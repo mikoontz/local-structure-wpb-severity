@@ -1,3 +1,4 @@
-data/features/*
-data/data_output/*
+data/features/srtm_30m.tif
+data/data_output/*/2_densification/*
+data/data_output/*/3_dsm_ortho/*
 .Rproj.user
