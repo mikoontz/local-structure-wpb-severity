@@ -1,2 +1,3 @@
-data_output/*
+data/features/*
+data/data_output/*
 .Rproj.user
