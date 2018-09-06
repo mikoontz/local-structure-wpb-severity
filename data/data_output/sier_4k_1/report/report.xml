@@ -1,0 +1,263 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<report project="sierra_4000_1_rgb" processed="2018-04-18 23:43:33">
+    <system>
+        <cpu sockets="1" threads="8" popcnt="true" sse3="true" sse42="true" info="Intel(R) Core(TM) i7-4770 CPU @ 3.40GHz" infoVerbose="Intel(R) Core(TM) i7-4770 CPU @ 3.40GHz, cpus=1, threads=8"/>
+        <ram capacity="32" units="GB"/>
+        <gpuList>
+            <gpu key="\REGISTRY\Machine\System\CurrentControlSet\Services\RDPDD\Device0" name="RDPDD Chained DD" provider="unknown" version="unknown" chipType="unknown" memoryBytes="0" glVersion="0" glFlags="0" displays="1"/>
+            <gpu key="\Registry\Machine\System\CurrentControlSet\Control\Video\{DEB039CC-B704-4F53-B43E-9DD4432FA2E9}\0000" name="RDPDD Chained DD" provider="unknown" version="unknown" chipType="unknown" memoryBytes="0" glVersion="0" glFlags="0" displays="1"/>
+            <gpu key="\Registry\Machine\System\CurrentControlSet\Control\Video\{42cf9257-1d96-4c9d-87f3-0d8e74595f78}\0000" name="RDP Encoder Mirror Driver" provider="unknown" version="unknown" chipType="unknown" memoryBytes="0" glVersion="0" glFlags="0" displays="1"/>
+            <gpu key="\Registry\Machine\System\CurrentControlSet\Control\Video\{b043b95c-5670-4f10-b934-8ed0c8eb59a8}\0000" name="RDP Reflector Display Driver" provider="unknown" version="unknown" chipType="unknown" memoryBytes="0" glVersion="0" glFlags="0" displays="1"/>
+        </gpuList>
+        <os platform="windows" info="Windows 7 Enterprise, 64-bit"/>
+    </system>
+    <software>
+        <projectVersion>4.2.26</projectVersion>
+        <p4dVersion>19</p4dVersion>
+        <cameraModelVersion>19</cameraModelVersion>
+    </software>
+    <coordinateSystem>
+        <images>
+            <horizontal wktVerbose="GEOGCS[&quot;WGS 84&quot;,DATUM[&quot;WGS_1984&quot;,SPHEROID[&quot;WGS 84&quot;,6378137,298.257223563,AUTHORITY[&quot;EPSG&quot;,&quot;7030&quot;]],TOWGS84[0,0,0,0,0,0,0],AUTHORITY[&quot;EPSG&quot;,&quot;6326&quot;]],PRIMEM[&quot;Greenwich&quot;,0,AUTHORITY[&quot;EPSG&quot;,&quot;8901&quot;]],UNIT[&quot;degree&quot;,0.01745329251994328,AUTHORITY[&quot;EPSG&quot;,&quot;9122&quot;]],AUTHORITY[&quot;EPSG&quot;,&quot;4326&quot;]]" wkt="WGS84" linearUnits="m"/>
+            <vertical name="egm96" altitudeReference="egm96" geoidHeight="0"/>
+        </images>
+        <gcp>
+            <horizontal wktVerbose="PROJCS[&quot;WGS 84 / UTM zone 11N&quot;,GEOGCS[&quot;WGS 84&quot;,DATUM[&quot;WGS_1984&quot;,SPHEROID[&quot;WGS 84&quot;,6378137,298.257223563,AUTHORITY[&quot;EPSG&quot;,&quot;7030&quot;]],AUTHORITY[&quot;EPSG&quot;,&quot;6326&quot;]],PRIMEM[&quot;Greenwich&quot;,0,AUTHORITY[&quot;EPSG&quot;,&quot;8901&quot;]],UNIT[&quot;degree&quot;,0.0174532925199433,AUTHORITY[&quot;EPSG&quot;,&quot;9122&quot;]],AUTHORITY[&quot;EPSG&quot;,&quot;4326&quot;]],PROJECTION[&quot;Transverse_Mercator&quot;],PARAMETER[&quot;latitude_of_origin&quot;,0],PARAMETER[&quot;central_meridian&quot;,-117],PARAMETER[&quot;scale_factor&quot;,0.9996],PARAMETER[&quot;false_easting&quot;,500000],PARAMETER[&quot;false_northing&quot;,0],UNIT[&quot;metre&quot;,1,AUTHORITY[&quot;EPSG&quot;,&quot;9001&quot;]],AXIS[&quot;Easting&quot;,EAST],AXIS[&quot;Northing&quot;,NORTH],AUTHORITY[&quot;EPSG&quot;,&quot;32611&quot;]]" wkt="WGS 84 / UTM zone 11N" linearUnits="m"/>
+            <vertical name="egm96" altitudeReference="egm96" geoidHeight="0"/>
+        </gcp>
+        <output>
+            <horizontal wktVerbose="PROJCS[&quot;WGS 84 / UTM zone 11N&quot;,GEOGCS[&quot;WGS 84&quot;,DATUM[&quot;WGS_1984&quot;,SPHEROID[&quot;WGS 84&quot;,6378137,298.257223563,AUTHORITY[&quot;EPSG&quot;,&quot;7030&quot;]],AUTHORITY[&quot;EPSG&quot;,&quot;6326&quot;]],PRIMEM[&quot;Greenwich&quot;,0,AUTHORITY[&quot;EPSG&quot;,&quot;8901&quot;]],UNIT[&quot;degree&quot;,0.0174532925199433,AUTHORITY[&quot;EPSG&quot;,&quot;9122&quot;]],AUTHORITY[&quot;EPSG&quot;,&quot;4326&quot;]],PROJECTION[&quot;Transverse_Mercator&quot;],PARAMETER[&quot;latitude_of_origin&quot;,0],PARAMETER[&quot;central_meridian&quot;,-117],PARAMETER[&quot;scale_factor&quot;,0.9996],PARAMETER[&quot;false_easting&quot;,500000],PARAMETER[&quot;false_northing&quot;,0],UNIT[&quot;metre&quot;,1,AUTHORITY[&quot;EPSG&quot;,&quot;9001&quot;]],AXIS[&quot;Easting&quot;,EAST],AXIS[&quot;Northing&quot;,NORTH],AUTHORITY[&quot;EPSG&quot;,&quot;32611&quot;]]" wkt="WGS 84 / UTM zone 11N" linearUnits="m"/>
+            <vertical name="egm96" altitudeReference="egm96" geoidHeight="0"/>
+            <xyzMean x="272872" y="4129613" z="1493"/>
+        </output>
+        <siteCalibration enabled="false">
+            <horizontal wktVerbose="PROJCS[&quot;WGS 84 / UTM zone 11N&quot;,GEOGCS[&quot;WGS 84&quot;,DATUM[&quot;WGS_1984&quot;,SPHEROID[&quot;WGS 84&quot;,6378137,298.257223563,AUTHORITY[&quot;EPSG&quot;,&quot;7030&quot;]],AUTHORITY[&quot;EPSG&quot;,&quot;6326&quot;]],PRIMEM[&quot;Greenwich&quot;,0,AUTHORITY[&quot;EPSG&quot;,&quot;8901&quot;]],UNIT[&quot;degree&quot;,0.0174532925199433,AUTHORITY[&quot;EPSG&quot;,&quot;9122&quot;]],AUTHORITY[&quot;EPSG&quot;,&quot;4326&quot;]],PROJECTION[&quot;Transverse_Mercator&quot;],PARAMETER[&quot;latitude_of_origin&quot;,0],PARAMETER[&quot;central_meridian&quot;,-117],PARAMETER[&quot;scale_factor&quot;,0.9996],PARAMETER[&quot;false_easting&quot;,500000],PARAMETER[&quot;false_northing&quot;,0],UNIT[&quot;metre&quot;,1,AUTHORITY[&quot;EPSG&quot;,&quot;9001&quot;]],AXIS[&quot;Easting&quot;,EAST],AXIS[&quot;Northing&quot;,NORTH],AUTHORITY[&quot;EPSG&quot;,&quot;32611&quot;]]" wkt="WGS 84 / UTM zone 11N" linearUnits="m"/>
+            <vertical name="egm96" altitudeReference="egm96" geoidHeight="0"/>
+            <rigidTransform scale="1">
+                <translation x="0" y="0" z="0"/>
+                <rotation omega="3.1415926536" phi="0" kappa="0">
+                    <eulerAngles x="0" y="0" z="0"/>
+                </rotation>
+            </rigidTransform>
+        </siteCalibration>
+    </coordinateSystem>
+    <options>
+        <initial>
+            <runStep>true</runStep>
+            <!--    General    -->
+            <!--Keypoints Image Scale-->
+            <keypointsImageScale>Custom</keypointsImageScale>
+            <imageScale>0.5</imageScale>
+            <!--Quality report-->
+            <generateOrthoInReport>true</generateOrthoInReport>
+            <!--    Matching    -->
+            <!--Matching Image Pairs-->
+            <matchStrategy>AutoAerial</matchStrategy>
+            <matchTimeNbNeighbours>1</matchTimeNbNeighbours>
+            <matchUseTriangulation>true</matchUseTriangulation>
+            <matchRelativeDistanceImages>0</matchRelativeDistanceImages>
+            <matchMtpMaxImagePair>5</matchMtpMaxImagePair>
+            <matchImageSimilarityMaxPairs>1</matchImageSimilarityMaxPairs>
+            <matchTimeMultiCamera>0</matchTimeMultiCamera>
+            <!--Matching Strategy-->
+            <geometricallyVerifiedMatching>true</geometricallyVerifiedMatching>
+            <!--    Calibration    -->
+            <!--Targeted number of keypoints-->
+            <keypointSelectionMethod>Automatic</keypointSelectionMethod>
+            <numberOfKeypoints>40000</numberOfKeypoints>
+            <!--Method-->
+            <calibrationMethod>Alternative</calibrationMethod>
+            <!--Optimizer-->
+            <optimizerType>Ceres</optimizerType>
+            <!--Camera optimization-->
+            <internalParamOptimization>All</internalParamOptimization>
+            <externalParamOptimization>All</externalParamOptimization>
+            <leverarmParamOptimization>None</leverarmParamOptimization>
+            <!--Rematch-->
+            <rematchStrategy>Auto</rematchStrategy>
+            <rematch>false</rematch>
+            <rematchOverlap>0.3000000119</rematchOverlap>
+            <!--SkySegmentation-->
+            <automaticSkyMasking>true</automaticSkyMasking>
+            <!--Export-->
+            <exportCameraParamsAATBBA>true</exportCameraParamsAATBBA>
+            <exportUndistortedImages>false</exportUndistortedImages>
+            <!--    Miscellaneous options    -->
+            <matchAll>false</matchAll>
+            <targetCameraDist>0</targetCameraDist>
+            <descriptorType>0</descriptorType>
+            <minImageDist>4.637246629</minImageDist>
+            <rigMatch>true</rigMatch>
+            <saveKMLReport>false</saveKMLReport>
+            <createThumbnails>true</createThumbnails>
+            <threshAdd>20</threshAdd>
+            <threshHom>10</threshHom>
+        </initial>
+    </options>
+    <results>
+        <initial>
+            <gsd cm="5.33845151436859" inches="2.10175256471204"/>
+            <trackHistogram observed2DPoints="2255701" numberOf3DPoints="812374">
+                <bin images="2" points3D="556802"/>
+                <bin images="3" points3D="132315"/>
+                <bin images="4" points3D="52321"/>
+                <bin images="5" points3D="25784"/>
+                <bin images="6" points3D="14448"/>
+                <bin images="7" points3D="8825"/>
+                <bin images="8" points3D="5679"/>
+                <bin images="9" points3D="3960"/>
+                <bin images="10" points3D="2732"/>
+                <bin images="11" points3D="1937"/>
+                <bin images="12" points3D="1540"/>
+                <bin images="13" points3D="1147"/>
+                <bin images="14" points3D="898"/>
+                <bin images="15" points3D="680"/>
+                <bin images="16" points3D="538"/>
+                <bin images="17" points3D="478"/>
+                <bin images="18" points3D="347"/>
+                <bin images="19" points3D="275"/>
+                <bin images="20" points3D="225"/>
+                <bin images="21" points3D="208"/>
+                <bin images="22" points3D="172"/>
+                <bin images="23" points3D="133"/>
+                <bin images="24" points3D="135"/>
+                <bin images="25" points3D="101"/>
+                <bin images="26" points3D="89"/>
+                <bin images="27" points3D="77"/>
+                <bin images="28" points3D="60"/>
+                <bin images="29" points3D="74"/>
+                <bin images="30" points3D="44"/>
+                <bin images="31" points3D="57"/>
+                <bin images="32" points3D="34"/>
+                <bin images="33" points3D="31"/>
+                <bin images="34" points3D="32"/>
+                <bin images="35" points3D="22"/>
+                <bin images="36" points3D="20"/>
+                <bin images="37" points3D="11"/>
+                <bin images="38" points3D="12"/>
+                <bin images="39" points3D="14"/>
+                <bin images="40" points3D="8"/>
+                <bin images="41" points3D="16"/>
+                <bin images="42" points3D="11"/>
+                <bin images="43" points3D="10"/>
+                <bin images="44" points3D="9"/>
+                <bin images="45" points3D="5"/>
+                <bin images="46" points3D="10"/>
+                <bin images="47" points3D="6"/>
+                <bin images="48" points3D="6"/>
+                <bin images="49" points3D="4"/>
+                <bin images="50" points3D="5"/>
+                <bin images="51" points3D="5"/>
+                <bin images="52" points3D="2"/>
+                <bin images="53" points3D="2"/>
+                <bin images="54" points3D="4"/>
+                <bin images="55" points3D="1"/>
+                <bin images="59" points3D="3"/>
+                <bin images="60" points3D="3"/>
+                <bin images="61" points3D="2"/>
+                <bin images="65" points3D="1"/>
+                <bin images="66" points3D="1"/>
+                <bin images="74" points3D="1"/>
+                <bin images="75" points3D="1"/>
+                <bin images="78" points3D="1"/>
+            </trackHistogram>
+            <points2D>
+                <general>
+                    <keypoints>
+                        <distribution max="14524" min="10641" mean="11637" median="11581"/>
+                    </keypoints>
+                    <tracks>
+                        <distribution max="3388" min="260" mean="1721" median="1658"/>
+                    </tracks>
+                </general>
+            </points2D>
+            <images total="1317" enabled="1317" calibrated="1311" calibratedEnabled="1311" calibratedPercentage="99" geolocated="1317" calibratedGeolocated="1311" disabled="0"/>
+            <cameraOptimization relativeDifference="2.27"/>
+            <qualityStatus images="success" dataset="success" cameraOptimization="success" matching="success" georeferencing="warning"/>
+            <atps meanProjectionError="0.1598"/>
+            <general time="01h:40m:46s"/>
+            <statsControlPoints>
+                <gcps>
+                    <avgPixel>0</avgPixel>
+                    <inliers/>
+                    <outliers/>
+                </gcps>
+                <checkPoints>
+                    <avgPixel>NaN</avgPixel>
+                    <inliers/>
+                    <outliers/>
+                </checkPoints>
+                <manualTiePoints>
+                    <avgPixel>0</avgPixel>
+                </manualTiePoints>
+            </statsControlPoints>
+            <camera name="FC350_3.6_4000x3000 (RGB)" uniqueName="FC350_3.6_4000x3000 (RGB)(1)">
+                <id>0</id>
+                <band name="Red" centralWaveLength="660" width="0" weight="0.2126"/>
+                <band name="Green" centralWaveLength="550" width="0" weight="0.7152"/>
+                <band name="Blue" centralWaveLength="470" width="0" weight="0.0722"/>
+                <serialNumber></serialNumber>
+                <initialValues>
+                    <imageWidth>4000</imageWidth>
+                    <imageHeight>3000</imageHeight>
+                    <pixelSize>1.57937</pixelSize>
+                    <principalPointXmm>3.15875</principalPointXmm>
+                    <principalPointYmm>2.36906</principalPointYmm>
+                    <lensType>perspective</lensType>
+                    <focalLengthmm>3.61</focalLengthmm>
+                    <distortion>5</distortion>
+                    <radialK1>-0.129873</radialK1>
+                    <radialK2>0.105766</radialK2>
+                    <radialK3>-0.016118</radialK3>
+                    <tangentialT1>-0.000142</tangentialT1>
+                    <tangentialT2>0.000198</tangentialT2>
+                    <cameraModelSource>internalDB</cameraModelSource>
+                    <principalPointXPixel>2000</principalPointXPixel>
+                    <principalPointYPixel>1500</principalPointYPixel>
+                </initialValues>
+                <optimizedValues>
+                    <imageWidth>4000</imageWidth>
+                    <imageHeight>3000</imageHeight>
+                    <pixelSize>1.57937</pixelSize>
+                    <principalPointXmm>3.135005</principalPointXmm>
+                    <principalPointYmm>2.373175</principalPointYmm>
+                    <lensType>perspective</lensType>
+                    <focalLengthmm>3.6922</focalLengthmm>
+                    <distortion>5</distortion>
+                    <radialK1>-0.13109</radialK1>
+                    <radialK2>0.116521</radialK2>
+                    <radialK3>-0.016445</radialK3>
+                    <tangentialT1>0.000857</tangentialT1>
+                    <tangentialT2>0.000295</tangentialT2>
+                    <cameraModelSource>internalDB</cameraModelSource>
+                    <principalPointXPixel>1985</principalPointXPixel>
+                    <principalPointYPixel>1502.6</principalPointYPixel>
+                </optimizedValues>
+                <uncertainties>
+                    <principalPointXPixel>0.1</principalPointXPixel>
+                    <principalPointYPixel>0.1</principalPointYPixel>
+                    <focalLengthmm>0.003762</focalLengthmm>
+                    <radialK1>0.000308</radialK1>
+                    <radialK2>0.000542</radialK2>
+                    <radialK3>0.000197</radialK3>
+                    <tangentialT1>0.000007</tangentialT1>
+                    <tangentialT2>0.000008</tangentialT2>
+                </uncertainties>
+            </camera>
+            <resources>
+                <matchesLegend>
+                    <bin intensity="230" name="25"/>
+                    <bin intensity="227" name="131"/>
+                    <bin intensity="199" name="262"/>
+                    <bin intensity="170" name="394"/>
+                    <bin intensity="142" name="525"/>
+                    <bin intensity="114" name="656"/>
+                    <bin intensity="85" name="788"/>
+                    <bin intensity="57" name="919"/>
+                    <bin intensity="29" name="1050"/>
+                    <bin intensity="0" name="1182"/>
+                </matchesLegend>
+            </resources>
+        </initial>
+    </results>
+</report>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+<Folder>
+ <name>eldo_5k_1_x3</name>
+ <description>Matches overlay</description>
+ <GroundOverlay>
+   <name>Matches overlay</name>
+   <description>Matches overlay</description>
+   <Icon><href>C:/pix4d_working/eldo_5k_1/eldo_5k_1_x3/1_initial/report/html/matches_graph_XY.png</href></Icon>
+   <LatLonBox>
+     <north>38.5414</north>
+     <south>38.5345</south>
+     <east>-120.343</east>
+     <west>-120.353</west>
+     <rotation>-0.1556640799496235</rotation>
+   </LatLonBox>
+ </GroundOverlay>
+</Folder>
+</kml>

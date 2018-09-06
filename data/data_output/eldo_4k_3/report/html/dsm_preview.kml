@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+<Folder>
+ <name>eldo_4k_3_x3</name>
+ <description>DSM preview overlay</description>
+ <GroundOverlay>
+   <name>DSM preview overlay</name>
+   <description>DSM preview overlay</description>
+   <Icon><href>C:/pix4d_working/eldo_4k_3/eldo_4k_3_x3/1_initial/report/html/dsm_preview.png</href></Icon>
+   <LatLonBox>
+     <north>38.7498</north>
+     <south>38.743</south>
+     <east>-120.403</east>
+     <west>-120.413</west>
+     <rotation>-0.1556640799496235</rotation>
+   </LatLonBox>
+ </GroundOverlay>
+</Folder>
+</kml>
