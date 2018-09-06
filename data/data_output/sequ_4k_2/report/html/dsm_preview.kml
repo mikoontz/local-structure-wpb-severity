@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+<Folder>
+ <name>sequoia_4000_2_rgb</name>
+ <description>DSM preview overlay</description>
+ <GroundOverlay>
+   <name>DSM preview overlay</name>
+   <description>DSM preview overlay</description>
+   <Icon><href>F:/sUAS/local-structure-outbreak-intensity/sequoia_4000_2/sequoia_4000_2_2018-04-13/sequoia_4000_2_rgb/1_initial/report/html/dsm_preview.png</href></Icon>
+   <LatLonBox>
+     <north>36.6527</north>
+     <south>36.6447</south>
+     <east>-118.943</east>
+     <west>-118.952</west>
+     <rotation>-0.1556640799496235</rotation>
+   </LatLonBox>
+ </GroundOverlay>
+</Folder>
+</kml>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+<Folder>
+ <name>sequ_6k_2_x3</name>
+ <description>Orthomosaic overlay</description>
+ <GroundOverlay>
+   <name>Orthomosaic overlay</name>
+   <description>Orthomosaic overlay</description>
+   <Icon><href>C:/pix4d_working/sequ_6k_2/sequ_6k_2_x3/1_initial/report/html/orthomosaic_preview.png</href></Icon>
+   <LatLonBox>
+     <north>35.7025</north>
+     <south>35.6966</south>
+     <east>-118.576</east>
+     <west>-118.583</west>
+     <rotation>-0.1556640799496235</rotation>
+   </LatLonBox>
+ </GroundOverlay>
+</Folder>
+</kml>

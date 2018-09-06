@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+<Folder>
+ <name>sequ_6k_1_x3</name>
+ <description>DSM preview overlay</description>
+ <GroundOverlay>
+   <name>DSM preview overlay</name>
+   <description>DSM preview overlay</description>
+   <Icon><href>C:/pix4d_working/sequ_6k_1/sequ_6k_1_x3/1_initial/report/html/dsm_preview.png</href></Icon>
+   <LatLonBox>
+     <north>36.029</north>
+     <south>36.0202</south>
+     <east>-118.565</east>
+     <west>-118.573</west>
+     <rotation>-0.1556640799496235</rotation>
+   </LatLonBox>
+ </GroundOverlay>
+</Folder>
+</kml>
