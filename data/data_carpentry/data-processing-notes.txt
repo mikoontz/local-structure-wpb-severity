@@ -1,0 +1,12 @@
+2018-09-09
+Data processing notes for local-structure-wpb-severity project
+
+Note that the following sites were processed with a less intensive Step 2 Densified point cloud operation in pix4d:
+
+sequ_4k_1
+sequ_4k_2
+sequ_5k_3
+sier_4k_1
+stan_3k_1
+
+The result is a far less dense point cloud, which has as-of-yet unknown consequences for crown segmentation
