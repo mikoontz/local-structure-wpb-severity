@@ -10,7 +10,7 @@ all_sites <- list.files("data/data_output")
 # https://stackoverflow.com/questions/38318139/run-a-for-loop-in-parallel-in-r
 
 cores <- detectCores()
-cl <- makeCluster(cores[1]-2) #not to overload your computer
+cl <- makeCluster(cores[1]-1) #not to overload your computer
 registerDoParallel(cl)
 
 foreach (i = seq_along(all_sites)) %dopar% {
@@ -126,5 +126,5 @@ foreach (i = seq_along(all_sites)) %dopar% {
   st_write(obj = crowns, dsn = paste0(current_dir, current_site, "_crowns.geoJSON"))
 }
 
-
+stopCluster(cl)
 
