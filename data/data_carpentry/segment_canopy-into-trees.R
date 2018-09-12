@@ -23,7 +23,7 @@ sites_checklist <-
 
 sites_to_process <-
   sites_checklist %>% 
-  dplyr::filter(!ttops_check & site %in% all_sites) %>% 
+  dplyr::filter(!crowns_check & site %in% all_sites) %>% 
   dplyr::select(site) %>% 
   dplyr::pull()
 
@@ -74,7 +74,7 @@ foreach (i = seq_along(sites_to_process)) %dopar% {
     sf::st_read(paste0(current_dir, current_site, "_mission-footprint/", current_site, "_site-bounds.geoJSON")) %>% 
     sf::st_transform(sp::proj4string(dtm))
   
-  # Cropping the dtm and dsm to the fligth bounds
+  # Cropping the dtm and dsm to the site bounds
   site_dtm <- raster::crop(dtm, site_bounds)
   site_dsm <- raster::crop(dsm, site_bounds)
   
@@ -107,31 +107,45 @@ foreach (i = seq_along(sites_to_process)) %dopar% {
     return(meters_per_side)
   }
   
-  # We only measured trees that were greater than 2.5 inches DBH and focused on ponderosa pine
-  # which translated to a height of approximately 6 meters (Wonn and O'Hara, 2001) so we ignored
-  # trees less than this height
-  # Uses the "variable window filter" algorithm by Popescu and Wynne (2004)
-  ttops <- try(ForestTools::vwf(CHM = chm_smooth, winFun = dynamicWindow, minHeight = 6, maxWinDiameter = NULL))
-  
-  if (class(ttops) != "try-error") {
+  if (!file.exists(paste0("data/data_output/", 
+                          current_site, 
+                          "/", 
+                          current_site, 
+                          "_ttops/", 
+                          current_site, 
+                          "_ttops.shp"))) {
+    # We only measured trees that were greater than 2.5 inches DBH and focused on ponderosa pine
+    # which translated to a height of approximately 6 meters (Wonn and O'Hara, 2001) so we ignored
+    # trees less than this height
+    # Uses the "variable window filter" algorithm by Popescu and Wynne (2004)
+    ttops <- try(ForestTools::vwf(CHM = chm_smooth, winFun = dynamicWindow, minHeight = 6, maxWinDiameter = NULL))
     
-    # Convert ttops sp object to an sf object for easier writing
-    sf_ttops <- 
-      ttops %>% 
-      st_as_sf()
     
-    # output the tree tops to a file; create a new directory to puth the .shp
-    # related files in it. This will preserve the CRS that the points came from
-    # originally
-    
-    if (!dir.exists(paste0(current_dir, current_site, "_ttops"))) {
-      dir.create(paste0(current_dir, current_site, "_ttops"))
+    if (class(ttops) != "try-error") {
+      
+      # Convert ttops sp object to an sf object for easier writing
+      sf_ttops <- 
+        ttops %>% 
+        st_as_sf()
+      
+      # output the tree tops to a file; create a new directory to puth the .shp
+      # related files in it. This will preserve the CRS that the points came from
+      # originally
+      
+      if (!dir.exists(paste0(current_dir, current_site, "_ttops"))) {
+        dir.create(paste0(current_dir, current_site, "_ttops"))
+      }
+      
+      st_write(obj = sf_ttops, dsn = paste0(current_dir, current_site, "_ttops/", current_site, "_ttops.shp"))
+      
     }
-    
-    st_write(obj = sf_ttops, dsn = paste0(current_dir, current_site, "_ttops/", current_site, "_ttops.shp"))
-    
+  } else {
+    ttops <-
+      try({
+        st_read(paste0(current_dir, current_site, "_ttops/", current_site, "_ttops.shp")) %>% 
+          as("Spatial")
+      })
   }
-  
   # Do the segmentation constrained by the "known" tree top locations
   # Called "Marker-controlled watershed segmentation" following Beucher & Meyer, 1993
   
