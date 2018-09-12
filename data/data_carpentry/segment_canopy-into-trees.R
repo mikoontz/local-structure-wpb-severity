@@ -13,19 +13,19 @@ sites_checklist <-
     1:3) %>% 
   as.data.frame() %>% 
   setNames(c("forest", "elev", "rep")) %>% 
-  filter(!(forest == "sequ" & elev == "3k")) %>%
-  filter(!(forest != "sequ" & elev == "6k")) %>% 
-  arrange(forest, elev, rep) %>% 
-  mutate(site = paste(forest, elev, rep, sep = "_")) %>% 
-  select(-forest, -elev, -rep) %>% 
-  mutate(ttops_check = file.exists(paste0("data/data_output/", site, "/", site, "_ttops/", site, "_ttops.shp"))) %>% 
-  mutate(crowns_check = file.exists(paste0("data/data_output/", site, "/", site, "_crowns/", site, "_crowns.shp")))
+  dplyr::filter(!(forest == "sequ" & elev == "3k")) %>%
+  dplyr::filter(!(forest != "sequ" & elev == "6k")) %>% 
+  dplyr::arrange(forest, elev, rep) %>% 
+  dplyr::mutate(site = paste(forest, elev, rep, sep = "_")) %>% 
+  dplyr::select(-forest, -elev, -rep) %>% 
+  dplyr::mutate(ttops_check = file.exists(paste0("data/data_output/", site, "/", site, "_ttops/", site, "_ttops.shp"))) %>% 
+  dplyr::mutate(crowns_check = file.exists(paste0("data/data_output/", site, "/", site, "_crowns/", site, "_crowns.shp")))
 
 sites_to_process <-
   sites_checklist %>% 
-  filter(!ttops_check & site %in% all_sites) %>% 
-  select(site) %>% 
-  pull()
+  dplyr::filter(!ttops_check & site %in% all_sites) %>% 
+  dplyr::select(site) %>% 
+  dplyr::pull()
 
 # I revisit this StackOverflow question and answer, like, everytime I want
 # to do anything in parallel to remind myself how
