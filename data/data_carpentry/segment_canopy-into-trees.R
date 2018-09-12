@@ -1,20 +1,43 @@
 # Load parallelization packages
 library(foreach)
 library(doParallel)
+library(tidyverse)
 
 # character vector of all study sites
 all_sites <- list.files("data/data_output")
+
+sites_checklist <- 
+  expand.grid(
+    c("eldo", "stan", "sier", "sequ"), 
+    c("3k", "4k", "5k", "6k"), 
+    1:3) %>% 
+  as.data.frame() %>% 
+  setNames(c("forest", "elev", "rep")) %>% 
+  filter(!(forest == "sequ" & elev == "3k")) %>%
+  filter(!(forest != "sequ" & elev == "6k")) %>% 
+  arrange(forest, elev, rep) %>% 
+  mutate(site = paste(forest, elev, rep, sep = "_")) %>% 
+  select(-forest, -elev, -rep) %>% 
+  mutate(ttops_check = file.exists(paste0("data/data_output/", site, "/", site, "_ttops/", site, "_ttops.shp"))) %>% 
+  mutate(crowns_check = file.exists(paste0("data/data_output/", site, "/", site, "_crowns/", site, "_crowns.shp")))
+
+sites_to_process <-
+  sites_checklist %>% 
+  filter(!ttops_check & site %in% all_sites) %>% 
+  select(site) %>% 
+  pull()
 
 # I revisit this StackOverflow question and answer, like, everytime I want
 # to do anything in parallel to remind myself how
 # https://stackoverflow.com/questions/38318139/run-a-for-loop-in-parallel-in-r
 
-cores <- detectCores()
-cl <- makeCluster(cores[1]-1) #not to overload your computer
+cores <- detectCores() 
+cl <- makeCluster(min(c(cores - 2), 4)) #not to overload your computer
 registerDoParallel(cl)
 
-foreach (i = seq_along(all_sites)) %dopar% {
-  
+print(Sys.time())
+foreach (i = seq_along(sites_to_process)) %dopar% {
+
   # Load all packages within the foreach() construct for parallelization to work
   library(raster)
   library(sf)
@@ -22,7 +45,7 @@ foreach (i = seq_along(all_sites)) %dopar% {
   library(ForestTools)
   
   # get the character string representing the ith site
-  current_site <- all_sites[i]
+  current_site <- sites_to_process[i]
   
   # convenience string to set file paths for input/output
   current_dir <- paste0("data/data_output/", current_site, "/")
@@ -47,13 +70,13 @@ foreach (i = seq_along(all_sites)) %dopar% {
   # area that the drone directly flew over.
   # Could consider buffering this further (inward-- so using a negative buffer value) to 
   # reduce edge effects
-  flight_bounds <- 
+  site_bounds <- 
     sf::st_read(paste0(current_dir, current_site, "_mission-footprint/", current_site, "_site-bounds.geoJSON")) %>% 
     sf::st_transform(sp::proj4string(dtm))
   
   # Cropping the dtm and dsm to the fligth bounds
-  site_dtm <- raster::crop(dtm, flight_bounds)
-  site_dsm <- raster::crop(dsm, flight_bounds)
+  site_dtm <- raster::crop(dtm, site_bounds)
+  site_dsm <- raster::crop(dsm, site_bounds)
   
   # Using bilinear interpolation to downsample the 2m resolution DTM to have the
   # same resolution as the dsm (~5cm, but slightly different for each site)
@@ -88,17 +111,27 @@ foreach (i = seq_along(all_sites)) %dopar% {
   # which translated to a height of approximately 6 meters (Wonn and O'Hara, 2001) so we ignored
   # trees less than this height
   # Uses the "variable window filter" algorithm by Popescu and Wynne (2004)
-  ttops <- ForestTools::vwf(CHM = chm_smooth, winFun = dynamicWindow, minHeight = 6, maxWinDiameter = NULL)
-
-  # Convert ttops sp object to an sf object for easier writing; make sure crs is the same as the original dsm
-  sf_ttops <- 
-    ttops %>% 
-    st_as_sf() %>% 
-    st_set_crs(sp::proj4string(dsm))
+  ttops <- try(ForestTools::vwf(CHM = chm_smooth, winFun = dynamicWindow, minHeight = 6, maxWinDiameter = NULL))
   
-  # output the tree tops to a file
-  st_write(obj = sf_ttops, dsn = paste0(current_dir, current_site, "_ttops.geoJSON"))
-
+  if (class(ttops) != "try-error") {
+    
+    # Convert ttops sp object to an sf object for easier writing
+    sf_ttops <- 
+      ttops %>% 
+      st_as_sf()
+    
+    # output the tree tops to a file; create a new directory to puth the .shp
+    # related files in it. This will preserve the CRS that the points came from
+    # originally
+    
+    if (!dir.exists(paste0(current_dir, current_site, "_ttops"))) {
+      dir.create(paste0(current_dir, current_site, "_ttops"))
+    }
+    
+    st_write(obj = sf_ttops, dsn = paste0(current_dir, current_site, "_ttops/", current_site, "_ttops.shp"))
+    
+  }
+  
   # Do the segmentation constrained by the "known" tree top locations
   # Called "Marker-controlled watershed segmentation" following Beucher & Meyer, 1993
   
@@ -113,18 +146,30 @@ foreach (i = seq_along(all_sites)) %dopar% {
   # in R... nothing; finally got it to work in QGIS, but that would have been an unfortunate 
   # pointing and clicking step...). So thank you, Andrew Plowright, because your implementation
   # using the APpolygonize() function in the APfun package you wrote just *works*
-
-  crowns <- 
-    ForestTools::mcws(treetops = ttops, 
-                              CHM = chm_smooth, 
-                              minHeight = 3.5, 
-                              format = "polygons", 
-                              OSGeoPath = "C:\\OSGeo4W64") %>% 
-    st_as_sf()
   
-  # Write the crowns polygons to a file
-  st_write(obj = crowns, dsn = paste0(current_dir, current_site, "_crowns.geoJSON"))
+  if (class(ttops) != "try-error") {
+    
+    crowns <- 
+      try({
+        ForestTools::mcws(treetops = ttops, 
+                          CHM = chm_smooth, 
+                          minHeight = 3.5, 
+                          format = "polygons", 
+                          OSGeoPath = "C:\\OSGeo4W64") %>% 
+          st_as_sf()
+      })
+    
+    if (all(class(crowns) != "try-error")) {
+      
+      # Write the crowns polygons to a file
+      if (!dir.exists(paste0(current_dir, current_site, "_crowns"))) {
+        dir.create(paste0(current_dir, current_site, "_crowns"))
+      }
+      st_write(obj = crowns, dsn = paste0(current_dir, current_site, "_crowns/", current_site, "_crowns.shp"))
+    
+  }
+  paste0("...", current_site, " completed.")
 }
-
+}
+print(Sys.time())
 stopCluster(cl)
-
