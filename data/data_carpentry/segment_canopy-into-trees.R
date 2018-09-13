@@ -18,8 +18,8 @@ sites_checklist <-
   dplyr::arrange(forest, elev, rep) %>% 
   dplyr::mutate(site = paste(forest, elev, rep, sep = "_")) %>% 
   dplyr::select(-forest, -elev, -rep) %>% 
-  dplyr::mutate(ttops_check = file.exists(paste0("data/data_output/", site, "/", site, "_ttops/", site, "_ttops.shp"))) %>% 
-  dplyr::mutate(crowns_check = file.exists(paste0("data/data_output/", site, "/", site, "_crowns/", site, "_crowns.shp")))
+  dplyr::mutate(ttops_check = file.exists(paste0("data/data_output/site_data", site, "/", site, "_ttops/", site, "_ttops.shp"))) %>% 
+  dplyr::mutate(crowns_check = file.exists(paste0("data/data_output/site_data", site, "/", site, "_crowns/", site, "_crowns.shp")))
 
 sites_to_process <-
   sites_checklist %>% 
@@ -48,7 +48,7 @@ foreach (i = seq_along(sites_to_process)) %dopar% {
   current_site <- sites_to_process[i]
   
   # convenience string to set file paths for input/output
-  current_dir <- paste0("data/data_output/", current_site, "/")
+  current_dir <- paste0("data/data_output/site_data", current_site, "/")
   
   # The Digital Terrain Model (dtm) is the 2m resolution "ground" underneath
   # the current site. Created using CloudCompare and the Cloth Simulator Filter
@@ -107,7 +107,7 @@ foreach (i = seq_along(sites_to_process)) %dopar% {
     return(meters_per_side)
   }
   
-  if (!file.exists(paste0("data/data_output/", 
+  if (!file.exists(paste0("data/data_output/site_data", 
                           current_site, 
                           "/", 
                           current_site, 

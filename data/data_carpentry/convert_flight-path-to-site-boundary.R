@@ -18,7 +18,7 @@ library(raster)
 overwrite <- FALSE
 
 # character vector of all study sites
-all_sites <- list.files("data/data_output")
+all_sites <- list.files("data/data_output/site_data")
 
 # the 30m resolution SRTM digital elevation model for the Sierra Nevada region
 # No direct source for this exists in R (not raster, elevatr, or FedData), so

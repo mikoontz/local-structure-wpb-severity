@@ -1,8 +1,8 @@
 data/features/srtm_30m.tif
-data/data_output/*/2_densification/*
-data/data_output/*/3_dsm_ortho/*
+data/data_output/*/*/2_densification/*
+data/data_output/*/*/3_dsm_ortho/*
 .Rproj.user
 *.las
-data/data_output/*/*_crowns/*
+data/data_output/*/*/*_crowns/*
 *.xml
 data/data_output/classified/*
