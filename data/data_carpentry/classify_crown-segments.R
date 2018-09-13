@@ -6,7 +6,7 @@ library(viridis)
 
 
 # character vector of all study sites
-all_sites <- list.files("data/data_output")
+all_sites <- list.files("data/data_output/site_data")
 
 sites_checklist <- 
   expand.grid(
@@ -20,9 +20,9 @@ sites_checklist <-
   dplyr::arrange(forest, elev, rep) %>% 
   dplyr::mutate(site = paste(forest, elev, rep, sep = "_")) %>% 
   dplyr::select(-forest, -elev, -rep) %>% 
-  dplyr::mutate(ttops_check = file.exists(paste0("data/data_output/", site, "/", site, "_ttops/", site, "_ttops.shp"))) %>% 
-  dplyr::mutate(crowns_check = file.exists(paste0("data/data_output/", site, "/", site, "_crowns/", site, "_crowns.shp"))) %>% 
-  dplyr::mutate(classified_check = file.exists(paste0("data/data_output/", site, "/", site, "_classified/", site, "_classified.shp")))
+  dplyr::mutate(ttops_check = file.exists(paste0("data/data_output/site_data/", site, "/", site, "_ttops/", site, "_ttops.shp"))) %>% 
+  dplyr::mutate(crowns_check = file.exists(paste0("data/data_output/site_data/", site, "/", site, "_crowns/", site, "_crowns.shp"))) %>% 
+  dplyr::mutate(classified_check = file.exists(paste0("data/data_output/site_data/", site, "/", site, "_classified/", site, "_classified.shp")))
 
 sites_to_process <-
   sites_checklist %>% 
@@ -31,8 +31,8 @@ sites_to_process <-
   dplyr::pull()
 
 hand_classified_sites <-
-  list.files("data/data_output")
-  sf::st_read("data/data_output/eldo_3k_1/eldo_3k_1_live-or-dead/eldo_3k_1_live-or-dead.shp")
+  list.files("data/data_output/site_data")
+  sf::st_read("data/data_output/site_data/eldo_3k_1/eldo_3k_1_live-or-dead/eldo_3k_1_live-or-dead.shp")
 
 i = 1
 for (i in seq_along(sites_to_process)) {
@@ -40,7 +40,7 @@ for (i in seq_along(sites_to_process)) {
   current_site <- sites_to_process[i]
   
 # convenience string to set file paths for input/output
-current_dir <- paste0("data/data_output/", current_site, "/")
+current_dir <- paste0("data/data_output/site_data/", current_site, "/")
 
 ttops <- sf::st_read(paste0(current_dir, "/", current_site, "_ttops/", current_site, "_ttops.shp"))
 crowns <- 
