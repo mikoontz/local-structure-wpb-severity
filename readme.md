@@ -23,7 +23,7 @@ This is one of the data products from the Pix4D processing of the 2D aerial imag
 
 This is a portion of one of the other primary data products of the Pix4D processing-- an orthomosaic showing the top-down view of all objects in the scene with the spatial relationships amongst them preserved. This image is suitable for making measurments between the trees.
 
-![An orthomosaic (a top-down view of all objects) of a forested site, generated using Pix4D](figures/eldo_3k_1_ortho-without-crown-segmentation.png)
+![An orthomosaic (a top-down view of all objects) of a forested site, generated using Pix4D](figures/eldo_3k_1_ortho-without-crown-segmentation.PNG)
 
 This is another view of a Pix4D generated point cloud from a different forest site, visualized in CloudCompare.
 
@@ -39,6 +39,6 @@ We can use the same "cloth" that helped classify ground versus non ground to int
 
 The results of the tree top identification and crown segmentation steps can be seen by comparing the same orthomosaic above with the crown segment polygons overlaid on them.
 
-![The orthomosaic as above](figures/eldo_3k_1_ortho-without-crown-segmentation.png)
+![The orthomosaic as above](figures/eldo_3k_1_ortho-without-crown-segmentation.PNG)
 
-![The orthomosaic with polygons representing tree crowns overlaid](figures/eldo_3k_1_ortho-with-crown-segmentation.png)
+![The orthomosaic with polygons representing tree crowns overlaid](figures/eldo_3k_1_ortho-with-crown-segmentation.PNG)
