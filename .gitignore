@@ -5,3 +5,4 @@ data/data_output/*/3_dsm_ortho/*
 *.las
 data/data_output/*/*_crowns/*
 *.xml
+data/data_output/classified/*
