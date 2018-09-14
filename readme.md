@@ -12,8 +12,9 @@ The general workflow is:
 6) We use a variable window local maximum filter to identify the tree tops in the canopy height model. (In `R` using the `ForestTools` package)
 7) We use a marker controlled watershed segmentation algorithm to identify the pixels in the orthomosaic that are associated with the individual trees. (Also in `R` and using the `ForestTools` package)
 8) We extract the red, blue, and green values from the pixels of the orthomosaic representing each tree. We calculate the red-green index (RGI) as R / G and the red-green vegetation index as (R - G) / (R + G). We take the average and the 75th percentile of these 5 metrics across all pixels belonging to each tree.
-9) Using QGIS, we overlay the polygons of the segmented crowns on top of the the RGB orthomosaic for the eldo_3k_1 site. We made a copy of the segmented crowns polygons and added an attribute field called "live". We then panned around the orthomosaic and manually changed the "live" field for 150 trees to 0 (for a dead tree) or 1 (for a live tree).
-10) Using the 150 manually classified crown segments and their R, G, B, RGI, and RGVI data, We fit a generalized linear model using a binomial family and a logit link using all possible covariates to predict the probability that the tree represented by the crown segment was alive or dead.
+9) Using QGIS, we overlay the polygons of the segmented crowns on top of the the RGB orthomosaic for the eldo_3k_1, eldo_5k_1, sequ_4k_1, and sequ_6k_1 sites. We made a copy of the segmented crowns polygons and added an attribute field called "live". We then panned around the orthomosaic and manually changed the "live" field for ~100 trees per site to 0 (for a dead tree) or 1 (for a live tree).
+10) Using the ~400 manually classified crown segments and the orthomosaic for each site, we extract the R, G, B, RGI (RGI = R/G per pixel), and GBI (GBI = G/B per pixel) data from each pixel and take the mean value of each spectral signature across all the pixels within each crown polygon. Using the mean R, G, B, RGI, and GBI values per crown polygon as covariates, We fit a generalized linear model using a binomial family and a logit link to predict the probability that the tree represented by the crown segment was alive or dead.
+11) Next, we extracted the R, G, B, RGI, and GBI means for all the crown polygons from each site's orthomosaic and used the model fit above to predict the probability that each tree in the study (across all sites) was alive or dead. We used the `velox` package in `R` to do this massive pixel value extraction from the raster files.
 
 Some photos of the processing:
 
@@ -36,6 +37,26 @@ This is a view of just the points from the point cloud classified as "ground" af
 We can use the same "cloth" that helped classify ground versus non ground to interpolate the terrain underneath the trees, even where the trees may have obscured the ground.
 
 ![Digital terrain model underneath the trees determined using the cloth simulator filter in CloudCompare](figures/eldo_3k_1_ground-from-cloth-simulator.png)
+
+In 2 dimensions, the digital terrain model looks like this:
+
+![2 dimensional digital terrain model](figures/eldo_3k_1_dtm.png)
+
+The Digital Surface Model is an output from Pix4D that represents the height of the surface, which includes the elevation of the ground plus the height of the vegetation.
+
+![Digital Surface Model (DSM) of a forested site](figures/eldo_3k_1_dsm.png)
+
+By subtracting the Digital Terrain Model (DTM) away from the Digital Surface Model (DSM), we get a representation of the heights of all the vegetation-- a Canopy Height Model (CHM).
+
+![A Canopy Height Model representing the height above the ground for each tree in the scene.](figures/eldo_3k_1_chm.png)
+
+The "variable window filter" algorithm detects tree tops as local maxima using the Canopy Height Model.
+
+![Tree tops detected using the variable window filter algorithm on the Canopy Height Model.](figures/eldo_3k_1_chm-with-ttops.png)
+
+The tree top locations and the Canopy Height Model are then used to determine the spatial extent of each tree's crown using a marker controlled watershed segmentation algorithm.
+
+![Crown spatial extent, or "segments", detected using marker controlled watershed segmentation algorithm on the Canopy Height Model and using the tree top locations.](figures/eldo_3k_1_ttops-with-crowns.png)
 
 The results of the tree top identification and crown segmentation steps can be seen by comparing the same orthomosaic above with the crown segment polygons overlaid on them.
 
