@@ -32,6 +32,8 @@ chm[chm < 0] <- 0
 ttops <- sf::st_read(paste0("data/data_output/site_data/", site, "/", site, "_ttops/", site, "_ttops.shp"))
 crowns <- sf::st_read(paste0("data/data_output/site_data/", site, "/", site, "_crowns/", site, "_crowns.shp"))
 
+cc <- sf::st_read(paste0("data/data_output/classified/model-classified/crown-shapefiles/", site, "_classified-crowns/", site, "_classified-crowns.shp"))
+
 orig <- par()
 
 ### Plot the Digital Surface Model (DSM)
@@ -154,3 +156,22 @@ plot(crowns$geometry, add = TRUE)
 
 dev.off()
 
+### Plot the classified tree tops
+cc_ggplot <-
+  ggplot(cc, aes(x = ttop_x, y = ttop_y, col = live_prob)) +
+  geom_point(size = 0.9) +
+  coord_equal() +
+  xlab(label = "longitude") +
+  ylab(label = "latitude") +
+  scale_color_viridis_c(name = "Pr (live) ", option = "E") +
+  theme_minimal() +
+  theme(axis.text = element_blank(), 
+        axis.title = element_text(size = 32), 
+        legend.title = element_text(size = 32), 
+        legend.text = element_text(size = 32), 
+        axis.title.y = element_text(angle = 0, vjust = 0.5),
+        plot.margin = margin(t = 0, r = 5.5, b = 0, l = 5.5, "points"),
+        plot.background = element_blank(),
+        panel.grid = element_blank())
+
+ggsave(plot = cc_ggplot, filename = paste0("figures/", site, "_classified-ttops.png"), height = 10, width = 10, units = "in", dpi = 600)
