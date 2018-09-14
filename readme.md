@@ -14,7 +14,8 @@ The general workflow is:
 8) We extract the red, blue, and green values from the pixels of the orthomosaic representing each tree. We calculate the red-green index (RGI) as R / G and the red-green vegetation index as (R - G) / (R + G). We take the average and the 75th percentile of these 5 metrics across all pixels belonging to each tree.
 9) Using QGIS, we overlay the polygons of the segmented crowns on top of the the RGB orthomosaic for the eldo_3k_1, eldo_5k_1, sequ_4k_1, and sequ_6k_1 sites. We made a copy of the segmented crowns polygons and added an attribute field called "live". We then panned around the orthomosaic and manually changed the "live" field for ~100 trees per site to 0 (for a dead tree) or 1 (for a live tree).
 10) Using the ~400 manually classified crown segments and the orthomosaic for each site, we extract the R, G, B, RGI (RGI = R/G per pixel), and GBI (GBI = G/B per pixel) data from each pixel and take the mean value of each spectral signature across all the pixels within each crown polygon. Using the mean R, G, B, RGI, and GBI values per crown polygon as covariates, We fit a generalized linear model using a binomial family and a logit link to predict the probability that the tree represented by the crown segment was alive or dead.
-11) Next, we extracted the R, G, B, RGI, and GBI means for all the crown polygons from each site's orthomosaic and used the model fit above to predict the probability that each tree in the study (across all sites) was alive or dead. We used the `velox` package in `R` to do this massive pixel value extraction from the raster files.
+11) Next, we extracted the R, G, B, RGI, and GBI means for all the crown polygons from each site's orthomosaic. We used the `velox` package in `R` to do this massive pixel value extraction from the raster files.
+12) We used the logistic regression model that we fit above to predict the probability that each tree in the study (across all sites) was alive or dead. 
 
 Some photos of the processing:
 
@@ -63,3 +64,7 @@ The results of the tree top identification and crown segmentation steps can be s
 ![The orthomosaic as above](figures/eldo_3k_1_ortho-without-crown-segmentation.PNG)
 
 ![The orthomosaic with polygons representing tree crowns overlaid](figures/eldo_3k_1_ortho-with-crown-segmentation.PNG)
+
+The classification of all trees in the study (whether they were alive or dead) based on the extracted pixel values from the orthomosaic for each crown segment generates a "forest stem map" for each site.
+
+![A stem map showing the prediction of which trees are alive and which ones are dead based on extracted pixel values for each tree crown and the logistic regression model.](figures/eldo_3k_1_classified-ttops.png)
