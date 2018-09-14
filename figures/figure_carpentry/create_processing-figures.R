@@ -172,6 +172,7 @@ cc_ggplot <-
         axis.title.y = element_text(angle = 0, vjust = 0.5),
         plot.margin = margin(t = 0, r = 5.5, b = 0, l = 5.5, "points"),
         plot.background = element_blank(),
-        panel.grid = element_blank())
+        panel.grid = element_blank(),
+        legend.key.height = unit(0.075, "npc"))
 
-ggsave(plot = cc_ggplot, filename = paste0("figures/", site, "_classified-ttops.png"), height = 10, width = 10, units = "in", dpi = 600)
+ggsave(plot = cc_ggplot, filename = paste0("figures/", site, "_classified-ttops.png"), height = 10, width = 12, units = "in", dpi = 600)
