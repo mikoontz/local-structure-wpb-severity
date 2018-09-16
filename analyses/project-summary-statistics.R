@@ -57,4 +57,45 @@ ggplot(summarized_hcc_data, aes(x = density, y = mortality)) +
   geom_smooth(method = "lm")
 
 summarized_hcc_data
+as.data.frame(summarized_hcc_data)
 sum(summarized_hcc_data$total_trees)
+
+m1 <- glm(as.matrix(summarized_hcc_data[, c("live", "dead")]) ~ forest + elev + density, data = summarized_hcc_data, family = "binomial")
+summary(m1)
+hist(hcc_data$voronoi_area, breaks = 1000)
+quantile(hcc_data$voronoi_area, probs = 0.5, na.rm = TRUE)
+mean(hcc_data$voronoi_area, na.rm = TRUE)
+
+s <- 
+  hcc_data %>%
+  dplyr::select(-voronoi_poly, -crown_poly) %>% 
+  mutate(voronoi_area = as.numeric(voronoi_area)) %>% 
+  filter(voronoi_area < 500) %>% 
+  mutate_at(vars(elev, height, voronoi_area), funs(scale))
+
+s$elev_relative <- factor(s$elev_relative, levels = c("lo", "mi", "hi"))
+s$forest <- factor(s$forest, levels = c("sequ", "sier", "stan", "eldo"))
+
+m2 <- glmer(live ~ voronoi_area*height + elev_relative + (1 | site), data = s[s$forest != "sier", ], family = "binomial", glmerControl(optimizer = "bobyqa"))
+summary(m2)
+e1 <- Effect(focal.predictors = c("voronoi_area", "height"), mod = m2, xlevels = list(voronoi_area = seq(-2, 2, length.out = 15), height = seq(-2, 2, length.out = 3)))
+
+e1_gg <- as.data.frame(e1)
+e1_gg
+
+ggplot(e1_gg, aes(x = rev(voronoi_area), y = plogis(fit), fill = as.factor(height))) +
+  geom_ribbon(aes(ymin = plogis(lower), ymax = plogis(upper)), alpha = 0.4) +
+  geom_line(lwd = 1) +
+  scale_fill_viridis_d(name = "Tree\nheight\n(m)") +
+  theme_bw() +
+  xlab("Local density (standard deviations)") +
+  ylab("Pr (live)") +
+  theme(axis.title.y = element_text(angle = 0, vjust = 0.5, margin = margin(0, 18, 0, 0)),
+        axis.title.x = element_text(margin = margin(18, 0, 0, 0)),
+        axis.text = element_text(size = 24),
+        axis.title = element_text(size = 24),
+        legend.text = element_text(size = 24, hjust = 1),
+        legend.title = element_text(size = 24, hjust = 0.5),
+        legend.key.height = unit(0.05, "npc"),
+        panel.grid = element_blank())
+        
