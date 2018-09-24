@@ -176,3 +176,12 @@ cc_ggplot <-
         legend.key.height = unit(0.075, "npc"))
 
 ggsave(plot = cc_ggplot, filename = paste0("figures/", site, "_classified-ttops.png"), height = 10, width = 12, units = "in", dpi = 600)
+
+# Example stem plots with orthos and mortality numbers
+# eldo_4k_1 ~10.8% mortality (low)
+# sequ_5k_2 ~32.4% mortality (about average)
+# sier_4k_1 ~58.2% mortality (high)
+
+# read summarized data
+
+sd <- read_csv("data/data_output/summarized-non-spatial-site-data.csv")
