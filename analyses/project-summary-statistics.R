@@ -52,13 +52,18 @@ summarized_hcc_data <-
   left_join(all_site_areas, by = "site") %>% 
   mutate(density = total_trees / (site_area / 10000))
 
+write_csv(summarized_hcc_data, path = "data/data_output/summarized-non-spatial-site-data.csv")
 ggplot(summarized_hcc_data, aes(x = density, y = mortality)) + 
   geom_point() +
   geom_smooth(method = "lm")
 
-summarized_hcc_data
-as.data.frame(summarized_hcc_data)
+summarized_hcc_data %>% 
+  arrange(mortality)
+as.data.frame(summarized_hcc_data %>% arrange(mortality))
 sum(summarized_hcc_data$total_trees)
+sum(summarized_hcc_data$dead)
+sum(summarized_hcc_data$dead) / sum(summarized_hcc_data$total_trees)
+
 
 m1 <- glm(as.matrix(summarized_hcc_data[, c("live", "dead")]) ~ forest + elev + density, data = summarized_hcc_data, family = "binomial")
 summary(m1)
@@ -83,19 +88,48 @@ e1 <- Effect(focal.predictors = c("voronoi_area", "height"), mod = m2, xlevels =
 e1_gg <- as.data.frame(e1)
 e1_gg
 
-ggplot(e1_gg, aes(x = rev(voronoi_area), y = plogis(fit), fill = as.factor(height))) +
+height_area_gg <- 
+  ggplot(e1_gg, aes(x = rev(voronoi_area), y = plogis(fit), fill = as.factor(height))) +
   geom_ribbon(aes(ymin = plogis(lower), ymax = plogis(upper)), alpha = 0.4) +
   geom_line(lwd = 1) +
-  scale_fill_viridis_d(name = "Tree\nheight\n(m)") +
+  scale_fill_viridis_d(name = "Tree\nheight\n(stdev)") +
   theme_bw() +
   xlab("Local density (standard deviations)") +
   ylab("Pr (live)") +
   theme(axis.title.y = element_text(angle = 0, vjust = 0.5, margin = margin(0, 18, 0, 0)),
         axis.title.x = element_text(margin = margin(18, 0, 0, 0)),
-        axis.text = element_text(size = 24),
-        axis.title = element_text(size = 24),
-        legend.text = element_text(size = 24, hjust = 1),
-        legend.title = element_text(size = 24, hjust = 0.5),
+        axis.text = element_text(size = 32),
+        axis.title = element_text(size = 32),
+        legend.text = element_text(size = 32, hjust = 1),
+        legend.title = element_text(size = 32, hjust = 0.5),
         legend.key.height = unit(0.05, "npc"),
-        panel.grid = element_blank())
-        
+        panel.grid = element_blank(),
+        plot.margin = margin(50, 50, 50, 50, "points"))
+
+ggsave(plot = height_area_gg, filename = "figures/height-area-model.png", height = 10, width = 12, units = "in", dpi = 600)
+
+e2 <- Effect(focal.predictors = "elev_relative", mod = m2)
+
+e2_gg <- as.data.frame(e2) 
+e2_gg 
+
+elev_gg <- 
+  ggplot(e2_gg, aes(x = 1:3, y = plogis(fit))) +
+  geom_line(lwd = 1) +
+  geom_ribbon(aes(ymin = plogis(lower), ymax = plogis(upper)), alpha = 0.4) +
+  theme_bw() +
+  xlab("Elevation") +
+  ylab("Pr (live)") +
+  theme(axis.title.y = element_text(angle = 0, vjust = 0.5, margin = margin(0, 18, 0, 0)),
+        axis.title.x = element_text(margin = margin(18, 0, 0, 0)),
+        axis.text = element_text(size = 32),
+        axis.title = element_text(size = 32),
+        legend.text = element_text(size = 32, hjust = 1),
+        legend.title = element_text(size = 32, hjust = 0.5),
+        legend.key.height = unit(0.05, "npc"),
+        panel.grid = element_blank(),
+        plot.margin = margin(50, 50, 50, 50, "points")
+  ) +
+  scale_x_continuous(breaks = 1:3, labels = c("low", "mid", "high"))
+
+ggsave(plot = elev_gg, filename = "figures/elev-model.png", height = 10, width = 12, units = "in", dpi = 600) 
