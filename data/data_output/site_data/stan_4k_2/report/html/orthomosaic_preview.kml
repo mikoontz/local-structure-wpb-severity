@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+<Folder>
+ <name>stan_4k_2_x3</name>
+ <description>Orthomosaic overlay</description>
+ <GroundOverlay>
+   <name>Orthomosaic overlay</name>
+   <description>Orthomosaic overlay</description>
+   <Icon><href>C:/pix4d_working/stan_4k_2/stan_4k_2_x3/1_initial/report/html/orthomosaic_preview.png</href></Icon>
+   <LatLonBox>
+     <north>38.2856</north>
+     <south>38.278</south>
+     <east>-120.339</east>
+     <west>-120.348</west>
+     <rotation>-0.1556640799496235</rotation>
+   </LatLonBox>
+ </GroundOverlay>
+</Folder>
+</kml>

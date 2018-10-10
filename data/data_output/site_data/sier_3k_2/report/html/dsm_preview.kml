@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+<Folder>
+ <name>sier_3k_2_x3</name>
+ <description>DSM preview overlay</description>
+ <GroundOverlay>
+   <name>DSM preview overlay</name>
+   <description>DSM preview overlay</description>
+   <Icon><href>/tmp/pix4dmapper/project-372215/sier_3k_2_x3/1_initial/report/html/dsm_preview.png</href></Icon>
+   <LatLonBox>
+     <north>37.0564</north>
+     <south>37.0484</south>
+     <east>-119.237</east>
+     <west>-119.246</west>
+     <rotation>-0.1556640799496235</rotation>
+   </LatLonBox>
+ </GroundOverlay>
+</Folder>
+</kml>

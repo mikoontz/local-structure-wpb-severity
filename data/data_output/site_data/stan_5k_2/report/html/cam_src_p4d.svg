@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg id="svg2" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" version="1.1" xmlns:cc="http://creativecommons.org/ns#" xmlns:dc="http://purl.org/dc/elements/1.1/">
+ <g stroke="#3d7634">
+  <g>
+   <path id="path4138" d="m3.994 3.0369-0.49658 0.49836v8.9705l0.49658 0.49836 0.49658 0.49836h6.9521l0.49658-0.49836 0.56-0.504v-7l-2.05 0.0288-0.5175-0.5077-0.4761-0.4891v-1.9934h-4.9658z" fill="none"/>
+   <path id="path4140" d="m5 7.5h6" fill="none"/>
+   <path id="path4142" d="m4.9872 9.5156 6.0128-0.0156" fill-rule="evenodd" fill="#3d7634"/>
+   <path id="path4144" d="m5 11.5h6" fill-rule="evenodd" fill="#3d7634"/>
+  </g>
+  <path id="path4143" stroke-linejoin="round" d="m9.5754 2.3463 3.0686 3.0028" stroke-width=".99494px" fill="none"/>
+ </g>
+</svg>
