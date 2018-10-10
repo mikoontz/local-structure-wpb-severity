@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <kml xmlns="http://www.opengis.net/kml/2.2">
 <Folder>
- <name>sequoia_4000_2_rgb</name>
+ <name>sequ_4k_2_x3</name>
  <description>Matches overlay</description>
  <GroundOverlay>
    <name>Matches overlay</name>
    <description>Matches overlay</description>
-   <Icon><href>F:/sUAS/local-structure-outbreak-intensity/sequoia_4000_2/sequoia_4000_2_2018-04-13/sequoia_4000_2_rgb/1_initial/report/html/matches_graph_XY.png</href></Icon>
+   <Icon><href>C:/pix4d_working/sequ_4k_2/sequ_4k_2_x3/1_initial/report/html/matches_graph_XY.png</href></Icon>
    <LatLonBox>
      <north>36.6527</north>
      <south>36.6447</south>
