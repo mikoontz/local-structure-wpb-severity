@@ -44,19 +44,42 @@ v) Save as a .geoTIFF in the data_output folder for the correct site
 CSF Filter Exceptions (Cloth resolution / Max iterations / Classification threshold)
 All sites used (1.5 / 500 / 0.5) unless otherwise noted
 
+eldo_3k_1: (1.5 / 500 / 0.5)
+eldo_3k_2: (1.5 / 500 / 0.5)
+eldo_3k_3: (1.5 / 500 / 0.5)
 eldo_4k_1: (0.5 / 500 / 0.5) denser forest so used a smaller cloth size to better detect ground points
+eldo_4k_2: (1.5 / 500 / 0.5)
 eldo_4k_3: (0.5 / 500 / 0.5) denser forest with steep slopes
 eldo_5k_1: (1.0 / 500 / 0.5) steep slopes
 eldo_5k_2: (1.0 / 500 / 0.5) steep slopes
-sequ_4k_1: (1.0 / 500 / 0.5): dense vegetation
+eldo_5k_3: (1.5 / 500 / 0.5)
+
+sequ_4k_1: (1.0 / 500 / 0.5): dense vegetation + terrain
+sequ_4k_2: (1.0 / 500 / 0.5): dense vegetation + terrain
 sequ_4k_3: (1.0 / 500 / 0.5): steep slopes
 sequ_5k_1: (0.8 / 500 / 0.5): vegetation + slopes
 sequ_5k_2: (0.5 / 500 / 0.5): vegetation + slopes
-sequ_5k_3: (0.5 / 500 / 0.5): vegetation + slopes
+sequ_5k_3: (1.2 / 500 / 0.5): vegetation + slopes
 sequ_6k_1: (1.0 / 500 / 0.5): dense vegetation + terrain
 sequ_6k_2: (1.0 / 500 / 0.5): dense vegetation + terrain
 sequ_6k_3: (0.5 / 500 / 0.5): dense vegetation + terrain
+
+sier_3k_1: (0.8 / 500 / 0.5): vegetation + slopes
+sier_3k_2: (0.8 / 500 / 0.5): vegetation + slopes
+sier_3k_3: (0.8 / 500 / 0.5): vegetation + slopes
 sier_4k_1: (1.0 / 500 / 0.5): dense vegetation + terrain
+sier_4k_2: (0.8 / 500 / 0.5): vegetation + slopes
+sier_4k_3: (1.0 / 500 / 0.5): dense vegetation + terrain
+sier_5k_1: (0.8 / 500 / 0.5): vegetation + slopes
+sier_5k_2: (1.2 / 500 / 0.5): dense vegetation + terrain
+sier_5k_3: (1.0 / 500 / 0.5): dense vegetation + terrain
+
 stan_3k_1: (1.0 / 500 / 0.5): dense vegetation + terrain
 stan_3k_2: (1.0 / 500 / 0.5): dense vegetation + terrain
 stan_3k_3: (1.0 / 500 / 0.5): dense vegetation + terrain
+stan_4k_1: (0.8 / 500 / 0.5): vegetation + slopes
+stan_4k_2: (0.8 / 500 / 0.5): vegetation + slopes
+stan_4k_3: (0.9 / 500 / 0.5): vegetation + slopes
+stan_5k_1: (1.0 / 500 / 0.5): dense vegetation + terrain
+stan_5k_2: (0.8 / 500 / 0.5): vegetation + slopes
+stan_5k_3: (1.0 / 500 / 0.5): dense vegetation + terrain
