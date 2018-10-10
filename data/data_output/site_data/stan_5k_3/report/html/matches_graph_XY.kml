@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+<Folder>
+ <name>stan_5k_3_x3</name>
+ <description>Matches overlay</description>
+ <GroundOverlay>
+   <name>Matches overlay</name>
+   <description>Matches overlay</description>
+   <Icon><href>/tmp/pix4dmapper/project-370284/stan_5k_3_x3/1_initial/report/html/matches_graph_XY.png</href></Icon>
+   <LatLonBox>
+     <north>38.2039</north>
+     <south>38.1965</south>
+     <east>-120.036</east>
+     <west>-120.046</west>
+     <rotation>-0.1556640799496235</rotation>
+   </LatLonBox>
+ </GroundOverlay>
+</Folder>
+</kml>

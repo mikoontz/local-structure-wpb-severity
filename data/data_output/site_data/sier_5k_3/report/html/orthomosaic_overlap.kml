@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+<Folder>
+ <name>sier_5k_3_x3</name>
+ <description>Overlap overlay</description>
+ <GroundOverlay>
+   <name>Overlap overlay</name>
+   <description>Overlap overlay</description>
+   <Icon><href>C:/pix4d_working/sier_5k_3/sier_5k_3_x3/1_initial/report/html/orthomosaic_overlap.png</href></Icon>
+   <LatLonBox>
+     <north>37.2592</north>
+     <south>37.2517</south>
+     <east>-119.373</east>
+     <west>-119.382</west>
+     <rotation>-0.1556640799496235</rotation>
+   </LatLonBox>
+ </GroundOverlay>
+</Folder>
+</kml>
