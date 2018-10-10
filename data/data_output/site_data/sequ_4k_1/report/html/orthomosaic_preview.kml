@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <kml xmlns="http://www.opengis.net/kml/2.2">
 <Folder>
- <name>sequoia_4000_1_rgb</name>
+ <name>sequ_4k_1_x3</name>
  <description>Orthomosaic overlay</description>
  <GroundOverlay>
    <name>Orthomosaic overlay</name>
    <description>Orthomosaic overlay</description>
-   <Icon><href>F:/sUAS/local-structure-outbreak-intensity/sequoia_4000_1/sequoia_4000_1_2018-04-13/sequoia_4000_1_rgb/1_initial/report/html/orthomosaic_preview.png</href></Icon>
+   <Icon><href>/tmp/pix4dmapper/project-371362/sequ_4k_1_x3/1_initial/report/html/orthomosaic_preview.png</href></Icon>
    <LatLonBox>
      <north>36.6878</north>
      <south>36.6801</south>
-     <east>-118.955</east>
+     <east>-118.954</east>
      <west>-118.964</west>
      <rotation>-0.1556640799496235</rotation>
    </LatLonBox>
