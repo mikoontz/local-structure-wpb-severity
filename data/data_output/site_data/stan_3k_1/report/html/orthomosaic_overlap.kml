@@ -6,10 +6,10 @@
  <GroundOverlay>
    <name>Overlap overlay</name>
    <description>Overlap overlay</description>
-   <Icon><href>Z:/sUAS/sUAS_data/local-structure-outbreak-intensity/stanislaus_3000_1/stanislaus_3000_1_2018-05-10/stan_3k_1_x3/1_initial/report/html/orthomosaic_overlap.png</href></Icon>
+   <Icon><href>/tmp/pix4dmapper/project-371213/stan_3k_1_x3/1_initial/report/html/orthomosaic_overlap.png</href></Icon>
    <LatLonBox>
-     <north>38.0893</north>
-     <south>38.0833</south>
+     <north>38.0894</north>
+     <south>38.0831</south>
      <east>-120.227</east>
      <west>-120.239</west>
      <rotation>-0.1556640799496235</rotation>
