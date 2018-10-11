@@ -1,0 +1,22 @@
+library(tidyverse)
+
+### first create a checklist to see what data_output products have been completed for each site.
+sites_checklist <- 
+  expand.grid(
+    c("eldo", "stan", "sier", "sequ"), 
+    c("3k", "4k", "5k", "6k"), 
+    1:3) %>% 
+  as.data.frame() %>% 
+  setNames(c("forest", "elev", "rep")) %>% 
+  dplyr::filter(!(forest == "sequ" & elev == "3k")) %>%
+  dplyr::filter(!(forest != "sequ" & elev == "6k")) %>% 
+  dplyr::arrange(forest, elev, rep) %>% 
+  dplyr::mutate(site = paste(forest, elev, rep, sep = "_")) %>% 
+  dplyr::select(-forest, -elev, -rep) %>% 
+  dplyr::mutate(plot_locations_check = file.exists(paste0("data/data_output/site_data/", site, "/", site, "_plot-locations/", site, "_plot-locations.shp"))) %>% 
+  dplyr::mutate(ttops_check = file.exists(paste0("data/data_output/site_data/", site, "/", site, "_ttops/", site, "_ttops.shp"))) %>% 
+  dplyr::mutate(crowns_check = file.exists(paste0("data/data_output/site_data/", site, "/", site, "_crowns/", site, "_crowns.shp"))) %>% 
+  dplyr::mutate(classified_check = file.exists(paste0("data/data_output/classified/model-classified/crown-shapefiles/", site, "_classified-crowns/", site, "_classified-crowns.shp"))) %>% 
+  dplyr::mutate(augmented_classified_check = file.exists(paste0("data/data_output/classified/model-classified/augmented-crowns/", site, "_augmented-crowns.rds")))
+
+sites_checklist

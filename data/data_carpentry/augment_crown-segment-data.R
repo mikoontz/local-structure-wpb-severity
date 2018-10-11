@@ -89,7 +89,7 @@ sites_checklist <-
   dplyr::mutate(ttops_check = file.exists(paste0("data/data_output/site_data/", site, "/", site, "_ttops/", site, "_ttops.shp"))) %>% 
   dplyr::mutate(crowns_check = file.exists(paste0("data/data_output/site_data/", site, "/", site, "_crowns/", site, "_crowns.shp"))) %>% 
   dplyr::mutate(classified_check = file.exists(paste0("data/data_output/classified/model-classified/crown-shapefiles/", site, "_classified-crowns/", site, "_classified-crowns.shp"))) %>% 
-  dplyr::mutate(augmented_classified_check = file.exists(paste0("data/data_output/classified/model-classified/augmented-crown-shapefiles/", site, "_augmented-crowns/", site, "_augmented-crowns.shp")))
+  dplyr::mutate(augmented_classified_check = file.exists(paste0("data/data_output/classified/model-classified/augmented-crowns/", site, "_augmented-crowns.rds")))
 
 # the sites to process is the intersection between the sites that haven't been model classified and the
 # sites for which we have Pix4D data to work with
