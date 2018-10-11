@@ -15,16 +15,39 @@ eldo_4k_3 (plum creek): 5 plots georeferenced on orthophoto
 eldo_5k_1 (panther creek above): 3 plots georeferenced on orthophoto (missing plots 2 and 4)
 eldo_5k_2 (near ellis road): 1 plot georeferenced on orthophoto (missing 1, 2, 3, and 5)
 eldo_5k_3 (pebble canyon): 3 plots georeferenced on orthophoto (missing 3 and 5)
-sequ_4k_1 (road to whittaker forest): skipped for now (may have to reprocess data)
-sequ_4k_2 (eshom ohv): skipped for now (may have to reprocess data)
+eldo: 31 plots identified
+
+stan_3k_1 (italian bar): 4 plots georeferenced on orthophoto (missing plot 5)
+stan_3k_2 (wagner road): 5 plots georeferenced on orthophoto 
+stan_3k_3 (sugar pine slopes): 5 plots georeferenced on orthophoto
+stan_4k_1 (lyons reservoir): 4 plots georeferenced on orthophoto (missing plot 4)
+stan_4k_2 (arnold): 5 plots georeferenced on orthophoto
+stan_4k_3 (crandall): 2 plots georeferenced on orthophoto (missing plots 3, 4, and 5)
+stan_5k_1 (long barn bluff): 5 plots georeferenced on orthophoto
+stan_5k_2 (fraser flat campground): 5 plots georeferenced on orthophoto
+stan_5k_3 (beardsley road): 5 plots georeferenced on orthophoto
+stan: 40 plots identified
+
+sier_3k_1 (marcs daily walk): 5 plots georeferenced on orthophoto
+sier_3k_2 (blue canyon north): 5 plots georeferenced on orthophoto
+sier_3k_3 (blue canyon south): 4 plots georeferenced on orthophoto (missing plot 3)
+sier_4k_1 (goat mountain): 5 plots georeferenced on orthophoto (plot 1 may be a false positive?)
+sier_4k_2 (beasore road): 4 plots georeferenced on orthophoto (missing plot 5)
+sier_4k_3 (nutmeg saddle): 4 plots georeferenced on orthophoto (missing plot 4)
+sier_5k_1 (muddy 6s40 road off beasore road): 5 plots georeferenced on orthophoto
+sier_5k_2 (11s91 road dinkey zone): 3 plots georeferenced on orthophoto (missing plots 3 and 4)
+sier_5k_3 (whiskey ridge): 3 plots georeferenced on orthophoto (missing plots 2 and 4)
+sier: 38 plots identified
+
+sequ_4k_1 (road to whittaker forest): 5 plots georeferenced on orthophoto
+sequ_4k_2 (eshom ohv): 3 plots georeferenced on orthophoto (missing 3 and 4)
 sequ_4k_3 (glenville hwy): 4 plots georeferenced on orthophoto (missing plot 2)
 sequ_5k_1 (last chance meadow): 3 plots georeferenced on orthophoto (missing plots 4 and 5)
 sequ_5k_2 (landslide campground): 5 plots georeferenced on orthophoto
-sequ_5k_3: skipped for now (may have to reprocess data)
+sequ_5k_3 (hume lake): 5 plots georeferenced on orthophoto
 sequ_6k_1 (nobe young meadow): 4 plots georeferenced on orthophoto (missing plot 5)
 sequ_6k_2 (near shadow mtn ski area): 2 plots georeferenced on orthophoto (missing plots 1, 4, and 5)
 sequ_6k_3 (hwy 180): 4 plots georeferenced on orthophoto (missing plot 5)
-sier_4k_1 (goat mountain): skipped for now (may have to reprocess data)
-stan_3k_1 (italian bar): skipped for now (may have to reprocess data)
-stan_3k_2 (wagner road): 5 plots georeferenced on orthophoto 
-stan_3k_3 (sugar pine slopes): 5 plots georeferenced on orthophoto
+sequ: 35 plots identified
+
+144 plots identified out of 180 (80%)
