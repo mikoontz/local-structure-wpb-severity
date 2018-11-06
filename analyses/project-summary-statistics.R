@@ -53,6 +53,7 @@ summarized_hcc_data <-
   mutate(density = total_trees / (site_area / 10000))
 
 write_csv(summarized_hcc_data, path = "data/data_output/summarized-non-spatial-site-data.csv")
+
 ggplot(summarized_hcc_data, aes(x = density, y = mortality)) + 
   geom_point() +
   geom_smooth(method = "lm")
