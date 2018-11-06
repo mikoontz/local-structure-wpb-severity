@@ -13,12 +13,18 @@ library(tidyverse)
 library(purrr)
 library(raster)
 
+source("data/data_carpentry/make_processing-checklist.R")
+
 # overwrite variable if user wants to rewrite all exported geospatial files (dem of each site, bounding box around
 # each site, photo points for each site)
 overwrite <- FALSE
 
-# character vector of all study sites
-all_sites <- list.files("data/data_output/site_data")
+# character vector of all study sites that don't have the mission footprint figured out yet
+sites_to_process <-
+  sites_checklist %>% 
+  dplyr::filter(!mission_footprint_check) %>% 
+  dplyr::select(site) %>% 
+  pull()
 
 # the 30m resolution SRTM digital elevation model for the Sierra Nevada region
 # No direct source for this exists in R (not raster, elevatr, or FedData), so
@@ -29,16 +35,16 @@ dem <- raster::raster("data/features/srtm_30m.tif")
 
 # Iterate through all the available sites
 # For loop is much more inuitive to use here (IMO)
-for (i in seq_along(all_sites)) {
+for (i in seq_along(sites_to_process)) {
   # get the character string representing the ith site
-  current_site <- all_sites[i]
+  current_site <- sites_to_process[i]
   
   # read all the individual raw flight logs from the specified directory
   # turn the csv files into shape files by assigning the appropriate columns
   # to be the coordinates
   
   flight_logs_list <- 
-    list.files(paste0("data/data_output/", current_site, "/", current_site, "_flight-logs/"), pattern = "[0-9].csv", full.names = TRUE) %>% 
+    list.files(paste0("data/data_output/site_data/", current_site, "/", current_site, "_flight-logs/"), pattern = "[0-9].csv", full.names = TRUE) %>% 
     purrr::map(read_csv) %>% 
     purrr::map(.f = function(x) {
       x %>% 
@@ -89,25 +95,25 @@ for (i in seq_along(all_sites)) {
   site_dem <- raster::crop(x = dem, y = as(site_bounds, "Spatial"), snap = "out")
   
   if (overwrite) {
-    if (dir.exists(paste0("data/data_output/", current_site, "/", current_site, "_mission-footprint"))) {
-      unlink(paste0("data/data_output/", current_site, "/", current_site, "_mission-footprint"), recursive = TRUE)
+    if (dir.exists(paste0("data/data_output/site_data/", current_site, "/", current_site, "_mission-footprint"))) {
+      unlink(paste0("data/data_output/site_data/", current_site, "/", current_site, "_mission-footprint"), recursive = TRUE)
     }
   }
   
-  if (!dir.exists(paste0("data/data_output/", current_site, "/", current_site, "_mission-footprint"))) {
-    dir.create(paste0("data/data_output/", current_site, "/", current_site, "_mission-footprint"))
+  if (!dir.exists(paste0("data/data_output/site_data/", current_site, "/", current_site, "_mission-footprint"))) {
+    dir.create(paste0("data/data_output/site_data/", current_site, "/", current_site, "_mission-footprint"))
   }
   
-  if (!file.exists(paste0("data/data_output/", current_site, "/", current_site, "_mission-footprint/", current_site, "_srtm30m.tif"))) {
-    raster::writeRaster(site_dem, filename = paste0("data/data_output/", current_site, "/", current_site, "_mission-footprint/", current_site, "_srtm30m.tif"), overwrite = TRUE)
+  if (!file.exists(paste0("data/data_output/site_data/", current_site, "/", current_site, "_mission-footprint/", current_site, "_srtm30m.tif"))) {
+    raster::writeRaster(site_dem, filename = paste0("data/data_output/site_data/", current_site, "/", current_site, "_mission-footprint/", current_site, "_srtm30m.tif"), overwrite = TRUE)
   }
   
-  if (!file.exists(paste0("data/data_output/", current_site, "/", current_site, "_mission-footprint/", current_site, "_photo-points.geoJSON"))) {
-    sf::st_write(obj = photo_points, dsn = paste0("data/data_output/", current_site, "/", current_site, "_mission-footprint/", current_site, "_photo-points.geoJSON"), delete_dsn = TRUE)
+  if (!file.exists(paste0("data/data_output/site_data/", current_site, "/", current_site, "_mission-footprint/", current_site, "_photo-points.geoJSON"))) {
+    sf::st_write(obj = photo_points, dsn = paste0("data/data_output/site_data/", current_site, "/", current_site, "_mission-footprint/", current_site, "_photo-points.geoJSON"), delete_dsn = TRUE)
   }
   
-  if (!file.exists(paste0("data/data_output/", current_site, "/", current_site, "_mission-footprint/", current_site, "_site-bounds.geoJSON"))) {
-    sf::st_write(obj = site_bounds, dsn = paste0("data/data_output/", current_site, "/", current_site, "_mission-footprint/", current_site, "_site-bounds.geoJSON"), delete_dsn = TRUE)
+  if (!file.exists(paste0("data/data_output/site_data/", current_site, "/", current_site, "_mission-footprint/", current_site, "_site-bounds.geoJSON"))) {
+    sf::st_write(obj = site_bounds, dsn = paste0("data/data_output/site_data/", current_site, "/", current_site, "_mission-footprint/", current_site, "_site-bounds.geoJSON"), delete_dsn = TRUE)
   }
   
 }
