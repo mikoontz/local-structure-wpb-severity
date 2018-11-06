@@ -1,4 +1,5 @@
 library(tidyverse)
+library(purrr)
 
 ### first create a checklist to see what data_output products have been completed for each site.
 sites_checklist <- 
@@ -14,6 +15,8 @@ sites_checklist <-
   dplyr::mutate(site = paste(forest, elev, rep, sep = "_")) %>% 
   dplyr::select(-forest, -elev, -rep) %>% 
   dplyr::mutate(plot_locations_check = file.exists(paste0("data/data_output/site_data/", site, "/", site, "_plot-locations/", site, "_plot-locations.shp"))) %>% 
+  dplyr::mutate(mission_footprint_check = file.exists(paste0("data/data_output/site_data/", site, "/", site, "_mission-footprint"))) %>% 
+  dplyr::mutate(plot_remote_data_check = map_lgl(paste0("data/data_output/site_data/", site, "/", site, "_plot-remote-data"), .f = function(x) length(list.files(x)) > 0)) %>% 
   dplyr::mutate(ttops_check = file.exists(paste0("data/data_output/site_data/", site, "/", site, "_ttops/", site, "_ttops.shp"))) %>% 
   dplyr::mutate(crowns_check = file.exists(paste0("data/data_output/site_data/", site, "/", site, "_crowns/", site, "_crowns.shp"))) %>% 
   dplyr::mutate(classified_check = file.exists(paste0("data/data_output/classified/model-classified/crown-shapefiles/", site, "_classified-crowns/", site, "_classified-crowns.shp"))) %>% 
