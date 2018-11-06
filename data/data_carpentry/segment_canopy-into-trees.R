@@ -4,7 +4,7 @@ library(doParallel)
 library(tidyverse)
 
 # character vector of all study sites
-all_sites <- list.files("data/data_output")
+all_sites <- list.files("data/data_output/site_data")
 
 sites_checklist <- 
   expand.grid(
@@ -48,7 +48,7 @@ foreach (i = seq_along(sites_to_process)) %dopar% {
   current_site <- sites_to_process[i]
   
   # convenience string to set file paths for input/output
-  current_dir <- paste0("data/data_output/site_data", current_site, "/")
+  current_dir <- paste0("data/data_output/site_data/", current_site, "/")
   
   # The Digital Terrain Model (dtm) is the 2m resolution "ground" underneath
   # the current site. Created using CloudCompare and the Cloth Simulator Filter
