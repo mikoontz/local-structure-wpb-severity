@@ -8,8 +8,8 @@ library(lme4)
 summarized_hcc_data <- read_csv("data/data_output/summarized-non-spatial-site-data.csv")
 
 d <- 
-  read_csv("data/ground-data.csv") %>% 
-  rename(leif_name = `Plot #`,
+  readr::read_csv("data/ground-data.csv") %>% 
+  dplyr::rename(leif_name = `Plot #`,
          forest = Forest,
          elev = `Elev. Band`,
          rep = Block,
@@ -24,7 +24,7 @@ d <-
          year_dead = `Year death (time of attack or time of injury/other cause)`,
          year_fall = `Year Fall (initial)`,
          wpb = `BB/Cause`) %>% 
-  select(tree_id,
+  dplyr::select(tree_id,
          forest,
          elev,
          rep,
@@ -38,28 +38,27 @@ d <-
          year_dead,
          year_fall,
          wpb) %>% 
-  filter(!is.na(tree_id))
+  dplyr::filter(!is.na(tree_id))
 
 d <- 
   d %>% 
-  mutate(wpb = tolower(wpb)) %>% 
-  mutate(wpb = ifelse(wpb == "wbp", yes = "wpb", no = wpb)) %>% 
-  mutate(wpb = ifelse(str_detect(wpb, pattern = "wpb"), yes = 1, no = 0)) %>% 
-  mutate(dbh = dbh_in * 2.54) %>% 
-  mutate(height = height_ft * 12 * 2.54 / 100) %>% 
-  mutate(dist = dist_ft * 12 * 2.54 / 100) %>% 
-  mutate(live = ifelse(live == "L", yes = 1, no = 0)) %>% 
-  mutate(forest = tolower(forest)) %>% 
-  mutate(forest_code = case_when(forest == "eldorado" ~ "eldo",
+  dplyr::mutate(wpb = tolower(wpb)) %>% 
+  dplyr::mutate(wpb = ifelse(wpb == "wbp", yes = "wpb", no = wpb)) %>% 
+  dplyr::mutate(wpb = ifelse(str_detect(wpb, pattern = "wpb"), yes = 1, no = 0)) %>% 
+  dplyr::mutate(dbh = dbh_in * 2.54) %>% 
+  dplyr::mutate(height = height_ft * 12 * 2.54 / 100) %>% 
+  dplyr::mutate(dist = dist_ft * 12 * 2.54 / 100) %>% 
+  dplyr::mutate(live = ifelse(live == "L", yes = 1, no = 0)) %>% 
+  dplyr::mutate(forest = tolower(forest)) %>% 
+  dplyr::mutate(forest_code = case_when(forest == "eldorado" ~ "eldo",
                                   forest == "sequoia" ~ "sequ",
                                   forest == "sierra" ~ "sier",
                                   forest == "stanislaus" ~ "stan")) %>% 
-  select(-height_ft, -dist_ft) %>% 
-  mutate(elev_code = paste0(elev / 1000, "k")) %>% 
-  unite(col = site, forest_code, elev_code, rep, remove = FALSE) %>% 
-  unite(col = plot, site, plot_id, remove = FALSE) %>% 
-  unite(col = tree, plot, tree_id, remove = FALSE)
+  dplyr::mutate(rep = ifelse(forest == "eldorado" & elev == 4000 & rep %in% c(4, 5), yes = 3, no = rep)) %>% 
+  dplyr::select(-height_ft, -dist_ft) %>% 
+  dplyr::mutate(elev_code = paste0(elev / 1000, "k")) %>% 
+  dplyr::mutate(plot_id = plot_id - ((rep - 1) * 5)) %>% 
+  tidyr::unite(col = site, forest_code, elev_code, rep, remove = FALSE) %>% 
+  tidyr::unite(col = plot, site, plot_id, remove = FALSE) %>% 
+  tidyr::unite(col = tree, plot, tree_id, remove = FALSE)
   
-
-glimpse(d)
-
