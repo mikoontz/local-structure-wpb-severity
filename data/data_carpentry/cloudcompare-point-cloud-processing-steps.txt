@@ -41,8 +41,7 @@ iii) Click "Update Grid" to generate the raster
 iv) Under "Export", click raster. Tick the "export heights" box and no other boxes
 v) Save as a .geoTIFF in the data_output folder for the correct site
 
-CSF Filter Exceptions (Cloth resolution / Max iterations / Classification threshold)
-All sites used (1.5 / 500 / 0.5) unless otherwise noted
+CSF Filter Parameters for X3 processing (Cloth resolution / Max iterations / Classification threshold)
 
 eldo_3k_1: (1.5 / 500 / 0.5)
 eldo_3k_2: (1.5 / 500 / 0.5)
@@ -83,3 +82,45 @@ stan_4k_3: (0.9 / 500 / 0.5): vegetation + slopes
 stan_5k_1: (1.0 / 500 / 0.5): dense vegetation + terrain
 stan_5k_2: (0.8 / 500 / 0.5): vegetation + slopes
 stan_5k_3: (1.0 / 500 / 0.5): dense vegetation + terrain
+
+CSF Filter Parameters for RE processing (Cloth resolution / Max iterations / Classification threshold
+
+eldo_3k_1: (1.5 / 500 / 0.5)
+eldo_3k_2: (1.5 / 500 / 0.5)
+eldo_3k_3: (1.5 / 500 / 0.5)
+eldo_4k_1: (0.5 / 500 / 0.5) 
+eldo_4k_2: (1.5 / 500 / 0.5)
+eldo_4k_3: (NA / NA / NA) too many blocks
+eldo_5k_1: (1.0 / 500 / 0.5) 
+eldo_5k_2: (1.0 / 500 / 0.5) 
+eldo_5k_3: (1.5 / 500 / 0.5)
+
+sequ_4k_1: (1.0 / 500 / 0.5): 
+sequ_4k_2: (1.0 / 500 / 0.5): 
+sequ_4k_3: (1.0 / 500 / 0.5): 
+sequ_5k_1: (0.8 / 500 / 0.5): 
+sequ_5k_2: (0.5 / 500 / 0.5): 
+sequ_5k_3: (1.2 / 500 / 0.5): 
+sequ_6k_1: (1.0 / 500 / 0.5):
+sequ_6k_2: (1.0 / 500 / 0.5): 
+sequ_6k_3: (0.5 / 500 / 0.5):
+
+sier_3k_1: (0.8 / 500 / 0.5):
+sier_3k_2: (0.8 / 500 / 0.5): 
+sier_3k_3: (0.8 / 500 / 0.5): 
+sier_4k_1: (1.0 / 500 / 0.5): 
+sier_4k_2: (0.8 / 500 / 0.5): 
+sier_4k_3: (1.0 / 500 / 0.5): 
+sier_5k_1: (0.8 / 500 / 0.5): 
+sier_5k_2: (1.2 / 500 / 0.5): 
+sier_5k_3: (1.0 / 500 / 0.5): 
+
+stan_3k_1: (1.0 / 500 / 0.5): 
+stan_3k_2: (1.0 / 500 / 0.5): 
+stan_3k_3: (0.4 / 500 / 2.0): done!
+stan_4k_1: (0.3 / 500 / 0.5): done!
+stan_4k_2: (0.8 / 500 / 0.5): done!
+stan_4k_3: (NA / NA / NA): too many blocks
+stan_5k_1: (1.0 / 500 / 0.5): done!
+stan_5k_2: (1.0 / 500 / 0.5): done!
+stan_5k_3: (NA / NA / NA): too many blocks
