@@ -1,0 +1,134 @@
+Procedure for integrating RGB and Multispectral images into a single photogrammetry project
+
+This is my file structure for a project that uses RGB and multispectral drone imagery as part of its data:
+
+H:/ (a solid-state local drive)
+|---- my_project/
+      |---- readme.md
+      |---- my_project.Rproj
+      |---- analyses/
+      |---- figures/
+      |     |____ figure_carpentry/
+      |---- data/
+            |---- data_carpentry/
+	    |---- data_output/
+	    |---- features/
+	    |____ data_working/
+		  |---- "current_site".p4d
+		  |---- "current_site"_re_photos/
+		  |---- "current_site"_x3_photos/
+		  |____ "current_site"/
+			|---- "current_site"_photos/
+			|---- "current_site"_re/
+			|---- "current_site"_x3/
+			|---- "current_site"_re.p4d  
+			|---- "current_site"_x3.p4d
+			|---- 1_initial/
+			|---- 2_/
+			|____ 3_/
+
+1) Copy all RGB (X3) and multispectral (RE) photos (in separate folders) to the solid state drive (fast hard drive) on your computer into:
+data/data_working/"current_site"_x3_photos for RGB photos
+data/data_working/"current_site"_re_photos for multispectral photos
+
+Create a new folder within data/data_working/"current_site"_re_photos for the calibration photos, and move all the photos of the calibration panel to this folder. The first photo in the data/data_working/"current_site"_re_photos/ directory should be of the takeoff point.
+
+2) Run "rename-and-integrate-x3-and-re-photos.R" to copy all X3 and RedEdge photos into the same folder and create unique names for each image (abolishing the file structure imposed by the cameras); all photos will end up in: 
+data/working_data/"current_site"/"current_site"_photos/"new_file_name.extension"
+
+This script also curates the multispectral photos to remove all photos where we calculate the above ground level altitude (agl) to be less than 90m or which fall outside of the survey area as defined by the footprint of the RGB photos (determined by processing the flight logs). This cuts down on processing time by removing photos that aren't over the survey area, and likely improves the results by creating zero opportunity for the software to try to find (and then fail to find) keypoints between photos that are at really different altitudes (e.g., taken during takeoff/landing) or pointing in odd angles.
+
+This script will also create the following directories, to be used in Step 6: data/data_working/"current_site"/"current_site"_x3 and data/data_working/"current_site"/"current_site"_re
+
+3) Manually curate the RGB photos to remove images that are obviously not of the survey area (oblique shots from return flights, photos of the takeoff zone). The triggering of the RBG camera by the flight software is pretty good (i.e., it doesn't trigger when it shouldn't), so this curation is a pretty minor step.
+
+4) Manually add the calibration panel photos from the multispectral imagery to the final photos folder. 
+
+5) Once the calibration photos have been added manually, the directory now represents the final set of photos to be used for processing. Go back to the "rename-and-integrate-x3-and-re-photos.R" script to run the part that saves a metadata csv file of the actual photos used in processing in:
+data/data_output/site_data/"current_site"/"current_site"_processed-photos.csv
+
+6) Start a new Pix4D project for the RGB imagery. Put it in the data/data_working/"current_site" folder and call it "current_site"_x3
+
+Use Step 1 parameters from this Pix4D Support article to improve the quality of outputs from densely vegetated areas: https://support.pix4d.com/hc/en-us/articles/202560159-How-to-improve-the-outputs-of-dense-vegetation-areas-
+These instructions assume that the photos are sufficiently overlapped and that reflights are not possible (thus all efforts to improve results come from changing processing parameters rather than changing flight parameters).
+1/2 keypoints image scale
+standard calibration (some other sources suggest to use the "alternative" calibration for vegetation, but that's because "alternative" would be good for crop vegetation in fields on relatively flat terrain.)
+
+7) Process Step 1 for the RGB project
+
+Ensure that only *1 block* is created for the processing. If more than 1 block is created, that means the software had a hard time linking parts of the surveyed area together and so they were processed separately. There are a few ways to link them together. One is to add ~3 manual tie points near the areas that aren't properly linked together (https://support.pix4d.com/hc/en-us/articles/202560349-How-to-add-import-and-mark-manual-tie-points-MTPs-in-the-rayCloud) and then go to "Project > Reoptimize". If this works, great! If not, the project may need to have Step 1 rerun with a different image scale. If this works, great! Worst case is that the project may need to be subdivided with different processing parameters used for each subproject, then merged together. This would be less than ideal and take a lot of manual work but might be the only path forward.
+
+8) Start a new Pix4D project for the multispectral imagery. Put it in the data/data_working/"current_site" folder and call it "current_site"_re
+
+***BE SURE TO ADD THE CALIBRATION PANEL PHOTOS TO THE MULTISPECTRAL PROJECT*** If you skip this step, then try to merge the X3 and RE projects, then try to upload everything for cloud processing, *the workflow will break because Pix4D cloud can't find the calibration photos*. You won't know the workflow is broken until ~10-15 hours of processing and uploading time has gone into it. The calibration photos *must* be associated with the project in order to be automatically uploaded to Pix4D cloud. There is currently (as of December 2018) no way to add photos to an already created project, either in the cloud or in the desktop version. Thus, if you neglect this step, you have to go *recreate* the multispectral project entirely, run Step 1, merge the projects, manually tie the merged projects together, then re-upload. 
+
+***ADD THE CALIBRATION PHOTOS TO THE PROCESSING OPTIONS FOR STEP 3*** Remember that you have to reach out to Micasense to get the reflectance values of your particular panel in each of the 5 spectral bands.
+
+9) Process Step 1 for the multispectral project
+I've been getting the best luck with an image scale of 1 and the standard calibration method. Though the "recommended practices" for dense vegetation suggest a lower image scale improves results, I have had success processing a project using an image scale of 2 when image scales of 1 and 1/2 wouldn't work. So there's some trial and error to find success with this step. As in Step 7, it is critical for the result of Step 1 to have only 1 block. Keep tweaking the processing variables to make this happen. The worst case might be to reduce the area of the survey by removing areas where camera calibration seems to be challenging.
+
+10) Once Steps 7 and 9 produce Step 1 results with a single block each, create a new Pix4D project just called "current_site" in the data/data_working directory. Choose the "this project is a merge of several subprojects" option. When prompted, select the "current_site"_x3.p4d and "current_site"_re.p4d subprojects as the ones to merge. There will be a prompt saying that some of the objects in each project have the same and "do you want to treat them as identical?". I've been selecting "yes", but I need to investigate further what exactly this means. I know it can appear if you have manual tie points or ground control points that have the same labels, but I'm not sure what it's referring to if you don't have these "extras" added in each project (which we don't, at this point). The project will take some time to merge the subprojects. If one block results from the merge, then great! If more than 1 block (most likely 2 blocks) are created, then use manual tie points to link the RGB and multispectral images together (https://support.pix4d.com/hc/en-us/articles/202560349-How-to-add-import-and-mark-manual-tie-points-MTPs-in-the-rayCloud). Export the manual tie points to a file "current_site"_mtp.txt so they can be easily incorporated into a reproducible workflow in the future if the same 2 subprojects need to be recreated and merged.
+
+11) Set the parameters for Steps 2 and 3 following these guidelines: https://support.pix4d.com/hc/en-us/articles/202560159-How-to-improve-the-outputs-of-dense-vegetation-areas-
+Step 2: Point cloud densification
+Use 1/2 image scale and "multi-scale"
+Step 3: Orthomosaic
+Use the triangulation interpolation method instead of IDW for raster DSM generation from the point cloud
+
+
+
+### Question for Pix4D engineers
+
+[Desktop / Cloud Hybrid] [Pix4Dmapper Pro 4.3.31] imagery with different spectral signatures; one block after subproject merge, two blocks after cloud processing
+
+Hi all,
+
+I'm trying to process a project that has both RGB and multispectral imagery. The cameras were flown simultaneously, so there is complete overlap in their coverage. The RGB camera is a DJI Zenmuse X3 and the multispectral camera is a Micasense RedEdge3, both of which are in the Pix4D database. There's lots of front and side overlap (90% / 90% measured 100m below the X3 lens, and I flew at 120m so slightly higher than 90% ground overlap for the X3), and so I'm interested in dialing in the processing parameters. I've successfully processed many RGB projects, and am now looking to integrate the multispectral data that I have by setting up the right Pix4D workflow.
+
+I'm having trouble with the proper order of events in the workflow to ensure the finished product has a single block. The short version is that I can get a single block from each camera rig separately (one block for the RGB camera and one block for the multispectral camera) by customizing the keypoints image scale during Step 1, and I can get a single block when merging the projects by using manual tie points, but I get two blocks returned in the finished product after uploading the project to the cloud for processing of Steps 2 and 3. It seems that Step 1 is redone in the cloud using one keypoints image scale for the whole project, and the different values of this parameter that I found for the different camera rigs to ensure a single block output are ignored.
+
+What step am I missing to ensure that the correct keypoints image scale parameter for each camera rig is used when proceeding to Steps 2 and 3 of a merged project?
+
+Thanks for your help!
+
+###
+
+ 
+
+I've been following the excellent tutorial on processing imagery with different spectral signatures. I've also been following the other excellent tutorial on merging projects. I'm using a hybrid Desktop/Cloud workflow which I'll describe in case it's helpful to other folks:
+
+1) Give all images a unique name (the X3 and RedEdge keep images with the same name distinct by putting them in different folders, so I turn the folder structure into part of the file name. E.g., 0000SET/000/IMG_0001_1.tif becomes 0000SET_000_IMG_0001_1.tif)
+
+2) Subset the images to just the ones taken over the survey area (remove images taken while the drone is taking off or travelling to the survey area but not yet over the survey area. I do this by extracting the latitude/longitude and altitude from the EXIF metadata in each photo and removing photos that are outside the bounds of the survey area or photos that are taken while the aircraft is not at survey altitude-- I use a bit of a buffer and include all photos where the aircraft is >100m above ground level. I do this step programmatically in R).
+
+3) Start a new Pix4D project for just the RGB images. Only perform Step 1, and find parameters such that a single image block is returned.
+
+4) Start a second new Pix4D project for just the multispectral images. *Make sure to add the calibration panel images to the project*. Only perform Step 1, and find parameters such that a single image block is returned.
+
+Note: If you don't add the calibration panel images to the project, you are still able to incorporate the radiometric correction by pointing the Step 3 processing option for calibration to wherever those photos live on your computer. BUT, if those photos aren't *added as part of the project*, then they won't be uploaded to Pix4D Cloud should you decide to use cloud processing. All the rest of your photos will upload, and then the project will break as soon as it starts on Pix4D Cloud. Since you can't add photos to a project after it has been created, this breakage means you have to start all over creating a new mulitspectral project, merging it, reoptimizing it, and uploading it.
+
+5) Start a third new Pix4D project and check the box indicating that this new project will be a merge of other projects. Select the RGB and multispectral projects as the ones to merge.
+
+Note: there's a dialog box that pops up saying that some objects have identical names in the projects and should Pix4D treat them as the same object. There aren't any identically named objects (like tie points or ground control points) in my projects, so I'm not sure what this is referring to. I've just been clicking "yes, treat them as identical"
+
+Note 2: There's also 3 dialog boxes that come up (one for each processing Step) saying that the processing parameters for each Step are different between the two projects. I know this is true (and part of the benefit of the merging workflow), so I've just been clicking "Okay".
+
+6) Once the merge is complete, I follow the tutorial to mark several (3 to 4) manual tie points using the rayCloud. I ensure that I mark photos for each manual tie point that are in the RGB group and that are in the multispectral group. I've been marking between 20 and 40 photos per manual tie point.
+
+Note: For me, unlike what is described in the tutorial, the green cross never matches up to the same point across all the images. Instead, the green cross matches nicely to *either* the RGB set of photos OR the multispectral set of photos. The green cross is in the vicinity, but doesn't overlap with, the points I've marked as manual tie points on the *other* set of photos. This seems to be fine, and perhaps expected, given that the whole point is to tie together image blocks that are offset from each other.
+
+7) After marking manual tie points, I export them to a file in case I need them again and click Process > Reoptimize
+
+8) A quality report isn't automatically generated after reoptimizing, so I click Process > Generate Quality Report so that I have a report that reflects the effort to tie the image blocks together.
+
+9) I look at the quality report to ensure a single block results from the reoptimization step.
+
+10) If one block is generated, I open up the Processing Options, keep the Step 1 parameters the same, and change the Steps 2 and 3 parameters to my liking. I want to generate a point cloud and a reflectance map and use the calibration photos for the index, so I fill in those parameters. I uncheck the Step 1 box, and check the boxes for Steps 2 and 3.
+
+Note: I always leave the Step 1 parameters unchanged. I've found that if I change these parameters, even if the box is unchecked indicating that I don't want to perform the Step 1 processing, then the project thinks I haven't done Step 1 at all, the "Initial Processing" text at the bottom of the Pix4D application window turns red instead of green, and the option to jump right to Steps 2 and 3 become grayed out.
+
+11) I click Project > Upload Project Files and check the box indicating that I want to start cloud processing as soon as the photos are uploaded.
+
+12) When I download the results from the cloud processing, I look at the quality report and find that there are 2 blocks and way fewer "matches per calibrated image" compared to the quality report that I generated after merging the projects, adding manual tie points, and reoptimizing. It appears that Step 1 was redone with a single value for the keypoints image scale (ignoring that I had a different value for this parameter in each of the projects that I merged).
+
+If I manage to get a single image block after the Step 1 procedure and merging subprojects with different spectral signatures, how can I ensure that I get a single block after sending my customized Step 2 and 3 parameters to Pix4D Cloud?
