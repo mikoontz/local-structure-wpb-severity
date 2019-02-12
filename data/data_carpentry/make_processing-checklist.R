@@ -16,6 +16,9 @@ sites_checklist <-
   dplyr::select(-forest, -elev, -rep) %>% 
   dplyr::mutate(plot_locations_check = file.exists(paste0("data/data_output/site_data/", site, "/", site, "_plot-locations/", site, "_plot-locations.shp"))) %>% 
   dplyr::mutate(mission_footprint_check = file.exists(paste0("data/data_output/site_data/", site, "/", site, "_mission-footprint"))) %>% 
+  dplyr::mutate(digital_terrain_model_check = file.exists(paste0("data/data_output/site_data/", site, "/", site, "_dtm.tif"))) %>% 
+  dplyr::mutate(nonground_point_cloud_check = file.exists(paste0("data/data_output/site_data/", site, "/", site, "_vegetation-from-csf_lidR.las"))) %>% 
+  dplyr::mutate(canopy_height_model_check = file.exists(paste0("data/data_output/site_data/", site, "/", site, "_chm.tif"))) %>% 
   dplyr::mutate(plot_remote_data_check = map_lgl(paste0("data/data_output/site_data/", site, "/", site, "_plot-remote-data"), .f = function(x) length(list.files(x)) > 0)) %>% 
   dplyr::mutate(ttops_check = file.exists(paste0("data/data_output/site_data/", site, "/", site, "_ttops/", site, "_ttops.shp"))) %>% 
   dplyr::mutate(crowns_check = file.exists(paste0("data/data_output/site_data/", site, "/", site, "_crowns/", site, "_crowns.shp"))) %>% 
