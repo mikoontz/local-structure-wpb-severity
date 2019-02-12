@@ -1,0 +1,5986 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document>
+    <name>local_structure_wpb_intensity</name>
+    <Style id="icon-1899-006064-labelson">
+      <IconStyle>
+        <color>ff646000</color>
+        <scale>1</scale>
+        <Icon>
+          <href>http://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png</href>
+        </Icon>
+        <hotSpot x="32" xunits="pixels" y="64" yunits="insetPixels"/>
+      </IconStyle>
+    </Style>
+    <Style id="icon-1899-1A237E-labelson">
+      <IconStyle>
+        <color>ff7e231a</color>
+        <scale>1</scale>
+        <Icon>
+          <href>http://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png</href>
+        </Icon>
+        <hotSpot x="32" xunits="pixels" y="64" yunits="insetPixels"/>
+      </IconStyle>
+    </Style>
+    <Style id="icon-1899-558B2F-labelson">
+      <IconStyle>
+        <color>ff2f8b55</color>
+        <scale>1</scale>
+        <Icon>
+          <href>http://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png</href>
+        </Icon>
+        <hotSpot x="32" xunits="pixels" y="64" yunits="insetPixels"/>
+      </IconStyle>
+    </Style>
+    <Style id="icon-1899-FFD600-labelson">
+      <IconStyle>
+        <color>ff00d6ff</color>
+        <scale>1</scale>
+        <Icon>
+          <href>http://www.gstatic.com/mapspro/images/stock/503-wht-blank_maps.png</href>
+        </Icon>
+        <hotSpot x="32" xunits="pixels" y="64" yunits="insetPixels"/>
+      </IconStyle>
+    </Style>
+    <Placemark>
+      <name>eldorado_3000_1_darling-ridge_01</name>
+      <description><![CDATA[name: eldorado_3000_1_darling-ridge_01<br>plot_id: Eldorado-3000-Plot 1-Site 1<br>forest: eldorado<br>elevation_band: 3000<br>site: 1<br>nickname: darling-ridge<br>plot: 1]]></description>
+      <styleUrl>#icon-1899-FFD600-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value>eldorado_3000_1_darling-ridge_01</value>
+        </Data>
+        <Data name="plot_id">
+          <value>Eldorado-3000-Plot 1-Site 1</value>
+        </Data>
+        <Data name="forest">
+          <value>eldorado</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>3000</value>
+        </Data>
+        <Data name="site">
+          <value>1</value>
+        </Data>
+        <Data name="nickname">
+          <value>darling-ridge</value>
+        </Data>
+        <Data name="plot">
+          <value>1</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -120.76516,38.893128,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>eldorado_3000_1_darling-ridge_02</name>
+      <description><![CDATA[name: eldorado_3000_1_darling-ridge_02<br>plot_id: Eldorado-3000-Plot 2-Site 1<br>forest: eldorado<br>elevation_band: 3000<br>site: 1<br>nickname: darling-ridge<br>plot: 2]]></description>
+      <styleUrl>#icon-1899-FFD600-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value>eldorado_3000_1_darling-ridge_02</value>
+        </Data>
+        <Data name="plot_id">
+          <value>Eldorado-3000-Plot 2-Site 1</value>
+        </Data>
+        <Data name="forest">
+          <value>eldorado</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>3000</value>
+        </Data>
+        <Data name="site">
+          <value>1</value>
+        </Data>
+        <Data name="nickname">
+          <value>darling-ridge</value>
+        </Data>
+        <Data name="plot">
+          <value>2</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -120.765179,38.894002,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>eldorado_3000_1_darling-ridge_03</name>
+      <description><![CDATA[name: eldorado_3000_1_darling-ridge_03<br>plot_id: Eldorado-3000-Plot 3-Site 1<br>forest: eldorado<br>elevation_band: 3000<br>site: 1<br>nickname: darling-ridge<br>plot: 3]]></description>
+      <styleUrl>#icon-1899-FFD600-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value>eldorado_3000_1_darling-ridge_03</value>
+        </Data>
+        <Data name="plot_id">
+          <value>Eldorado-3000-Plot 3-Site 1</value>
+        </Data>
+        <Data name="forest">
+          <value>eldorado</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>3000</value>
+        </Data>
+        <Data name="site">
+          <value>1</value>
+        </Data>
+        <Data name="nickname">
+          <value>darling-ridge</value>
+        </Data>
+        <Data name="plot">
+          <value>3</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -120.764328,38.895031,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>eldorado_3000_1_darling-ridge_04</name>
+      <description><![CDATA[name: eldorado_3000_1_darling-ridge_04<br>plot_id: Eldorado-3000-Plot 4-Site 1<br>forest: eldorado<br>elevation_band: 3000<br>site: 1<br>nickname: darling-ridge<br>plot: 4]]></description>
+      <styleUrl>#icon-1899-FFD600-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value>eldorado_3000_1_darling-ridge_04</value>
+        </Data>
+        <Data name="plot_id">
+          <value>Eldorado-3000-Plot 4-Site 1</value>
+        </Data>
+        <Data name="forest">
+          <value>eldorado</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>3000</value>
+        </Data>
+        <Data name="site">
+          <value>1</value>
+        </Data>
+        <Data name="nickname">
+          <value>darling-ridge</value>
+        </Data>
+        <Data name="plot">
+          <value>4</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -120.764058,38.895558,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>eldorado_3000_1_darling-ridge_05</name>
+      <description><![CDATA[name: eldorado_3000_1_darling-ridge_05<br>plot_id: Eldorado-3000-Plot 5-Site 1<br>forest: eldorado<br>elevation_band: 3000<br>site: 1<br>nickname: darling-ridge<br>plot: 5]]></description>
+      <styleUrl>#icon-1899-FFD600-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value>eldorado_3000_1_darling-ridge_05</value>
+        </Data>
+        <Data name="plot_id">
+          <value>Eldorado-3000-Plot 5-Site 1</value>
+        </Data>
+        <Data name="forest">
+          <value>eldorado</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>3000</value>
+        </Data>
+        <Data name="site">
+          <value>1</value>
+        </Data>
+        <Data name="nickname">
+          <value>darling-ridge</value>
+        </Data>
+        <Data name="plot">
+          <value>5</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -120.763402,38.89513,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>eldorado_3000_2_liddicoat-springs_06</name>
+      <description><![CDATA[name: eldorado_3000_2_liddicoat-springs_06<br>plot_id: Eldorado-3000-Plot 6-Site 2<br>forest: eldorado<br>elevation_band: 3000<br>site: 2<br>nickname: liddicoat-springs<br>plot: 6]]></description>
+      <styleUrl>#icon-1899-FFD600-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value>eldorado_3000_2_liddicoat-springs_06</value>
+        </Data>
+        <Data name="plot_id">
+          <value>Eldorado-3000-Plot 6-Site 2</value>
+        </Data>
+        <Data name="forest">
+          <value>eldorado</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>3000</value>
+        </Data>
+        <Data name="site">
+          <value>2</value>
+        </Data>
+        <Data name="nickname">
+          <value>liddicoat-springs</value>
+        </Data>
+        <Data name="plot">
+          <value>6</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -120.523159,38.540666,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>eldorado_3000_2_liddicoat-springs_07</name>
+      <description><![CDATA[name: eldorado_3000_2_liddicoat-springs_07<br>plot_id: Eldorado-3000-Plot 7-Site 2<br>forest: eldorado<br>elevation_band: 3000<br>site: 2<br>nickname: liddicoat-springs<br>plot: 7]]></description>
+      <styleUrl>#icon-1899-FFD600-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value>eldorado_3000_2_liddicoat-springs_07</value>
+        </Data>
+        <Data name="plot_id">
+          <value>Eldorado-3000-Plot 7-Site 2</value>
+        </Data>
+        <Data name="forest">
+          <value>eldorado</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>3000</value>
+        </Data>
+        <Data name="site">
+          <value>2</value>
+        </Data>
+        <Data name="nickname">
+          <value>liddicoat-springs</value>
+        </Data>
+        <Data name="plot">
+          <value>7</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -120.523986,38.53962,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>eldorado_3000_2_liddicoat-springs_08</name>
+      <description><![CDATA[name: eldorado_3000_2_liddicoat-springs_08<br>plot_id: Eldorado-3000-Plot 8-Site 2<br>forest: eldorado<br>elevation_band: 3000<br>site: 2<br>nickname: liddicoat-springs<br>plot: 8]]></description>
+      <styleUrl>#icon-1899-FFD600-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value>eldorado_3000_2_liddicoat-springs_08</value>
+        </Data>
+        <Data name="plot_id">
+          <value>Eldorado-3000-Plot 8-Site 2</value>
+        </Data>
+        <Data name="forest">
+          <value>eldorado</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>3000</value>
+        </Data>
+        <Data name="site">
+          <value>2</value>
+        </Data>
+        <Data name="nickname">
+          <value>liddicoat-springs</value>
+        </Data>
+        <Data name="plot">
+          <value>8</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -120.524407,38.537395,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>eldorado_3000_2_liddicoat-springs_09</name>
+      <description><![CDATA[name: eldorado_3000_2_liddicoat-springs_09<br>plot_id: Eldorado-3000-Plot 9-Site 2<br>forest: eldorado<br>elevation_band: 3000<br>site: 2<br>nickname: liddicoat-springs<br>plot: 9]]></description>
+      <styleUrl>#icon-1899-FFD600-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value>eldorado_3000_2_liddicoat-springs_09</value>
+        </Data>
+        <Data name="plot_id">
+          <value>Eldorado-3000-Plot 9-Site 2</value>
+        </Data>
+        <Data name="forest">
+          <value>eldorado</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>3000</value>
+        </Data>
+        <Data name="site">
+          <value>2</value>
+        </Data>
+        <Data name="nickname">
+          <value>liddicoat-springs</value>
+        </Data>
+        <Data name="plot">
+          <value>9</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -120.525507,38.537427,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>eldorado_3000_2_liddicoat-springs_10</name>
+      <description><![CDATA[name: eldorado_3000_2_liddicoat-springs_10<br>plot_id: Eldorado-3000-Plot 10-Site 2<br>forest: eldorado<br>elevation_band: 3000<br>site: 2<br>nickname: liddicoat-springs<br>plot: 10]]></description>
+      <styleUrl>#icon-1899-FFD600-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value>eldorado_3000_2_liddicoat-springs_10</value>
+        </Data>
+        <Data name="plot_id">
+          <value>Eldorado-3000-Plot 10-Site 2</value>
+        </Data>
+        <Data name="forest">
+          <value>eldorado</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>3000</value>
+        </Data>
+        <Data name="site">
+          <value>2</value>
+        </Data>
+        <Data name="nickname">
+          <value>liddicoat-springs</value>
+        </Data>
+        <Data name="plot">
+          <value>10</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -120.527127,38.536677,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>eldorado_3000_3_barney-ridge-north_11</name>
+      <description><![CDATA[name: eldorado_3000_3_barney-ridge-north_11<br>plot_id: Eldorado-3000-Plot 11-Site 3<br>forest: eldorado<br>elevation_band: 3000<br>site: 3<br>nickname: barney-ridge-north<br>plot: 11]]></description>
+      <styleUrl>#icon-1899-FFD600-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value>eldorado_3000_3_barney-ridge-north_11</value>
+        </Data>
+        <Data name="plot_id">
+          <value>Eldorado-3000-Plot 11-Site 3</value>
+        </Data>
+        <Data name="forest">
+          <value>eldorado</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>3000</value>
+        </Data>
+        <Data name="site">
+          <value>3</value>
+        </Data>
+        <Data name="nickname">
+          <value>barney-ridge-north</value>
+        </Data>
+        <Data name="plot">
+          <value>11</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -120.533166,38.553978,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>eldorado_3000_3_barney-ridge-north_12</name>
+      <description><![CDATA[name: eldorado_3000_3_barney-ridge-north_12<br>plot_id: Eldorado-3000-Plot 12-Site 3<br>forest: eldorado<br>elevation_band: 3000<br>site: 3<br>nickname: barney-ridge-north<br>plot: 12]]></description>
+      <styleUrl>#icon-1899-FFD600-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value>eldorado_3000_3_barney-ridge-north_12</value>
+        </Data>
+        <Data name="plot_id">
+          <value>Eldorado-3000-Plot 12-Site 3</value>
+        </Data>
+        <Data name="forest">
+          <value>eldorado</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>3000</value>
+        </Data>
+        <Data name="site">
+          <value>3</value>
+        </Data>
+        <Data name="nickname">
+          <value>barney-ridge-north</value>
+        </Data>
+        <Data name="plot">
+          <value>12</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -120.532216,38.555607,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>eldorado_3000_3_barney-ridge-north_13</name>
+      <description><![CDATA[name: eldorado_3000_3_barney-ridge-north_13<br>plot_id: Eldorado-3000-Plot 13-Site 3<br>forest: eldorado<br>elevation_band: 3000<br>site: 3<br>nickname: barney-ridge-north<br>plot: 13]]></description>
+      <styleUrl>#icon-1899-FFD600-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value>eldorado_3000_3_barney-ridge-north_13</value>
+        </Data>
+        <Data name="plot_id">
+          <value>Eldorado-3000-Plot 13-Site 3</value>
+        </Data>
+        <Data name="forest">
+          <value>eldorado</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>3000</value>
+        </Data>
+        <Data name="site">
+          <value>3</value>
+        </Data>
+        <Data name="nickname">
+          <value>barney-ridge-north</value>
+        </Data>
+        <Data name="plot">
+          <value>13</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -120.531196,38.556225,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>eldorado_3000_3_barney-ridge-north_14</name>
+      <description><![CDATA[name: eldorado_3000_3_barney-ridge-north_14<br>plot_id: Eldorado-3000-Plot 14-Site 3<br>forest: eldorado<br>elevation_band: 3000<br>site: 3<br>nickname: barney-ridge-north<br>plot: 14]]></description>
+      <styleUrl>#icon-1899-FFD600-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value>eldorado_3000_3_barney-ridge-north_14</value>
+        </Data>
+        <Data name="plot_id">
+          <value>Eldorado-3000-Plot 14-Site 3</value>
+        </Data>
+        <Data name="forest">
+          <value>eldorado</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>3000</value>
+        </Data>
+        <Data name="site">
+          <value>3</value>
+        </Data>
+        <Data name="nickname">
+          <value>barney-ridge-north</value>
+        </Data>
+        <Data name="plot">
+          <value>14</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -120.530892,38.557066,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>eldorado_3000_3_barney-ridge-north_15</name>
+      <description><![CDATA[name: <br>plot_id: Eldorado-3000-Plot 15-Site 3<br>forest: eldorado<br>elevation_band: 3000<br>site: 3<br>nickname: barney-ridge-north<br>plot: 15]]></description>
+      <styleUrl>#icon-1899-FFD600-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value/>
+        </Data>
+        <Data name="plot_id">
+          <value>Eldorado-3000-Plot 15-Site 3</value>
+        </Data>
+        <Data name="forest">
+          <value>eldorado</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>3000</value>
+        </Data>
+        <Data name="site">
+          <value>3</value>
+        </Data>
+        <Data name="nickname">
+          <value>barney-ridge-north</value>
+        </Data>
+        <Data name="plot">
+          <value>15</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -120.530085,38.556166,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>eldorado_4000_1_panther-creek-below_01</name>
+      <description><![CDATA[name: <br>plot_id: Eldorado-4000-Plot 1-Site 1<br>forest: eldorado<br>elevation_band: 4000<br>site: 1<br>nickname: panther-creek-below<br>plot: 1]]></description>
+      <styleUrl>#icon-1899-FFD600-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value/>
+        </Data>
+        <Data name="plot_id">
+          <value>Eldorado-4000-Plot 1-Site 1</value>
+        </Data>
+        <Data name="forest">
+          <value>eldorado</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>4000</value>
+        </Data>
+        <Data name="site">
+          <value>1</value>
+        </Data>
+        <Data name="nickname">
+          <value>panther-creek-below</value>
+        </Data>
+        <Data name="plot">
+          <value>1</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -120.358424,38.526134,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>eldorado_4000_1_panther-creek-below_02</name>
+      <description><![CDATA[name: <br>plot_id: Eldorado-4000-Plot 2-Site 1<br>forest: eldorado<br>elevation_band: 4000<br>site: 1<br>nickname: panther-creek-below<br>plot: 2]]></description>
+      <styleUrl>#icon-1899-FFD600-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value/>
+        </Data>
+        <Data name="plot_id">
+          <value>Eldorado-4000-Plot 2-Site 1</value>
+        </Data>
+        <Data name="forest">
+          <value>eldorado</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>4000</value>
+        </Data>
+        <Data name="site">
+          <value>1</value>
+        </Data>
+        <Data name="nickname">
+          <value>panther-creek-below</value>
+        </Data>
+        <Data name="plot">
+          <value>2</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -120.358128,38.52765,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>eldorado_4000_1_panther-creek-below_03</name>
+      <description><![CDATA[name: <br>plot_id: Eldorado-4000-Plot 3-Site 1<br>forest: eldorado<br>elevation_band: 4000<br>site: 1<br>nickname: panther-creek-below<br>plot: 3]]></description>
+      <styleUrl>#icon-1899-FFD600-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value/>
+        </Data>
+        <Data name="plot_id">
+          <value>Eldorado-4000-Plot 3-Site 1</value>
+        </Data>
+        <Data name="forest">
+          <value>eldorado</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>4000</value>
+        </Data>
+        <Data name="site">
+          <value>1</value>
+        </Data>
+        <Data name="nickname">
+          <value>panther-creek-below</value>
+        </Data>
+        <Data name="plot">
+          <value>3</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -120.35743,38.526967,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>eldorado_4000_1_panther-creek-below_04</name>
+      <description><![CDATA[name: <br>plot_id: Eldorado-4000-Plot 4-Site 1<br>forest: eldorado<br>elevation_band: 4000<br>site: 1<br>nickname: panther-creek-below<br>plot: 4]]></description>
+      <styleUrl>#icon-1899-FFD600-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value/>
+        </Data>
+        <Data name="plot_id">
+          <value>Eldorado-4000-Plot 4-Site 1</value>
+        </Data>
+        <Data name="forest">
+          <value>eldorado</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>4000</value>
+        </Data>
+        <Data name="site">
+          <value>1</value>
+        </Data>
+        <Data name="nickname">
+          <value>panther-creek-below</value>
+        </Data>
+        <Data name="plot">
+          <value>4</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -120.356242,38.526832,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>eldorado_4000_1_panther-creek-below_05</name>
+      <description><![CDATA[name: <br>plot_id: Eldorado-4000-Plot 5-Site 1<br>forest: eldorado<br>elevation_band: 4000<br>site: 1<br>nickname: panther-creek-below<br>plot: 5]]></description>
+      <styleUrl>#icon-1899-FFD600-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value/>
+        </Data>
+        <Data name="plot_id">
+          <value>Eldorado-4000-Plot 5-Site 1</value>
+        </Data>
+        <Data name="forest">
+          <value>eldorado</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>4000</value>
+        </Data>
+        <Data name="site">
+          <value>1</value>
+        </Data>
+        <Data name="nickname">
+          <value>panther-creek-below</value>
+        </Data>
+        <Data name="plot">
+          <value>5</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -120.354926,38.525812,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>eldorado_4000_2_power7n_06</name>
+      <description><![CDATA[name: <br>plot_id: Eldorado-4000-Plot 6-Site 2<br>forest: eldorado<br>elevation_band: 4000<br>site: 2<br>nickname: power7n<br>plot: 6]]></description>
+      <styleUrl>#icon-1899-FFD600-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value/>
+        </Data>
+        <Data name="plot_id">
+          <value>Eldorado-4000-Plot 6-Site 2</value>
+        </Data>
+        <Data name="forest">
+          <value>eldorado</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>4000</value>
+        </Data>
+        <Data name="site">
+          <value>2</value>
+        </Data>
+        <Data name="nickname">
+          <value>power7n</value>
+        </Data>
+        <Data name="plot">
+          <value>6</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -120.339232,38.481082,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>eldorado_4000_2_power7n_07</name>
+      <description><![CDATA[name: <br>plot_id: Eldorado-4000-Plot 7-Site 2<br>forest: eldorado<br>elevation_band: 4000<br>site: 2<br>nickname: power7n<br>plot: 7]]></description>
+      <styleUrl>#icon-1899-FFD600-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value/>
+        </Data>
+        <Data name="plot_id">
+          <value>Eldorado-4000-Plot 7-Site 2</value>
+        </Data>
+        <Data name="forest">
+          <value>eldorado</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>4000</value>
+        </Data>
+        <Data name="site">
+          <value>2</value>
+        </Data>
+        <Data name="nickname">
+          <value>power7n</value>
+        </Data>
+        <Data name="plot">
+          <value>7</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -120.339209,38.482009,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>eldorado_4000_2_power7n_08</name>
+      <description><![CDATA[name: <br>plot_id: Eldorado-4000-Plot 8-Site 2<br>forest: eldorado<br>elevation_band: 4000<br>site: 2<br>nickname: power7n<br>plot: 8]]></description>
+      <styleUrl>#icon-1899-FFD600-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value/>
+        </Data>
+        <Data name="plot_id">
+          <value>Eldorado-4000-Plot 8-Site 2</value>
+        </Data>
+        <Data name="forest">
+          <value>eldorado</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>4000</value>
+        </Data>
+        <Data name="site">
+          <value>2</value>
+        </Data>
+        <Data name="nickname">
+          <value>power7n</value>
+        </Data>
+        <Data name="plot">
+          <value>8</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -120.340267,38.482223,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>eldorado_4000_2_power7n_09</name>
+      <description><![CDATA[name: <br>plot_id: Eldorado-4000-Plot 9-Site 2<br>forest: eldorado<br>elevation_band: 4000<br>site: 2<br>nickname: power7n<br>plot: 9]]></description>
+      <styleUrl>#icon-1899-FFD600-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value/>
+        </Data>
+        <Data name="plot_id">
+          <value>Eldorado-4000-Plot 9-Site 2</value>
+        </Data>
+        <Data name="forest">
+          <value>eldorado</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>4000</value>
+        </Data>
+        <Data name="site">
+          <value>2</value>
+        </Data>
+        <Data name="nickname">
+          <value>power7n</value>
+        </Data>
+        <Data name="plot">
+          <value>9</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -120.341838,38.481907,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>eldorado_4000_2_power7n_10</name>
+      <description><![CDATA[name: <br>plot_id: Eldorado-4000-Plot 10-Site 2<br>forest: eldorado<br>elevation_band: 4000<br>site: 2<br>nickname: power7n<br>plot: 10]]></description>
+      <styleUrl>#icon-1899-FFD600-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value/>
+        </Data>
+        <Data name="plot_id">
+          <value>Eldorado-4000-Plot 10-Site 2</value>
+        </Data>
+        <Data name="forest">
+          <value>eldorado</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>4000</value>
+        </Data>
+        <Data name="site">
+          <value>2</value>
+        </Data>
+        <Data name="nickname">
+          <value>power7n</value>
+        </Data>
+        <Data name="plot">
+          <value>10</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -120.343544,38.481639,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>eldorado_4000_3_plum-creek_11</name>
+      <description><![CDATA[name: <br>plot_id: Eldorado-4000-Plot 11-Site 3<br>forest: eldorado<br>elevation_band: 4000<br>site: 3<br>nickname: plum-creek<br>plot: 11]]></description>
+      <styleUrl>#icon-1899-FFD600-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value/>
+        </Data>
+        <Data name="plot_id">
+          <value>Eldorado-4000-Plot 11-Site 3</value>
+        </Data>
+        <Data name="forest">
+          <value>eldorado</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>4000</value>
+        </Data>
+        <Data name="site">
+          <value>3</value>
+        </Data>
+        <Data name="nickname">
+          <value>plum-creek</value>
+        </Data>
+        <Data name="plot">
+          <value>11</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -120.406892,38.746383,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>eldorado_4000_3_plum-creek_12</name>
+      <description><![CDATA[name: <br>plot_id: Eldorado-4000-Plot 12-Site 3<br>forest: eldorado<br>elevation_band: 4000<br>site: 3<br>nickname: plum-creek<br>plot: 12]]></description>
+      <styleUrl>#icon-1899-FFD600-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value/>
+        </Data>
+        <Data name="plot_id">
+          <value>Eldorado-4000-Plot 12-Site 3</value>
+        </Data>
+        <Data name="forest">
+          <value>eldorado</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>4000</value>
+        </Data>
+        <Data name="site">
+          <value>3</value>
+        </Data>
+        <Data name="nickname">
+          <value>plum-creek</value>
+        </Data>
+        <Data name="plot">
+          <value>12</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -120.407489,38.745784,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>eldorado_4000_3_plum-creek_13</name>
+      <description><![CDATA[name: <br>plot_id: Eldorado-4000-Plot 13-Site 3<br>forest: eldorado<br>elevation_band: 4000<br>site: 3<br>nickname: plum-creek<br>plot: 13]]></description>
+      <styleUrl>#icon-1899-FFD600-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value/>
+        </Data>
+        <Data name="plot_id">
+          <value>Eldorado-4000-Plot 13-Site 3</value>
+        </Data>
+        <Data name="forest">
+          <value>eldorado</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>4000</value>
+        </Data>
+        <Data name="site">
+          <value>3</value>
+        </Data>
+        <Data name="nickname">
+          <value>plum-creek</value>
+        </Data>
+        <Data name="plot">
+          <value>13</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -120.408643,38.745989,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>eldorado_4000_3_plum-creek_14</name>
+      <description><![CDATA[name: <br>plot_id: Eldorado-4000-Plot 14-Site 3<br>forest: eldorado<br>elevation_band: 4000<br>site: 3<br>nickname: plum-creek<br>plot: 14]]></description>
+      <styleUrl>#icon-1899-FFD600-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value/>
+        </Data>
+        <Data name="plot_id">
+          <value>Eldorado-4000-Plot 14-Site 3</value>
+        </Data>
+        <Data name="forest">
+          <value>eldorado</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>4000</value>
+        </Data>
+        <Data name="site">
+          <value>3</value>
+        </Data>
+        <Data name="nickname">
+          <value>plum-creek</value>
+        </Data>
+        <Data name="plot">
+          <value>14</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -120.409367,38.746654,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>eldorado_4000_3_plum-creek_15</name>
+      <description><![CDATA[name: <br>plot_id: Eldorado-4000-Plot 15-Site 3<br>forest: eldorado<br>elevation_band: 4000<br>site: 3<br>nickname: plum-creek<br>plot: 15]]></description>
+      <styleUrl>#icon-1899-FFD600-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value/>
+        </Data>
+        <Data name="plot_id">
+          <value>Eldorado-4000-Plot 15-Site 3</value>
+        </Data>
+        <Data name="forest">
+          <value>eldorado</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>4000</value>
+        </Data>
+        <Data name="site">
+          <value>3</value>
+        </Data>
+        <Data name="nickname">
+          <value>plum-creek</value>
+        </Data>
+        <Data name="plot">
+          <value>15</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -120.407905,38.747324,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>eldorado_5000_1_panther-creek-above_01</name>
+      <description><![CDATA[name: <br>plot_id: Eldorado-5000-Plot 1-Site 1<br>forest: eldorado<br>elevation_band: 5000<br>site: 1<br>nickname: panther-creek-above<br>plot: 1]]></description>
+      <styleUrl>#icon-1899-FFD600-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value/>
+        </Data>
+        <Data name="plot_id">
+          <value>Eldorado-5000-Plot 1-Site 1</value>
+        </Data>
+        <Data name="forest">
+          <value>eldorado</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>5000</value>
+        </Data>
+        <Data name="site">
+          <value>1</value>
+        </Data>
+        <Data name="nickname">
+          <value>panther-creek-above</value>
+        </Data>
+        <Data name="plot">
+          <value>1</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -120.346764,38.538808,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>eldorado_5000_1_panther-creek-above_02</name>
+      <description><![CDATA[name: <br>plot_id: Eldorado-5000-Plot 2-Site 1<br>forest: eldorado<br>elevation_band: 5000<br>site: 1<br>nickname: panther-creek-above<br>plot: 2]]></description>
+      <styleUrl>#icon-1899-FFD600-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value/>
+        </Data>
+        <Data name="plot_id">
+          <value>Eldorado-5000-Plot 2-Site 1</value>
+        </Data>
+        <Data name="forest">
+          <value>eldorado</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>5000</value>
+        </Data>
+        <Data name="site">
+          <value>1</value>
+        </Data>
+        <Data name="nickname">
+          <value>panther-creek-above</value>
+        </Data>
+        <Data name="plot">
+          <value>2</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -120.34889,38.53901,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>eldorado_5000_1_panther-creek-above_03</name>
+      <description><![CDATA[name: <br>plot_id: Eldorado-5000-Plot 3-Site 1<br>forest: eldorado<br>elevation_band: 5000<br>site: 1<br>nickname: panther-creek-above<br>plot: 3]]></description>
+      <styleUrl>#icon-1899-FFD600-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value/>
+        </Data>
+        <Data name="plot_id">
+          <value>Eldorado-5000-Plot 3-Site 1</value>
+        </Data>
+        <Data name="forest">
+          <value>eldorado</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>5000</value>
+        </Data>
+        <Data name="site">
+          <value>1</value>
+        </Data>
+        <Data name="nickname">
+          <value>panther-creek-above</value>
+        </Data>
+        <Data name="plot">
+          <value>3</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -120.349395,38.538075,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>eldorado_5000_1_panther-creek-above_04</name>
+      <description><![CDATA[name: <br>plot_id: Eldorado-5000-Plot 4-Site 1<br>forest: eldorado<br>elevation_band: 5000<br>site: 1<br>nickname: panther-creek-above<br>plot: 4]]></description>
+      <styleUrl>#icon-1899-FFD600-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value/>
+        </Data>
+        <Data name="plot_id">
+          <value>Eldorado-5000-Plot 4-Site 1</value>
+        </Data>
+        <Data name="forest">
+          <value>eldorado</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>5000</value>
+        </Data>
+        <Data name="site">
+          <value>1</value>
+        </Data>
+        <Data name="nickname">
+          <value>panther-creek-above</value>
+        </Data>
+        <Data name="plot">
+          <value>4</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -120.349148,38.536673,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>eldorado_5000_1_panther-creek-above_05</name>
+      <description><![CDATA[name: <br>plot_id: Eldorado-5000-Plot 5-Site 1<br>forest: eldorado<br>elevation_band: 5000<br>site: 1<br>nickname: panther-creek-above<br>plot: 5]]></description>
+      <styleUrl>#icon-1899-FFD600-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value/>
+        </Data>
+        <Data name="plot_id">
+          <value>Eldorado-5000-Plot 5-Site 1</value>
+        </Data>
+        <Data name="forest">
+          <value>eldorado</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>5000</value>
+        </Data>
+        <Data name="site">
+          <value>1</value>
+        </Data>
+        <Data name="nickname">
+          <value>panther-creek-above</value>
+        </Data>
+        <Data name="plot">
+          <value>5</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -120.348041,38.536846,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>eldorado_5000_2_near-ellis-rd_06</name>
+      <description><![CDATA[name: <br>plot_id: Eldorado-5000-Plot 6-Site 2<br>forest: eldorado<br>elevation_band: 5000<br>site: 2<br>nickname: near-ellis-rd<br>plot: 6]]></description>
+      <styleUrl>#icon-1899-FFD600-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value/>
+        </Data>
+        <Data name="plot_id">
+          <value>Eldorado-5000-Plot 6-Site 2</value>
+        </Data>
+        <Data name="forest">
+          <value>eldorado</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>5000</value>
+        </Data>
+        <Data name="site">
+          <value>2</value>
+        </Data>
+        <Data name="nickname">
+          <value>near-ellis-rd</value>
+        </Data>
+        <Data name="plot">
+          <value>6</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -120.323136,38.522638,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>eldorado_5000_2_near-ellis-rd_07</name>
+      <description><![CDATA[name: <br>plot_id: Eldorado-5000-Plot 7-Site 2<br>forest: eldorado<br>elevation_band: 5000<br>site: 2<br>nickname: near-ellis-rd<br>plot: 7]]></description>
+      <styleUrl>#icon-1899-FFD600-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value/>
+        </Data>
+        <Data name="plot_id">
+          <value>Eldorado-5000-Plot 7-Site 2</value>
+        </Data>
+        <Data name="forest">
+          <value>eldorado</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>5000</value>
+        </Data>
+        <Data name="site">
+          <value>2</value>
+        </Data>
+        <Data name="nickname">
+          <value>near-ellis-rd</value>
+        </Data>
+        <Data name="plot">
+          <value>7</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -120.323507,38.521304,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>eldorado_5000_2_near-ellis-rd_08</name>
+      <description><![CDATA[name: <br>plot_id: Eldorado-5000-Plot 8-Site 2<br>forest: eldorado<br>elevation_band: 5000<br>site: 2<br>nickname: near-ellis-rd<br>plot: 8]]></description>
+      <styleUrl>#icon-1899-FFD600-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value/>
+        </Data>
+        <Data name="plot_id">
+          <value>Eldorado-5000-Plot 8-Site 2</value>
+        </Data>
+        <Data name="forest">
+          <value>eldorado</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>5000</value>
+        </Data>
+        <Data name="site">
+          <value>2</value>
+        </Data>
+        <Data name="nickname">
+          <value>near-ellis-rd</value>
+        </Data>
+        <Data name="plot">
+          <value>8</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -120.325424,38.520627,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>eldorado_5000_2_near-ellis-rd_09</name>
+      <description><![CDATA[name: <br>plot_id: Eldorado-5000-Plot 9-Site 2<br>forest: eldorado<br>elevation_band: 5000<br>site: 2<br>nickname: near-ellis-rd<br>plot: 9]]></description>
+      <styleUrl>#icon-1899-FFD600-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value/>
+        </Data>
+        <Data name="plot_id">
+          <value>Eldorado-5000-Plot 9-Site 2</value>
+        </Data>
+        <Data name="forest">
+          <value>eldorado</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>5000</value>
+        </Data>
+        <Data name="site">
+          <value>2</value>
+        </Data>
+        <Data name="nickname">
+          <value>near-ellis-rd</value>
+        </Data>
+        <Data name="plot">
+          <value>9</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -120.326442,38.520686,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>eldorado_5000_2_near-ellis-rd_10</name>
+      <description><![CDATA[name: <br>plot_id: Eldorado-5000-Plot 10-Site 2<br>forest: eldorado<br>elevation_band: 5000<br>site: 2<br>nickname: near-ellis-rd<br>plot: 10]]></description>
+      <styleUrl>#icon-1899-FFD600-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value/>
+        </Data>
+        <Data name="plot_id">
+          <value>Eldorado-5000-Plot 10-Site 2</value>
+        </Data>
+        <Data name="forest">
+          <value>eldorado</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>5000</value>
+        </Data>
+        <Data name="site">
+          <value>2</value>
+        </Data>
+        <Data name="nickname">
+          <value>near-ellis-rd</value>
+        </Data>
+        <Data name="plot">
+          <value>10</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -120.326292,38.521665,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>eldorado_5000_3_pebble-canyon_11</name>
+      <description><![CDATA[name: <br>plot_id: Eldorado-5000-Plot 11-Site 3<br>forest: eldorado<br>elevation_band: 5000<br>site: 3<br>nickname: pebble-canyon<br>plot: 11]]></description>
+      <styleUrl>#icon-1899-FFD600-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value/>
+        </Data>
+        <Data name="plot_id">
+          <value>Eldorado-5000-Plot 11-Site 3</value>
+        </Data>
+        <Data name="forest">
+          <value>eldorado</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>5000</value>
+        </Data>
+        <Data name="site">
+          <value>3</value>
+        </Data>
+        <Data name="nickname">
+          <value>pebble-canyon</value>
+        </Data>
+        <Data name="plot">
+          <value>11</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -120.419011,38.687142,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>eldorado_5000_3_pebble-canyon_12</name>
+      <description><![CDATA[name: <br>plot_id: Eldorado-5000-Plot 12-Site 3<br>forest: eldorado<br>elevation_band: 5000<br>site: 3<br>nickname: pebble-canyon<br>plot: 12]]></description>
+      <styleUrl>#icon-1899-FFD600-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value/>
+        </Data>
+        <Data name="plot_id">
+          <value>Eldorado-5000-Plot 12-Site 3</value>
+        </Data>
+        <Data name="forest">
+          <value>eldorado</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>5000</value>
+        </Data>
+        <Data name="site">
+          <value>3</value>
+        </Data>
+        <Data name="nickname">
+          <value>pebble-canyon</value>
+        </Data>
+        <Data name="plot">
+          <value>12</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -120.420349,38.687324,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>eldorado_5000_3_pebble-canyon_13</name>
+      <description><![CDATA[name: <br>plot_id: Eldorado-5000-Plot 13-Site 3<br>forest: eldorado<br>elevation_band: 5000<br>site: 3<br>nickname: pebble-canyon<br>plot: 13]]></description>
+      <styleUrl>#icon-1899-FFD600-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value/>
+        </Data>
+        <Data name="plot_id">
+          <value>Eldorado-5000-Plot 13-Site 3</value>
+        </Data>
+        <Data name="forest">
+          <value>eldorado</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>5000</value>
+        </Data>
+        <Data name="site">
+          <value>3</value>
+        </Data>
+        <Data name="nickname">
+          <value>pebble-canyon</value>
+        </Data>
+        <Data name="plot">
+          <value>13</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -120.421416,38.687078,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>eldorado_5000_3_pebble-canyon_14</name>
+      <description><![CDATA[name: <br>plot_id: Eldorado-5000-Plot 14-Site 3<br>forest: eldorado<br>elevation_band: 5000<br>site: 3<br>nickname: pebble-canyon<br>plot: 14]]></description>
+      <styleUrl>#icon-1899-FFD600-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value/>
+        </Data>
+        <Data name="plot_id">
+          <value>Eldorado-5000-Plot 14-Site 3</value>
+        </Data>
+        <Data name="forest">
+          <value>eldorado</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>5000</value>
+        </Data>
+        <Data name="site">
+          <value>3</value>
+        </Data>
+        <Data name="nickname">
+          <value>pebble-canyon</value>
+        </Data>
+        <Data name="plot">
+          <value>14</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -120.422114,38.686516,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>eldorado_5000_3_pebble-canyon_15</name>
+      <description><![CDATA[name: <br>plot_id: Eldorado-5000-Plot 15-Site 3<br>forest: eldorado<br>elevation_band: 5000<br>site: 3<br>nickname: pebble-canyon<br>plot: 15]]></description>
+      <styleUrl>#icon-1899-FFD600-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value/>
+        </Data>
+        <Data name="plot_id">
+          <value>Eldorado-5000-Plot 15-Site 3</value>
+        </Data>
+        <Data name="forest">
+          <value>eldorado</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>5000</value>
+        </Data>
+        <Data name="site">
+          <value>3</value>
+        </Data>
+        <Data name="nickname">
+          <value>pebble-canyon</value>
+        </Data>
+        <Data name="plot">
+          <value>15</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -120.422366,38.688144,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>sequoia_4000_1_rd-to-whitaker-foresteshom-creek-campground_01</name>
+      <description><![CDATA[name: <br>plot_id: Sequoia-4000-Plot 1-Site 1<br>forest: sequoia<br>elevation_band: 4000<br>site: 1<br>nickname: rd-to-whitaker-foresteshom-creek-campground<br>plot: 1]]></description>
+      <styleUrl>#icon-1899-1A237E-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value/>
+        </Data>
+        <Data name="plot_id">
+          <value>Sequoia-4000-Plot 1-Site 1</value>
+        </Data>
+        <Data name="forest">
+          <value>sequoia</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>4000</value>
+        </Data>
+        <Data name="site">
+          <value>1</value>
+        </Data>
+        <Data name="nickname">
+          <value>rd-to-whitaker-foresteshom-creek-campground</value>
+        </Data>
+        <Data name="plot">
+          <value>1</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -118.958567,36.685734,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>sequoia_4000_1_rd-to-whitaker-foresteshom-creek-campground_02</name>
+      <description><![CDATA[name: <br>plot_id: Sequoia-4000-Plot 2-Site 1<br>forest: sequoia<br>elevation_band: 4000<br>site: 1<br>nickname: rd-to-whitaker-foresteshom-creek-campground<br>plot: 2]]></description>
+      <styleUrl>#icon-1899-1A237E-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value/>
+        </Data>
+        <Data name="plot_id">
+          <value>Sequoia-4000-Plot 2-Site 1</value>
+        </Data>
+        <Data name="forest">
+          <value>sequoia</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>4000</value>
+        </Data>
+        <Data name="site">
+          <value>1</value>
+        </Data>
+        <Data name="nickname">
+          <value>rd-to-whitaker-foresteshom-creek-campground</value>
+        </Data>
+        <Data name="plot">
+          <value>2</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -118.959147,36.684787,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>sequoia_4000_1_rd-to-whitaker-foresteshom-creek-campground_03</name>
+      <description><![CDATA[name: <br>plot_id: Sequoia-4000-Plot 3-Site 1<br>forest: sequoia<br>elevation_band: 4000<br>site: 1<br>nickname: rd-to-whitaker-foresteshom-creek-campground<br>plot: 3]]></description>
+      <styleUrl>#icon-1899-1A237E-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value/>
+        </Data>
+        <Data name="plot_id">
+          <value>Sequoia-4000-Plot 3-Site 1</value>
+        </Data>
+        <Data name="forest">
+          <value>sequoia</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>4000</value>
+        </Data>
+        <Data name="site">
+          <value>1</value>
+        </Data>
+        <Data name="nickname">
+          <value>rd-to-whitaker-foresteshom-creek-campground</value>
+        </Data>
+        <Data name="plot">
+          <value>3</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -118.960063,36.683844,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>sequoia_4000_1_rd-to-whitaker-foresteshom-creek-campground_04</name>
+      <description><![CDATA[name: <br>plot_id: Sequoia-4000-Plot 4-Site 1<br>forest: sequoia<br>elevation_band: 4000<br>site: 1<br>nickname: rd-to-whitaker-foresteshom-creek-campground<br>plot: 4]]></description>
+      <styleUrl>#icon-1899-1A237E-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value/>
+        </Data>
+        <Data name="plot_id">
+          <value>Sequoia-4000-Plot 4-Site 1</value>
+        </Data>
+        <Data name="forest">
+          <value>sequoia</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>4000</value>
+        </Data>
+        <Data name="site">
+          <value>1</value>
+        </Data>
+        <Data name="nickname">
+          <value>rd-to-whitaker-foresteshom-creek-campground</value>
+        </Data>
+        <Data name="plot">
+          <value>4</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -118.96026,36.682344,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>sequoia_4000_1_rd-to-whitaker-foresteshom-creek-campground_05</name>
+      <description><![CDATA[name: <br>plot_id: Sequoia-4000-Plot 5-Site 1<br>forest: sequoia<br>elevation_band: 4000<br>site: 1<br>nickname: rd-to-whitaker-foresteshom-creek-campground<br>plot: 5]]></description>
+      <styleUrl>#icon-1899-1A237E-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value/>
+        </Data>
+        <Data name="plot_id">
+          <value>Sequoia-4000-Plot 5-Site 1</value>
+        </Data>
+        <Data name="forest">
+          <value>sequoia</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>4000</value>
+        </Data>
+        <Data name="site">
+          <value>1</value>
+        </Data>
+        <Data name="nickname">
+          <value>rd-to-whitaker-foresteshom-creek-campground</value>
+        </Data>
+        <Data name="plot">
+          <value>5</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -118.959543,36.681419,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>sequoia_4000_2_eshom-ohv_06</name>
+      <description><![CDATA[name: <br>plot_id: Sequoia-4000-Plot 6-Site 2<br>forest: sequoia<br>elevation_band: 4000<br>site: 2<br>nickname: eshom-ohv<br>plot: 6]]></description>
+      <styleUrl>#icon-1899-1A237E-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value/>
+        </Data>
+        <Data name="plot_id">
+          <value>Sequoia-4000-Plot 6-Site 2</value>
+        </Data>
+        <Data name="forest">
+          <value>sequoia</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>4000</value>
+        </Data>
+        <Data name="site">
+          <value>2</value>
+        </Data>
+        <Data name="nickname">
+          <value>eshom-ohv</value>
+        </Data>
+        <Data name="plot">
+          <value>6</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -118.947474,36.64614,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>sequoia_4000_2_eshom-ohv_07</name>
+      <description><![CDATA[name: <br>plot_id: Sequoia-4000-Plot 7-Site 2<br>forest: sequoia<br>elevation_band: 4000<br>site: 2<br>nickname: eshom-ohv<br>plot: 7]]></description>
+      <styleUrl>#icon-1899-1A237E-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value/>
+        </Data>
+        <Data name="plot_id">
+          <value>Sequoia-4000-Plot 7-Site 2</value>
+        </Data>
+        <Data name="forest">
+          <value>sequoia</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>4000</value>
+        </Data>
+        <Data name="site">
+          <value>2</value>
+        </Data>
+        <Data name="nickname">
+          <value>eshom-ohv</value>
+        </Data>
+        <Data name="plot">
+          <value>7</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -118.948063,36.647302,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>sequoia_4000_2_eshom-ohv_08</name>
+      <description><![CDATA[name: <br>plot_id: Sequoia-4000-Plot 8-Site 2<br>forest: sequoia<br>elevation_band: 4000<br>site: 2<br>nickname: eshom-ohv<br>plot: 8]]></description>
+      <styleUrl>#icon-1899-1A237E-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value/>
+        </Data>
+        <Data name="plot_id">
+          <value>Sequoia-4000-Plot 8-Site 2</value>
+        </Data>
+        <Data name="forest">
+          <value>sequoia</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>4000</value>
+        </Data>
+        <Data name="site">
+          <value>2</value>
+        </Data>
+        <Data name="nickname">
+          <value>eshom-ohv</value>
+        </Data>
+        <Data name="plot">
+          <value>8</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -118.947998,36.648286,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>sequoia_4000_2_eshom-ohv_09</name>
+      <description><![CDATA[name: <br>plot_id: Sequoia-4000-Plot 9-Site 2<br>forest: sequoia<br>elevation_band: 4000<br>site: 2<br>nickname: eshom-ohv<br>plot: 9]]></description>
+      <styleUrl>#icon-1899-1A237E-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value/>
+        </Data>
+        <Data name="plot_id">
+          <value>Sequoia-4000-Plot 9-Site 2</value>
+        </Data>
+        <Data name="forest">
+          <value>sequoia</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>4000</value>
+        </Data>
+        <Data name="site">
+          <value>2</value>
+        </Data>
+        <Data name="nickname">
+          <value>eshom-ohv</value>
+        </Data>
+        <Data name="plot">
+          <value>9</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -118.948603,36.650087,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>sequoia_4000_2_eshom-ohv_10</name>
+      <description><![CDATA[name: <br>plot_id: Sequoia-4000-Plot 10-Site 2<br>forest: sequoia<br>elevation_band: 4000<br>site: 2<br>nickname: eshom-ohv<br>plot: 10]]></description>
+      <styleUrl>#icon-1899-1A237E-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value/>
+        </Data>
+        <Data name="plot_id">
+          <value>Sequoia-4000-Plot 10-Site 2</value>
+        </Data>
+        <Data name="forest">
+          <value>sequoia</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>4000</value>
+        </Data>
+        <Data name="site">
+          <value>2</value>
+        </Data>
+        <Data name="nickname">
+          <value>eshom-ohv</value>
+        </Data>
+        <Data name="plot">
+          <value>10</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -118.946914,36.650521,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>sequoia_4000_3_glenvillehwy-155_11</name>
+      <description><![CDATA[name: <br>plot_id: Sequoia-4000-Plot 11-Site 3<br>forest: sequoia<br>elevation_band: 4000<br>site: 3<br>nickname: glenvillehwy-155<br>plot: 11]]></description>
+      <styleUrl>#icon-1899-1A237E-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value/>
+        </Data>
+        <Data name="plot_id">
+          <value>Sequoia-4000-Plot 11-Site 3</value>
+        </Data>
+        <Data name="forest">
+          <value>sequoia</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>4000</value>
+        </Data>
+        <Data name="site">
+          <value>3</value>
+        </Data>
+        <Data name="nickname">
+          <value>glenvillehwy-155</value>
+        </Data>
+        <Data name="plot">
+          <value>11</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -118.614647,35.73596,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>sequoia_4000_3_glenvillehwy-155_12</name>
+      <description><![CDATA[name: <br>plot_id: Sequoia-4000-Plot 12-Site 3<br>forest: sequoia<br>elevation_band: 4000<br>site: 3<br>nickname: glenvillehwy-155<br>plot: 12]]></description>
+      <styleUrl>#icon-1899-1A237E-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value/>
+        </Data>
+        <Data name="plot_id">
+          <value>Sequoia-4000-Plot 12-Site 3</value>
+        </Data>
+        <Data name="forest">
+          <value>sequoia</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>4000</value>
+        </Data>
+        <Data name="site">
+          <value>3</value>
+        </Data>
+        <Data name="nickname">
+          <value>glenvillehwy-155</value>
+        </Data>
+        <Data name="plot">
+          <value>12</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -118.616032,35.73559,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>sequoia_4000_3_glenvillehwy-155_13</name>
+      <description><![CDATA[name: <br>plot_id: Sequoia-4000-Plot 13-Site 3<br>forest: sequoia<br>elevation_band: 4000<br>site: 3<br>nickname: glenvillehwy-155<br>plot: 13]]></description>
+      <styleUrl>#icon-1899-1A237E-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value/>
+        </Data>
+        <Data name="plot_id">
+          <value>Sequoia-4000-Plot 13-Site 3</value>
+        </Data>
+        <Data name="forest">
+          <value>sequoia</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>4000</value>
+        </Data>
+        <Data name="site">
+          <value>3</value>
+        </Data>
+        <Data name="nickname">
+          <value>glenvillehwy-155</value>
+        </Data>
+        <Data name="plot">
+          <value>13</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -118.617111,35.7348,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>sequoia_4000_3_glenvillehwy-155_14</name>
+      <description><![CDATA[name: <br>plot_id: Sequoia-4000-Plot 14-Site 3<br>forest: sequoia<br>elevation_band: 4000<br>site: 3<br>nickname: glenvillehwy-155<br>plot: 14]]></description>
+      <styleUrl>#icon-1899-1A237E-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value/>
+        </Data>
+        <Data name="plot_id">
+          <value>Sequoia-4000-Plot 14-Site 3</value>
+        </Data>
+        <Data name="forest">
+          <value>sequoia</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>4000</value>
+        </Data>
+        <Data name="site">
+          <value>3</value>
+        </Data>
+        <Data name="nickname">
+          <value>glenvillehwy-155</value>
+        </Data>
+        <Data name="plot">
+          <value>14</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -118.618214,35.734118,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>sequoia_4000_3_glenvillehwy-155_15</name>
+      <description><![CDATA[name: <br>plot_id: Sequoia-4000-Plot 15-Site 3<br>forest: sequoia<br>elevation_band: 4000<br>site: 3<br>nickname: glenvillehwy-155<br>plot: 15]]></description>
+      <styleUrl>#icon-1899-1A237E-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value/>
+        </Data>
+        <Data name="plot_id">
+          <value>Sequoia-4000-Plot 15-Site 3</value>
+        </Data>
+        <Data name="forest">
+          <value>sequoia</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>4000</value>
+        </Data>
+        <Data name="site">
+          <value>3</value>
+        </Data>
+        <Data name="nickname">
+          <value>glenvillehwy-155</value>
+        </Data>
+        <Data name="plot">
+          <value>15</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -118.618553,35.735556,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>sequoia_5000_1_last-chance-meadow_01</name>
+      <description><![CDATA[name: <br>plot_id: Sequoia-5000-Plot 1-Site 1<br>forest: sequoia<br>elevation_band: 5000<br>site: 1<br>nickname: last-chance-meadow<br>plot: 1]]></description>
+      <styleUrl>#icon-1899-1A237E-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value/>
+        </Data>
+        <Data name="plot_id">
+          <value>Sequoia-5000-Plot 1-Site 1</value>
+        </Data>
+        <Data name="forest">
+          <value>sequoia</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>5000</value>
+        </Data>
+        <Data name="site">
+          <value>1</value>
+        </Data>
+        <Data name="nickname">
+          <value>last-chance-meadow</value>
+        </Data>
+        <Data name="plot">
+          <value>1</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -118.566848,36.005503,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>sequoia_5000_1_last-chance-meadow_02</name>
+      <description><![CDATA[name: <br>plot_id: Sequoia-5000-Plot 2-Site 1<br>forest: sequoia<br>elevation_band: 5000<br>site: 1<br>nickname: last-chance-meadow<br>plot: 2]]></description>
+      <styleUrl>#icon-1899-1A237E-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value/>
+        </Data>
+        <Data name="plot_id">
+          <value>Sequoia-5000-Plot 2-Site 1</value>
+        </Data>
+        <Data name="forest">
+          <value>sequoia</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>5000</value>
+        </Data>
+        <Data name="site">
+          <value>1</value>
+        </Data>
+        <Data name="nickname">
+          <value>last-chance-meadow</value>
+        </Data>
+        <Data name="plot">
+          <value>2</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -118.56613,36.006765,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>sequoia_5000_1_last-chance-meadow_03</name>
+      <description><![CDATA[name: <br>plot_id: Sequoia-5000-Plot 3-Site 1<br>forest: sequoia<br>elevation_band: 5000<br>site: 1<br>nickname: last-chance-meadow<br>plot: 3]]></description>
+      <styleUrl>#icon-1899-1A237E-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value/>
+        </Data>
+        <Data name="plot_id">
+          <value>Sequoia-5000-Plot 3-Site 1</value>
+        </Data>
+        <Data name="forest">
+          <value>sequoia</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>5000</value>
+        </Data>
+        <Data name="site">
+          <value>1</value>
+        </Data>
+        <Data name="nickname">
+          <value>last-chance-meadow</value>
+        </Data>
+        <Data name="plot">
+          <value>3</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -118.565047,36.005869,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>sequoia_5000_1_last-chance-meadow_04</name>
+      <description><![CDATA[name: <br>plot_id: Sequoia-5000-Plot 4-Site 1<br>forest: sequoia<br>elevation_band: 5000<br>site: 1<br>nickname: last-chance-meadow<br>plot: 4]]></description>
+      <styleUrl>#icon-1899-1A237E-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value/>
+        </Data>
+        <Data name="plot_id">
+          <value>Sequoia-5000-Plot 4-Site 1</value>
+        </Data>
+        <Data name="forest">
+          <value>sequoia</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>5000</value>
+        </Data>
+        <Data name="site">
+          <value>1</value>
+        </Data>
+        <Data name="nickname">
+          <value>last-chance-meadow</value>
+        </Data>
+        <Data name="plot">
+          <value>4</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -118.564243,36.005609,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>sequoia_5000_1_last-chance-meadow_05</name>
+      <description><![CDATA[name: <br>plot_id: Sequoia-5000-Plot 5-Site 1<br>forest: sequoia<br>elevation_band: 5000<br>site: 1<br>nickname: last-chance-meadow<br>plot: 5]]></description>
+      <styleUrl>#icon-1899-1A237E-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value/>
+        </Data>
+        <Data name="plot_id">
+          <value>Sequoia-5000-Plot 5-Site 1</value>
+        </Data>
+        <Data name="forest">
+          <value>sequoia</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>5000</value>
+        </Data>
+        <Data name="site">
+          <value>1</value>
+        </Data>
+        <Data name="nickname">
+          <value>last-chance-meadow</value>
+        </Data>
+        <Data name="plot">
+          <value>5</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -118.562973,36.006464,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>sequoia_5000_2_landslide-cg_06</name>
+      <description><![CDATA[name: <br>plot_id: Sequoia-5000-Plot 6-Site 2<br>forest: sequoia<br>elevation_band: 5000<br>site: 2<br>nickname: landslide-cg<br>plot: 6]]></description>
+      <styleUrl>#icon-1899-1A237E-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value/>
+        </Data>
+        <Data name="plot_id">
+          <value>Sequoia-5000-Plot 6-Site 2</value>
+        </Data>
+        <Data name="forest">
+          <value>sequoia</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>5000</value>
+        </Data>
+        <Data name="site">
+          <value>2</value>
+        </Data>
+        <Data name="nickname">
+          <value>landslide-cg</value>
+        </Data>
+        <Data name="plot">
+          <value>6</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -118.877308,36.764857,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>sequoia_5000_2_landslide-cg_07</name>
+      <description><![CDATA[name: <br>plot_id: Sequoia-5000-Plot 7-Site 2<br>forest: sequoia<br>elevation_band: 5000<br>site: 2<br>nickname: landslide-cg<br>plot: 7]]></description>
+      <styleUrl>#icon-1899-1A237E-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value/>
+        </Data>
+        <Data name="plot_id">
+          <value>Sequoia-5000-Plot 7-Site 2</value>
+        </Data>
+        <Data name="forest">
+          <value>sequoia</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>5000</value>
+        </Data>
+        <Data name="site">
+          <value>2</value>
+        </Data>
+        <Data name="nickname">
+          <value>landslide-cg</value>
+        </Data>
+        <Data name="plot">
+          <value>7</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -118.879795,36.764844,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>sequoia_5000_2_landslide-cg_08</name>
+      <description><![CDATA[name: <br>plot_id: Sequoia-5000-Plot 8-Site 2<br>forest: sequoia<br>elevation_band: 5000<br>site: 2<br>nickname: landslide-cg<br>plot: 8]]></description>
+      <styleUrl>#icon-1899-1A237E-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value/>
+        </Data>
+        <Data name="plot_id">
+          <value>Sequoia-5000-Plot 8-Site 2</value>
+        </Data>
+        <Data name="forest">
+          <value>sequoia</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>5000</value>
+        </Data>
+        <Data name="site">
+          <value>2</value>
+        </Data>
+        <Data name="nickname">
+          <value>landslide-cg</value>
+        </Data>
+        <Data name="plot">
+          <value>8</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -118.879396,36.763219,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>sequoia_5000_2_landslide-cg_09</name>
+      <description><![CDATA[name: <br>plot_id: Sequoia-5000-Plot 9-Site 2<br>forest: sequoia<br>elevation_band: 5000<br>site: 2<br>nickname: landslide-cg<br>plot: 9]]></description>
+      <styleUrl>#icon-1899-1A237E-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value/>
+        </Data>
+        <Data name="plot_id">
+          <value>Sequoia-5000-Plot 9-Site 2</value>
+        </Data>
+        <Data name="forest">
+          <value>sequoia</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>5000</value>
+        </Data>
+        <Data name="site">
+          <value>2</value>
+        </Data>
+        <Data name="nickname">
+          <value>landslide-cg</value>
+        </Data>
+        <Data name="plot">
+          <value>9</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -118.878936,36.761802,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>sequoia_5000_2_landslide-cg_10</name>
+      <description><![CDATA[name: <br>plot_id: Sequoia-5000-Plot 10-Site 2<br>forest: sequoia<br>elevation_band: 5000<br>site: 2<br>nickname: landslide-cg<br>plot: 10]]></description>
+      <styleUrl>#icon-1899-1A237E-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value/>
+        </Data>
+        <Data name="plot_id">
+          <value>Sequoia-5000-Plot 10-Site 2</value>
+        </Data>
+        <Data name="forest">
+          <value>sequoia</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>5000</value>
+        </Data>
+        <Data name="site">
+          <value>2</value>
+        </Data>
+        <Data name="nickname">
+          <value>landslide-cg</value>
+        </Data>
+        <Data name="plot">
+          <value>10</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -118.879142,36.761042,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>sequoia_5000_3_hume-lake_11</name>
+      <description><![CDATA[name: <br>plot_id: Sequoia-5000-Plot 11-Site 3<br>forest: sequoia<br>elevation_band: 5000<br>site: 3<br>nickname: hume-lake<br>plot: 11]]></description>
+      <styleUrl>#icon-1899-1A237E-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value/>
+        </Data>
+        <Data name="plot_id">
+          <value>Sequoia-5000-Plot 11-Site 3</value>
+        </Data>
+        <Data name="forest">
+          <value>sequoia</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>5000</value>
+        </Data>
+        <Data name="site">
+          <value>3</value>
+        </Data>
+        <Data name="nickname">
+          <value>hume-lake</value>
+        </Data>
+        <Data name="plot">
+          <value>11</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -118.918222,36.792785,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>sequoia_5000_3_hume-lake_12</name>
+      <description><![CDATA[name: <br>plot_id: Sequoia-5000-Plot 12-Site 3<br>forest: sequoia<br>elevation_band: 5000<br>site: 3<br>nickname: hume-lake<br>plot: 12]]></description>
+      <styleUrl>#icon-1899-1A237E-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value/>
+        </Data>
+        <Data name="plot_id">
+          <value>Sequoia-5000-Plot 12-Site 3</value>
+        </Data>
+        <Data name="forest">
+          <value>sequoia</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>5000</value>
+        </Data>
+        <Data name="site">
+          <value>3</value>
+        </Data>
+        <Data name="nickname">
+          <value>hume-lake</value>
+        </Data>
+        <Data name="plot">
+          <value>12</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -118.919553,36.792665,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>sequoia_5000_3_hume-lake_13</name>
+      <description><![CDATA[name: <br>plot_id: Sequoia-5000-Plot 13-Site 3<br>forest: sequoia<br>elevation_band: 5000<br>site: 3<br>nickname: hume-lake<br>plot: 13]]></description>
+      <styleUrl>#icon-1899-1A237E-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value/>
+        </Data>
+        <Data name="plot_id">
+          <value>Sequoia-5000-Plot 13-Site 3</value>
+        </Data>
+        <Data name="forest">
+          <value>sequoia</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>5000</value>
+        </Data>
+        <Data name="site">
+          <value>3</value>
+        </Data>
+        <Data name="nickname">
+          <value>hume-lake</value>
+        </Data>
+        <Data name="plot">
+          <value>13</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -118.920639,36.79399,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>sequoia_5000_3_hume-lake_14</name>
+      <description><![CDATA[name: <br>plot_id: Sequoia-5000-Plot 14-Site 3<br>forest: sequoia<br>elevation_band: 5000<br>site: 3<br>nickname: hume-lake<br>plot: 14]]></description>
+      <styleUrl>#icon-1899-1A237E-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value/>
+        </Data>
+        <Data name="plot_id">
+          <value>Sequoia-5000-Plot 14-Site 3</value>
+        </Data>
+        <Data name="forest">
+          <value>sequoia</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>5000</value>
+        </Data>
+        <Data name="site">
+          <value>3</value>
+        </Data>
+        <Data name="nickname">
+          <value>hume-lake</value>
+        </Data>
+        <Data name="plot">
+          <value>14</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -118.918433,36.794485,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>sequoia_5000_3_hume-lake_15</name>
+      <description><![CDATA[name: <br>plot_id: Sequoia-5000-Plot 15-Site 3<br>forest: sequoia<br>elevation_band: 5000<br>site: 3<br>nickname: hume-lake<br>plot: 15]]></description>
+      <styleUrl>#icon-1899-1A237E-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value/>
+        </Data>
+        <Data name="plot_id">
+          <value>Sequoia-5000-Plot 15-Site 3</value>
+        </Data>
+        <Data name="forest">
+          <value>sequoia</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>5000</value>
+        </Data>
+        <Data name="site">
+          <value>3</value>
+        </Data>
+        <Data name="nickname">
+          <value>hume-lake</value>
+        </Data>
+        <Data name="plot">
+          <value>15</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -118.917366,36.794854,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>sequoia_6000_1_nobe-young-meadow_01</name>
+      <description><![CDATA[name: <br>plot_id: Sequoia-6000-Plot 1-Site 1<br>forest: sequoia<br>elevation_band: 6000<br>site: 1<br>nickname: nobe-young-meadow<br>plot: 1]]></description>
+      <styleUrl>#icon-1899-1A237E-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value/>
+        </Data>
+        <Data name="plot_id">
+          <value>Sequoia-6000-Plot 1-Site 1</value>
+        </Data>
+        <Data name="forest">
+          <value>sequoia</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>6000</value>
+        </Data>
+        <Data name="site">
+          <value>1</value>
+        </Data>
+        <Data name="nickname">
+          <value>nobe-young-meadow</value>
+        </Data>
+        <Data name="plot">
+          <value>1</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -118.567886,36.022608,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>sequoia_6000_1_nobe-young-meadow_02</name>
+      <description><![CDATA[name: <br>plot_id: Sequoia-6000-Plot 2-Site 1<br>forest: sequoia<br>elevation_band: 6000<br>site: 1<br>nickname: nobe-young-meadow<br>plot: 2]]></description>
+      <styleUrl>#icon-1899-1A237E-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value/>
+        </Data>
+        <Data name="plot_id">
+          <value>Sequoia-6000-Plot 2-Site 1</value>
+        </Data>
+        <Data name="forest">
+          <value>sequoia</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>6000</value>
+        </Data>
+        <Data name="site">
+          <value>1</value>
+        </Data>
+        <Data name="nickname">
+          <value>nobe-young-meadow</value>
+        </Data>
+        <Data name="plot">
+          <value>2</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -118.568318,36.023675,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>sequoia_6000_1_nobe-young-meadow_03</name>
+      <description><![CDATA[name: <br>plot_id: Sequoia-6000-Plot 3-Site 1<br>forest: sequoia<br>elevation_band: 6000<br>site: 1<br>nickname: nobe-young-meadow<br>plot: 3]]></description>
+      <styleUrl>#icon-1899-1A237E-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value/>
+        </Data>
+        <Data name="plot_id">
+          <value>Sequoia-6000-Plot 3-Site 1</value>
+        </Data>
+        <Data name="forest">
+          <value>sequoia</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>6000</value>
+        </Data>
+        <Data name="site">
+          <value>1</value>
+        </Data>
+        <Data name="nickname">
+          <value>nobe-young-meadow</value>
+        </Data>
+        <Data name="plot">
+          <value>3</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -118.568828,36.02421,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>sequoia_6000_1_nobe-young-meadow_04</name>
+      <description><![CDATA[name: <br>plot_id: Sequoia-6000-Plot 4-Site 1<br>forest: sequoia<br>elevation_band: 6000<br>site: 1<br>nickname: nobe-young-meadow<br>plot: 4]]></description>
+      <styleUrl>#icon-1899-1A237E-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value/>
+        </Data>
+        <Data name="plot_id">
+          <value>Sequoia-6000-Plot 4-Site 1</value>
+        </Data>
+        <Data name="forest">
+          <value>sequoia</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>6000</value>
+        </Data>
+        <Data name="site">
+          <value>1</value>
+        </Data>
+        <Data name="nickname">
+          <value>nobe-young-meadow</value>
+        </Data>
+        <Data name="plot">
+          <value>4</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -118.568955,36.025587,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>sequoia_6000_1_nobe-young-meadow_05</name>
+      <description><![CDATA[name: <br>plot_id: Sequoia-6000-Plot 5-Site 1<br>forest: sequoia<br>elevation_band: 6000<br>site: 1<br>nickname: nobe-young-meadow<br>plot: 5]]></description>
+      <styleUrl>#icon-1899-1A237E-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value/>
+        </Data>
+        <Data name="plot_id">
+          <value>Sequoia-6000-Plot 5-Site 1</value>
+        </Data>
+        <Data name="forest">
+          <value>sequoia</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>6000</value>
+        </Data>
+        <Data name="site">
+          <value>1</value>
+        </Data>
+        <Data name="nickname">
+          <value>nobe-young-meadow</value>
+        </Data>
+        <Data name="plot">
+          <value>5</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -118.570336,36.026398,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>sequoia_6000_2_near-shadow-mtn-ski-area_06</name>
+      <description><![CDATA[name: <br>plot_id: Sequoia-6000-Plot 6-Site 2<br>forest: sequoia<br>elevation_band: 6000<br>site: 2<br>nickname: near-shadow-mtn-ski-area<br>plot: 6]]></description>
+      <styleUrl>#icon-1899-1A237E-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value/>
+        </Data>
+        <Data name="plot_id">
+          <value>Sequoia-6000-Plot 6-Site 2</value>
+        </Data>
+        <Data name="forest">
+          <value>sequoia</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>6000</value>
+        </Data>
+        <Data name="site">
+          <value>2</value>
+        </Data>
+        <Data name="nickname">
+          <value>near-shadow-mtn-ski-area</value>
+        </Data>
+        <Data name="plot">
+          <value>6</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -118.580859,35.700312,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>sequoia_6000_2_near-shadow-mtn-ski-area_07</name>
+      <description><![CDATA[name: <br>plot_id: Sequoia-6000-Plot 7-Site 2<br>forest: sequoia<br>elevation_band: 6000<br>site: 2<br>nickname: near-shadow-mtn-ski-area<br>plot: 7]]></description>
+      <styleUrl>#icon-1899-1A237E-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value/>
+        </Data>
+        <Data name="plot_id">
+          <value>Sequoia-6000-Plot 7-Site 2</value>
+        </Data>
+        <Data name="forest">
+          <value>sequoia</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>6000</value>
+        </Data>
+        <Data name="site">
+          <value>2</value>
+        </Data>
+        <Data name="nickname">
+          <value>near-shadow-mtn-ski-area</value>
+        </Data>
+        <Data name="plot">
+          <value>7</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -118.579749,35.699497,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>sequoia_6000_2_near-shadow-mtn-ski-area_08</name>
+      <description><![CDATA[name: <br>plot_id: Sequoia-6000-Plot 8-Site 2<br>forest: sequoia<br>elevation_band: 6000<br>site: 2<br>nickname: near-shadow-mtn-ski-area<br>plot: 8]]></description>
+      <styleUrl>#icon-1899-1A237E-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value/>
+        </Data>
+        <Data name="plot_id">
+          <value>Sequoia-6000-Plot 8-Site 2</value>
+        </Data>
+        <Data name="forest">
+          <value>sequoia</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>6000</value>
+        </Data>
+        <Data name="site">
+          <value>2</value>
+        </Data>
+        <Data name="nickname">
+          <value>near-shadow-mtn-ski-area</value>
+        </Data>
+        <Data name="plot">
+          <value>8</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -118.579306,35.69834,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>sequoia_6000_2_near-shadow-mtn-ski-area_09</name>
+      <description><![CDATA[name: <br>plot_id: Sequoia-6000-Plot 9-Site 2<br>forest: sequoia<br>elevation_band: 6000<br>site: 2<br>nickname: near-shadow-mtn-ski-area<br>plot: 9]]></description>
+      <styleUrl>#icon-1899-1A237E-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value/>
+        </Data>
+        <Data name="plot_id">
+          <value>Sequoia-6000-Plot 9-Site 2</value>
+        </Data>
+        <Data name="forest">
+          <value>sequoia</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>6000</value>
+        </Data>
+        <Data name="site">
+          <value>2</value>
+        </Data>
+        <Data name="nickname">
+          <value>near-shadow-mtn-ski-area</value>
+        </Data>
+        <Data name="plot">
+          <value>9</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -118.57834,35.698695,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>sequoia_6000_2_near-shadow-mtn-ski-area_10</name>
+      <description><![CDATA[name: <br>plot_id: Sequoia-6000-Plot 10-Site 2<br>forest: sequoia<br>elevation_band: 6000<br>site: 2<br>nickname: near-shadow-mtn-ski-area<br>plot: 10]]></description>
+      <styleUrl>#icon-1899-1A237E-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value/>
+        </Data>
+        <Data name="plot_id">
+          <value>Sequoia-6000-Plot 10-Site 2</value>
+        </Data>
+        <Data name="forest">
+          <value>sequoia</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>6000</value>
+        </Data>
+        <Data name="site">
+          <value>2</value>
+        </Data>
+        <Data name="nickname">
+          <value>near-shadow-mtn-ski-area</value>
+        </Data>
+        <Data name="plot">
+          <value>10</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -118.57805,35.700231,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>sequoia_6000_3_hwy-180_11</name>
+      <description><![CDATA[name: <br>plot_id: Sequoia-6000-Plot 11-Site 3<br>forest: sequoia<br>elevation_band: 6000<br>site: 3<br>nickname: hwy-180<br>plot: 11]]></description>
+      <styleUrl>#icon-1899-1A237E-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value/>
+        </Data>
+        <Data name="plot_id">
+          <value>Sequoia-6000-Plot 11-Site 3</value>
+        </Data>
+        <Data name="forest">
+          <value>sequoia</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>6000</value>
+        </Data>
+        <Data name="site">
+          <value>3</value>
+        </Data>
+        <Data name="nickname">
+          <value>hwy-180</value>
+        </Data>
+        <Data name="plot">
+          <value>11</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -118.954352,36.78924,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>sequoia_6000_3_hwy-180_12</name>
+      <description><![CDATA[name: <br>plot_id: Sequoia-6000-Plot 12-Site 3<br>forest: sequoia<br>elevation_band: 6000<br>site: 3<br>nickname: hwy-180<br>plot: 12]]></description>
+      <styleUrl>#icon-1899-1A237E-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value/>
+        </Data>
+        <Data name="plot_id">
+          <value>Sequoia-6000-Plot 12-Site 3</value>
+        </Data>
+        <Data name="forest">
+          <value>sequoia</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>6000</value>
+        </Data>
+        <Data name="site">
+          <value>3</value>
+        </Data>
+        <Data name="nickname">
+          <value>hwy-180</value>
+        </Data>
+        <Data name="plot">
+          <value>12</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -118.953622,36.790938,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>sequoia_6000_3_hwy-180_13</name>
+      <description><![CDATA[name: <br>plot_id: Sequoia-6000-Plot 13-Site 3<br>forest: sequoia<br>elevation_band: 6000<br>site: 3<br>nickname: hwy-180<br>plot: 13]]></description>
+      <styleUrl>#icon-1899-1A237E-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value/>
+        </Data>
+        <Data name="plot_id">
+          <value>Sequoia-6000-Plot 13-Site 3</value>
+        </Data>
+        <Data name="forest">
+          <value>sequoia</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>6000</value>
+        </Data>
+        <Data name="site">
+          <value>3</value>
+        </Data>
+        <Data name="nickname">
+          <value>hwy-180</value>
+        </Data>
+        <Data name="plot">
+          <value>13</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -118.952714,36.792701,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>sequoia_6000_3_hwy-180_14</name>
+      <description><![CDATA[name: <br>plot_id: Sequoia-6000-Plot 14-Site 3<br>forest: sequoia<br>elevation_band: 6000<br>site: 3<br>nickname: hwy-180<br>plot: 14]]></description>
+      <styleUrl>#icon-1899-1A237E-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value/>
+        </Data>
+        <Data name="plot_id">
+          <value>Sequoia-6000-Plot 14-Site 3</value>
+        </Data>
+        <Data name="forest">
+          <value>sequoia</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>6000</value>
+        </Data>
+        <Data name="site">
+          <value>3</value>
+        </Data>
+        <Data name="nickname">
+          <value>hwy-180</value>
+        </Data>
+        <Data name="plot">
+          <value>14</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -118.952773,36.793692,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>sequoia_6000_3_hwy-180_15</name>
+      <description><![CDATA[name: <br>plot_id: Sequoia-6000-Plot 15-Site 3<br>forest: sequoia<br>elevation_band: 6000<br>site: 3<br>nickname: hwy-180<br>plot: 15]]></description>
+      <styleUrl>#icon-1899-1A237E-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value/>
+        </Data>
+        <Data name="plot_id">
+          <value>Sequoia-6000-Plot 15-Site 3</value>
+        </Data>
+        <Data name="forest">
+          <value>sequoia</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>6000</value>
+        </Data>
+        <Data name="site">
+          <value>3</value>
+        </Data>
+        <Data name="nickname">
+          <value>hwy-180</value>
+        </Data>
+        <Data name="plot">
+          <value>15</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -118.952332,36.795303,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>sierra_3000_1_marcs-daily-walk_01</name>
+      <description><![CDATA[name: <br>plot_id: Sierra-3000-Plot 1-Site 1<br>forest: sierra<br>elevation_band: 3000<br>site: 1<br>nickname: marcs-daily-walk<br>plot: 1]]></description>
+      <styleUrl>#icon-1899-006064-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value/>
+        </Data>
+        <Data name="plot_id">
+          <value>Sierra-3000-Plot 1-Site 1</value>
+        </Data>
+        <Data name="forest">
+          <value>sierra</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>3000</value>
+        </Data>
+        <Data name="site">
+          <value>1</value>
+        </Data>
+        <Data name="nickname">
+          <value>marcs-daily-walk</value>
+        </Data>
+        <Data name="plot">
+          <value>1</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -119.576312,37.307602,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>sierra_3000_1_marcs-daily-walk_02</name>
+      <description><![CDATA[name: <br>plot_id: Sierra-3000-Plot 2-Site 1<br>forest: sierra<br>elevation_band: 3000<br>site: 1<br>nickname: marcs-daily-walk<br>plot: 2]]></description>
+      <styleUrl>#icon-1899-006064-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value/>
+        </Data>
+        <Data name="plot_id">
+          <value>Sierra-3000-Plot 2-Site 1</value>
+        </Data>
+        <Data name="forest">
+          <value>sierra</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>3000</value>
+        </Data>
+        <Data name="site">
+          <value>1</value>
+        </Data>
+        <Data name="nickname">
+          <value>marcs-daily-walk</value>
+        </Data>
+        <Data name="plot">
+          <value>2</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -119.575113,37.307853,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>sierra_3000_1_marcs-daily-walk_03</name>
+      <description><![CDATA[name: <br>plot_id: Sierra-3000-Plot 3-Site 1<br>forest: sierra<br>elevation_band: 3000<br>site: 1<br>nickname: marcs-daily-walk<br>plot: 3]]></description>
+      <styleUrl>#icon-1899-006064-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value/>
+        </Data>
+        <Data name="plot_id">
+          <value>Sierra-3000-Plot 3-Site 1</value>
+        </Data>
+        <Data name="forest">
+          <value>sierra</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>3000</value>
+        </Data>
+        <Data name="site">
+          <value>1</value>
+        </Data>
+        <Data name="nickname">
+          <value>marcs-daily-walk</value>
+        </Data>
+        <Data name="plot">
+          <value>3</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -119.57358,37.307887,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>sierra_3000_1_marcs-daily-walk_04</name>
+      <description><![CDATA[name: <br>plot_id: Sierra-3000-Plot 4-Site 1<br>forest: sierra<br>elevation_band: 3000<br>site: 1<br>nickname: marcs-daily-walk<br>plot: 4]]></description>
+      <styleUrl>#icon-1899-006064-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value/>
+        </Data>
+        <Data name="plot_id">
+          <value>Sierra-3000-Plot 4-Site 1</value>
+        </Data>
+        <Data name="forest">
+          <value>sierra</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>3000</value>
+        </Data>
+        <Data name="site">
+          <value>1</value>
+        </Data>
+        <Data name="nickname">
+          <value>marcs-daily-walk</value>
+        </Data>
+        <Data name="plot">
+          <value>4</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -119.57108,37.308013,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>sierra_3000_1_marcs-daily-walk_05</name>
+      <description><![CDATA[name: <br>plot_id: Sierra-3000-Plot 5-Site 1<br>forest: sierra<br>elevation_band: 3000<br>site: 1<br>nickname: marcs-daily-walk<br>plot: 5]]></description>
+      <styleUrl>#icon-1899-006064-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value/>
+        </Data>
+        <Data name="plot_id">
+          <value>Sierra-3000-Plot 5-Site 1</value>
+        </Data>
+        <Data name="forest">
+          <value>sierra</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>3000</value>
+        </Data>
+        <Data name="site">
+          <value>1</value>
+        </Data>
+        <Data name="nickname">
+          <value>marcs-daily-walk</value>
+        </Data>
+        <Data name="plot">
+          <value>5</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -119.570142,37.308295,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>sierra_3000_2_blue-canyon-north-of-workcenter_06</name>
+      <description><![CDATA[name: <br>plot_id: Sierra-3000-Plot 6-Site 2<br>forest: sierra<br>elevation_band: 3000<br>site: 2<br>nickname: blue-canyon-north-of-workcenter<br>plot: 6]]></description>
+      <styleUrl>#icon-1899-006064-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value/>
+        </Data>
+        <Data name="plot_id">
+          <value>Sierra-3000-Plot 6-Site 2</value>
+        </Data>
+        <Data name="forest">
+          <value>sierra</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>3000</value>
+        </Data>
+        <Data name="site">
+          <value>2</value>
+        </Data>
+        <Data name="nickname">
+          <value>blue-canyon-north-of-workcenter</value>
+        </Data>
+        <Data name="plot">
+          <value>6</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -119.239801,37.051205,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>sierra_3000_2_blue-canyon-north-of-workcenter_07</name>
+      <description><![CDATA[name: <br>plot_id: Sierra-3000-Plot 7-Site 2<br>forest: sierra<br>elevation_band: 3000<br>site: 2<br>nickname: blue-canyon-north-of-workcenter<br>plot: 7]]></description>
+      <styleUrl>#icon-1899-006064-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value/>
+        </Data>
+        <Data name="plot_id">
+          <value>Sierra-3000-Plot 7-Site 2</value>
+        </Data>
+        <Data name="forest">
+          <value>sierra</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>3000</value>
+        </Data>
+        <Data name="site">
+          <value>2</value>
+        </Data>
+        <Data name="nickname">
+          <value>blue-canyon-north-of-workcenter</value>
+        </Data>
+        <Data name="plot">
+          <value>7</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -119.24131,37.051672,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>sierra_3000_2_blue-canyon-north-of-workcenter_08</name>
+      <description><![CDATA[name: <br>plot_id: Sierra-3000-Plot 8-Site 2<br>forest: sierra<br>elevation_band: 3000<br>site: 2<br>nickname: blue-canyon-north-of-workcenter<br>plot: 8]]></description>
+      <styleUrl>#icon-1899-006064-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value/>
+        </Data>
+        <Data name="plot_id">
+          <value>Sierra-3000-Plot 8-Site 2</value>
+        </Data>
+        <Data name="forest">
+          <value>sierra</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>3000</value>
+        </Data>
+        <Data name="site">
+          <value>2</value>
+        </Data>
+        <Data name="nickname">
+          <value>blue-canyon-north-of-workcenter</value>
+        </Data>
+        <Data name="plot">
+          <value>8</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -119.241575,37.05264,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>sierra_3000_2_blue-canyon-north-of-workcenter_09</name>
+      <description><![CDATA[name: <br>plot_id: Sierra-3000-Plot 9-Site 2<br>forest: sierra<br>elevation_band: 3000<br>site: 2<br>nickname: blue-canyon-north-of-workcenter<br>plot: 9]]></description>
+      <styleUrl>#icon-1899-006064-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value/>
+        </Data>
+        <Data name="plot_id">
+          <value>Sierra-3000-Plot 9-Site 2</value>
+        </Data>
+        <Data name="forest">
+          <value>sierra</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>3000</value>
+        </Data>
+        <Data name="site">
+          <value>2</value>
+        </Data>
+        <Data name="nickname">
+          <value>blue-canyon-north-of-workcenter</value>
+        </Data>
+        <Data name="plot">
+          <value>9</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -119.242185,37.053512,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>sierra_3000_2_blue-canyon-north-of-workcenter_10</name>
+      <description><![CDATA[name: <br>plot_id: Sierra-3000-Plot 10-Site 2<br>forest: sierra<br>elevation_band: 3000<br>site: 2<br>nickname: blue-canyon-north-of-workcenter<br>plot: 10]]></description>
+      <styleUrl>#icon-1899-006064-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value/>
+        </Data>
+        <Data name="plot_id">
+          <value>Sierra-3000-Plot 10-Site 2</value>
+        </Data>
+        <Data name="forest">
+          <value>sierra</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>3000</value>
+        </Data>
+        <Data name="site">
+          <value>2</value>
+        </Data>
+        <Data name="nickname">
+          <value>blue-canyon-north-of-workcenter</value>
+        </Data>
+        <Data name="plot">
+          <value>10</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -119.241377,37.053924,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>sierra_3000_3_blue-canyon-south-of-workcenter_11</name>
+      <description><![CDATA[name: <br>plot_id: Sierra-3000-Plot 11-Site 3<br>forest: sierra<br>elevation_band: 3000<br>site: 3<br>nickname: blue-canyon-south-of-workcenter<br>plot: 11]]></description>
+      <styleUrl>#icon-1899-006064-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value/>
+        </Data>
+        <Data name="plot_id">
+          <value>Sierra-3000-Plot 11-Site 3</value>
+        </Data>
+        <Data name="forest">
+          <value>sierra</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>3000</value>
+        </Data>
+        <Data name="site">
+          <value>3</value>
+        </Data>
+        <Data name="nickname">
+          <value>blue-canyon-south-of-workcenter</value>
+        </Data>
+        <Data name="plot">
+          <value>11</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -119.237312,37.027711,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>sierra_3000_3_blue-canyon-south-of-workcenter_12</name>
+      <description><![CDATA[name: <br>plot_id: Sierra-3000-Plot 12-Site 3<br>forest: sierra<br>elevation_band: 3000<br>site: 3<br>nickname: blue-canyon-south-of-workcenter<br>plot: 12]]></description>
+      <styleUrl>#icon-1899-006064-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value/>
+        </Data>
+        <Data name="plot_id">
+          <value>Sierra-3000-Plot 12-Site 3</value>
+        </Data>
+        <Data name="forest">
+          <value>sierra</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>3000</value>
+        </Data>
+        <Data name="site">
+          <value>3</value>
+        </Data>
+        <Data name="nickname">
+          <value>blue-canyon-south-of-workcenter</value>
+        </Data>
+        <Data name="plot">
+          <value>12</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -119.236671,37.026543,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>sierra_3000_3_blue-canyon-south-of-workcenter_13</name>
+      <description><![CDATA[name: <br>plot_id: Sierra-3000-Plot 13-Site 3<br>forest: sierra<br>elevation_band: 3000<br>site: 3<br>nickname: blue-canyon-south-of-workcenter<br>plot: 13]]></description>
+      <styleUrl>#icon-1899-006064-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value/>
+        </Data>
+        <Data name="plot_id">
+          <value>Sierra-3000-Plot 13-Site 3</value>
+        </Data>
+        <Data name="forest">
+          <value>sierra</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>3000</value>
+        </Data>
+        <Data name="site">
+          <value>3</value>
+        </Data>
+        <Data name="nickname">
+          <value>blue-canyon-south-of-workcenter</value>
+        </Data>
+        <Data name="plot">
+          <value>13</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -119.235752,37.025857,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>sierra_3000_3_blue-canyon-south-of-workcenter_14</name>
+      <description><![CDATA[name: <br>plot_id: Sierra-3000-Plot 14-Site 3<br>forest: sierra<br>elevation_band: 3000<br>site: 3<br>nickname: blue-canyon-south-of-workcenter<br>plot: 14]]></description>
+      <styleUrl>#icon-1899-006064-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value/>
+        </Data>
+        <Data name="plot_id">
+          <value>Sierra-3000-Plot 14-Site 3</value>
+        </Data>
+        <Data name="forest">
+          <value>sierra</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>3000</value>
+        </Data>
+        <Data name="site">
+          <value>3</value>
+        </Data>
+        <Data name="nickname">
+          <value>blue-canyon-south-of-workcenter</value>
+        </Data>
+        <Data name="plot">
+          <value>14</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -119.234403,37.024729,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>sierra_3000_3_blue-canyon-south-of-workcenter_15</name>
+      <description><![CDATA[name: <br>plot_id: Sierra-3000-Plot 15-Site 3<br>forest: sierra<br>elevation_band: 3000<br>site: 3<br>nickname: blue-canyon-south-of-workcenter<br>plot: 15]]></description>
+      <styleUrl>#icon-1899-006064-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value/>
+        </Data>
+        <Data name="plot_id">
+          <value>Sierra-3000-Plot 15-Site 3</value>
+        </Data>
+        <Data name="forest">
+          <value>sierra</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>3000</value>
+        </Data>
+        <Data name="site">
+          <value>3</value>
+        </Data>
+        <Data name="nickname">
+          <value>blue-canyon-south-of-workcenter</value>
+        </Data>
+        <Data name="plot">
+          <value>15</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -119.232459,37.025486,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>sierra_4000_1_goat-mountain_01</name>
+      <description><![CDATA[name: <br>plot_id: Sierra-4000-Plot 1-Site 1<br>forest: sierra<br>elevation_band: 4000<br>site: 1<br>nickname: goat-mountain<br>plot: 1]]></description>
+      <styleUrl>#icon-1899-006064-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value/>
+        </Data>
+        <Data name="plot_id">
+          <value>Sierra-4000-Plot 1-Site 1</value>
+        </Data>
+        <Data name="forest">
+          <value>sierra</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>4000</value>
+        </Data>
+        <Data name="site">
+          <value>1</value>
+        </Data>
+        <Data name="nickname">
+          <value>goat-mountain</value>
+        </Data>
+        <Data name="plot">
+          <value>1</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -119.563148,37.28772,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>sierra_4000_1_goat-mountain_02</name>
+      <description><![CDATA[name: <br>plot_id: Sierra-4000-Plot 2-Site 1<br>forest: sierra<br>elevation_band: 4000<br>site: 1<br>nickname: goat-mountain<br>plot: 2]]></description>
+      <styleUrl>#icon-1899-006064-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value/>
+        </Data>
+        <Data name="plot_id">
+          <value>Sierra-4000-Plot 2-Site 1</value>
+        </Data>
+        <Data name="forest">
+          <value>sierra</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>4000</value>
+        </Data>
+        <Data name="site">
+          <value>1</value>
+        </Data>
+        <Data name="nickname">
+          <value>goat-mountain</value>
+        </Data>
+        <Data name="plot">
+          <value>2</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -119.563122,37.28663,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>sierra_4000_1_goat-mountain_03</name>
+      <description><![CDATA[name: <br>plot_id: Sierra-4000-Plot 3-Site 1<br>forest: sierra<br>elevation_band: 4000<br>site: 1<br>nickname: goat-mountain<br>plot: 3]]></description>
+      <styleUrl>#icon-1899-006064-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value/>
+        </Data>
+        <Data name="plot_id">
+          <value>Sierra-4000-Plot 3-Site 1</value>
+        </Data>
+        <Data name="forest">
+          <value>sierra</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>4000</value>
+        </Data>
+        <Data name="site">
+          <value>1</value>
+        </Data>
+        <Data name="nickname">
+          <value>goat-mountain</value>
+        </Data>
+        <Data name="plot">
+          <value>3</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -119.562925,37.285148,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>sierra_4000_1_goat-mountain_04</name>
+      <description><![CDATA[name: <br>plot_id: Sierra-4000-Plot 4-Site 1<br>forest: sierra<br>elevation_band: 4000<br>site: 1<br>nickname: goat-mountain<br>plot: 4]]></description>
+      <styleUrl>#icon-1899-006064-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value/>
+        </Data>
+        <Data name="plot_id">
+          <value>Sierra-4000-Plot 4-Site 1</value>
+        </Data>
+        <Data name="forest">
+          <value>sierra</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>4000</value>
+        </Data>
+        <Data name="site">
+          <value>1</value>
+        </Data>
+        <Data name="nickname">
+          <value>goat-mountain</value>
+        </Data>
+        <Data name="plot">
+          <value>4</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -119.561947,37.283889,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>sierra_4000_1_goat-mountain_05</name>
+      <description><![CDATA[name: <br>plot_id: Sierra-4000-Plot 5-Site 1<br>forest: sierra<br>elevation_band: 4000<br>site: 1<br>nickname: goat-mountain<br>plot: 5]]></description>
+      <styleUrl>#icon-1899-006064-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value/>
+        </Data>
+        <Data name="plot_id">
+          <value>Sierra-4000-Plot 5-Site 1</value>
+        </Data>
+        <Data name="forest">
+          <value>sierra</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>4000</value>
+        </Data>
+        <Data name="site">
+          <value>1</value>
+        </Data>
+        <Data name="nickname">
+          <value>goat-mountain</value>
+        </Data>
+        <Data name="plot">
+          <value>5</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -119.561646,37.282661,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>sierra_4000_2_beasore-rd-redneck-grounds-between-mcleod-flat--chilkoot-cg_06</name>
+      <description><![CDATA[name: <br>plot_id: Sierra-4000-Plot 6-Site 2<br>forest: sierra<br>elevation_band: 4000<br>site: 2<br>nickname: beasore-rd-redneck-grounds-between-mcleod-flat--chilkoot-cg<br>plot: 6]]></description>
+      <styleUrl>#icon-1899-006064-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value/>
+        </Data>
+        <Data name="plot_id">
+          <value>Sierra-4000-Plot 6-Site 2</value>
+        </Data>
+        <Data name="forest">
+          <value>sierra</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>4000</value>
+        </Data>
+        <Data name="site">
+          <value>2</value>
+        </Data>
+        <Data name="nickname">
+          <value>beasore-rd-redneck-grounds-between-mcleod-flat--chilkoot-cg</value>
+        </Data>
+        <Data name="plot">
+          <value>6</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -119.544331,37.355488,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>sierra_4000_2_beasore-rd-redneck-grounds-between-mcleod-flat--chilkoot-cg_07</name>
+      <description><![CDATA[name: <br>plot_id: Sierra-4000-Plot 7-Site 2<br>forest: sierra<br>elevation_band: 4000<br>site: 2<br>nickname: beasore-rd-redneck-grounds-between-mcleod-flat--chilkoot-cg<br>plot: 7]]></description>
+      <styleUrl>#icon-1899-006064-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value/>
+        </Data>
+        <Data name="plot_id">
+          <value>Sierra-4000-Plot 7-Site 2</value>
+        </Data>
+        <Data name="forest">
+          <value>sierra</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>4000</value>
+        </Data>
+        <Data name="site">
+          <value>2</value>
+        </Data>
+        <Data name="nickname">
+          <value>beasore-rd-redneck-grounds-between-mcleod-flat--chilkoot-cg</value>
+        </Data>
+        <Data name="plot">
+          <value>7</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -119.543894,37.354587,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>sierra_4000_2_beasore-rd-redneck-grounds-between-mcleod-flat--chilkoot-cg_08</name>
+      <description><![CDATA[name: <br>plot_id: Sierra-4000-Plot 8-Site 2<br>forest: sierra<br>elevation_band: 4000<br>site: 2<br>nickname: beasore-rd-redneck-grounds-between-mcleod-flat--chilkoot-cg<br>plot: 8]]></description>
+      <styleUrl>#icon-1899-006064-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value/>
+        </Data>
+        <Data name="plot_id">
+          <value>Sierra-4000-Plot 8-Site 2</value>
+        </Data>
+        <Data name="forest">
+          <value>sierra</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>4000</value>
+        </Data>
+        <Data name="site">
+          <value>2</value>
+        </Data>
+        <Data name="nickname">
+          <value>beasore-rd-redneck-grounds-between-mcleod-flat--chilkoot-cg</value>
+        </Data>
+        <Data name="plot">
+          <value>8</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -119.543805,37.353607,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>sierra_4000_2_beasore-rd-redneck-grounds-between-mcleod-flat--chilkoot-cg_09</name>
+      <description><![CDATA[name: <br>plot_id: Sierra-4000-Plot 9-Site 2<br>forest: sierra<br>elevation_band: 4000<br>site: 2<br>nickname: beasore-rd-redneck-grounds-between-mcleod-flat--chilkoot-cg<br>plot: 9]]></description>
+      <styleUrl>#icon-1899-006064-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value/>
+        </Data>
+        <Data name="plot_id">
+          <value>Sierra-4000-Plot 9-Site 2</value>
+        </Data>
+        <Data name="forest">
+          <value>sierra</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>4000</value>
+        </Data>
+        <Data name="site">
+          <value>2</value>
+        </Data>
+        <Data name="nickname">
+          <value>beasore-rd-redneck-grounds-between-mcleod-flat--chilkoot-cg</value>
+        </Data>
+        <Data name="plot">
+          <value>9</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -119.543691,37.352906,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>sierra_4000_2_beasore-rd-redneck-grounds-between-mcleod-flat--chilkoot-cg_10</name>
+      <description><![CDATA[name: <br>plot_id: Sierra-4000-Plot 10-Site 2<br>forest: sierra<br>elevation_band: 4000<br>site: 2<br>nickname: beasore-rd-redneck-grounds-between-mcleod-flat--chilkoot-cg<br>plot: 10]]></description>
+      <styleUrl>#icon-1899-006064-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value/>
+        </Data>
+        <Data name="plot_id">
+          <value>Sierra-4000-Plot 10-Site 2</value>
+        </Data>
+        <Data name="forest">
+          <value>sierra</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>4000</value>
+        </Data>
+        <Data name="site">
+          <value>2</value>
+        </Data>
+        <Data name="nickname">
+          <value>beasore-rd-redneck-grounds-between-mcleod-flat--chilkoot-cg</value>
+        </Data>
+        <Data name="plot">
+          <value>10</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -119.543372,37.351841,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>sierra_4000_3_nutmeg-saddle_11</name>
+      <description><![CDATA[name: <br>plot_id: Sierra-4000-Plot 11-Site 3<br>forest: sierra<br>elevation_band: 4000<br>site: 3<br>nickname: nutmeg-saddle<br>plot: 11]]></description>
+      <styleUrl>#icon-1899-006064-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value/>
+        </Data>
+        <Data name="plot_id">
+          <value>Sierra-4000-Plot 11-Site 3</value>
+        </Data>
+        <Data name="forest">
+          <value>sierra</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>4000</value>
+        </Data>
+        <Data name="site">
+          <value>3</value>
+        </Data>
+        <Data name="nickname">
+          <value>nutmeg-saddle</value>
+        </Data>
+        <Data name="plot">
+          <value>11</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -119.174931,36.998706,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>sierra_4000_3_nutmeg-saddle_12</name>
+      <description><![CDATA[name: <br>plot_id: Sierra-4000-Plot 12-Site 3<br>forest: sierra<br>elevation_band: 4000<br>site: 3<br>nickname: nutmeg-saddle<br>plot: 12]]></description>
+      <styleUrl>#icon-1899-006064-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value/>
+        </Data>
+        <Data name="plot_id">
+          <value>Sierra-4000-Plot 12-Site 3</value>
+        </Data>
+        <Data name="forest">
+          <value>sierra</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>4000</value>
+        </Data>
+        <Data name="site">
+          <value>3</value>
+        </Data>
+        <Data name="nickname">
+          <value>nutmeg-saddle</value>
+        </Data>
+        <Data name="plot">
+          <value>12</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -119.175502,36.997858,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>sierra_4000_3_nutmeg-saddle_13</name>
+      <description><![CDATA[name: <br>plot_id: Sierra-4000-Plot 13-Site 3<br>forest: sierra<br>elevation_band: 4000<br>site: 3<br>nickname: nutmeg-saddle<br>plot: 13]]></description>
+      <styleUrl>#icon-1899-006064-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value/>
+        </Data>
+        <Data name="plot_id">
+          <value>Sierra-4000-Plot 13-Site 3</value>
+        </Data>
+        <Data name="forest">
+          <value>sierra</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>4000</value>
+        </Data>
+        <Data name="site">
+          <value>3</value>
+        </Data>
+        <Data name="nickname">
+          <value>nutmeg-saddle</value>
+        </Data>
+        <Data name="plot">
+          <value>13</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -119.175995,36.99701,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>sierra_4000_3_nutmeg-saddle_14</name>
+      <description><![CDATA[name: <br>plot_id: Sierra-4000-Plot 14-Site 3<br>forest: sierra<br>elevation_band: 4000<br>site: 3<br>nickname: nutmeg-saddle<br>plot: 14]]></description>
+      <styleUrl>#icon-1899-006064-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value/>
+        </Data>
+        <Data name="plot_id">
+          <value>Sierra-4000-Plot 14-Site 3</value>
+        </Data>
+        <Data name="forest">
+          <value>sierra</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>4000</value>
+        </Data>
+        <Data name="site">
+          <value>3</value>
+        </Data>
+        <Data name="nickname">
+          <value>nutmeg-saddle</value>
+        </Data>
+        <Data name="plot">
+          <value>14</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -119.173418,36.996895,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>sierra_4000_3_nutmeg-saddle_15</name>
+      <description><![CDATA[name: <br>plot_id: Sierra-4000-Plot 15-Site 3<br>forest: sierra<br>elevation_band: 4000<br>site: 3<br>nickname: nutmeg-saddle<br>plot: 15]]></description>
+      <styleUrl>#icon-1899-006064-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value/>
+        </Data>
+        <Data name="plot_id">
+          <value>Sierra-4000-Plot 15-Site 3</value>
+        </Data>
+        <Data name="forest">
+          <value>sierra</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>4000</value>
+        </Data>
+        <Data name="site">
+          <value>3</value>
+        </Data>
+        <Data name="nickname">
+          <value>nutmeg-saddle</value>
+        </Data>
+        <Data name="plot">
+          <value>15</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -119.171897,36.995535,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>sierra_5000_1_muddy-6s40-rd-off-of-beasore-rd_01</name>
+      <description><![CDATA[name: <br>plot_id: Sierra-5000-Plot 1-Site 1<br>forest: sierra<br>elevation_band: 5000<br>site: 1<br>nickname: muddy-6s40-rd-off-of-beasore-rd<br>plot: 1]]></description>
+      <styleUrl>#icon-1899-006064-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value/>
+        </Data>
+        <Data name="plot_id">
+          <value>Sierra-5000-Plot 1-Site 1</value>
+        </Data>
+        <Data name="forest">
+          <value>sierra</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>5000</value>
+        </Data>
+        <Data name="site">
+          <value>1</value>
+        </Data>
+        <Data name="nickname">
+          <value>muddy-6s40-rd-off-of-beasore-rd</value>
+        </Data>
+        <Data name="plot">
+          <value>1</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -119.538158,37.38234,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>sierra_5000_1_muddy-6s40-rd-off-of-beasore-rd_02</name>
+      <description><![CDATA[name: <br>plot_id: Sierra-5000-Plot 2-Site 1<br>forest: sierra<br>elevation_band: 5000<br>site: 1<br>nickname: muddy-6s40-rd-off-of-beasore-rd<br>plot: 2]]></description>
+      <styleUrl>#icon-1899-006064-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value/>
+        </Data>
+        <Data name="plot_id">
+          <value>Sierra-5000-Plot 2-Site 1</value>
+        </Data>
+        <Data name="forest">
+          <value>sierra</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>5000</value>
+        </Data>
+        <Data name="site">
+          <value>1</value>
+        </Data>
+        <Data name="nickname">
+          <value>muddy-6s40-rd-off-of-beasore-rd</value>
+        </Data>
+        <Data name="plot">
+          <value>2</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -119.53931,37.38236,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>sierra_5000_1_muddy-6s40-rd-off-of-beasore-rd_03</name>
+      <description><![CDATA[name: <br>plot_id: Sierra-5000-Plot 3-Site 1<br>forest: sierra<br>elevation_band: 5000<br>site: 1<br>nickname: muddy-6s40-rd-off-of-beasore-rd<br>plot: 3]]></description>
+      <styleUrl>#icon-1899-006064-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value/>
+        </Data>
+        <Data name="plot_id">
+          <value>Sierra-5000-Plot 3-Site 1</value>
+        </Data>
+        <Data name="forest">
+          <value>sierra</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>5000</value>
+        </Data>
+        <Data name="site">
+          <value>1</value>
+        </Data>
+        <Data name="nickname">
+          <value>muddy-6s40-rd-off-of-beasore-rd</value>
+        </Data>
+        <Data name="plot">
+          <value>3</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -119.540122,37.382658,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>sierra_5000_1_muddy-6s40-rd-off-of-beasore-rd_04</name>
+      <description><![CDATA[name: <br>plot_id: Sierra-5000-Plot 4-Site 1<br>forest: sierra<br>elevation_band: 5000<br>site: 1<br>nickname: muddy-6s40-rd-off-of-beasore-rd<br>plot: 4]]></description>
+      <styleUrl>#icon-1899-006064-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value/>
+        </Data>
+        <Data name="plot_id">
+          <value>Sierra-5000-Plot 4-Site 1</value>
+        </Data>
+        <Data name="forest">
+          <value>sierra</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>5000</value>
+        </Data>
+        <Data name="site">
+          <value>1</value>
+        </Data>
+        <Data name="nickname">
+          <value>muddy-6s40-rd-off-of-beasore-rd</value>
+        </Data>
+        <Data name="plot">
+          <value>4</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -119.541203,37.382572,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>sierra_5000_1_muddy-6s40-rd-off-of-beasore-rd_05</name>
+      <description><![CDATA[name: <br>plot_id: Sierra-5000-Plot 5-Site 1<br>forest: sierra<br>elevation_band: 5000<br>site: 1<br>nickname: muddy-6s40-rd-off-of-beasore-rd<br>plot: 5]]></description>
+      <styleUrl>#icon-1899-006064-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value/>
+        </Data>
+        <Data name="plot_id">
+          <value>Sierra-5000-Plot 5-Site 1</value>
+        </Data>
+        <Data name="forest">
+          <value>sierra</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>5000</value>
+        </Data>
+        <Data name="site">
+          <value>1</value>
+        </Data>
+        <Data name="nickname">
+          <value>muddy-6s40-rd-off-of-beasore-rd</value>
+        </Data>
+        <Data name="plot">
+          <value>5</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -119.541857,37.383873,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>sierra_5000_2_11s91-rddinkey-zone_06</name>
+      <description><![CDATA[name: <br>plot_id: Sierra-5000-Plot 6-Site 2<br>forest: sierra<br>elevation_band: 5000<br>site: 2<br>nickname: 11s91-rddinkey-zone<br>plot: 6]]></description>
+      <styleUrl>#icon-1899-006064-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value/>
+        </Data>
+        <Data name="plot_id">
+          <value>Sierra-5000-Plot 6-Site 2</value>
+        </Data>
+        <Data name="forest">
+          <value>sierra</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>5000</value>
+        </Data>
+        <Data name="site">
+          <value>2</value>
+        </Data>
+        <Data name="nickname">
+          <value>11s91-rddinkey-zone</value>
+        </Data>
+        <Data name="plot">
+          <value>6</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -119.141337,36.987601,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>sierra_5000_2_11s91-rddinkey-zone_07</name>
+      <description><![CDATA[name: <br>plot_id: Sierra-5000-Plot 7-Site 2<br>forest: sierra<br>elevation_band: 5000<br>site: 2<br>nickname: 11s91-rddinkey-zone<br>plot: 7]]></description>
+      <styleUrl>#icon-1899-006064-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value/>
+        </Data>
+        <Data name="plot_id">
+          <value>Sierra-5000-Plot 7-Site 2</value>
+        </Data>
+        <Data name="forest">
+          <value>sierra</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>5000</value>
+        </Data>
+        <Data name="site">
+          <value>2</value>
+        </Data>
+        <Data name="nickname">
+          <value>11s91-rddinkey-zone</value>
+        </Data>
+        <Data name="plot">
+          <value>7</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -119.141738,36.988711,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>sierra_5000_2_11s91-rddinkey-zone_08</name>
+      <description><![CDATA[name: <br>plot_id: Sierra-5000-Plot 8-Site 2<br>forest: sierra<br>elevation_band: 5000<br>site: 2<br>nickname: 11s91-rddinkey-zone<br>plot: 8]]></description>
+      <styleUrl>#icon-1899-006064-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value/>
+        </Data>
+        <Data name="plot_id">
+          <value>Sierra-5000-Plot 8-Site 2</value>
+        </Data>
+        <Data name="forest">
+          <value>sierra</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>5000</value>
+        </Data>
+        <Data name="site">
+          <value>2</value>
+        </Data>
+        <Data name="nickname">
+          <value>11s91-rddinkey-zone</value>
+        </Data>
+        <Data name="plot">
+          <value>8</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -119.141668,36.989812,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>sierra_5000_2_11s91-rddinkey-zone_09</name>
+      <description><![CDATA[name: <br>plot_id: Sierra-5000-Plot 9-Site 2<br>forest: sierra<br>elevation_band: 5000<br>site: 2<br>nickname: 11s91-rddinkey-zone<br>plot: 9]]></description>
+      <styleUrl>#icon-1899-006064-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value/>
+        </Data>
+        <Data name="plot_id">
+          <value>Sierra-5000-Plot 9-Site 2</value>
+        </Data>
+        <Data name="forest">
+          <value>sierra</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>5000</value>
+        </Data>
+        <Data name="site">
+          <value>2</value>
+        </Data>
+        <Data name="nickname">
+          <value>11s91-rddinkey-zone</value>
+        </Data>
+        <Data name="plot">
+          <value>9</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -119.141771,36.991865,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>sierra_5000_2_11s91-rddinkey-zone_10</name>
+      <description><![CDATA[name: <br>plot_id: Sierra-5000-Plot 10-Site 2<br>forest: sierra<br>elevation_band: 5000<br>site: 2<br>nickname: 11s91-rddinkey-zone<br>plot: 10]]></description>
+      <styleUrl>#icon-1899-006064-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value/>
+        </Data>
+        <Data name="plot_id">
+          <value>Sierra-5000-Plot 10-Site 2</value>
+        </Data>
+        <Data name="forest">
+          <value>sierra</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>5000</value>
+        </Data>
+        <Data name="site">
+          <value>2</value>
+        </Data>
+        <Data name="nickname">
+          <value>11s91-rddinkey-zone</value>
+        </Data>
+        <Data name="plot">
+          <value>10</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -119.141599,36.992959,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>sierra_5000_3_whiskey-ridge_11</name>
+      <description><![CDATA[name: <br>plot_id: Sierra-5000-Plot 11-Site 3<br>forest: sierra<br>elevation_band: 5000<br>site: 3<br>nickname: whiskey-ridge<br>plot: 11]]></description>
+      <styleUrl>#icon-1899-006064-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value/>
+        </Data>
+        <Data name="plot_id">
+          <value>Sierra-5000-Plot 11-Site 3</value>
+        </Data>
+        <Data name="forest">
+          <value>sierra</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>5000</value>
+        </Data>
+        <Data name="site">
+          <value>3</value>
+        </Data>
+        <Data name="nickname">
+          <value>whiskey-ridge</value>
+        </Data>
+        <Data name="plot">
+          <value>11</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -119.376361,37.254058,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>sierra_5000_3_whiskey-ridge_12</name>
+      <description><![CDATA[name: <br>plot_id: Sierra-5000-Plot 12-Site 3<br>forest: sierra<br>elevation_band: 5000<br>site: 3<br>nickname: whiskey-ridge<br>plot: 12]]></description>
+      <styleUrl>#icon-1899-006064-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value/>
+        </Data>
+        <Data name="plot_id">
+          <value>Sierra-5000-Plot 12-Site 3</value>
+        </Data>
+        <Data name="forest">
+          <value>sierra</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>5000</value>
+        </Data>
+        <Data name="site">
+          <value>3</value>
+        </Data>
+        <Data name="nickname">
+          <value>whiskey-ridge</value>
+        </Data>
+        <Data name="plot">
+          <value>12</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -119.375877,37.254789,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>sierra_5000_3_whiskey-ridge_13</name>
+      <description><![CDATA[name: <br>plot_id: Sierra-5000-Plot 13-Site 3<br>forest: sierra<br>elevation_band: 5000<br>site: 3<br>nickname: whiskey-ridge<br>plot: 13]]></description>
+      <styleUrl>#icon-1899-006064-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value/>
+        </Data>
+        <Data name="plot_id">
+          <value>Sierra-5000-Plot 13-Site 3</value>
+        </Data>
+        <Data name="forest">
+          <value>sierra</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>5000</value>
+        </Data>
+        <Data name="site">
+          <value>3</value>
+        </Data>
+        <Data name="nickname">
+          <value>whiskey-ridge</value>
+        </Data>
+        <Data name="plot">
+          <value>13</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -119.377334,37.255607,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>sierra_5000_3_whiskey-ridge_14</name>
+      <description><![CDATA[name: <br>plot_id: Sierra-5000-Plot 14-Site 3<br>forest: sierra<br>elevation_band: 5000<br>site: 3<br>nickname: whiskey-ridge<br>plot: 14]]></description>
+      <styleUrl>#icon-1899-006064-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value/>
+        </Data>
+        <Data name="plot_id">
+          <value>Sierra-5000-Plot 14-Site 3</value>
+        </Data>
+        <Data name="forest">
+          <value>sierra</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>5000</value>
+        </Data>
+        <Data name="site">
+          <value>3</value>
+        </Data>
+        <Data name="nickname">
+          <value>whiskey-ridge</value>
+        </Data>
+        <Data name="plot">
+          <value>14</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -119.378729,37.256218,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>sierra_5000_3_whiskey-ridge_15</name>
+      <description><![CDATA[name: <br>plot_id: Sierra-5000-Plot 15-Site 3<br>forest: sierra<br>elevation_band: 5000<br>site: 3<br>nickname: whiskey-ridge<br>plot: 15]]></description>
+      <styleUrl>#icon-1899-006064-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value/>
+        </Data>
+        <Data name="plot_id">
+          <value>Sierra-5000-Plot 15-Site 3</value>
+        </Data>
+        <Data name="forest">
+          <value>sierra</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>5000</value>
+        </Data>
+        <Data name="site">
+          <value>3</value>
+        </Data>
+        <Data name="nickname">
+          <value>whiskey-ridge</value>
+        </Data>
+        <Data name="plot">
+          <value>15</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -119.379835,37.256611,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>stanislaus_3000_1_off-of-italian-bar-rd_01</name>
+      <description><![CDATA[name: <br>plot_id: Stan-3000-Plot 1-Site 1<br>forest: stanislaus<br>elevation_band: 3000<br>site: 1<br>nickname: off-of-italian-bar-rd<br>plot: 1]]></description>
+      <styleUrl>#icon-1899-558B2F-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value/>
+        </Data>
+        <Data name="plot_id">
+          <value>Stan-3000-Plot 1-Site 1</value>
+        </Data>
+        <Data name="forest">
+          <value>stanislaus</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>3000</value>
+        </Data>
+        <Data name="site">
+          <value>1</value>
+        </Data>
+        <Data name="nickname">
+          <value>off-of-italian-bar-rd</value>
+        </Data>
+        <Data name="plot">
+          <value>1</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -120.229261,38.085091,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>stanislaus_3000_1_off-of-italian-bar-rd_02</name>
+      <description><![CDATA[name: <br>plot_id: Stan-3000-Plot 2-Site 1<br>forest: stanislaus<br>elevation_band: 3000<br>site: 1<br>nickname: off-of-italian-bar-rd<br>plot: 2]]></description>
+      <styleUrl>#icon-1899-558B2F-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value/>
+        </Data>
+        <Data name="plot_id">
+          <value>Stan-3000-Plot 2-Site 1</value>
+        </Data>
+        <Data name="forest">
+          <value>stanislaus</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>3000</value>
+        </Data>
+        <Data name="site">
+          <value>1</value>
+        </Data>
+        <Data name="nickname">
+          <value>off-of-italian-bar-rd</value>
+        </Data>
+        <Data name="plot">
+          <value>2</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -120.230212,38.085564,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>stanislaus_3000_1_off-of-italian-bar-rd_03</name>
+      <description><![CDATA[name: <br>plot_id: Stan-3000-Plot 3-Site 1<br>forest: stanislaus<br>elevation_band: 3000<br>site: 1<br>nickname: off-of-italian-bar-rd<br>plot: 3]]></description>
+      <styleUrl>#icon-1899-558B2F-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value/>
+        </Data>
+        <Data name="plot_id">
+          <value>Stan-3000-Plot 3-Site 1</value>
+        </Data>
+        <Data name="forest">
+          <value>stanislaus</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>3000</value>
+        </Data>
+        <Data name="site">
+          <value>1</value>
+        </Data>
+        <Data name="nickname">
+          <value>off-of-italian-bar-rd</value>
+        </Data>
+        <Data name="plot">
+          <value>3</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -120.232445,38.086815,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>stanislaus_3000_1_off-of-italian-bar-rd_04</name>
+      <description><![CDATA[name: <br>plot_id: Stan-3000-Plot 4-Site 1<br>forest: stanislaus<br>elevation_band: 3000<br>site: 1<br>nickname: off-of-italian-bar-rd<br>plot: 4]]></description>
+      <styleUrl>#icon-1899-558B2F-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value/>
+        </Data>
+        <Data name="plot_id">
+          <value>Stan-3000-Plot 4-Site 1</value>
+        </Data>
+        <Data name="forest">
+          <value>stanislaus</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>3000</value>
+        </Data>
+        <Data name="site">
+          <value>1</value>
+        </Data>
+        <Data name="nickname">
+          <value>off-of-italian-bar-rd</value>
+        </Data>
+        <Data name="plot">
+          <value>4</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -120.23456,38.086639,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>stanislaus_3000_1_off-of-italian-bar-rd_05</name>
+      <description><![CDATA[name: <br>plot_id: Stan-3000-Plot 5-Site 1<br>forest: stanislaus<br>elevation_band: 3000<br>site: 1<br>nickname: off-of-italian-bar-rd<br>plot: 5]]></description>
+      <styleUrl>#icon-1899-558B2F-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value/>
+        </Data>
+        <Data name="plot_id">
+          <value>Stan-3000-Plot 5-Site 1</value>
+        </Data>
+        <Data name="forest">
+          <value>stanislaus</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>3000</value>
+        </Data>
+        <Data name="site">
+          <value>1</value>
+        </Data>
+        <Data name="nickname">
+          <value>off-of-italian-bar-rd</value>
+        </Data>
+        <Data name="plot">
+          <value>5</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -120.236517,38.086136,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>stanislaus_3000_2_wagner-rdgroveland_06</name>
+      <description><![CDATA[name: <br>plot_id: Stan-3000-Plot 6-Site 2<br>forest: stanislaus<br>elevation_band: 3000<br>site: 2<br>nickname: wagner-rdgroveland<br>plot: 6]]></description>
+      <styleUrl>#icon-1899-558B2F-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value/>
+        </Data>
+        <Data name="plot_id">
+          <value>Stan-3000-Plot 6-Site 2</value>
+        </Data>
+        <Data name="forest">
+          <value>stanislaus</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>3000</value>
+        </Data>
+        <Data name="site">
+          <value>2</value>
+        </Data>
+        <Data name="nickname">
+          <value>wagner-rdgroveland</value>
+        </Data>
+        <Data name="plot">
+          <value>6</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -120.117117,37.77845,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>stanislaus_3000_2_wagner-rdgroveland_07</name>
+      <description><![CDATA[name: <br>plot_id: Stan-3000-Plot 7-Site 2<br>forest: stanislaus<br>elevation_band: 3000<br>site: 2<br>nickname: wagner-rdgroveland<br>plot: 7]]></description>
+      <styleUrl>#icon-1899-558B2F-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value/>
+        </Data>
+        <Data name="plot_id">
+          <value>Stan-3000-Plot 7-Site 2</value>
+        </Data>
+        <Data name="forest">
+          <value>stanislaus</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>3000</value>
+        </Data>
+        <Data name="site">
+          <value>2</value>
+        </Data>
+        <Data name="nickname">
+          <value>wagner-rdgroveland</value>
+        </Data>
+        <Data name="plot">
+          <value>7</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -120.115991,37.777612,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>stanislaus_3000_2_wagner-rdgroveland_08</name>
+      <description><![CDATA[name: <br>plot_id: Stan-3000-Plot 8-Site 2<br>forest: stanislaus<br>elevation_band: 3000<br>site: 2<br>nickname: wagner-rdgroveland<br>plot: 8]]></description>
+      <styleUrl>#icon-1899-558B2F-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value/>
+        </Data>
+        <Data name="plot_id">
+          <value>Stan-3000-Plot 8-Site 2</value>
+        </Data>
+        <Data name="forest">
+          <value>stanislaus</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>3000</value>
+        </Data>
+        <Data name="site">
+          <value>2</value>
+        </Data>
+        <Data name="nickname">
+          <value>wagner-rdgroveland</value>
+        </Data>
+        <Data name="plot">
+          <value>8</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -120.114938,37.776955,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>stanislaus_3000_2_wagner-rdgroveland_09</name>
+      <description><![CDATA[name: <br>plot_id: Stan-3000-Plot 9-Site 2<br>forest: stanislaus<br>elevation_band: 3000<br>site: 2<br>nickname: wagner-rdgroveland<br>plot: 9]]></description>
+      <styleUrl>#icon-1899-558B2F-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value/>
+        </Data>
+        <Data name="plot_id">
+          <value>Stan-3000-Plot 9-Site 2</value>
+        </Data>
+        <Data name="forest">
+          <value>stanislaus</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>3000</value>
+        </Data>
+        <Data name="site">
+          <value>2</value>
+        </Data>
+        <Data name="nickname">
+          <value>wagner-rdgroveland</value>
+        </Data>
+        <Data name="plot">
+          <value>9</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -120.113984,37.776103,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>stanislaus_3000_2_wagner-rdgroveland_10</name>
+      <description><![CDATA[name: <br>plot_id: Stan-3000-Plot 10-Site 2<br>forest: stanislaus<br>elevation_band: 3000<br>site: 2<br>nickname: wagner-rdgroveland<br>plot: 10]]></description>
+      <styleUrl>#icon-1899-558B2F-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value/>
+        </Data>
+        <Data name="plot_id">
+          <value>Stan-3000-Plot 10-Site 2</value>
+        </Data>
+        <Data name="forest">
+          <value>stanislaus</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>3000</value>
+        </Data>
+        <Data name="site">
+          <value>2</value>
+        </Data>
+        <Data name="nickname">
+          <value>wagner-rdgroveland</value>
+        </Data>
+        <Data name="plot">
+          <value>10</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -120.114575,37.774622,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>stanislaus_3000_3_sugar-pine-slopes_11</name>
+      <description><![CDATA[name: <br>plot_id: Stan-3000-Plot 11-Site 3<br>forest: stanislaus<br>elevation_band: 3000<br>site: 3<br>nickname: sugar-pine-slopes<br>plot: 11]]></description>
+      <styleUrl>#icon-1899-558B2F-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value/>
+        </Data>
+        <Data name="plot_id">
+          <value>Stan-3000-Plot 11-Site 3</value>
+        </Data>
+        <Data name="forest">
+          <value>stanislaus</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>3000</value>
+        </Data>
+        <Data name="site">
+          <value>3</value>
+        </Data>
+        <Data name="nickname">
+          <value>sugar-pine-slopes</value>
+        </Data>
+        <Data name="plot">
+          <value>11</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -120.095546,37.732382,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>stanislaus_3000_3_sugar-pine-slopes_12</name>
+      <description><![CDATA[name: <br>plot_id: Stan-3000-Plot 12-Site 3<br>forest: stanislaus<br>elevation_band: 3000<br>site: 3<br>nickname: sugar-pine-slopes<br>plot: 12]]></description>
+      <styleUrl>#icon-1899-558B2F-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value/>
+        </Data>
+        <Data name="plot_id">
+          <value>Stan-3000-Plot 12-Site 3</value>
+        </Data>
+        <Data name="forest">
+          <value>stanislaus</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>3000</value>
+        </Data>
+        <Data name="site">
+          <value>3</value>
+        </Data>
+        <Data name="nickname">
+          <value>sugar-pine-slopes</value>
+        </Data>
+        <Data name="plot">
+          <value>12</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -120.096595,37.732246,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>stanislaus_3000_3_sugar-pine-slopes_13</name>
+      <description><![CDATA[name: <br>plot_id: Stan-3000-Plot 13-Site 3<br>forest: stanislaus<br>elevation_band: 3000<br>site: 3<br>nickname: sugar-pine-slopes<br>plot: 13]]></description>
+      <styleUrl>#icon-1899-558B2F-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value/>
+        </Data>
+        <Data name="plot_id">
+          <value>Stan-3000-Plot 13-Site 3</value>
+        </Data>
+        <Data name="forest">
+          <value>stanislaus</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>3000</value>
+        </Data>
+        <Data name="site">
+          <value>3</value>
+        </Data>
+        <Data name="nickname">
+          <value>sugar-pine-slopes</value>
+        </Data>
+        <Data name="plot">
+          <value>13</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -120.097502,37.733403,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>stanislaus_3000_3_sugar-pine-slopes_14</name>
+      <description><![CDATA[name: <br>plot_id: Stan-3000-Plot 14-Site 3<br>forest: stanislaus<br>elevation_band: 3000<br>site: 3<br>nickname: sugar-pine-slopes<br>plot: 14]]></description>
+      <styleUrl>#icon-1899-558B2F-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value/>
+        </Data>
+        <Data name="plot_id">
+          <value>Stan-3000-Plot 14-Site 3</value>
+        </Data>
+        <Data name="forest">
+          <value>stanislaus</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>3000</value>
+        </Data>
+        <Data name="site">
+          <value>3</value>
+        </Data>
+        <Data name="nickname">
+          <value>sugar-pine-slopes</value>
+        </Data>
+        <Data name="plot">
+          <value>14</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -120.09925,37.733383,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>stanislaus_3000_3_sugar-pine-slopes_15</name>
+      <description><![CDATA[name: <br>plot_id: Stan-3000-Plot 15-Site 3<br>forest: stanislaus<br>elevation_band: 3000<br>site: 3<br>nickname: sugar-pine-slopes<br>plot: 15]]></description>
+      <styleUrl>#icon-1899-558B2F-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value/>
+        </Data>
+        <Data name="plot_id">
+          <value>Stan-3000-Plot 15-Site 3</value>
+        </Data>
+        <Data name="forest">
+          <value>stanislaus</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>3000</value>
+        </Data>
+        <Data name="site">
+          <value>3</value>
+        </Data>
+        <Data name="nickname">
+          <value>sugar-pine-slopes</value>
+        </Data>
+        <Data name="plot">
+          <value>15</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -120.10144,37.734248,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>stanislaus_4000_1_lyons-reservoir_01</name>
+      <description><![CDATA[name: <br>plot_id: Stan-4000-Plot 1-Site 1<br>forest: stanislaus<br>elevation_band: 4000<br>site: 1<br>nickname: lyons-reservoir<br>plot: 1]]></description>
+      <styleUrl>#icon-1899-558B2F-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value/>
+        </Data>
+        <Data name="plot_id">
+          <value>Stan-4000-Plot 1-Site 1</value>
+        </Data>
+        <Data name="forest">
+          <value>stanislaus</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>4000</value>
+        </Data>
+        <Data name="site">
+          <value>1</value>
+        </Data>
+        <Data name="nickname">
+          <value>lyons-reservoir</value>
+        </Data>
+        <Data name="plot">
+          <value>1</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -120.178065,38.095747,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>stanislaus_4000_1_lyons-reservoir_02</name>
+      <description><![CDATA[name: <br>plot_id: Stan-4000-Plot 2-Site 1<br>forest: stanislaus<br>elevation_band: 4000<br>site: 1<br>nickname: lyons-reservoir<br>plot: 2]]></description>
+      <styleUrl>#icon-1899-558B2F-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value/>
+        </Data>
+        <Data name="plot_id">
+          <value>Stan-4000-Plot 2-Site 1</value>
+        </Data>
+        <Data name="forest">
+          <value>stanislaus</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>4000</value>
+        </Data>
+        <Data name="site">
+          <value>1</value>
+        </Data>
+        <Data name="nickname">
+          <value>lyons-reservoir</value>
+        </Data>
+        <Data name="plot">
+          <value>2</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -120.179127,38.095115,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>stanislaus_4000_1_lyons-reservoir_03</name>
+      <description><![CDATA[name: <br>plot_id: Stan-4000-Plot 3-Site 1<br>forest: stanislaus<br>elevation_band: 4000<br>site: 1<br>nickname: lyons-reservoir<br>plot: 3]]></description>
+      <styleUrl>#icon-1899-558B2F-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value/>
+        </Data>
+        <Data name="plot_id">
+          <value>Stan-4000-Plot 3-Site 1</value>
+        </Data>
+        <Data name="forest">
+          <value>stanislaus</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>4000</value>
+        </Data>
+        <Data name="site">
+          <value>1</value>
+        </Data>
+        <Data name="nickname">
+          <value>lyons-reservoir</value>
+        </Data>
+        <Data name="plot">
+          <value>3</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -120.179756,38.094454,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>stanislaus_4000_1_lyons-reservoir_04</name>
+      <description><![CDATA[name: <br>plot_id: Stan-4000-Plot 4-Site 1<br>forest: stanislaus<br>elevation_band: 4000<br>site: 1<br>nickname: lyons-reservoir<br>plot: 4]]></description>
+      <styleUrl>#icon-1899-558B2F-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value/>
+        </Data>
+        <Data name="plot_id">
+          <value>Stan-4000-Plot 4-Site 1</value>
+        </Data>
+        <Data name="forest">
+          <value>stanislaus</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>4000</value>
+        </Data>
+        <Data name="site">
+          <value>1</value>
+        </Data>
+        <Data name="nickname">
+          <value>lyons-reservoir</value>
+        </Data>
+        <Data name="plot">
+          <value>4</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -120.178787,38.09417,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>stanislaus_4000_1_lyons-reservoir_05</name>
+      <description><![CDATA[name: <br>plot_id: Stan-4000-Plot 5-Site 1<br>forest: stanislaus<br>elevation_band: 4000<br>site: 1<br>nickname: lyons-reservoir<br>plot: 5]]></description>
+      <styleUrl>#icon-1899-558B2F-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value/>
+        </Data>
+        <Data name="plot_id">
+          <value>Stan-4000-Plot 5-Site 1</value>
+        </Data>
+        <Data name="forest">
+          <value>stanislaus</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>4000</value>
+        </Data>
+        <Data name="site">
+          <value>1</value>
+        </Data>
+        <Data name="nickname">
+          <value>lyons-reservoir</value>
+        </Data>
+        <Data name="plot">
+          <value>5</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -120.178008,38.094547,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>stanislaus_4000_2_arnold_06</name>
+      <description><![CDATA[name: <br>plot_id: Stan-4000-Plot 6-Site 2<br>forest: stanislaus<br>elevation_band: 4000<br>site: 2<br>nickname: arnold<br>plot: 6]]></description>
+      <styleUrl>#icon-1899-558B2F-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value/>
+        </Data>
+        <Data name="plot_id">
+          <value>Stan-4000-Plot 6-Site 2</value>
+        </Data>
+        <Data name="forest">
+          <value>stanislaus</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>4000</value>
+        </Data>
+        <Data name="site">
+          <value>2</value>
+        </Data>
+        <Data name="nickname">
+          <value>arnold</value>
+        </Data>
+        <Data name="plot">
+          <value>6</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -120.342862,38.280438,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>stanislaus_4000_2_arnold_07</name>
+      <description><![CDATA[name: <br>plot_id: Stan-4000-Plot 7-Site 2<br>forest: stanislaus<br>elevation_band: 4000<br>site: 2<br>nickname: arnold<br>plot: 7]]></description>
+      <styleUrl>#icon-1899-558B2F-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value/>
+        </Data>
+        <Data name="plot_id">
+          <value>Stan-4000-Plot 7-Site 2</value>
+        </Data>
+        <Data name="forest">
+          <value>stanislaus</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>4000</value>
+        </Data>
+        <Data name="site">
+          <value>2</value>
+        </Data>
+        <Data name="nickname">
+          <value>arnold</value>
+        </Data>
+        <Data name="plot">
+          <value>7</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -120.3439,38.28111,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>stanislaus_4000_2_arnold_08</name>
+      <description><![CDATA[name: <br>plot_id: Stan-4000-Plot 8-Site 2<br>forest: stanislaus<br>elevation_band: 4000<br>site: 2<br>nickname: arnold<br>plot: 8]]></description>
+      <styleUrl>#icon-1899-558B2F-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value/>
+        </Data>
+        <Data name="plot_id">
+          <value>Stan-4000-Plot 8-Site 2</value>
+        </Data>
+        <Data name="forest">
+          <value>stanislaus</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>4000</value>
+        </Data>
+        <Data name="site">
+          <value>2</value>
+        </Data>
+        <Data name="nickname">
+          <value>arnold</value>
+        </Data>
+        <Data name="plot">
+          <value>8</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -120.345228,38.282321,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>stanislaus_4000_2_arnold_09</name>
+      <description><![CDATA[name: <br>plot_id: Stan-4000-Plot 9-Site 2<br>forest: stanislaus<br>elevation_band: 4000<br>site: 2<br>nickname: arnold<br>plot: 9]]></description>
+      <styleUrl>#icon-1899-558B2F-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value/>
+        </Data>
+        <Data name="plot_id">
+          <value>Stan-4000-Plot 9-Site 2</value>
+        </Data>
+        <Data name="forest">
+          <value>stanislaus</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>4000</value>
+        </Data>
+        <Data name="site">
+          <value>2</value>
+        </Data>
+        <Data name="nickname">
+          <value>arnold</value>
+        </Data>
+        <Data name="plot">
+          <value>9</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -120.342923,38.282827,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>stanislaus_4000_2_arnold_10</name>
+      <description><![CDATA[name: <br>plot_id: Stan-4000-Plot 10-Site 2<br>forest: stanislaus<br>elevation_band: 4000<br>site: 2<br>nickname: arnold<br>plot: 10]]></description>
+      <styleUrl>#icon-1899-558B2F-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value/>
+        </Data>
+        <Data name="plot_id">
+          <value>Stan-4000-Plot 10-Site 2</value>
+        </Data>
+        <Data name="forest">
+          <value>stanislaus</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>4000</value>
+        </Data>
+        <Data name="site">
+          <value>2</value>
+        </Data>
+        <Data name="nickname">
+          <value>arnold</value>
+        </Data>
+        <Data name="plot">
+          <value>10</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -120.341925,38.281975,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>stanislaus_4000_3_crandall_11</name>
+      <description><![CDATA[name: <br>plot_id: Stan-4000-Plot 11-Site 3<br>forest: stanislaus<br>elevation_band: 4000<br>site: 3<br>nickname: crandall<br>plot: 11]]></description>
+      <styleUrl>#icon-1899-558B2F-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value/>
+        </Data>
+        <Data name="plot_id">
+          <value>Stan-4000-Plot 11-Site 3</value>
+        </Data>
+        <Data name="forest">
+          <value>stanislaus</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>4000</value>
+        </Data>
+        <Data name="site">
+          <value>3</value>
+        </Data>
+        <Data name="nickname">
+          <value>crandall</value>
+        </Data>
+        <Data name="plot">
+          <value>11</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -120.119057,38.164907,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>stanislaus_4000_3_crandall_12</name>
+      <description><![CDATA[name: <br>plot_id: Stan-4000-Plot 12-Site 3<br>forest: stanislaus<br>elevation_band: 4000<br>site: 3<br>nickname: crandall<br>plot: 12]]></description>
+      <styleUrl>#icon-1899-558B2F-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value/>
+        </Data>
+        <Data name="plot_id">
+          <value>Stan-4000-Plot 12-Site 3</value>
+        </Data>
+        <Data name="forest">
+          <value>stanislaus</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>4000</value>
+        </Data>
+        <Data name="site">
+          <value>3</value>
+        </Data>
+        <Data name="nickname">
+          <value>crandall</value>
+        </Data>
+        <Data name="plot">
+          <value>12</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -120.120655,38.16519,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>stanislaus_4000_3_crandall_13</name>
+      <description><![CDATA[name: <br>plot_id: Stan-4000-Plot 13-Site 3<br>forest: stanislaus<br>elevation_band: 4000<br>site: 3<br>nickname: crandall<br>plot: 13]]></description>
+      <styleUrl>#icon-1899-558B2F-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value/>
+        </Data>
+        <Data name="plot_id">
+          <value>Stan-4000-Plot 13-Site 3</value>
+        </Data>
+        <Data name="forest">
+          <value>stanislaus</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>4000</value>
+        </Data>
+        <Data name="site">
+          <value>3</value>
+        </Data>
+        <Data name="nickname">
+          <value>crandall</value>
+        </Data>
+        <Data name="plot">
+          <value>13</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -120.120418,38.166274,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>stanislaus_4000_3_crandall_14</name>
+      <description><![CDATA[name: <br>plot_id: Stan-4000-Plot 14-Site 3<br>forest: stanislaus<br>elevation_band: 4000<br>site: 3<br>nickname: crandall<br>plot: 14]]></description>
+      <styleUrl>#icon-1899-558B2F-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value/>
+        </Data>
+        <Data name="plot_id">
+          <value>Stan-4000-Plot 14-Site 3</value>
+        </Data>
+        <Data name="forest">
+          <value>stanislaus</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>4000</value>
+        </Data>
+        <Data name="site">
+          <value>3</value>
+        </Data>
+        <Data name="nickname">
+          <value>crandall</value>
+        </Data>
+        <Data name="plot">
+          <value>14</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -120.120244,38.167234,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>stanislaus_4000_3_crandall_15</name>
+      <description><![CDATA[name: <br>plot_id: Stan-4000-Plot 15-Site 3<br>forest: stanislaus<br>elevation_band: 4000<br>site: 3<br>nickname: crandall<br>plot: 15]]></description>
+      <styleUrl>#icon-1899-558B2F-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value/>
+        </Data>
+        <Data name="plot_id">
+          <value>Stan-4000-Plot 15-Site 3</value>
+        </Data>
+        <Data name="forest">
+          <value>stanislaus</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>4000</value>
+        </Data>
+        <Data name="site">
+          <value>3</value>
+        </Data>
+        <Data name="nickname">
+          <value>crandall</value>
+        </Data>
+        <Data name="plot">
+          <value>15</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -120.11966,38.168724,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>stanislaus_5000_1_longbarn-bluff_01</name>
+      <description><![CDATA[name: <br>plot_id: Stan-5000-Plot 1-Site 1<br>forest: stanislaus<br>elevation_band: 5000<br>site: 1<br>nickname: longbarn-bluff<br>plot: 1]]></description>
+      <styleUrl>#icon-1899-558B2F-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value/>
+        </Data>
+        <Data name="plot_id">
+          <value>Stan-5000-Plot 1-Site 1</value>
+        </Data>
+        <Data name="forest">
+          <value>stanislaus</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>5000</value>
+        </Data>
+        <Data name="site">
+          <value>1</value>
+        </Data>
+        <Data name="nickname">
+          <value>longbarn-bluff</value>
+        </Data>
+        <Data name="plot">
+          <value>1</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -120.143833,38.090892,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>stanislaus_5000_1_longbarn-bluff_02</name>
+      <description><![CDATA[name: <br>plot_id: Stan-5000-Plot 2-Site 1<br>forest: stanislaus<br>elevation_band: 5000<br>site: 1<br>nickname: longbarn-bluff<br>plot: 2]]></description>
+      <styleUrl>#icon-1899-558B2F-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value/>
+        </Data>
+        <Data name="plot_id">
+          <value>Stan-5000-Plot 2-Site 1</value>
+        </Data>
+        <Data name="forest">
+          <value>stanislaus</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>5000</value>
+        </Data>
+        <Data name="site">
+          <value>1</value>
+        </Data>
+        <Data name="nickname">
+          <value>longbarn-bluff</value>
+        </Data>
+        <Data name="plot">
+          <value>2</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -120.142401,38.090794,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>stanislaus_5000_1_longbarn-bluff_03</name>
+      <description><![CDATA[name: <br>plot_id: Stan-5000-Plot 3-Site 1<br>forest: stanislaus<br>elevation_band: 5000<br>site: 1<br>nickname: longbarn-bluff<br>plot: 3]]></description>
+      <styleUrl>#icon-1899-558B2F-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value/>
+        </Data>
+        <Data name="plot_id">
+          <value>Stan-5000-Plot 3-Site 1</value>
+        </Data>
+        <Data name="forest">
+          <value>stanislaus</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>5000</value>
+        </Data>
+        <Data name="site">
+          <value>1</value>
+        </Data>
+        <Data name="nickname">
+          <value>longbarn-bluff</value>
+        </Data>
+        <Data name="plot">
+          <value>3</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -120.141295,38.091073,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>stanislaus_5000_1_longbarn-bluff_04</name>
+      <description><![CDATA[name: <br>plot_id: Stan-5000-Plot 4-Site 1<br>forest: stanislaus<br>elevation_band: 5000<br>site: 1<br>nickname: longbarn-bluff<br>plot: 4]]></description>
+      <styleUrl>#icon-1899-558B2F-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value/>
+        </Data>
+        <Data name="plot_id">
+          <value>Stan-5000-Plot 4-Site 1</value>
+        </Data>
+        <Data name="forest">
+          <value>stanislaus</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>5000</value>
+        </Data>
+        <Data name="site">
+          <value>1</value>
+        </Data>
+        <Data name="nickname">
+          <value>longbarn-bluff</value>
+        </Data>
+        <Data name="plot">
+          <value>4</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -120.140997,38.091706,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>stanislaus_5000_1_longbarn-bluff_05</name>
+      <description><![CDATA[name: <br>plot_id: Stan-5000-Plot 5-Site 1<br>forest: stanislaus<br>elevation_band: 5000<br>site: 1<br>nickname: longbarn-bluff<br>plot: 5]]></description>
+      <styleUrl>#icon-1899-558B2F-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value/>
+        </Data>
+        <Data name="plot_id">
+          <value>Stan-5000-Plot 5-Site 1</value>
+        </Data>
+        <Data name="forest">
+          <value>stanislaus</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>5000</value>
+        </Data>
+        <Data name="site">
+          <value>1</value>
+        </Data>
+        <Data name="nickname">
+          <value>longbarn-bluff</value>
+        </Data>
+        <Data name="plot">
+          <value>5</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -120.142435,38.093128,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>stanislaus_5000_2_fraser-flat-cg-area_06</name>
+      <description><![CDATA[name: <br>plot_id: Stan-5000-Plot 6-Site 2<br>forest: stanislaus<br>elevation_band: 5000<br>site: 2<br>nickname: fraser-flat-cg-area<br>plot: 6]]></description>
+      <styleUrl>#icon-1899-558B2F-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value/>
+        </Data>
+        <Data name="plot_id">
+          <value>Stan-5000-Plot 6-Site 2</value>
+        </Data>
+        <Data name="forest">
+          <value>stanislaus</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>5000</value>
+        </Data>
+        <Data name="site">
+          <value>2</value>
+        </Data>
+        <Data name="nickname">
+          <value>fraser-flat-cg-area</value>
+        </Data>
+        <Data name="plot">
+          <value>6</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -120.061159,38.175824,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>stanislaus_5000_2_fraser-flat-cg-area_07</name>
+      <description><![CDATA[name: <br>plot_id: Stan-5000-Plot 7-Site 2<br>forest: stanislaus<br>elevation_band: 5000<br>site: 2<br>nickname: fraser-flat-cg-area<br>plot: 7]]></description>
+      <styleUrl>#icon-1899-558B2F-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value/>
+        </Data>
+        <Data name="plot_id">
+          <value>Stan-5000-Plot 7-Site 2</value>
+        </Data>
+        <Data name="forest">
+          <value>stanislaus</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>5000</value>
+        </Data>
+        <Data name="site">
+          <value>2</value>
+        </Data>
+        <Data name="nickname">
+          <value>fraser-flat-cg-area</value>
+        </Data>
+        <Data name="plot">
+          <value>7</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -120.060405,38.176409,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>stanislaus_5000_2_fraser-flat-cg-area_08</name>
+      <description><![CDATA[name: <br>plot_id: Stan-5000-Plot 8-Site 2<br>forest: stanislaus<br>elevation_band: 5000<br>site: 2<br>nickname: fraser-flat-cg-area<br>plot: 8]]></description>
+      <styleUrl>#icon-1899-558B2F-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value/>
+        </Data>
+        <Data name="plot_id">
+          <value>Stan-5000-Plot 8-Site 2</value>
+        </Data>
+        <Data name="forest">
+          <value>stanislaus</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>5000</value>
+        </Data>
+        <Data name="site">
+          <value>2</value>
+        </Data>
+        <Data name="nickname">
+          <value>fraser-flat-cg-area</value>
+        </Data>
+        <Data name="plot">
+          <value>8</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -120.059152,38.176918,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>stanislaus_5000_2_fraser-flat-cg-area_09</name>
+      <description><![CDATA[name: <br>plot_id: Stan-5000-Plot 9-Site 2<br>forest: stanislaus<br>elevation_band: 5000<br>site: 2<br>nickname: fraser-flat-cg-area<br>plot: 9]]></description>
+      <styleUrl>#icon-1899-558B2F-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value/>
+        </Data>
+        <Data name="plot_id">
+          <value>Stan-5000-Plot 9-Site 2</value>
+        </Data>
+        <Data name="forest">
+          <value>stanislaus</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>5000</value>
+        </Data>
+        <Data name="site">
+          <value>2</value>
+        </Data>
+        <Data name="nickname">
+          <value>fraser-flat-cg-area</value>
+        </Data>
+        <Data name="plot">
+          <value>9</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -120.059458,38.177836,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>stanislaus_5000_2_fraser-flat-cg-area_10</name>
+      <description><![CDATA[name: <br>plot_id: Stan-5000-Plot 10-Site 2<br>forest: stanislaus<br>elevation_band: 5000<br>site: 2<br>nickname: fraser-flat-cg-area<br>plot: 10]]></description>
+      <styleUrl>#icon-1899-558B2F-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value/>
+        </Data>
+        <Data name="plot_id">
+          <value>Stan-5000-Plot 10-Site 2</value>
+        </Data>
+        <Data name="forest">
+          <value>stanislaus</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>5000</value>
+        </Data>
+        <Data name="site">
+          <value>2</value>
+        </Data>
+        <Data name="nickname">
+          <value>fraser-flat-cg-area</value>
+        </Data>
+        <Data name="plot">
+          <value>10</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -120.060751,38.177471,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>stanislaus_5000_3_beardsley-rd_11</name>
+      <description><![CDATA[name: <br>plot_id: Stan-5000-Plot 11-Site 3<br>forest: stanislaus<br>elevation_band: 5000<br>site: 3<br>nickname: beardsley-rd<br>plot: 11]]></description>
+      <styleUrl>#icon-1899-558B2F-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value/>
+        </Data>
+        <Data name="plot_id">
+          <value>Stan-5000-Plot 11-Site 3</value>
+        </Data>
+        <Data name="forest">
+          <value>stanislaus</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>5000</value>
+        </Data>
+        <Data name="site">
+          <value>3</value>
+        </Data>
+        <Data name="nickname">
+          <value>beardsley-rd</value>
+        </Data>
+        <Data name="plot">
+          <value>11</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -120.040205,38.202002,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>stanislaus_5000_3_beardsley-rd_12</name>
+      <description><![CDATA[name: <br>plot_id: Stan-5000-Plot 12-Site 3<br>forest: stanislaus<br>elevation_band: 5000<br>site: 3<br>nickname: beardsley-rd<br>plot: 12]]></description>
+      <styleUrl>#icon-1899-558B2F-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value/>
+        </Data>
+        <Data name="plot_id">
+          <value>Stan-5000-Plot 12-Site 3</value>
+        </Data>
+        <Data name="forest">
+          <value>stanislaus</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>5000</value>
+        </Data>
+        <Data name="site">
+          <value>3</value>
+        </Data>
+        <Data name="nickname">
+          <value>beardsley-rd</value>
+        </Data>
+        <Data name="plot">
+          <value>12</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -120.04126,38.201056,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>stanislaus_5000_3_beardsley-rd_13</name>
+      <description><![CDATA[name: <br>plot_id: Stan-5000-Plot 13-Site 3<br>forest: stanislaus<br>elevation_band: 5000<br>site: 3<br>nickname: beardsley-rd<br>plot: 13]]></description>
+      <styleUrl>#icon-1899-558B2F-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value/>
+        </Data>
+        <Data name="plot_id">
+          <value>Stan-5000-Plot 13-Site 3</value>
+        </Data>
+        <Data name="forest">
+          <value>stanislaus</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>5000</value>
+        </Data>
+        <Data name="site">
+          <value>3</value>
+        </Data>
+        <Data name="nickname">
+          <value>beardsley-rd</value>
+        </Data>
+        <Data name="plot">
+          <value>13</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -120.041667,38.200012,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>stanislaus_5000_3_beardsley-rd_14</name>
+      <description><![CDATA[name: <br>plot_id: Stan-5000-Plot 14-Site 3<br>forest: stanislaus<br>elevation_band: 5000<br>site: 3<br>nickname: beardsley-rd<br>plot: 14]]></description>
+      <styleUrl>#icon-1899-558B2F-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value/>
+        </Data>
+        <Data name="plot_id">
+          <value>Stan-5000-Plot 14-Site 3</value>
+        </Data>
+        <Data name="forest">
+          <value>stanislaus</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>5000</value>
+        </Data>
+        <Data name="site">
+          <value>3</value>
+        </Data>
+        <Data name="nickname">
+          <value>beardsley-rd</value>
+        </Data>
+        <Data name="plot">
+          <value>14</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -120.040557,38.198686,0
+        </coordinates>
+      </Point>
+    </Placemark>
+    <Placemark>
+      <name>stanislaus_5000_3_beardsley-rd_15</name>
+      <description><![CDATA[name: <br>plot_id: Stan-5000-Plot 15-Site 3<br>forest: stanislaus<br>elevation_band: 5000<br>site: 3<br>nickname: beardsley-rd<br>plot: 15]]></description>
+      <styleUrl>#icon-1899-558B2F-labelson</styleUrl>
+      <ExtendedData>
+        <Data name="name">
+          <value/>
+        </Data>
+        <Data name="plot_id">
+          <value>Stan-5000-Plot 15-Site 3</value>
+        </Data>
+        <Data name="forest">
+          <value>stanislaus</value>
+        </Data>
+        <Data name="elevation_band">
+          <value>5000</value>
+        </Data>
+        <Data name="site">
+          <value>3</value>
+        </Data>
+        <Data name="nickname">
+          <value>beardsley-rd</value>
+        </Data>
+        <Data name="plot">
+          <value>15</value>
+        </Data>
+      </ExtendedData>
+      <Point>
+        <coordinates>
+          -120.038977,38.199629,0
+        </coordinates>
+      </Point>
+    </Placemark>
+  </Document>
+</kml>
