@@ -16,8 +16,8 @@ sites_checklist <-
   dplyr::select(-forest, -elev, -rep) %>% 
   dplyr::mutate(plot_locations_check = file.exists(paste0("data/data_output/site_data/", site, "/", site, "_plot-locations/", site, "_plot-locations.shp"))) %>% 
   dplyr::mutate(mission_footprint_check = file.exists(paste0("data/data_output/site_data/", site, "/", site, "_mission-footprint"))) %>% 
-  dplyr::mutate(dtm_check = file.exists(paste0("data/data_output/site_data/", site, "/", site, "_dtm.tif"))) %>% 
   dplyr::mutate(veg_point_cloud_check = file.exists(paste0("data/data_output/site_data/", site, "/", site, "_vegetation-from-csf_lidR.las"))) %>% 
+  dplyr::mutate(dtm_check = file.exists(paste0("data/data_output/site_data/", site, "/", site, "_dtm.tif"))) %>% 
   dplyr::mutate(chm_check = file.exists(paste0("data/data_output/site_data/", site, "/", site, "_chm.tif"))) %>% 
   dplyr::mutate(plot_remote_data_check = map_lgl(paste0("data/data_output/site_data/", site, "/", site, "_plot-remote-data"), .f = function(x) length(list.files(x)) > 0)) %>% 
   dplyr::mutate(ttops_check = file.exists(paste0("data/data_output/site_data/", site, "/", site, "_ttops/", site, "_ttops.shp"))) %>% 
