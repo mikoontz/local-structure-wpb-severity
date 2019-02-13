@@ -1,10 +1,36 @@
+# Load libraries
 library(RCSF)
 library(lidR)
+library(sf)
+library(tidyverse)
+library(purrr)
 library(raster)
 
-# Wipe clean all of Pix4D classification
-las <- readLAS(files = "data/data_working/stan_3k_2/stan_3k_2_re/2_densification/point_cloud/stan_3k_2_re_Green_densified_point_cloud.las")
-las@data[, Classification := 0L]
+source("data/data_carpentry/make_processing-checklist.R")
+
+sites_checklist
+
+unusable_sites <- c("eldo_4k_3", # too many blocks
+                    "stan_4k_3", # too many blocks
+                    "stan_5k_3", # too many blocks
+                    "sequ_4k_2") # middle section flown on a separate day and the stitch looks terrible
+
+usable_sites <- 
+  sites_checklist %>% 
+  dplyr::filter(!(site %in% unusable_sites)) %>% 
+  dplyr::pull(site)
+
+i = 1
+for (i in seq_along(usable_sites)) {
+  current_site <- usable_sites[i]
+  # Wipe clean all of Pix4D classification
+  
+  # Get the file system right. Is it time to move all of the data_workign stuff to site_data??
+  
+  las <- readLAS(files = here::here(paste0("data/data_working/", current_site, "/", current_site, stan_3k_2_re/2_densification/point_cloud/stan_3k_2_re_Green_densified_point_cloud.las")
+  las@data[, Classification := 0L]
+  
+}  
 
 (start <- Sys.time())
 
