@@ -14,9 +14,11 @@ sites_checklist <-
   dplyr::arrange(forest, elev, rep) %>% 
   dplyr::mutate(site = paste(forest, elev, rep, sep = "_")) %>% 
   dplyr::select(-forest, -elev, -rep) %>% 
-  dplyr::mutate(plot_locations_check = file.exists(paste0("data/data_output/site_data/", site, "/", site, "_plot-locations/", site, "_plot-locations.shp"))) %>% 
+  dplyr::mutate(plot_locations_check = ifelse(site %in%  c("eldo_3k_2", "eldo_3k_3", "eldo_4k_2"),
+                                              yes = file.exists(paste0("data/data_output/site_data/", site, "/", site, "_plot-locations/", site, "_plot-locations.shp")),
+                                              no = file.exists(paste0("data/data_output/site_data/", site, "/", site, "_plot-locations_re/", site, "_plot-locations_re.shp")))) %>% 
   dplyr::mutate(mission_footprint_check = file.exists(paste0("data/data_output/site_data/", site, "/", site, "_mission-footprint"))) %>% 
-  dplyr::mutate(veg_point_cloud_check = file.exists(paste0("data/data_output/site_data/", site, "/", site, "_vegetation-from-csf_lidR.las"))) %>% 
+  dplyr::mutate(classified_point_cloud_check = file.exists(paste0("data/data_output/site_data/", site, "/", site, "_classified_point_cloud.las"))) %>% 
   dplyr::mutate(dtm_check = file.exists(paste0("data/data_output/site_data/", site, "/", site, "_dtm.tif"))) %>% 
   dplyr::mutate(chm_check = file.exists(paste0("data/data_output/site_data/", site, "/", site, "_chm.tif"))) %>% 
   dplyr::mutate(plot_remote_data_check = map_lgl(paste0("data/data_output/site_data/", site, "/", site, "_plot-remote-data"), .f = function(x) length(list.files(x)) > 0)) %>% 
