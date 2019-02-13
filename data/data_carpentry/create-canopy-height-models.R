@@ -109,6 +109,7 @@ for (i in seq_along(sites_to_process)) {
   # output is derived from merged X3+RedEdge imagery versus just being derived from RedEdge imagery
   raster::writeRaster(x = chm, filename = here::here(paste0("data/data_output/site_data/", current_site, "/", current_site, "_chm.tif")), overwrite = TRUE)
 
+  print(paste0("...", current_site, " complete..."))
 }  
 
 (end <- Sys.time())
