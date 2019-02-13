@@ -1,6 +1,13 @@
 data/features/srtm_30m.tif
+data/data_output/*/*/1_initial/*
 data/data_output/*/*/2_densification/*
 data/data_output/*/*/3_dsm_ortho/*
+data/data_output/*/*/4_index/*
+data/data_output/*/*/temp/*
+data/data_output/*/*/*_x3/*
+data/data_output/*/*/*_re/*
+data/data_output/*/*/*_photos
+data/data_output/*/*/*_mtp.txt
 .Rproj.user
 *.las
 data/data_output/*/*/*_crowns/*
@@ -10,3 +17,7 @@ data/CA Sierra-PIPO tree data Jan 2019 representing spring 18.xlsx
 data/ground-data.csv
 data/data_output/site_data/*/*plot-remote-data/*
 data/data_working/*
+*.p4d
+*.log
+*_geolocations.txt
+*gcp*
