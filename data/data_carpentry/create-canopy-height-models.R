@@ -28,6 +28,25 @@ sites_to_process <-
   dplyr::filter(!classified_point_cloud_check | !dtm_check | !chm_check) %>% 
   dplyr::pull(site)
 
+# Set the Cloth Simulation Filter processing parameters for different sites
+# These parameters are the defaults
+csf_parameters <- data_frame(site = sites_checklist$site,
+                             sloop_smooth = TRUE,
+                             class_threshold = 0.25,
+                             cloth_resolution = 1.0,
+                             rigidness = 1,
+                             iterations = 500,
+                             time_step = 0.65)
+
+# Sites that need a slightly finer resolution cloth
+slightly_finer_cloth_sites <- c("eldo_5k_2", "stan_3k_2", "stan_3k_3", "sier_3k_1", "sier_4k_2", "sequ_5k_1", "sequ_5k_2")
+
+csf_parameters[csf_parameters$site %in% slightly_finer_cloth_sites, "cloth_resolution"] <- 0.75
+
+# Sites that need a moderately finer resolution cloth
+moderately_finer_cloth_sites <- c("eldo_4k_1", "eldo_5k_1", "stan_3k_2", "stan_4k_1", "sier_3k_2", "sier_3k_3", "sier_5k_1", "sier_5k_3", "sequ_4k_1", "sequ_4k_3", "sequ_6k_2", "sequ_6k_3")
+
+csf_parameters[csf_parameters$site %in% moderately_finer_cloth_sites, "cloth_resolution"] <- 0.5
 
 (start <- Sys.time())
 
@@ -49,12 +68,15 @@ for (i in seq_along(sites_to_process)) {
   
   # cloth resolution set to be ~5 times the average spacing between points
   # when point cloud density is ~30 pts per m^2
-  current_point_cloud <- lidR::lasground(current_point_cloud, csf(sloop_smooth = TRUE, 
-                                                                  class_threshold = 0.25, 
-                                                                  cloth_resolution = 1.0,  
-                                                                  rigidness = 1, 
-                                                                  iterations = 500, 
-                                                                  time_step = 0.65))
+  current_idx <- csf_parameters$site == current_site
+  
+  current_point_cloud <- lidR::lasground(las = current_point_cloud, 
+                                         algorithm = csf(sloop_smooth = csf_parameters$sloop_smooth[current_idx], 
+                                                         class_threshold = csf_parameters$class_threshold[current_idx], 
+                                                         cloth_resolution = csf_parameters$cloth_resolution[current_idx],  
+                                                         rigidness = csf_parameters$rigidness[current_idx], 
+                                                         iterations = csf_parameters$iterations[current_idx], 
+                                                         time_step = csf_parameters$time_step[current_idx]))
   
   
   # Plot the classification of the point cloud for inspection
