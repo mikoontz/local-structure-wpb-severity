@@ -21,3 +21,5 @@ data/data_working/*
 *.log
 *_geolocations.txt
 *gcp*
+data/data_output/site_data/*/*_chm.tif
+data/data_output/site_data/*/*_dtm.tif
