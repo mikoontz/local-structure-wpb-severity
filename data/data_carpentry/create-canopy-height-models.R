@@ -22,10 +22,12 @@ merged_sites <- c("eldo_3k_2",
                   "eldo_3k_3",
                   "eldo_4k_2")
 
+overwrite <- TRUE
+
 sites_to_process <- 
   sites_checklist %>% 
   dplyr::filter(!(site %in% unusable_sites)) %>%
-  dplyr::filter(!classified_point_cloud_check | !dtm_check | !chm_check) %>% 
+  dplyr::filter(overwrite | !classified_point_cloud_check | !dtm_check | !chm_check) %>% 
   dplyr::pull(site)
 
 # Set the Cloth Simulation Filter processing parameters for different sites
