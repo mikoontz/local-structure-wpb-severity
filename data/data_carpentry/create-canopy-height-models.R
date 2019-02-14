@@ -41,12 +41,12 @@ csf_parameters <- data_frame(site = sites_checklist$site,
 # Sites that need a slightly finer resolution cloth
 slightly_finer_cloth_sites <- c("eldo_5k_2", "stan_3k_2", "stan_3k_3", "sier_3k_1", "sier_4k_2", "sequ_5k_1", "sequ_5k_2")
 
-csf_parameters[csf_parameters$site %in% slightly_finer_cloth_sites, "cloth_resolution"] <- 0.75
+csf_parameters[csf_parameters$site %in% slightly_finer_cloth_sites, "cloth_resolution"] <- 0.9
 
 # Sites that need a moderately finer resolution cloth
 moderately_finer_cloth_sites <- c("eldo_4k_1", "eldo_5k_1", "stan_3k_2", "stan_4k_1", "sier_3k_2", "sier_3k_3", "sier_5k_1", "sier_5k_3", "sequ_4k_1", "sequ_4k_3", "sequ_6k_2", "sequ_6k_3")
 
-csf_parameters[csf_parameters$site %in% moderately_finer_cloth_sites, "cloth_resolution"] <- 0.5
+csf_parameters[csf_parameters$site %in% moderately_finer_cloth_sites, "cloth_resolution"] <- 0.75
 
 (start <- Sys.time())
 
