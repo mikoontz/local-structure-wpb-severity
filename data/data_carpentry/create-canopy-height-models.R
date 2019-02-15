@@ -22,14 +22,6 @@ merged_sites <- c("eldo_3k_2",
                   "eldo_3k_3",
                   "eldo_4k_2")
 
-overwrite <- TRUE
-
-sites_to_process <- 
-  sites_checklist %>% 
-  dplyr::filter(!(site %in% unusable_sites)) %>%
-  dplyr::filter(overwrite | !classified_point_cloud_check | !dtm_check | !chm_check) %>% 
-  dplyr::pull(site)
-
 # Set the Cloth Simulation Filter processing parameters for different sites
 # These parameters are the defaults
 csf_parameters <- data_frame(site = sites_checklist$site,
@@ -40,15 +32,33 @@ csf_parameters <- data_frame(site = sites_checklist$site,
                              iterations = 500,
                              time_step = 0.65)
 
-# Sites that need a slightly finer resolution cloth
-slightly_finer_cloth_sites <- c("eldo_5k_2", "stan_3k_2", "stan_3k_3", "sier_3k_1", "sier_4k_2", "sequ_5k_1", "sequ_5k_2")
+# Sites that need a slightly finer resolution cloth (found through trial and error)
+cloth_res_0.9_sites <- c("eldo_5k_2", "sequ_5k_1", "sequ_5k_2")
+csf_parameters[csf_parameters$site %in% cloth_res_0.9_sites, "cloth_resolution"] <- 0.9
 
-csf_parameters[csf_parameters$site %in% slightly_finer_cloth_sites, "cloth_resolution"] <- 0.9
+cloth_res_0.75_sites <- c("eldo_3k_1", "stan_3k_1", "sequ_6k_1")
+csf_parameters[csf_parameters$site %in% cloth_res_0.75_sites, "cloth_resolution"] <- 0.75
 
-# Sites that need a moderately finer resolution cloth
-moderately_finer_cloth_sites <- c("eldo_4k_1", "eldo_5k_1", "stan_3k_2", "stan_4k_1", "sier_3k_2", "sier_3k_3", "sier_5k_1", "sier_5k_3", "sequ_4k_1", "sequ_4k_3", "sequ_6k_2", "sequ_6k_3")
+cloth_res_0.6_sites <- c("stan_3k_2", "sier_3k_2", "sier_3k_1", "sier_4k_2", "sier_5k_1", "sier_5k_3")
+csf_parameters[csf_parameters$site %in% cloth_res_0.6_sites, "cloth_resolution"] <- 0.6
 
-csf_parameters[csf_parameters$site %in% moderately_finer_cloth_sites, "cloth_resolution"] <- 0.75
+cloth_res_0.5_sites <- c("eldo_4k_1", "stan_3k_3", "sier_3k_3", "sequ_4k_1", "sequ_6k_2")
+csf_parameters[csf_parameters$site %in% cloth_res_0.5_sites, "cloth_resolution"] <- 0.5
+
+cloth_res_0.4_sites <- c("eldo_5k_1", "stan_4k_1", "sequ_4k_3", "sequ_6k_3")
+csf_parameters[csf_parameters$site %in% cloth_res_0.4_sites, "cloth_resolution"] <- 0.4
+
+sites_to_overwrite <- ""
+sites_checklist$overwrite <- FALSE
+
+sites_checklist[sites_checklist$site %in% sites_to_overwrite, "overwrite"] <- TRUE
+
+sites_to_process <- 
+  sites_checklist %>% 
+  dplyr::filter(!(site %in% unusable_sites)) %>%
+  dplyr::filter(overwrite | !classified_point_cloud_check | !dtm_check | !chm_check) %>% 
+  dplyr::pull(site)
+
 
 (start <- Sys.time())
 
@@ -88,7 +98,7 @@ for (i in seq_along(sites_to_process)) {
   
   # Export the classified point cloud to disk so we can use the vegetation points for tree segmentation if
   # we want
-  lidR::writeLAS(las= current_point_cloud, file = here::here(paste0("data/data_output/site_data/", current_site, "/", current_site, "_classified_point_cloud.las")))
+  lidR::writeLAS(las = current_point_cloud, file = here::here(paste0("data/data_output/site_data/", current_site, "/", current_site, "_classified_point_cloud.las")))
   
   
   # Create a 1m resolution digital terrain model using the classified ground points
