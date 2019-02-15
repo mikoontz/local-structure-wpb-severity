@@ -21,6 +21,8 @@ sites_checklist <-
   dplyr::mutate(classified_point_cloud_check = file.exists(paste0("data/data_output/site_data/", site, "/", site, "_classified_point_cloud.las"))) %>% 
   dplyr::mutate(dtm_check = file.exists(paste0("data/data_output/site_data/", site, "/", site, "_dtm.tif"))) %>% 
   dplyr::mutate(chm_check = file.exists(paste0("data/data_output/site_data/", site, "/", site, "_chm.tif"))) %>% 
+  dplyr::mutate(stacked_ortho_check = file.exists(paste0("data/data_output/site_data/", site, "/", site, "_ortho.tif"))) %>% 
+  dplyr::mutate(stacked_index_check = file.exists(paste0("data/data_output/site_data/", site, "/", site, "_index.tif"))) %>% 
   dplyr::mutate(plot_remote_data_check = map_lgl(paste0("data/data_output/site_data/", site, "/", site, "_plot-remote-data"), .f = function(x) length(list.files(x)) > 0)) %>% 
   dplyr::mutate(ttops_check = file.exists(paste0("data/data_output/site_data/", site, "/", site, "_ttops/", site, "_ttops.shp"))) %>% 
   dplyr::mutate(crowns_check = file.exists(paste0("data/data_output/site_data/", site, "/", site, "_crowns/", site, "_crowns.shp"))) %>% 
