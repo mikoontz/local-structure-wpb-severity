@@ -12,7 +12,6 @@ library(lidR)
 # infomation about how far along all processing steps are.
 
 source("data/data_carpentry/make_processing-checklist.R")
-source("data/data_carpentry/format_ground-data.R")
 
 unusable_sites <- c("eldo_4k_3", # too many blocks
                     "stan_4k_3", # too many blocks
