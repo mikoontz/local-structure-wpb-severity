@@ -14,12 +14,30 @@ library(lidR)
 source("data/data_carpentry/make_processing-checklist.R")
 source("data/data_carpentry/format_ground-data.R")
 
-overwrite = TRUE
+unusable_sites <- c("eldo_4k_3", # too many blocks
+                    "stan_4k_3", # too many blocks
+                    "stan_5k_3", # too many blocks
+                    "sequ_4k_2") # middle section flown on a separate day and the stitch looks terrible
+
+# These sites were processed with their X3 and RedEdge imagery combined so some of their
+# output products will be in a slightly different place in the project directory
+merged_sites <- c("eldo_3k_2",
+                  "eldo_3k_3",
+                  "eldo_4k_2")
+
+# This is where I can put in sites that need their processing redone. An empty 
+# string means that no already-processed site output will be overwritten
+# (but sites that have yet to be processed will still have their processing done)
+
+sites_to_overwrite <- ""
+sites_checklist$overwrite <- FALSE
+
+sites_checklist[sites_checklist$site %in% sites_to_overwrite, "overwrite"] <- TRUE
 
 sites_to_process <- 
   sites_checklist %>% 
-  dplyr::mutate(plot_remote_data_check = !overwrite) %>% 
-  dplyr::filter(!plot_remote_data_check) %>% 
+  dplyr::filter(!(site %in% unusable_sites)) %>%
+  dplyr::filter(overwrite | (!plot_remote_data_check & chm_check)) %>% 
   dplyr::select(site) %>% 
   dplyr::pull()
 
@@ -29,7 +47,7 @@ for (i in seq_along(sites_to_process)) {
   
   current_dir <- paste0("data/data_output/site_data/", current_site, "/")
   
-  if (overwrite) {
+  if (sites_checklist$overwrite[sites_checklist$site == current_site]) {
     if (dir.exists(paste0(current_dir, current_site, "_plot-remote-data"))) {
       unlink(paste0(current_dir, current_site, "_plot-remote-data"), recursive = TRUE)
       message(paste("...Erasing", paste0(current_dir, current_site, "_plot-remote-data", "...")))
@@ -38,39 +56,45 @@ for (i in seq_along(sites_to_process)) {
     # Create a new directory to put the plot-specific remotely sensed data
     dir.create(paste0(current_dir, current_site, "_plot-remote-data"))
     
-    # The Digital Terrain Model (dtm) is the 2m resolution "ground" underneath
-    # the current site. Created using CloudCompare and the Cloth Simulator Filter
-    dtm <- raster::raster(paste0(current_dir, current_site, "_2m-dtm.tif"))
+    # Import all of the products that we want to crop to the inidivdual ground plots
+    # DTM, DSM, point cloud, index tifs, ortho tifs
+    
+    # The Digital Terrain Model (dtm) represents the "ground" underneath
+    # the current site. Created using the cloth simulation filter implemented in 
+    # the lidR package. See the "create-canopy-height-models.R" script.
+    dtm <- raster::raster(paste0(current_dir, current_site, "_dtm.tif"))
     
     # The Digital Surface Model (dsm) is the ~5cm resolution raster representing
     # the surface (ground + objects on top) that the drone flew over
-    dsm <- raster::raster(paste0(current_dir, "3_dsm_ortho/1_dsm/", current_site, "_x3_dsm.tif"))
+    if (current_site %in% merged_sites) {
+      dsm <- raster::raster(x = here::here(paste0("data/data_output/site_data/", current_site, "/", "3_dsm_ortho/1_dsm/", current_site, "_dsm.tif")))
+    } else {
+      dsm <- raster::raster(x = here::here(paste0("data/data_output/site_data/", current_site, "/", current_site, "_re/3_dsm_ortho/1_dsm/", current_site, "_re_dsm.tif")))
+    }
     
-    # Get the orthophoto also
-    ortho <- raster::brick(paste0("data/data_output/site_data/", current_site, "/3_dsm_ortho/2_mosaic/", current_site, "_x3_transparent_mosaic_group1.tif"))
+    # The Canopy Height Model (chm) represents the height of the canopy above
+    # the ground level. It is derived by subtracting the digital terrain
+    # model from the digital surface model (chm = dsm - dtm). See the
+    # "create-canopy-height-models.R" script
+    chm <- raster::raster(paste0(current_dir, current_site, "_chm.tif"))
+    
+    # Orthomosaic (could be 5-band or 8-band depending on whether it includes the 
+    # X3-derived R, G, and B bands)
+    ortho <- raster::brick(here::here(paste0(current_dir, current_site, "_ortho.tif")))
+    
+    # Index mosaic (could be 6-band or 9-band depending on whether it includes the
+    # X3-derived R, G, and B bands)
+    index <- raster::brick(here::here(paste0(current_dir, current_site, "_index.tif")))
     
     # Make sure the Coordinate Reference Systems (crs) are the same
     raster::crs(dtm) <- raster::crs(ortho)
-    
-    # The flight bounds is the polygon surrounding the images that the drone took. Determined
-    # in the "convert_flight-path-to-site-boundary.R script using the elevation model used
-    # during flight planning, the takeoff altitude, the ground altitude underneath each photo,
-    # and the altitude difference between each photo and the takeoff point. Essentially, we 
-    # crop all the products (e.g., the dsm, the dtm, the lidar point cloud) to just be 
-    # area within the flight path, rather than some of the spillover information beyond the
-    # area that the drone directly flew over.
-    # Could consider buffering this further (inward-- so using a negative buffer value) to 
-    # reduce edge effects
-    site_bounds <- 
-      sf::st_read(paste0(current_dir, current_site, "_mission-footprint/", current_site, "_site-bounds.geoJSON")) %>% 
-      sf::st_transform(sp::proj4string(dtm))
     
     # Cropping the dtm and dsm to the site bounds
     site_dtm <- raster::crop(dtm, site_bounds)
     site_dsm <- raster::crop(dsm, site_bounds)
     site_ortho <- raster::crop(ortho, site_bounds)
     
-    plot_radius <- sqrt((66*66) / pi) * 12 *2.54 / 100
+    plot_radius <- sqrt((66*66) / pi) * 12 * 2.54 / 100
     
     # Get plot locations as determined by visually inspecting orthophotos and finding orange X's laid
     # across the plot centers
@@ -89,8 +113,12 @@ for (i in seq_along(sites_to_process)) {
         current_site_plot_locations %>% 
         filter(plot == paste(current_site, current_plot_id, sep = "_"))
       
-      # We want enough canopy beyond the ground plots that we can avoid edge effects in our crown segmentation efforts during validation. That is, we want the crown segmentation that we perform on the cropped rasters just over each plot to essentially be the same crown segmentations that occurs when we work the whole site's CHM
-      # So we buffer around the plot boundary by another 5 meters (from 11.35m radius to 16.35m radius)
+      # We want enough canopy beyond the ground plots that we can avoid edge effects 
+      # in our crown segmentation efforts during validation. That is, we want the 
+      # crown segmentation that we perform on the cropped rasters just over each plot 
+      # to essentially be the same crown segmentations that occurs when we work the 
+      # whole site's CHM. So we buffer around the plot boundary by another 5 meters 
+      # (from 11.35m radius to 16.35m radius)
       current_plot_boundary <-
         current_plot_location %>% 
         st_buffer(plot_radius + 5)
