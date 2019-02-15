@@ -98,8 +98,8 @@ for (i in seq_along(sites_to_process)) {
     index <- raster::brick(index_blue, index_green, index_red, index_re, index_nir, index_ndvi)
   }
   
-  raster::writeRaster(x = ortho, filename = here::here(paste0("data/data_output/site_data/", site, "/", site, "_ortho.tif")))
-  raster::writeRaster(x = index, filename = here::here(paste0("data/data_output/site_data/", site, "/", site, "_index.tif")))
+  raster::writeRaster(x = ortho, filename = here::here(paste0("data/data_output/site_data/", current_site, "/", current_site, "_ortho.tif")))
+  raster::writeRaster(x = index, filename = here::here(paste0("data/data_output/site_data/", current_site, "/", current_site, "_index.tif")))
   
   print(paste0("...", current_site, " complete..."))
 }  
