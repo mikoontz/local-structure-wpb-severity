@@ -47,7 +47,7 @@ sites_checklist[sites_checklist$site %in% sites_to_overwrite, "overwrite"] <- TR
 sites_to_process <- 
   sites_checklist %>% 
   dplyr::filter(!(site %in% unusable_sites)) %>%
-  dplyr::filter(overwrite | ((!stacked_ortho | !stacked_index))) %>% 
+  dplyr::filter(overwrite | ((!stacked_ortho_check | !stacked_index_check))) %>% 
   dplyr::select(site) %>% 
   dplyr::pull()
 
