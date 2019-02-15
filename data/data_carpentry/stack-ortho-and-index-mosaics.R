@@ -51,6 +51,9 @@ sites_to_process <-
   dplyr::select(site) %>% 
   dplyr::pull()
 
+
+(start <- Sys.time())
+
 for (i in seq_along(sites_to_process)) {
   # get the character string representing the ith site
   current_site <- sites_to_process[i]
@@ -98,4 +101,8 @@ for (i in seq_along(sites_to_process)) {
   raster::writeRaster(x = ortho, filename = here::here(paste0("data/data_output/site_data/", site, "/", site, "_ortho.tif")))
   raster::writeRaster(x = index, filename = here::here(paste0("data/data_output/site_data/", site, "/", site, "_index.tif")))
   
-}
+  print(paste0("...", current_site, " complete..."))
+}  
+
+(end <- Sys.time())
+(end - start)
