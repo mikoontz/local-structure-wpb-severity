@@ -23,3 +23,5 @@ data/data_working/*
 *gcp*
 data/data_output/site_data/*/*_chm.tif
 data/data_output/site_data/*/*_dtm.tif
+data/data_output/site_data/*/*_index.tif
+data/data_output/site_data/*/*_ortho.tif
