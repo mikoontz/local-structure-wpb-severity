@@ -5,8 +5,6 @@ library(tidyverse)
 library(sf)
 library(lme4)
 
-summarized_hcc_data <- read_csv("data/data_output/summarized-non-spatial-site-data.csv")
-
 d <- 
   readr::read_csv("data/ground-data.csv") %>% 
   dplyr::rename(leif_name = `Plot #`,
