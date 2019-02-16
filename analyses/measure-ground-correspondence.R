@@ -754,6 +754,11 @@ ttops_summary <- foreach(i = seq_along(all_validation_plots), .combine = rbind) 
     st_set_agr("constant") %>%
     st_intersection(y = current_plot_boundary)
   
+  # multichm
+  
+  # lmfx
+  
+  
   # All the different ttops
 
   ttops <-
