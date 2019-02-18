@@ -83,7 +83,7 @@ ground_trees <-
         dplyr::arrange(id) %>% 
         st_zm()
     }
-
+    
     current_plot_ground_trees <- 
       d %>% 
       filter(site == current_site) %>% 
@@ -105,10 +105,10 @@ ground_trees <-
       as.data.frame()
     
     nn <- nn %>% dplyr::select(-1)
-
+    
     if (ncol(nn) == 1) {nn <- nn %>% rename(nn1 = V2) %>% mutate(nn2 = NA, nn3 = NA)} else
-    if (ncol(nn) == 2) {nn <- nn %>% rename(nn1 = V2, nn2 = V3) %>% mutate(nn3 = NA)} else
-    if (ncol(nn) == 3) {nn <- nn %>% rename(nn1 = V2, nn2 = V3, nn3 = V4) }
+      if (ncol(nn) == 2) {nn <- nn %>% rename(nn1 = V2, nn2 = V3) %>% mutate(nn3 = NA)} else
+        if (ncol(nn) == 3) {nn <- nn %>% rename(nn1 = V2, nn2 = V3, nn3 = V4) }
     
     current_plot_ground_trees <- 
       current_plot_ground_trees %>% 
@@ -203,6 +203,165 @@ ttops_summary <- foreach(i = seq_along(all_validation_plots), .combine = rbind) 
   
   source("analyses/vwf2.R")
   
+  
+  # treetop detection algorithm helper functions ----------------------------
+  
+  
+  st_vwf <- function(CHM, plot_boundary, winFun, minHeight, maxWinDiameter) {
+    start <- Sys.time()
+    
+    ttops_sf <-
+      CHM %>% 
+      vwf2(winFun = winFun, minHeight = minHeight, maxWinDiameter = maxWinDiameter) %>%
+      st_as_sf() %>%
+      st_set_agr("constant") %>%
+      st_intersection(y = plot_boundary)
+    
+    end <- Sys.time()
+    
+    ttops_time <- end - start
+    
+    return(list(ttops_sf = ttops_sf, ttops_time = ttops_time))
+  }
+  
+  
+  st_lmf <- function(obj, plot_boundary, ws) {
+    start <- Sys.time()
+    ttops_sf <-
+      obj %>%
+      lidR::tree_detection(algorithm = lmf(ws = ws)) %>%
+      st_as_sf() %>% 
+      rename(height = Z) %>%
+      st_set_agr("constant") %>%
+      st_intersection(y = plot_boundary)
+    
+    end <- Sys.time()
+    
+    ttops_time <- end - start
+    
+    return(list(ttops_sf = ttops_sf, ttops_time = ttops_time))
+  }
+  
+  
+  st_li2012 <- function(las, plot_boundary, dt1, dt2, R, Zu, hmin, speed_up) {
+    start <- Sys.time()
+    ttops_las <- 
+      las %>% 
+      lidR::lastrees(algorithm = li2012(dt1 = dt1, dt2 = dt2, R = R, Zu = Zu, hmin = min_height, speed_up = speed_up))
+    
+    ttops_sf <-
+      ttops_las %>% 
+      slot("data") %>% 
+      dplyr::group_by(treeID) %>%
+      dplyr::filter(Z == max(Z)) %>%
+      dplyr::ungroup() %>%
+      st_as_sf(coords = c("X", "Y"),
+               crs = proj4string(las)) %>%
+      rename(height = Z) %>%
+      st_set_agr("constant") %>%
+      st_intersection(y = plot_boundary)
+    
+    end <- Sys.time()
+    
+    ttops_time <- end - start
+    
+    return(list(ttops_las = ttops_las, ttops_sf = ttops_sf, ttops_time = ttops_time))
+  }
+  
+  st_watershed <- function(las, plot_boundary, chm, th_tree, tol, ext) {
+    start <- Sys.time()
+    
+    ttops_las <-
+      las %>% 
+      lidR::lastrees(algorithm = watershed(chm = current_chm, th_tree = th_tree, tol = tol, ext = ext))
+    
+    ttops_sf <-  
+      ttops_las %>% 
+      slot("data") %>% 
+      dplyr::group_by(treeID) %>%
+      dplyr::filter(Z == max(Z)) %>%
+      dplyr::ungroup() %>%
+      st_as_sf(coords = c("X", "Y"),
+               crs = proj4string(las)) %>%
+      rename(height = Z) %>%
+      st_set_agr("constant") %>%
+      st_intersection(y = plot_boundary)
+    
+    end <- Sys.time()
+    
+    ttops_time <- end - start
+    
+    return(list(ttops_las = ttops_las, ttops_sf = ttops_sf, ttops_time = ttops_time))
+  }
+  
+  st_ptree <- function(las, plot_boundary, k, hmin, nmax) {
+    start <- Sys.time()
+    
+    ttops_las <-
+      las %>%
+      lidR::lastrees(algorithm = ptrees(k = k, hmin = hmin, nmax = nmax))
+    
+    ttops_sf <-
+      ttops_las %>%
+      slot("data") %>% 
+      dplyr::group_by(treeID) %>%
+      dplyr::filter(Z == max(Z)) %>%
+      dplyr::ungroup() %>%
+      st_as_sf(coords = c("X", "Y"),
+               crs = proj4string(las)) %>%
+      rename(height = Z) %>%
+      st_set_agr("constant") %>%
+      st_intersection(y = plot_boundary)
+    
+    end <- Sys.time()
+    ttops_time <- end - start
+    
+    return(list(ttops_las = ttops_las, ttops_sf = ttops_sf, ttops_time = ttops_time))
+    
+  }
+  
+  st_multichm <- function(las, plot_boundary, res, layer_thickness, dist_2d, dist_3d, use_max, ws) {
+    
+    start <- Sys.time()
+    
+    ttops_sf <-
+      las %>% 
+      lidR::tree_detection(algorithm = multichm(res = res, layer_thickness = layer_thickness, dist_2d = dist_2d, dist_3d = dist_3d, use_max = use_max, ws = ws)) %>% 
+      st_as_sf() %>% 
+      rename(height = Z) %>%
+      st_set_agr("constant") %>%
+      st_intersection(y = plot_boundary)
+    
+    end <- Sys.time()
+    ttops_time <- end - start
+    
+    return(list(ttops_sf = ttops_sf, ttops_time = ttops_time))
+  }
+  
+  
+  st_lmfx <- function(las, plot_boundary, hmin, dist_2d, ws) {
+    
+    start <- Sys.time()
+    
+    ttops_sf <- 
+      las %>% 
+      lidR::tree_detection(algorithm = lmfx(hmin = hmin, dist_2d = dist_2d, ws = ws)) %>% 
+      st_as_sf() %>% 
+      rename(height = Z) %>%
+      st_set_agr("constant") %>%
+      st_intersection(y = plot_boundary)
+    
+    end <- Sys.time()
+    
+    ttops_time <- end - start
+    
+    return(list(ttops_sf = ttops_sf, ttops_time = ttops_time))
+    
+  }
+  
+  # get data for particular plot --------------------------------------------
+  
+  
   current_plot <- all_validation_plots[i]
   current_site <- substr(current_plot, start = 1, stop = 9)
   current_dir <- paste0("data/data_output/site_data/", current_site, "/")
@@ -261,14 +420,20 @@ ttops_summary <- foreach(i = seq_along(all_validation_plots), .combine = rbind) 
   
   min_height <- 3
   
-  # Methods 1 through 3 use a "variable window filter" to search for local maxima within window sizes
+  
+  # vwf treetop detection ---------------------------------------------------
+  
+  
+  # These algorithms use a "variable window filter" to search for local maxima within window sizes
   # that are functions of how high a particular pixel is
   
-  # Method 1
   # Using the window function defined in the help file
   dynamicWindow_default <- function(x){x * 0.06 + 0.5}
   
-  # Method 2
+  ttops_vwf_default <-
+    current_chm %>% 
+    st_vwf(plot_boundary = current_plot_boundary, winFun = dynamicWindow_default, minHeight = min_height, maxWinDiameter = NULL)
+  
   # Equation and coefficients taken from Popescu and Wynne (2004)
   # Divide the Popescu and Wynne (2004) equations by 2 to convert to *radius* of search window
   # which is what the vwf() function requires
@@ -279,7 +444,10 @@ ttops_summary <- foreach(i = seq_along(all_validation_plots), .combine = rbind) 
     return(window_radius)
   }
   
-  # Method 3
+  ttops_vwf_pines <-
+    current_chm %>% 
+    st_vwf(plot_boundary = current_plot_boundary, winFun = dynamicWindow_pines, minHeight = min_height, maxWinDiameter = NULL)
+  
   # Equation and coefficients taken from Popescu and Wynne (2004)
   # Divide the Popescu and Wynne (2004) equations by 2 to convert to *radius* of search window
   # which is what the vwf() function requires
@@ -290,477 +458,231 @@ ttops_summary <- foreach(i = seq_along(all_validation_plots), .combine = rbind) 
     return(window_radius)
   }
   
-  ttops_vwf_default <-
-    vwf2(CHM = current_chm, winFun = dynamicWindow_default, minHeight = min_height, maxWinDiameter = NULL) %>%
-    st_as_sf() %>%
-    st_set_agr("constant") %>%
-    st_intersection(y = current_plot_boundary)
-
-  ttops_vwf_pines <-
-    vwf2(CHM = current_chm, winFun = dynamicWindow_pines, minHeight = min_height, maxWinDiameter = NULL) %>%
-    st_as_sf() %>%
-    st_set_agr("constant") %>%
-    st_intersection(y = current_plot_boundary)
-
   ttops_vwf_combined <-
-    vwf2(CHM = current_chm, winFun = dynamicWindow_combined, minHeight = min_height, maxWinDiameter = NULL) %>%
-    st_as_sf() %>%
-    st_set_agr("constant") %>%
-    st_intersection(y = current_plot_boundary)
-
-
+    current_chm %>% 
+    st_vwf(plot_boundary = current_plot_boundary, winFun = dynamicWindow_combined, minHeight = min_height, maxWinDiameter = NULL)
+  
+  
+  
+  # lmf treetop detection ---------------------------------------------------
+  
+  
   # Method 4
   # Using a fixed square window for detecting local maxima
   # 1.5 meters per side in pixels
   window_size <- 1.5
   ws_in_pixels <- round(window_size * (1 / res(current_chm)[1]))
   ws_in_pixels <- ifelse(ws_in_pixels %% 2 == 0, yes = ws_in_pixels + 1, no = ws_in_pixels)
-
+  
   # On a raster-like object, the window size is in pixels
   # The returned value when a raster-like object is used is also a raster-like object, so we transform it into a
   # sf POINT object
   ttops_localMaxima_chm_1.5 <-
     current_chm %>%
-    lidR::tree_detection(algorithm = lmf(ws = ws_in_pixels)) %>%
-    st_as_sf() %>% 
-    rename(height = Z) %>%
-    st_set_agr("constant") %>%
-    st_intersection(y = current_plot_boundary)
-
+    st_lmf(plot_boundary = current_plot_boundary, ws = ws_in_pixels)
+  
   # Method 5
   # Using a fixed window for detecting local maxima
   # On a raw point cloud object, the window size is in meters
   # 1.5 las units per side = 1.5 meters
   ttops_localMaxima_las_1.5 <-
-    current_las_normalized %>%
-    lidR::tree_detection(algorithm = lmf(ws = window_size)) %>%
-    st_as_sf() %>%
-    rename(height = Z) %>%
-    st_set_agr("constant") %>%
-    st_intersection(y = current_plot_boundary)
-
-  # Method 6
+    current_las_normalized %>% 
+    st_lmf(plot_boundary = current_plot_boundary, ws = window_size)
+  
+  
   # Using a fixed window for detecting local maxima
   # 2 meters on a side in pixels
   window_size <- 2
   ws_in_pixels <- round(window_size * (1 / res(current_chm)[1]))
   ws_in_pixels <- ifelse(ws_in_pixels %% 2 == 0, yes = ws_in_pixels + 1, no = ws_in_pixels)
-
+  
   # On a raster-like object, the window size is in pixels
   # The returned value when a raster-like object is used is also a raster-like object, so we transform it into a
   # sf POINT object
   ttops_localMaxima_chm_2 <-
     current_chm %>%
-    lidR::tree_detection(algorithm = lmf(ws = ws_in_pixels)) %>%
-    st_as_sf() %>% 
-    rename(height = Z) %>%
-    st_set_agr("constant") %>%
-    st_intersection(y = current_plot_boundary)
+    st_lmf(plot_boundary = current_plot_boundary, ws = ws_in_pixels)
   
-  # Method 7
   # Using a fixed window for detecting local maxima
   # On a raw point cloud object, the window size is in meters
   # 2 las units on a side = 2 meters
   ttops_localMaxima_las_2 <-
     current_las_normalized %>%
-    lidR::tree_detection(algorithm = lmf(ws = window_size)) %>%
-    st_as_sf() %>%
-    rename(height = Z) %>%
-    st_set_agr("constant") %>%
-    st_intersection(y = current_plot_boundary)
+    st_lmf(plot_boundary = current_plot_boundary, ws = window_size)
   
-  # Method 8
+  
   # Using a fixed window for detecting local maxima
   # 2.5 meters on a side in pixels
   window_size <- 2.5
   ws_in_pixels <- round(window_size * (1 / res(current_chm)[1]))
   ws_in_pixels <- ifelse(ws_in_pixels %% 2 == 0, yes = ws_in_pixels + 1, no = ws_in_pixels)
-
+  
   # On a raster-like object, the window size is in pixels
   # The returned value when a raster-like object is used is also a raster-like object, so we transform it into a
   # sf POINT object
   ttops_localMaxima_chm_2.5 <-
     current_chm %>%
-    lidR::tree_detection(algorithm = lmf(ws = ws_in_pixels)) %>%
-    st_as_sf() %>% 
-    rename(height = Z) %>%
-    st_set_agr("constant") %>%
-    st_intersection(y = current_plot_boundary)
+    st_lmf(plot_boundary = current_plot_boundary, ws = ws_in_pixels)
   
-  # Method 9
   # Using a fixed window for detecting local maxima
   # On a raw point cloud object, the window size is in meters
   # 2.5 las units = 2.5 meters
-
+  
   ttops_localMaxima_las_2.5 <-
     current_las_normalized %>%
-    lidR::tree_detection(algorithm = lmf(ws = window_size)) %>%
-    st_as_sf() %>%
-    rename(height = Z) %>%
-    st_set_agr("constant") %>%
-    st_intersection(y = current_plot_boundary)
+    st_lmf(plot_boundary = current_plot_boundary, ws = window_size)
   
-  # Method 10
+  
+  # li2012 treetop detection ------------------------------------------------
+  
+  
   # Using the approach developed by Li et al. (2012)
   # Using values from Shin et al. (2018) Remote Sensing.
-  # "The segmentation method relies on four user-defined parameters: minimum height of a tree, maximum crown radius, and two numeric distances, which define horizontal distance (in meters) thresholds between all points above 15 m in height, and below 15 m in height. These thresholds values are hereafter referred to as distance thresholds (DT). The DT value is site specific [42]. A low DT value generally results in over-segmentation with many additional trees identified in the point cloud, whereas a high DT value causes under-segmentation, where many tree canopies are merged together into single large canopies. In this study, 16 different iterations of varying DT values were tested. We used a minimum tree height of 2 m, and a maximum canopy diameter of 7 m, based on the ranges observed in our field data."
-  # "The parameters used in a given tree segmentation algorithm must be “tuned” to match the specific site and user’s needs. We used a point-based algorithm [42] to segment individual trees from the point cloud. The main parameter that affected the segmentation was the DT parameter—a distance threshold between points that determined whether a point was or was not part of a particular tree. Within the Li et al. [42] segmentation algorithm, there are two different DT values, both of which were set as equal in our study. In future studies, these values can be set differently to potentially achieve better segmentation results."
-  # "The optimized iteration contains two DT values: 1.4 m for areas with more than 50% canopy cover, and 1.7 m for areas of 50% or less canopy cover."
+  # "The segmentation method relies on four user-defined parameters: minimum height of a tree, 
+  # maximum crown radius, and two numeric distances, which define horizontal distance (in meters) 
+  # thresholds between all points above 15 m in height, and below 15 m in height. These 
+  # thresholds values are hereafter referred to as distance thresholds (DT). The DT value is site 
+  # specific [42]. A low DT value generally results in over-segmentation with many additional 
+  # trees identified in the point cloud, whereas a high DT value causes under-segmentation, where 
+  # many tree canopies are merged together into single large canopies. In this study, 16 different 
+  # iterations of varying DT values were tested. We used a minimum tree height of 2 m, and a 
+  # maximum canopy diameter of 7 m, based on the ranges observed in our field data."
+  
+  # "The parameters used in a given tree segmentation algorithm must be “tuned” to match the 
+  # specific site and user’s needs. We used a point-based algorithm [42] to segment individual 
+  # trees from the point cloud. The main parameter that affected the segmentation was the DT 
+  # parameter—a distance threshold between points that determined whether a point was or was not 
+  # part of a particular tree. Within the Li et al. [42] segmentation algorithm, there are two 
+  # different DT values, both of which were set as equal in our study. In future studies, these 
+  # values can be set differently to potentially achieve better segmentation results."
+  # "The optimized iteration contains two DT values: 1.4 m for areas with more than 50% canopy 
+  # cover, and 1.7 m for areas of 50% or less canopy cover."
+  
+  # Could systematically iterate through many parameter combinations...
+  # dt1_vals <- c(1.0, 1.4)
+  # dt2_vals <- c(1.0, 1.4)
+  # R_vals <- 0
+  # Zu_vals <- c(15, 25)
+  # min_height <- 3
+  # speed_up <- 10
+  # 
+  # li2012_params <- as_data_frame(expand.grid(dt1 = dt1_vals, dt2 = dt2_vals, R = R_vals, Zu = Zu_vals, hmin = min_height, speed_up = speed_up))
+  # 
+  # li2012_summary <-
+  #   li2012_params %>% 
+  #   pmap(.f = st_li2012, las = current_las_normalized, plot_boundary = current_plot_boundary)
+  
+  # Default parameters
   ttops_li2012_dt1_1.4_dt2_1.4_zu_15_R_0_speedUp_10 <- 
     current_las_normalized %>% 
-    lidR::lastrees(algorithm = li2012(dt1 = 1.4, dt2 = 1.4, R = 0, Zu = 15, hmin = min_height, speed_up = 10))
+    st_li2012(plot_boundary = current_plot_boundary, dt1 = 1.4, dt2 = 1.4, R = 0, Zu = 15, hmin = min_height, speed_up = 10)
   
-  ttops_li2012_dt1_1.4_dt2_1.4_zu_15_R_0_speedUp_10 <-
-    ttops_li2012_dt1_1.4_dt2_1.4_zu_15_R_0_speedUp_10@data %>%
-    dplyr::group_by(treeID) %>%
-    dplyr::filter(Z == max(Z)) %>%
-    ungroup() %>%
-    st_as_sf(coords = c("X", "Y"),
-             crs = proj4string(current_chm)) %>%
-    rename(height = Z) %>%
-    st_set_agr("constant") %>%
-    st_intersection(y = current_plot_boundary)
-  
-  # crowns_li2012_dt1_1.4_dt2_1.4_zu_15_R_0_speedUp_10 <-
-  #   current_las_normalized %>%
-  #   as.spatial() %>%
-  #   st_as_sf(coords = c("X", "Y"),
-  #            crs = proj4string(current_chm)) %>%
-  #   mutate(treeID = 1:nrow(.)) %>%
-  #   rename(height = Z) %>%
-  #   st_intersection(y = current_plot_boundary)
-
-  # Method 11
   # Using approach developed by Li et al. (2012)
   # Using values from Jakubowski et al. (2013), a study done in mixed-conifer forests in the Sierra Nevada (Tahoe National Forest, mostly)
-  #
-  ttops_li2012_dt1_1.5_dt2_2.0_zu_15_R_0_speedUp_10 <-
+  ttops_li2012_dt1_1.5_dt2_2.0_zu_15_R_0_speedUp_10 <- 
     current_las_normalized %>% 
-    lidR::lastrees(algorithm = li2012(dt1 = 1.5, dt2 = 2, R = 0, Zu = 15, hmin = min_height, speed_up = 10))
-  
-  # crowns_li2_dt1_1.5_dt2_2.0_zu_15_R_0_speedUp_10 <-
-  #   current_las_normalized %>%
-  #   as.spatial() %>%
-  #   st_as_sf(coords = c("X", "Y"),
-  #            crs = proj4string(current_chm)) %>%
-  #   mutate(treeID = 1:nrow(.)) %>%
-  #   rename(height = Z) %>%
-  #   st_intersection(y = current_plot_boundary)
-  
-  ttops_li2012_dt1_1.5_dt2_2.0_zu_15_R_0_speedUp_10 <-
-    ttops_li2012_dt1_1.5_dt2_2.0_zu_15_R_0_speedUp_10@data %>% 
-    dplyr::group_by(treeID) %>%
-    dplyr::filter(Z == max(Z)) %>%
-    dplyr::ungroup() %>%
-    st_as_sf(coords = c("X", "Y"),
-             crs = proj4string(current_chm)) %>%
-    rename(height = Z) %>%
-    st_set_agr("constant") %>%
-    st_intersection(y = current_plot_boundary)
-  
+    st_li2012(plot_boundary = current_plot_boundary, dt1 = 1.5, dt2 = 2, R = 0, Zu = 15, hmin = min_height, speed_up = 10)
   
   ttops_li2012_dt1_1.0_dt2_2.0_zu_15_R_0_speedUp_10 <-
     current_las_normalized %>% 
-    lidR::lastrees(algorithm = li2012(dt1 = 1.0, dt2 = 2, R = 0, Zu = 15, hmin = min_height, speed_up = 10))
-
-  # crowns_li2012_dt1_1.0_dt2_2.0_zu_15_R_0_speedUp_10 <-
-  #   current_las_normalized %>%
-  #   as.spatial() %>%
-  #   st_as_sf(coords = c("X", "Y"),
-  #            crs = proj4string(current_chm)) %>%
-  #   mutate(treeID = 1:nrow(.)) %>%
-  #   rename(height = Z) %>%
-  #   st_intersection(y = current_plot_boundary)
-
-  ttops_li2012_dt1_1.0_dt2_2.0_zu_15_R_0_speedUp_10 <-
-    ttops_li2012_dt1_1.0_dt2_2.0_zu_15_R_0_speedUp_10@data %>%
-    dplyr::group_by(treeID) %>%
-    dplyr::filter(Z == max(Z)) %>%
-    dplyr::ungroup() %>%
-    st_as_sf(coords = c("X", "Y"),
-             crs = proj4string(current_chm)) %>%
-    rename(height = Z) %>%
-    st_set_agr("constant") %>%
-    st_intersection(y = current_plot_boundary)
-
+    st_li2012(plot_boundary = current_plot_boundary, dt1 = 1.0, dt2 = 2, R = 0, Zu = 15, hmin = min_height, speed_up = 10)
+  
   ttops_li2012_dt1_1.0_dt2_2.0_zu_20_R_0_speedUp_10 <-
     current_las_normalized %>% 
-    lidR::lastrees(algorithm = li2012(dt1 = 1.0, dt2 = 2, R = 0, Zu = 20, hmin = min_height, speed_up = 10))
-  
-  # crowns_li2012_dt1_1.0_dt2_2.0_zu_20_R_0_speedUp_10 <-
-  #   current_las_normalized %>%
-  #   as.spatial() %>%
-  #   st_as_sf(coords = c("X", "Y"),
-  #            crs = proj4string(current_chm)) %>%
-  #   mutate(treeID = 1:nrow(.)) %>%
-  #   rename(height = Z) %>%
-  #   st_intersection(y = current_plot_boundary)
-  
-  ttops_li2012_dt1_1.0_dt2_2.0_zu_20_R_0_speedUp_10 <-
-    ttops_li2012_dt1_1.0_dt2_2.0_zu_20_R_0_speedUp_10@data %>%
-    dplyr::group_by(treeID) %>%
-    dplyr::filter(Z == max(Z)) %>%
-    dplyr::ungroup() %>%
-    st_as_sf(coords = c("X", "Y"),
-             crs = proj4string(current_chm)) %>%
-    rename(height = Z) %>%
-    st_set_agr("constant") %>%
-    st_intersection(y = current_plot_boundary)
+    st_li2012(plot_boundary = current_plot_boundary, dt1 = 1.0, dt2 = 2, R = 0, Zu = 20, hmin = min_height, speed_up = 10)
   
   ttops_li2012_dt1_1.0_dt2_1.5_zu_25_R_0_speedUp_10 <-
     current_las_normalized %>% 
-    lidR::lastrees(algorithm = li2012(dt1 = 1.0, dt2 = 1.5, R = 0, Zu = 25, hmin = min_height, speed_up = 10))
-  
-  # crowns_li2012_dt1_1.0_dt2_1.5_zu_25_R_0_speedUp_10 <-
-  #   current_las_normalized %>%
-  #   as.spatial() %>%
-  #   st_as_sf(coords = c("X", "Y"),
-  #            crs = proj4string(current_chm)) %>%
-  #   mutate(treeID = 1:nrow(.)) %>%
-  #   rename(height = Z) %>%
-  #   st_intersection(y = current_plot_boundary)
-  
-  ttops_li2012_dt1_1.0_dt2_1.5_zu_25_R_0_speedUp_10 <-
-    ttops_li2012_dt1_1.0_dt2_1.5_zu_25_R_0_speedUp_10@data %>%
-    dplyr::group_by(treeID) %>%
-    dplyr::filter(Z == max(Z)) %>%
-    dplyr::ungroup() %>%
-    st_as_sf(coords = c("X", "Y"),
-             crs = proj4string(current_chm)) %>%
-    rename(height = Z) %>%
-    st_set_agr("constant") %>%
-    st_intersection(y = current_plot_boundary)
-
+    st_li2012(plot_boundary = current_plot_boundary, dt1 = 1.0, dt2 = 1.5, R = 0, Zu = 25, hmin = min_height, speed_up = 10)
   
   ttops_li2012_dt1_1.0_dt2_1.5_zu_20_R_0_speedUp_10 <-
     current_las_normalized %>% 
-    lidR::lastrees(algorithm = li2012(dt1 = 1.0, dt2 = 1.5, R = 0, Zu = 20, hmin = min_height, speed_up = 10))
-  
-  # crowns_li2012_dt1_1.0_dt2_1.5_zu_20_R_0_speedUp_10 <-
-  #   current_las_normalized %>%
-  #   as.spatial() %>%
-  #   st_as_sf(coords = c("X", "Y"),
-  #            crs = proj4string(current_chm)) %>%
-  #   mutate(treeID = 1:nrow(.)) %>%
-  #   rename(height = Z) %>%
-  #   st_intersection(y = current_plot_boundary)
-
-  ttops_li2012_dt1_1.0_dt2_1.5_zu_20_R_0_speedUp_10 <-
-    ttops_li2012_dt1_1.0_dt2_1.5_zu_20_R_0_speedUp_10@data %>%
-    dplyr::group_by(treeID) %>%
-    dplyr::filter(Z == max(Z)) %>%
-    dplyr::ungroup() %>%
-    st_as_sf(coords = c("X", "Y"),
-             crs = proj4string(current_chm)) %>%
-    rename(height = Z) %>%
-    st_set_agr("constant") %>%
-    st_intersection(y = current_plot_boundary)
+    st_li2012(plot_boundary = current_plot_boundary, dt1 = 1.0, dt2 = 1.5, R = 0, Zu = 20, hmin = min_height, speed_up = 10) 
   
   ttops_li2012_dt1_1.0_dt2_1.4_zu_20_R_0_speedUp_10 <-
     current_las_normalized %>% 
-    lidR::lastrees(algorithm = li2012(dt1 = 1.0, dt2 = 1.4, R = 0, Zu = 20, hmin = min_height, speed_up = 10))
-  
-  # crowns_li2012_dt1_1.0_dt2_1.4_zu_20_R_0_speedUp_10 <-
-  #   current_las_normalized %>%
-  #   as.spatial() %>%
-  #   st_as_sf(coords = c("X", "Y"),
-  #            crs = proj4string(current_chm)) %>%
-  #   mutate(treeID = 1:nrow(.)) %>%
-  #   rename(height = Z) %>%
-  #   st_intersection(y = current_plot_boundary)
-
-  ttops_li2012_dt1_1.0_dt2_1.4_zu_20_R_0_speedUp_10 <-
-    ttops_li2012_dt1_1.0_dt2_1.4_zu_20_R_0_speedUp_10@data %>%
-    dplyr::group_by(treeID) %>%
-    dplyr::filter(Z == max(Z)) %>%
-    dplyr::ungroup() %>%
-    st_as_sf(coords = c("X", "Y"),
-             crs = proj4string(current_chm)) %>%
-    rename(height = Z) %>%
-    st_set_agr("constant") %>%
-    st_intersection(y = current_plot_boundary)
+    st_li2012(plot_boundary = current_plot_boundary, dt1 = 1.0, dt2 = 1.4, R = 0, Zu = 20, hmin = min_height, speed_up = 10)
   
   ttops_li2012_dt1_1.0_dt2_1.4_zu_25_R_0_speedUp_10 <-
     current_las_normalized %>% 
-    lidR::lastrees(algorithm = li2012(dt1 = 1.0, dt2 = 1.4, R = 0, Zu = 25, hmin = min_height, speed_up = 10))
-  
-  # crowns_li2012_dt1_1.0_dt2_1.4_zu_25_R_0_speedUp_10 <-
-  #   current_las_normalized %>%
-  #   as.spatial() %>%
-  #   st_as_sf(coords = c("X", "Y"),
-  #            crs = proj4string(current_chm)) %>%
-  #   mutate(treeID = 1:nrow(.)) %>%
-  #   rename(height = Z) %>%
-  #   st_intersection(y = current_plot_boundary)
-  
-  ttops_li2012_dt1_1.0_dt2_1.4_zu_25_R_0_speedUp_10 <-
-    ttops_li2012_dt1_1.0_dt2_1.4_zu_25_R_0_speedUp_10@data %>%
-    dplyr::group_by(treeID) %>%
-    dplyr::filter(Z == max(Z)) %>%
-    dplyr::ungroup() %>%
-    st_as_sf(coords = c("X", "Y"),
-             crs = proj4string(current_chm)) %>%
-    rename(height = Z) %>%
-    st_set_agr("constant") %>%
-    st_intersection(y = current_plot_boundary)
-  
+    st_li2012(plot_boundary = current_plot_boundary, dt1 = 1.0, dt2 = 1.4, R = 0, Zu = 25, hmin = min_height, speed_up = 10)
   
   ttops_li2012_dt1_1.0_dt2_1.3_zu_20_R_0_speedUp_10 <-
     current_las_normalized %>% 
-    lidR::lastrees(algorithm = li2012(dt1 = 1.0, dt2 = 1.3, R = 0, Zu = 20, hmin = min_height, speed_up = 10))
-  
-  # crowns_li2012_dt1_1.0_dt2_1.3_zu_20_R_0_speedUp_10 <-
-  #   current_las_normalized %>%
-  #   as.spatial() %>%
-  #   st_as_sf(coords = c("X", "Y"),
-  #            crs = proj4string(current_chm)) %>%
-  #   mutate(treeID = 1:nrow(.)) %>%
-  #   rename(height = Z) %>%
-  #   st_intersection(y = current_plot_boundary)
-  
-  ttops_li2012_dt1_1.0_dt2_1.3_zu_20_R_0_speedUp_10 <-
-    ttops_li2012_dt1_1.0_dt2_1.3_zu_20_R_0_speedUp_10@data %>%
-    dplyr::group_by(treeID) %>%
-    dplyr::filter(Z == max(Z)) %>%
-    dplyr::ungroup() %>%
-    st_as_sf(coords = c("X", "Y"),
-             crs = proj4string(current_chm)) %>%
-    rename(height = Z) %>%
-    st_set_agr("constant") %>%
-    st_intersection(y = current_plot_boundary)
+    st_li2012(plot_boundary = current_plot_boundary, dt1 = 1.0, dt2 = 1.3, R = 0, Zu = 20, hmin = min_height, speed_up = 10)
   
   ttops_li2012_dt1_1.0_dt2_1.0_zu_20_R_0_speedUp_10 <-
     current_las_normalized %>% 
-    lidR::lastrees(algorithm = li2012(dt1 = 1.0, dt2 = 1.0, R = 0, Zu = 20, hmin = min_height, speed_up = 10))
-  
-  # crowns_li2012_dt1_1.0_dt2_1.0_zu_20_R_0_speedUp_10 <-
-  #   current_las_normalized %>%
-  #   as.spatial() %>%
-  #   st_as_sf(coords = c("X", "Y"),
-  #            crs = proj4string(current_chm)) %>%
-  #   mutate(treeID = 1:nrow(.)) %>%
-  #   rename(height = Z) %>%
-  #   st_intersection(y = current_plot_boundary)
-
-  ttops_li2012_dt1_1.0_dt2_1.0_zu_20_R_0_speedUp_10 <-
-    ttops_li2012_dt1_1.0_dt2_1.0_zu_20_R_0_speedUp_10@data %>%
-    dplyr::group_by(treeID) %>%
-    dplyr::filter(Z == max(Z)) %>%
-    dplyr::ungroup() %>%
-    st_as_sf(coords = c("X", "Y"),
-             crs = proj4string(current_chm)) %>%
-    rename(height = Z) %>%
-    st_set_agr("constant") %>%
-    st_intersection(y = current_plot_boundary)
+    st_li2012(plot_boundary = current_plot_boundary, dt1 = 1.0, dt2 = 1.0, R = 0, Zu = 20, hmin = min_height, speed_up = 10)
   
   ttops_li2012_dt1_1.0_dt2_1.3_zu_20_R_0_speedUp_20 <-
     current_las_normalized %>% 
-    lidR::lastrees(algorithm = li2012(dt1 = 1.0, dt2 = 1.3, R = 0, Zu = 20, hmin = min_height, speed_up = 20))
-  
-  # crowns_li2012_dt1_1.0_dt2_1.3_zu_20_R_0_speedUp_20 <-
-  #   current_las_normalized %>%
-  #   as.spatial() %>%
-  #   st_as_sf(coords = c("X", "Y"),
-  #            crs = proj4string(current_chm)) %>%
-  #   mutate(treeID = 1:nrow(.)) %>%
-  #   rename(height = Z) %>%
-  #   st_intersection(y = current_plot_boundary)
+    st_li2012(plot_boundary = current_plot_boundary, dt1 = 1.0, dt2 = 1.3, R = 0, Zu = 20, hmin = min_height, speed_up = 20)
   
   
-  ttops_li2012_dt1_1.0_dt2_1.3_zu_20_R_0_speedUp_20 <-
-    ttops_li2012_dt1_1.0_dt2_1.3_zu_20_R_0_speedUp_20@data %>%
-    dplyr::group_by(treeID) %>%
-    dplyr::filter(Z == max(Z)) %>%
-    dplyr::ungroup() %>%
-    st_as_sf(coords = c("X", "Y"),
-             crs = proj4string(current_chm)) %>%
-    rename(height = Z) %>%
-    st_set_agr("constant") %>%
-    st_intersection(y = current_plot_boundary)
   
-  # Method 12
+  # watershed treetop detection ---------------------------------------------
+  
+  
   # th_tree: Threshold below which a pixel cannot be a tree
-  # tolerance: The minimum height of the object in the units of image intensity between its highest point (seed) and the point where it contacts another object (checked for every contact pixel). If the height is smaller than the tolerance, the object will be combined with one of its neighbors, which is the highest. Tolerance should be chosen according to the range of x. Default value is 1, which is a reasonable value if x comes from distmap.
-  # ext: Radius of the neighborhood in pixels for the detection of neighboring objects. Higher value smoothes out small objects.
-
-  ttops_watershed_tol_3_ext_0.5 <-
-    current_las_normalized %>% 
-    lidR::lastrees(algorithm = watershed(chm = current_chm, th_tree = min_height, tol = 3, ext = 0.5 * round((1 / res(current_chm)[1]))))
+  # tolerance: The minimum height of the object in the units of image intensity between 
+  # its highest point (seed) and the point where it contacts another object (checked for 
+  # every contact pixel). If the height is smaller than the tolerance, the object will 
+  # be combined with one of its neighbors, which is the highest. Tolerance should be 
+  # chosen according to the range of x. Default value is 1, which is a reasonable value 
+  # if x comes from distmap.
+  # ext: Radius of the neighborhood in pixels for the detection of neighboring objects. 
+  # Higher value smoothes out small objects.
   
   ttops_watershed_tol_3_ext_0.5 <-
-    ttops_watershed_tol_3_ext_0.5@data %>%
-    dplyr::group_by(treeID) %>%
-    dplyr::filter(Z == max(Z)) %>%
-    dplyr::ungroup() %>%
-    st_as_sf(coords = c("X", "Y"),
-             crs = proj4string(current_chm)) %>%
-    rename(height = Z) %>%
-    st_set_agr("constant") %>%
-    st_intersection(y = current_plot_boundary)
+    current_las_normalized %>% 
+    st_watershed(plot_boundary = current_plot_boundary, chm = current_chm, th_tree = 3, tol = 3, ext = 0.5 * round((1 / res(current_chm)[1])))
   
   
   ttops_watershed_tol_1_ext_0.5 <-
     current_las_normalized %>% 
-    lidR::lastrees(algorithm = watershed(chm = current_chm, th_tree = min_height, tol = 1, ext = 0.5 * round((1 / res(current_chm)[1]))))
-  
-  ttops_watershed_tol_1_ext_0.5 <-
-    ttops_watershed_tol_1_ext_0.5@data %>% 
-    dplyr::group_by(treeID) %>%
-    dplyr::filter(Z == max(Z)) %>%
-    dplyr::ungroup() %>%
-    st_as_sf(coords = c("X", "Y"),
-             crs = proj4string(current_chm)) %>%
-    rename(height = Z) %>%
-    st_set_agr("constant") %>%
-    st_intersection(y = current_plot_boundary)
+    st_watershed(plot_boundary = current_plot_boundary, chm = current_chm, th_tree = 3, tol = 1, ext = 0.5 * round((1 / res(current_chm)[1])))
   
   
   ttops_watershed_tol_1_ext_1.0 <-
     current_las_normalized %>% 
-    lidR::lastrees(algorithm = watershed(chm = current_chm, th_tree = min_height, tol = 1, ext = 1 * round((1 / res(current_chm)[1]))))
+    st_watershed(plot_boundary = current_plot_boundary, chm = current_chm, th_tree = 3, tol = 1, ext = 1 * round((1 / res(current_chm)[1])))
   
-  ttops_watershed_tol_1_ext_1.0 <-
-    ttops_watershed_tol_1_ext_1.0@data %>% 
-    dplyr::group_by(treeID) %>%
-    dplyr::filter(Z == max(Z)) %>%
-    dplyr::ungroup() %>%
-    st_as_sf(coords = c("X", "Y"),
-             crs = proj4string(current_chm)) %>%
-    rename(height = Z) %>%
-    st_set_agr("constant") %>%
-    st_intersection(y = current_plot_boundary)
-    
+  
   
   ## lidRplugins experimental tree detection
   
+  # ptree treetop detection -------------------------------------------------
+  
   # ptrees
   # importantly, we have to use the non-normalized point cloud for this algorithm
-  k <- c(30, 15)
-  hmin <- 2
-  nmax <- 7
   
   ttops_ptrees_hmin_2_k_30_15_nmax_7 <-
     current_las %>%
-    lidR::lastrees(algorithm = ptrees(k = k, hmin = hmin, nmax = nmax))
-    
-  ttops_ptrees_hmin_2_k_30_15_nmax_7 <-
-    ttops_ptrees_hmin_2_k_30_15_nmax_7@data %>% 
-    dplyr::group_by(treeID) %>%
-    dplyr::filter(Z == max(Z)) %>%
-    dplyr::ungroup() %>%
-    st_as_sf(coords = c("X", "Y"),
-             crs = proj4string(current_chm)) %>%
-    rename(height = Z) %>%
-    st_set_agr("constant") %>%
-    st_intersection(y = current_plot_boundary)
+    st_ptree(plot_boundary = current_plot_boundary, k = c(30, 15), hmin = min_height, nmax = 7)
   
-  # multichm
   
+  # multichm treetop detection ----------------------------------------------
+  # Eysn, L., Hollaus, M., Lindberg, E., Berger, F., Monnet, J. M., Dalponte, M., … Pfeifer, N. (2015). A benchmark of lidar-based single tree detection methods using heterogeneous forest data from the Alpine Space. Forests, 6(5), 1721–1747. https://doi.org/10.3390/f6051721
+  
+  ttops_multichm_res_1.0_thickness_0.5_dist_2d_3.0_dist_3d_5_usemax_FALSE_ws_5 <-
+    current_las_normalized %>% 
+    st_multichm(plot_boundary = current_plot_boundary, res = 1.0, layer_thickness = 0.5, dist_2d = 3.0, dist_3d = 5.0, use_max = FALSE, ws = 5)
+  
+  
+  # lmfx treetop detection --------------------------------------------------
   # lmfx
+  
+
+  ttops_lmfx_dist_2d_3.0_ws_3.0 <- 
+    current_las_normalized %>% 
+    st_lmfx(plot_boundary = current_plot_boundary, hmin = min_height, dist_2d = 3.0, ws = 3.0)
+  
+  # combine treetop detection algorithm outputs -----------------------------
   
   
   # All the different ttops
-
+  
   ttops <-
     list(
       vwf_default = ttops_vwf_default,
@@ -785,42 +707,91 @@ ttops_summary <- foreach(i = seq_along(all_validation_plots), .combine = rbind) 
       li2012_dt1_1.0_dt2_1.3_zu_20_R_0_speedUp_20 = ttops_li2012_dt1_1.0_dt2_1.3_zu_20_R_0_speedUp_20,
       watershed_tol_3_ext_0.5 = ttops_watershed_tol_3_ext_0.5,
       watershed_tol_1_ext_0.5 = ttops_watershed_tol_1_ext_0.5,
-      watershed_tol_1_ext_1.0 = ttops_watershed_tol_1_ext_1.0)
-
-  ttops <-
+      watershed_tol_1_ext_1.0 = ttops_watershed_tol_1_ext_1.0,
+      ptrees_hmin_2_k_30_15_nmax_7 = ttops_ptrees_hmin_2_k_30_15_nmax_7,
+      multichm_res_1.0_thickness_0.5_dist_2d_3.0_dist_3d_5_usemax_FALSE_ws_5 = ttops_multichm_res_1.0_thickness_0.5_dist_2d_3.0_dist_3d_5_usemax_FALSE_ws_5,
+      lmfx_dist_2d_3.0_ws_3.0 = ttops_lmfx_dist_2d_3.0_ws_3.0)
+  
+  
+  # Combine all of the sf objects from the different treetop detection algorithms
+  # into a single sf object
+  # Also add a column that says which algorithm detected the tree
+  # Further, calculate the nearest neighbor distance between the
+  # three nearest neighbors for each tree
+  ttops_sf <-
     lapply(seq_along(ttops), FUN = function(j) {
-      ttops[[j]] <-
-        ttops[[j]] %>%
-        dplyr::select(height, geometry)
-   
-      if (nrow(ttops[[j]]) == 0) {
-        ttops[[j]] <- 
-          st_sf(height = NA, geometry = st_sfc(st_multipoint()), crs = st_crs(ttops[[j]]))}
-      
-      ttops[[j]] <-
-        ttops[[j]] %>% 
-        dplyr::mutate(ttop_method = names(ttops[j]))
 
-      if(nrow(ttops[[j]]) > 0) {
-        nn <- st_nn(ttops[[j]], ttops[[j]], k = min(c(4, nrow(ttops[[j]]))), returnDist = TRUE, sparse = FALSE, progress = FALSE)$dist %>% 
+      # Each list element in the ttops list is itself a list of two or three pieces:
+      # the sf object with the location and height of each tree segmented
+      # the elapsed time that the algorithm took to complete
+      # potentially the returned las point cloud if the tree detection algorithm
+      # returns that as well
+      
+      # which of those 2-3 list element in the current ttop list is the sf object?
+      ttops_sf_idx <- which(names(ttops[[j]]) == "ttops_sf")
+
+      # just select the height and geometry columns of the sf object
+      ttops[[j]][[ttops_sf_idx]] <-
+        ttops[[j]][[ttops_sf_idx]] %>%
+        dplyr::select(height, geometry)
+      
+      # If no trees were segmented, create an "empty" sf object so that the rest of
+      # the objects will bind together nicely since they'll have the same column names, etc.
+      if (nrow(ttops[[j]][[ttops_sf_idx]]) == 0) {
+        ttops[[j]][[ttops_sf_idx]] <- 
+          st_sf(height = NA, geometry = st_sfc(st_multipoint()), crs = st_crs(ttops[[j]][[ttops_sf_idx]]))}
+      
+      # Add the treetop detection algorithm name to the data frame row
+      ttops[[j]][[ttops_sf_idx]] <-
+        ttops[[j]][[ttops_sf_idx]] %>% 
+        dplyr::mutate(ttop_method = names(ttops[j]))
+      
+      # If there are any trees in the sf object, get the nearest neighbor distance between each tree
+      # and its three nearest neighbors
+      if(nrow(ttops[[j]][[ttops_sf_idx]]) > 0) {
+        nn <- st_nn(ttops[[j]][[ttops_sf_idx]], ttops[[j]][[ttops_sf_idx]], k = min(c(4, nrow(ttops[[j]][[ttops_sf_idx]]))), returnDist = TRUE, sparse = FALSE, progress = FALSE)$dist %>% 
           as.data.frame() } else {nn <- data.frame()}
       
+      # remove nuisance column
       nn <- nn %>% dplyr::select(-1)
       
+      # build up a nearest neighbors dataframe, but ensure that the data frame will always have 
+      # three columns (even if there are not enough trees segmented to result in 3
+      # nearest neighbor distances for each tree). If there aren't enough trees, fill the
+      # first, first and second, or first, second and third columns of this data frame with NA
       if (ncol(nn) == 0) {nn <- nn %>% mutate(nn1 = NA, nn2 = NA, nn3 = NA)} else
-      if (ncol(nn) == 1) {nn <- nn %>% rename(nn1 = V2) %>% mutate(nn2 = NA, nn3 = NA)} else
-      if (ncol(nn) == 2) {nn <- nn %>% rename(nn1 = V2, nn2 = V3) %>% mutate(nn3 = NA)} else
-      if (ncol(nn) == 3) {nn <- nn %>% rename(nn1 = V2, nn2 = V3, nn3 = V4) }
-
-      ttops[[j]] <-
-        ttops[[j]] %>%
+        if (ncol(nn) == 1) {nn <- nn %>% rename(nn1 = V2) %>% mutate(nn2 = NA, nn3 = NA)} else
+          if (ncol(nn) == 2) {nn <- nn %>% rename(nn1 = V2, nn2 = V3) %>% mutate(nn3 = NA)} else
+            if (ncol(nn) == 3) {nn <- nn %>% rename(nn1 = V2, nn2 = V3, nn3 = V4) }
+      
+      # bind the nearest neighbor dataframe we just created with the sf object
+      ttops[[j]][[ttops_sf_idx]] <-
+        ttops[[j]][[ttops_sf_idx]] %>%
         bind_cols(nn)
       
-      if (nrow(ttops[[j]]) > 0) {ttops[[j]] <- ttops[[j]] %>% st_transform(4326)} else {ttops[[j]] <- suppressWarnings(ttops[[j]] %>% st_set_crs(4326))}
+      # transform the crs to epsg4326 to make it compatible across all segmented sf objects
+      # if the sf object is empty, set its crs to 4326
+      if (nrow(ttops[[j]][[ttops_sf_idx]]) > 0) {
+        ttops[[j]][[ttops_sf_idx]] <- 
+          ttops[[j]][[ttops_sf_idx]] %>% 
+          st_transform(4326)} else 
+            {ttops[[j]][[ttops_sf_idx]] <- suppressWarnings(ttops[[j]][[ttops_sf_idx]] %>% st_set_crs(4326))}
       
     }) %>%
-    do.call("rbind", .)
+    do.call("rbind", .) # bind the rows for all the sf objects resulting from different segmentation algorithms together
 
+  # Get the time elapsed for each method-- this might help break any close calls
+  # with respect to which algorithm best captured the data collected on the
+  # ground
+  ttops_time <-
+    lapply(seq_along(ttops), FUN = function(k) {
+      ttops_time_idx <- which(names(ttops[[k]]) == "ttops_time")
+      ttops_time <- ttops[[k]][[ttops_time_idx]]
+      
+      data_frame(ttops_method = names(ttops[k]), elapsed_time = ttops_time)
+    }) %>% do.call("rbind", .)
+  
+  
   current_plot_ttops_summary <-
     ttops %>%
     dplyr::group_by(ttop_method) %>%
@@ -843,10 +814,10 @@ ttops_summary <- foreach(i = seq_along(all_validation_plots), .combine = rbind) 
     as.data.frame() %>%
     dplyr::select(-geometry) %>%
     dplyr::select(plot, everything())
-
+  
   
   rbind(ground_tree_summary %>% filter(plot == current_plot), current_plot_ttops_summary)
-
+  
   # cat(paste0("...", all_validation_plots[i], " (", i, " of ", length(all_validation_plots), ") complete.\n"))
   # 
   # # Crown Segmentation as a 2nd step
