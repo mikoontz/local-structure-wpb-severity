@@ -37,6 +37,12 @@ source(here::here("data/data_carpentry/segmentation-helper-functions.R"))
 # Establish a method for detecting tree tops and segmenting crowns
 # Work through all of the remotely-visible plots at each site (144 in total) applying the ttops and crown segmentation approach
 
+# These sites had X3 and RedEdge photos merged into the same project, so we look in a different place for some of the relevant
+# files.
+merged_sites <- c("eldo_3k_2",
+                  "eldo_3k_3",
+                  "eldo_4k_2")
+
 # This is where I can put in sites that need their processing redone. An empty 
 # string means that no already-processed site output will be overwritten
 # (but sites that have yet to be processed will still have their processing done)
@@ -297,10 +303,10 @@ ttops_summary <-
 
     li2012_list <-
     li2012_params %>%
-    pmap(.f = function(dt1, dt2, R, Zu, hmin, speed_up, ...) {
+    pmap(.f = function(dt1, dt2, R, Zu, speed_up, ...) {
 
       current_las_normalized %>%
-      st_li2012(plot_boundary = current_plot_boundary, dt1 = dt1, dt2 = dt2, R = R, Zu = Zu, hmin = hmin, speed_up = speed_up)
+      st_li2012(plot_boundary = current_plot_boundary, dt1 = dt1, dt2 = dt2, R = R, Zu = Zu, hmin = min_height, speed_up = speed_up)
 
     })
 

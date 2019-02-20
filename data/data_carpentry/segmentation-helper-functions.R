@@ -59,7 +59,7 @@ st_li2012 <- function(las, plot_boundary = NULL, dt1, dt2, R, Zu, hmin, speed_up
   start <- Sys.time()
   ttops_las <- 
     las %>% 
-    lidR::lastrees(algorithm = li2012(dt1 = dt1, dt2 = dt2, R = R, Zu = Zu, hmin = min_height, speed_up = speed_up))
+    lidR::lastrees(algorithm = li2012(dt1 = dt1, dt2 = dt2, R = R, Zu = Zu, hmin = hmin, speed_up = speed_up))
   
   ttops_sf <-
     ttops_las %>% 
