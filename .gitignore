@@ -1,4 +1,5 @@
 data/features/srtm_30m.tif
+data/features/cwd1981_2010_ave_HST_1550861123/*
 data/data_output/*/*/1_initial/*
 data/data_output/*/*/2_densification/*
 data/data_output/*/*/3_dsm_ortho/*
