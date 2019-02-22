@@ -566,18 +566,20 @@ glimpse(ttops_summary)
 if (!file.exists("data/data_output/ttops-summary.csv")) {
   write_csv(ttops_summary, path = "data/data_output/ttops-summary.csv")
 }
-# ttops_summary_from_file <- read_csv("data/data_output/ttops-summary.csv")
-# 
-# ttops_summary_to_save <-
-#   ttops_summary %>%
-#   filter(!(ttops_method %in% ttops_summary_from_file$ttops_method)) %>% 
-#   rbind(ttops_summary_from_file)
+
+ttops_summary_from_file <- read_csv("data/data_output/ttops-summary.csv")
+
+ttops_summary_to_save <-
+  ttops_summary %>%
+  filter(!(ttops_method %in% ttops_summary_from_file$ttops_method)) %>%
+  rbind(ttops_summary_from_file) %>% 
+  dplyr::mutate(elapsed_time = as.numeric(elapsed_time))
 
 # Overwrite the originally saved data with the data.frame representing the old data plus the new data
-# write_csv(ttops_summary_to_save, path = "data/data_output/ttops-summary.csv")
+write_csv(ttops_summary_to_save, path = "data/data_output/ttops-summary.csv")
 
 # ttops_summary <- ttops_summary_from_file
-# ttops_summary <- ttops_summary_to_save
+ttops_summary <- ttops_summary_to_save
 
 ground <- ttops_summary %>% filter(ttops_method == "ground") %>% dplyr::select(-live_tree_count, -dead_tree_count, -total_density_tph, -live_density_tph, -dead_density_tph, -live_proportion)
 air <- ttops_summary %>% filter(ttops_method != "ground") %>% dplyr::select(-live_tree_count, -dead_tree_count, -total_density_tph, -live_density_tph, -dead_density_tph, -live_proportion)
@@ -596,34 +598,33 @@ air_ground
 #   summarize(n = n()) %>% 
 #   as.data.frame()
 
-ggplot(air_ground, aes(x = ground_value, y = diff)) +
-  geom_point() +
-  geom_smooth(aes(col = ttops_method)) +
-  facet_wrap(~forest_metric, scales = "free") +
-  scale_color_viridis_d()
+# ggplot(air_ground, aes(x = ground_value, y = diff)) +
+#   geom_point() +
+#   geom_smooth(aes(col = ttops_method)) +
+#   facet_wrap(~forest_metric, scales = "free") +
+#   scale_color_viridis_d()
+
+elapsed_time <-
+  air_ground %>% 
+  dplyr::filter(forest_metric == "elapsed_time") %>% 
+  group_by(ttops_method) %>% 
+  summarize(mean_time = mean(air_value)) %>% 
+  dplyr::rename(mean_algorithm_time_s = mean_time)
 
 air_ground_summary <-
   air_ground %>%
+  dplyr::filter(forest_metric != "elapsed_time") %>% 
   group_by(ttops_method, forest_metric) %>% 
-  summarize(ground_correlation = cor(air_value, ground_value),
+  summarize(ground_correlation = cor(air_value, ground_value, use = "na.or.complete"),
+            complete_cases = length(which(!is.na(air_value))),
             rmse = sqrt(mean((air_value - ground_value)^2, na.rm = TRUE)),
             me = mean(air_value - ground_value),
             med_error = median(air_value - ground_value),
             min = min(air_value - ground_value, na.rm = TRUE),
             max = max(air_value - ground_value, na.rm = TRUE)) %>% 
-  as.data.frame()
+  dplyr::left_join(elapsed_time)
 
-air_ground %>% 
-  dplyr::filter(forest_metric == "elapsed_time") %>% 
-  group_by(ttops_method) %>% 
-  summarize(mean_time = mean(air_value)) %>% 
-  dplyr::arrange(mean_time)
 
-air_ground %>% 
-  dplyr::filter(forest_metric == "elapsed_time") %>% 
-  group_by(ttops_method) %>% 
-  summarize(mean_time = mean(air_value)) %>% 
-  dplyr::arrange(desc(mean_time))
 
 air_ground_summary %>% filter(forest_metric == "total_tree_count") %>% arrange(desc(ground_correlation))
 air_ground_summary %>% filter(forest_metric == "total_tree_count") %>% arrange(rmse)
