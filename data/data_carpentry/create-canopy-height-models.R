@@ -98,7 +98,7 @@ for (i in seq_along(sites_to_process)) {
   
   # Export the classified point cloud to disk so we can use the vegetation points for tree segmentation if
   # we want
-  lidR::writeLAS(las = current_point_cloud, file = here::here(paste0("data/data_output/site_data/", current_site, "/", current_site, "_classified_point_cloud.las")))
+  lidR::writeLAS(las = current_point_cloud, file = here::here(paste0("data/data_output/site_data/", current_site, "/", current_site, "_classified-point-cloud.las")))
   
   
   # Create a 1m resolution digital terrain model using the classified ground points
