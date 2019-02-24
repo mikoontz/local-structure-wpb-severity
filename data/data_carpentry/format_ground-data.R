@@ -6,7 +6,7 @@ library(sf)
 library(lme4)
 
 d <- 
-  readr::read_csv("data/ground-data.csv") %>% 
+  readr::read_csv("data/data_raw/ground-data.csv") %>% 
   dplyr::rename(leif_name = `Plot #`,
          forest = Forest,
          elev = `Elev. Band`,
