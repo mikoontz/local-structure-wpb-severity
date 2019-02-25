@@ -1,189 +1,177 @@
-# Load parallelization packages
-library(foreach)
-library(doParallel)
+library(sf)
 library(tidyverse)
+library(purrr)
+library(lidR)
+library(viridis)
+library(raster)
+library(ForestTools)
+library(gstat)
+library(nngeo)
+# devtools::install_github("Jean-Romain/lidRplugins")
+library(lidRplugins)
+library(furrr)
+library(stars)
+library(tictoc)
+library(here)
+library(units)
 
-# character vector of all study sites
-all_sites <- list.files("data/data_output/site_data")
+source(here::here("data/data_carpentry/segmentation-helper-functions.R"))
+source(here::here("data/data_carpentry/make_processing-checklist.R"))
 
-sites_checklist <- 
-  expand.grid(
-    c("eldo", "stan", "sier", "sequ"), 
-    c("3k", "4k", "5k", "6k"), 
-    1:3) %>% 
-  as.data.frame() %>% 
-  setNames(c("forest", "elev", "rep")) %>% 
-  dplyr::filter(!(forest == "sequ" & elev == "3k")) %>%
-  dplyr::filter(!(forest != "sequ" & elev == "6k")) %>% 
-  dplyr::arrange(forest, elev, rep) %>% 
-  dplyr::mutate(site = paste(forest, elev, rep, sep = "_")) %>% 
-  dplyr::select(-forest, -elev, -rep) %>% 
-  dplyr::mutate(ttops_check = file.exists(paste0("data/data_output/site_data", site, "/", site, "_ttops/", site, "_ttops.shp"))) %>% 
-  dplyr::mutate(crowns_check = file.exists(paste0("data/data_output/site_data", site, "/", site, "_crowns/", site, "_crowns.shp")))
+sites_checklist
+# These sites had X3 and RedEdge photos merged into the same project, so we look in a different place for some of the relevant
+# files.
+merged_sites <- c("eldo_3k_2",
+                  "eldo_3k_3",
+                  "eldo_4k_2")
 
-sites_to_process <-
+
+unusable_sites <- c("eldo_4k_3", # too many blocks
+                    "stan_4k_3", # too many blocks
+                    "stan_5k_3", # too many blocks
+                    "sequ_4k_2") # middle section flown on a separate day and the stitch looks terrible
+
+# The merged versus the unmerged sites will have different numbers of bands
+# Because the merged sites will have the X3 imagery incorporated, there will
+# be an extra 3 bands for the ortho and the index outputs (the R, G, and B
+# from the X3 camera)
+# The R, G, and B bands from the X3 images will always be the final three bands
+# if they exist.
+# For the RedEdge-derived products, the bands go in the order of wavelength,
+# from shortest to longest (B, G, R, RE, NIR)
+# There is one Pix4D derived index (NDVI), which will go after the NIR band
+# for the index mosaic
+
+# This is where I can put in sites that need their processing redone. An empty 
+# string means that no already-processed site output will be overwritten
+# (but sites that have yet to be processed will still have their processing done)
+sites_to_overwrite <- ""
+sites_checklist$overwrite <- FALSE
+
+sites_checklist[sites_checklist$site %in% sites_to_overwrite, "overwrite"] <- TRUE
+
+sites_to_process <- 
   sites_checklist %>% 
-  dplyr::filter(!crowns_check & site %in% all_sites) %>% 
+  dplyr::filter(!(site %in% unusable_sites)) %>%
+  dplyr::filter(overwrite | !ttops_check | !crowns_check) %>% 
   dplyr::select(site) %>% 
   dplyr::pull()
 
-# I revisit this StackOverflow question and answer, like, everytime I want
-# to do anything in parallel to remind myself how
-# https://stackoverflow.com/questions/38318139/run-a-for-loop-in-parallel-in-r
+# Get an example for testing
+# current_site <- sites_to_process[1]
 
-cores <- detectCores() 
-cl <- makeCluster(min(c(cores - 2), 4)) #not to overload your computer
-registerDoParallel(cl)
+tic()
+# Set up the parallelization
+num_cores_to_use <- availableCores() - 2
+plan(multiprocess, workers = num_cores_to_use)
 
-print(Sys.time())
-foreach (i = seq_along(sites_to_process)) %dopar% {
-
-  # Load all packages within the foreach() construct for parallelization to work
-  library(raster)
-  library(sf)
-  library(tidyverse)
-  library(ForestTools)
-  
-  # get the character string representing the ith site
-  current_site <- sites_to_process[i]
-  
-  # convenience string to set file paths for input/output
-  current_dir <- paste0("data/data_output/site_data/", current_site, "/")
-  
-  # The Digital Terrain Model (dtm) is the 2m resolution "ground" underneath
-  # the current site. Created using CloudCompare and the Cloth Simulator Filter
-  dtm <- raster::raster(paste0(current_dir, current_site, "_2m-dtm.tif"))
-  
-  # The Digital Surface Model (dsm) is the ~5cm resolution raster representing
-  # the surface (ground + objects on top) that the drone flew over
-  dsm <- raster::raster(paste0(current_dir, "3_dsm_ortho/1_dsm/", current_site, "_x3_dsm.tif"))
-  
-  # Make sure the Coordinate Reference Systems (crs) are the same
-  raster::crs(dtm) <- raster::crs(dsm)
-
-  # The flight bounds is the polygon surrounding the images that the drone took. Determined
-  # in the "convert_flight-path-to-site-boundary.R script using the elevation model used
-  # during flight planning, the takeoff altitude, the ground altitude underneath each photo,
-  # and the altitude difference between each photo and the takeoff point. Essentially, we 
-  # crop all the products (e.g., the dsm, the dtm, the lidar point cloud) to just be 
-  # area within the flight path, rather than some of the spillover information beyond the
-  # area that the drone directly flew over.
-  # Could consider buffering this further (inward-- so using a negative buffer value) to 
-  # reduce edge effects
-  site_bounds <- 
-    sf::st_read(paste0(current_dir, current_site, "_mission-footprint/", current_site, "_site-bounds.geoJSON")) %>% 
-    sf::st_transform(sp::proj4string(dtm))
-  
-  # Cropping the dtm and dsm to the site bounds
-  site_dtm <- raster::crop(dtm, site_bounds)
-  site_dsm <- raster::crop(dsm, site_bounds)
-  
-  # Using bilinear interpolation to downsample the 2m resolution DTM to have the
-  # same resolution as the dsm (~5cm, but slightly different for each site)
-  dtm_resamp <- raster::resample(site_dtm, site_dsm, method = "bilinear")
-  
-  # The Canopy Height Model (chm) is the dsm (vegetation + ground) minus the dtm (ground)
-  # to give just the height of the vegetation.
-  chm <- site_dsm - dtm_resamp
-  
-  # Smooth out the chm and set any negative values to 0 (meaning "ground") following
-  # advice from Zagalikis, Cameron, and Miller (2004) and references therein
-  # More recently, a 3x3 pixel smoothing filter was specifically suggested as ideal
-  # for sUAS derived chm by Mohan et al. (2017)
-  chm_smooth <- raster::focal(chm, w = matrix(1, 3, 3), mean)
-  chm_smooth[raster::getValues(chm_smooth) < 0] <- 0
-
-  # Using ForestTools package written by Andrew Plowright and the chm
-  # (https://cran.r-project.org/web/packages/ForestTools/vignettes/treetopAnalysis.html)
-  # define a function that sets the variable window size for finding maxima
-  # This linear relationship is the one used in the vignette, which seems pretty appropriate for our
-  # forests too. Our maximum tree sizes are about 60 meters, which would mean the window size to search
-  # for a maximum height is 3.6 meters x 3.6 meters
-  # This is a point where the workflow could be dialed in to improve accuracy given the on-the-ground
-  # data we have.
-  
-  dynamicWindow <- function(x) {
-    meters_per_side <- x * 0.05 + 0.6
-    return(meters_per_side)
-  }
-  
-  if (!file.exists(paste0("data/data_output/site_data", 
-                          current_site, 
-                          "/", 
-                          current_site, 
-                          "_ttops/", 
-                          current_site, 
-                          "_ttops.shp"))) {
+crowns <-
+  sites_to_process %>% 
+  furrr::future_map(.f = function(current_site) {
+ 
+    current_dir <- paste0("data/data_output/site_data/", current_site, "/")
+ 
+    # The dtm is the terrain model for a particular site. We need it to normalize the objects returned from the
+    # ptrees algorithm, which acts on a non-normalized point cloud.
+    current_dtm <- raster::raster(here::here(paste0(current_dir, current_site, "_dtm.tif")))
+    
+    # The Canopy Height Model (chm) is the dsm (vegetation + ground) minus the dtm (ground)
+    # to give just the height of the vegetation.
+    current_chm_rough <- raster::raster(here::here(paste0(current_dir, current_site, "_chm.tif")))
+    
+    # The point cloud is directly used for some segmentation algorithms, so we import that too
+    current_las <- lidR::readLAS(paste0(current_dir, current_site, "_classified-point-cloud.las"))
+    current_las_normalized <- lidR::lasnormalize(las = current_las, algorithm = current_dtm, na.rm = TRUE)
+    
+    # Smooth out the chm and set any negative values to 0 (meaning "ground") following
+    # advice from Zagalikis, Cameron, and Miller (2004) and references therein
+    # More recently, a 3x3 pixel smoothing filter was specifically suggested as ideal
+    # for sUAS derived chm by Mohan et al. (2017)
+    # w <- focalWeight(x = chm, d = 0.5, type = "circle")
+    current_chm <- raster::focal(current_chm_rough, w = matrix(1/9, nrow = 3, ncol = 3))
+    # current_chm <- current_chm_rough
+    current_chm[raster::getValues(current_chm) < 0] <- 0
+    
+    # First step for many segmentation algorithms is to detect tree tops
+    # which can be done in a number of ways
+    
     # We only measured trees that were greater than 2.5 inches DBH and focused on ponderosa pine
     # which translated to a height of approximately 6 meters (Wonn and O'Hara, 2001) so we ignored
     # trees less than this height
+    # Empirically, over 99% of trees were greater than 3 meters in height... (1 - ecdf(ground_trees$height)(3) = 0.99001)
+    # ... and over 80% of trees measured in the ground plots were greater than 6 meters in height (1 - ecdf(ground_trees$height)(6) = 0.8085248)
+    # ... and over 90% of trees measured in the ground plots were greater than 4.5 meters in height (1 - ecdf(ground_trees$height)(4.5) = 0.9020979)
     # Uses the "variable window filter" algorithm by Popescu and Wynne (2004)
-    ttops <- try(ForestTools::vwf(CHM = chm_smooth, winFun = dynamicWindow, minHeight = 6, maxWinDiameter = NULL))
     
+    min_height <- 3
     
-    if (class(ttops) != "try-error") {
-      
-      # Convert ttops sp object to an sf object for easier writing
-      sf_ttops <- 
-        ttops %>% 
-        st_as_sf()
-      
-      # output the tree tops to a file; create a new directory to puth the .shp
-      # related files in it. This will preserve the CRS that the points came from
-      # originally
-      
-      if (!dir.exists(paste0(current_dir, current_site, "_ttops"))) {
-        dir.create(paste0(current_dir, current_site, "_ttops"))
-      }
-      
-      st_write(obj = sf_ttops, dsn = paste0(current_dir, current_site, "_ttops/", current_site, "_ttops.shp"))
-      
-    }
-  } else {
+    dist2d <- 1.5
+    ws <- 2.5
+    
+    max_crown_area <- pi * 10^2 %>% set_units(m^2)
+    
     ttops <-
-      try({
-        st_read(paste0(current_dir, current_site, "_ttops/", current_site, "_ttops.shp")) %>% 
-          as("Spatial")
-      })
-  }
-  # Do the segmentation constrained by the "known" tree top locations
-  # Called "Marker-controlled watershed segmentation" following Beucher & Meyer, 1993
-  
-  # Note this function masks all raster points lower than the "minHeight" variable, so it
-  # is a different kind of parameter than the minHeight parameter from the vwf() function
-  # Function returns a SpatialPolygonsDataFrame with tree attributes included
-  
-  # Uses the python version (in OSGeo4w64) of polygonize because the R version is bad.
-  # Andrew Plowright is brilliant. I spent days trying to get the gdal_polygonize.py script
-  # to work or trying to get the gdal.polygonize() method to work directly in python and
-  # could not make it happen for the life of me (tried command line, OSGeo4w64 shell, reticulate
-  # in R... nothing; finally got it to work in QGIS, but that would have been an unfortunate 
-  # pointing and clicking step...). So thank you, Andrew Plowright, because your implementation
-  # using the APpolygonize() function in the APfun package you wrote just *works*
-  
-  if (class(ttops) != "try-error") {
+      current_las_normalized %>%
+      st_lmfx(hmin = min_height, dist_2d = dist2d, ws = ws)
     
-    crowns <- 
-      try({
-        ForestTools::mcws(treetops = ttops, 
-                          CHM = chm_smooth, 
-                          minHeight = 3.5, 
-                          format = "polygons", 
-                          OSGeoPath = "C:\\OSGeo4W64") %>% 
-          st_as_sf()
-      })
+    ttops_sf <-
+      ttops$ttops_sf 
+
+    # Here, we may want to subset the tree tops to buffer inside from the edge of
+    # the outermost treetops that were detected. We would do the same thing for
+    # the crown segments.
+    # survey_area <- ttops_sf %>% st_combine() %>% st_convex_hull() %>% st_buffer(-25)
+    # ttops_sf <- ttops_sf %>% st_intersection(survey_area)
+    # 
+    max_crown_area <- pi * 10^2 %>% set_units(m^2)
     
-    if (all(class(crowns) != "try-error")) {
-      
-      # Write the crowns polygons to a file
-      if (!dir.exists(paste0(current_dir, current_site, "_crowns"))) {
-        dir.create(paste0(current_dir, current_site, "_crowns"))
-      }
-      st_write(obj = crowns, dsn = paste0(current_dir, current_site, "_crowns/", current_site, "_crowns.shp"))
+    # Write the ttops point geometries to a file
+    if (!dir.exists(here::here(paste0(current_dir, current_site, "_ttops")))) {
+      dir.create(here::here(paste0(current_dir, current_site, "_ttops")))
+    }
     
-  }
-  paste0("...", current_site, " completed.")
-}
-}
-print(Sys.time())
-stopCluster(cl)
+    st_write(obj = ttops_sf, dsn = here::here(paste0(current_dir, current_site, "_ttops/", current_site, "_ttops.shp")), delete_dsn = TRUE)
+    
+
+    non_spatial_ttops <-
+      ttops_sf %>%
+      dplyr::mutate(x = st_coordinates(.)[, 1],
+                    y = st_coordinates(.)[, 2]) %>%
+      sf::st_drop_geometry()
+  
+    crowns <-
+      ttops_sf %>%
+      as("Spatial") %>%
+      ForestTools::mcws(CHM = current_chm, minHeight = 1.5, format = "raster") %>%
+      setNames(nm = "treeID") %>%
+      st_as_stars() %>%
+      st_as_sf(merge = TRUE) %>%
+      dplyr::group_by(treeID) %>%
+      summarize() %>%
+      dplyr::left_join(st_drop_geometry(ttops_sf), by = "treeID") %>% 
+      # sf::st_intersection(survey_area) %>% # comment back in if we want to spatially subset crowns
+      dplyr::mutate(ch_area = st_area(st_convex_hull(.))) %>% 
+      dplyr::filter(ch_area < max_crown_area)
+
+    points_to_crowns <-
+      non_spatial_ttops %>%
+      dplyr::anti_join(crowns, by = "treeID") %>%
+      st_as_sf(coords = c("x", "y"), crs = st_crs(ttops_sf)) %>%
+      st_buffer(dist = 0.5) %>% 
+      dplyr::mutate(ch_area = st_area(st_convex_hull(.)))
+
+    crowns <-
+      crowns %>%
+      rbind(points_to_crowns)
+
+    # Write the crowns polygons to a file
+    if (!dir.exists(here::here(paste0(current_dir, current_site, "_crowns")))) {
+      dir.create(here::here(paste0(current_dir, current_site, "_crowns")))
+    }
+    
+    st_write(obj = crowns, dsn = here::here(paste0(current_dir, current_site, "_crowns/", current_site, "_crowns.shp")), delete_dsn = TRUE)
+    
+    return(list(ttops = ttops_sf, crowns = crowns))
+    
+  }) # end unnamed, mapped function; end map
+toc()
