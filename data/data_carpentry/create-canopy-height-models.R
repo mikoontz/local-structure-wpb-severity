@@ -7,7 +7,7 @@ library(purrr)
 library(raster)
 library(rgl)
 
-source("data/data_carpentry/make_processing-checklist.R")
+source("data/data_carpentry/make-processing-checklist.R")
 
 sites_checklist
 
