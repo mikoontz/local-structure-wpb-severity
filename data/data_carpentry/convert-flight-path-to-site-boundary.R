@@ -13,7 +13,7 @@ library(tidyverse)
 library(purrr)
 library(raster)
 
-source("data/data_carpentry/make_processing-checklist.R")
+source("data/data_carpentry/make-processing-checklist.R")
 
 # overwrite variable if user wants to rewrite all exported geospatial files (dem of each site, bounding box around
 # each site, photo points for each site)

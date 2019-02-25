@@ -16,7 +16,7 @@ library(here)
 library(units)
 
 source(here::here("data/data_carpentry/segmentation-helper-functions.R"))
-source(here::here("data/data_carpentry/make_processing-checklist.R"))
+source(here::here("data/data_carpentry/make-processing-checklist.R"))
 
 sites_checklist
 # These sites had X3 and RedEdge photos merged into the same project, so we look in a different place for some of the relevant
