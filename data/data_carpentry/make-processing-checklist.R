@@ -26,7 +26,7 @@ sites_checklist <-
   dplyr::mutate(plot_remote_data_check = map_lgl(paste0("data/data_output/site_data/", site, "/", site, "_plot-remote-data"), .f = function(x) length(list.files(x)) > 0)) %>% 
   dplyr::mutate(ttops_check = file.exists(paste0("data/data_output/site_data/", site, "/", site, "_ttops/", site, "_ttops.shp"))) %>% 
   dplyr::mutate(crowns_check = file.exists(paste0("data/data_output/site_data/", site, "/", site, "_crowns/", site, "_crowns.shp"))) %>% 
-  dplyr::mutate(classified_check = file.exists(paste0("data/data_output/classified/model-classified/crown-shapefiles/", site, "_classified-crowns/", site, "_classified-crowns.shp"))) %>% 
-  dplyr::mutate(augmented_classified_check = file.exists(paste0("data/data_output/classified/model-classified/augmented-crowns/", site, "_augmented-crowns.rds")))
+  dplyr::mutate(reflectance_extraction_check = file.exists(paste0("data/data_output/classified/model-classified/crowns-with-reflectance/", site, "_crowns-with-reflectance/", site, "_crowns-with-reflectance.shp"))) %>% 
+  dplyr::mutate(classified_trees_check = file.exists(paste0("data/data_output/classified/model-classified/classified-trees/", site, "_classified-trees.csv")))
 
 sites_checklist
