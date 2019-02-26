@@ -45,8 +45,8 @@ unusable_sites <- c("eldo_4k_3", # too many blocks
 # This is where I can put in sites that need their processing redone. An empty 
 # string means that no already-processed site output will be overwritten
 # (but sites that have yet to be processed will still have their processing done)
-sites_to_overwrite <- ""
-sites_checklist$overwrite <- FALSE
+sites_to_overwrite <- "all"
+sites_checklist$overwrite <- ifelse(sites_to_overwrite == "all", yes = TRUE, no = FALSE)
 
 sites_checklist[sites_checklist$site %in% sites_to_overwrite, "overwrite"] <- TRUE
 
@@ -60,9 +60,22 @@ sites_to_process <-
 # Get an example for testing
 # current_site <- sites_to_process[1]
 
+sites_to_process %>% 
+  walk(.f = function(current_site) {
+    current_dir <- paste0("data/data_output/site_data/", current_site, "/")
+    
+    if (dir.exists(here::here(paste0(current_dir, current_site, "_ttops")))) {
+      unlink(here::here(paste0(current_dir, current_site, "_ttops")), recursive = TRUE)
+    }
+    
+    if (dir.exists(here::here(paste0(current_dir, current_site, "_crowns")))) {
+      unlink(here::here(paste0(current_dir, current_site, "_crowns")), recursive = TRUE)
+    }
+  })
+
 tic()
 # Set up the parallelization
-num_cores_to_use <- availableCores() - 2
+num_cores_to_use <- availableCores() - 6 # Took 1996.05 sec on Alienware using 6 workers + 64GB RAM
 plan(multiprocess, workers = num_cores_to_use)
 
 crowns <-
@@ -126,9 +139,7 @@ crowns <-
     max_crown_area <- pi * 10^2 %>% set_units(m^2)
     
     # Write the ttops point geometries to a file
-    if (!dir.exists(here::here(paste0(current_dir, current_site, "_ttops")))) {
-      dir.create(here::here(paste0(current_dir, current_site, "_ttops")))
-    }
+     dir.create(here::here(paste0(current_dir, current_site, "_ttops")))
     
     st_write(obj = ttops_sf, dsn = here::here(paste0(current_dir, current_site, "_ttops/", current_site, "_ttops.shp")), delete_dsn = TRUE)
     
@@ -146,13 +157,13 @@ crowns <-
       setNames(nm = "treeID") %>%
       st_as_stars() %>%
       st_as_sf(merge = TRUE) %>%
-      dplyr::group_by(treeID) %>%
-      summarize() %>%
-      dplyr::left_join(st_drop_geometry(ttops_sf), by = "treeID") %>% 
-      # sf::st_intersection(survey_area) %>% # comment back in if we want to spatially subset crowns
+      st_join(ttops_sf) %>% 
+      dplyr::filter(!is.na(treeID.y)) %>% 
+      dplyr::rename(treeID = treeID.x) %>% 
+      dplyr::select(-treeID.y) %>% 
       dplyr::mutate(ch_area = st_area(st_convex_hull(.))) %>% 
       dplyr::filter(ch_area < max_crown_area)
-
+    
     points_to_crowns <-
       non_spatial_ttops %>%
       dplyr::anti_join(crowns, by = "treeID") %>%
@@ -165,9 +176,7 @@ crowns <-
       rbind(points_to_crowns)
 
     # Write the crowns polygons to a file
-    if (!dir.exists(here::here(paste0(current_dir, current_site, "_crowns")))) {
-      dir.create(here::here(paste0(current_dir, current_site, "_crowns")))
-    }
+    dir.create(here::here(paste0(current_dir, current_site, "_crowns")))
     
     st_write(obj = crowns, dsn = here::here(paste0(current_dir, current_site, "_crowns/", current_site, "_crowns.shp")), delete_dsn = TRUE)
     
