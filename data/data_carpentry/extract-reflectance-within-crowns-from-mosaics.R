@@ -9,69 +9,14 @@ library(purrr)
 library(velox)
 library(viridis)
 
-source(here::here("data/data_carpentry/make-processing-checklist.R"))
+# If the crowns vector shapefile represents a result of hand classifying live/dead and
+# species, set the hand_classified= argument to TRUE and the crowns will be subset
+# to just ones with some hand classification. This should greatly speed up the process
+# and eliminate all the crowns that are just going to be excluded for building a 
+# model anyhow.
 
-sites_checklist
-# These sites had X3 and RedEdge photos merged into the same project, so we look in a different place for some of the relevant
-# files.
-merged_sites <- c("eldo_3k_2",
-                  "eldo_3k_3",
-                  "eldo_4k_2")
+extract_reflectance_from_crowns <- function(index, crowns, ttops) {
 
-unusable_sites <- c("eldo_4k_3", # too many blocks
-                    "stan_4k_3", # too many blocks
-                    "stan_5k_3", # too many blocks
-                    "sequ_4k_2") # middle section flown on a separate day and the stitch looks terrible
-
-# The merged versus the unmerged sites will have different numbers of bands
-# Because the merged sites will have the X3 imagery incorporated, there will
-# be an extra 3 bands for the ortho and the index outputs (the R, G, and B
-# from the X3 camera)
-# The R, G, and B bands from the X3 images will always be the final three bands
-# if they exist.
-# For the RedEdge-derived products, the bands go in the order of wavelength,
-# from shortest to longest (B, G, R, RE, NIR)
-# There is one Pix4D derived index (NDVI), which will go after the NIR band
-# for the index mosaic
-
-# This is where I can put in sites that need their processing redone. An empty 
-# string means that no already-processed site output will be overwritten
-# (but sites that have yet to be processed will still have their processing done)
-sites_to_overwrite <- "all"
-sites_checklist$overwrite <- ifelse(sites_to_overwrite == "all", yes = TRUE, no = FALSE)
-
-sites_checklist[sites_checklist$site %in% sites_to_overwrite, "overwrite"] <- TRUE
-
-sites_to_process <- 
-  sites_checklist %>% 
-  dplyr::filter(!(site %in% unusable_sites)) %>%
-  dplyr::filter(overwrite | !classified_check) %>% 
-  dplyr::select(site) %>% 
-  dplyr::pull()
-
-# Create a list for the classified crowns to live in.
-classified_crowns <- vector(mode = "list", length = length(sites_to_process))
-i = 1
-
-# # loop through all the sites_to_process
-# for (i in seq_along(sites_to_process)) {
-#   
-#   # `current_site` is the current site in the loop
-#   current_site <- sites_to_process[i]
-#   
-#   # Use the velox package to read in the current site's index mosaic raster
-#   # Index mosaic (could be 6-band or 9-band depending on whether it includes the
-#   # X3-derived R, G, and B bands)
-#   index <- velox::velox(here::here(paste0(current_dir, current_site, "_index.tif")))
-#   
-index_path <- "data/data_output/site_data/eldo_3k_1/eldo_3k_1_index.tif"
-crowns_path <- "data/data_output/classified/hand-classified/eldo_3k_1_hand-classified-crowns/eldo_3k_1_hand-classified-crowns.shp"
-ttops_path <- "data/data_output/site_data/eldo_3k_1/eldo_3k_1_ttops/eldo_3k_1_ttops.shp"
-
-extract_reflectance_from_crowns <- function(index_path, crowns_path, ttops_path) {
-  index <- velox::velox(here::here(index_path))
-  crowns <- sf::st_read(here::here(crowns_path))
-  ttops <- sf::st_read(here::here(ttops_path))
   non_spatial_ttops <-
     ttops %>% 
     dplyr::mutate(x = st_coordinates(.)[,1],
@@ -81,7 +26,7 @@ extract_reflectance_from_crowns <- function(index_path, crowns_path, ttops_path)
   # give the velox object bands for its different raster layers
   if(length(index$rasterbands) == 6) {
     names(index$rasterbands) <- c("b", "g", "r", "re", "nir", "ndvi")
-  } else if(length(index$rasterbands) == 6) {
+  } else if(length(index$rasterbands) == 9) {
     names(index$rasterbands) <- c("b", "g", "r", "re", "nir", "ndvi", "x3_r", "x3_g", "x3_b")
   }
   
@@ -103,19 +48,15 @@ extract_reflectance_from_crowns <- function(index_path, crowns_path, ttops_path)
     dplyr::left_join(non_spatial_ttops) %>% 
     dplyr::mutate(object_ = 1:nrow(.))
   
-  # I copy the velox object, because velox methods alter the original object even without using
-  # the assignment operator
-  index_copy <- index$copy()
-  
   # I learned from here: https://gis.stackexchange.com/questions/286409/fastest-way-to-extract-a-raster-in-r-improve-the-time-of-my-reproducible-code
   # that the velox$extract() method works fastest if you crop the raster to the polygons first.
-  index_copy$crop(crowns)
+  index$crop(crowns)
   
   # this is the extract operation; I summarize all pixel values in each crown segment using mean()
-  extracted_vals <- index_copy$extract(crowns, fun = function(x) mean(x, na.rm = TRUE), df = TRUE)
+  extracted_vals <- index$extract(crowns, fun = function(x) mean(x, na.rm = TRUE), df = TRUE)
   
   # add column names to the resulting object and add a treeID column
-  colnames(extracted_vals) <- c("object_", paste0(names(index_copy$rasterbands), "_mean"))
+  colnames(extracted_vals) <- c("object_", paste0(names(index$rasterbands), "_mean"))
   
   crowns <-
     crowns %>%
@@ -123,3 +64,17 @@ extract_reflectance_from_crowns <- function(index_path, crowns_path, ttops_path)
   
   return(crowns)
 }
+
+# # Example use:
+# index_path <- "data/data_output/site_data/eldo_3k_1/eldo_3k_1_index.tif"
+# crowns_path <- "data/data_output/classified/hand-classified/eldo_3k_1_hand-classified-crowns/eldo_3k_1_hand-classified-crowns.shp"
+# ttops_path <- "data/data_output/site_data/eldo_3k_1/eldo_3k_1_ttops/eldo_3k_1_ttops.shp"
+# 
+# index <- velox::velox(here::here(index_path))
+# crowns <- sf::st_read(here::here(crowns_path)) %>% dplyr::filter(!is.na(live) | !is.na(species))
+# ttops <- sf::st_read(here::here(ttops_path))
+# 
+# crowns <- extract_reflectance_from_crowns(index = index,
+#                                           crowns = crowns,
+#                                           ttops = ttops)
+
