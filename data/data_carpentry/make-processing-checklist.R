@@ -24,6 +24,7 @@ sites_checklist <-
   dplyr::mutate(stacked_ortho_check = file.exists(paste0("data/data_output/site_data/", site, "/", site, "_ortho.tif"))) %>% 
   dplyr::mutate(stacked_index_check = file.exists(paste0("data/data_output/site_data/", site, "/", site, "_index.tif"))) %>% 
   dplyr::mutate(plot_remote_data_check = map_lgl(paste0("data/data_output/site_data/", site, "/", site, "_plot-remote-data"), .f = function(x) length(list.files(x)) > 0)) %>% 
+  dplyr::mutate(ground_trees_check = file.exists(paste0("data/data_output/site_data/", site, "/", site, "_ground-trees/", site, "_ground-trees.shp"))) %>% 
   dplyr::mutate(ttops_check = file.exists(paste0("data/data_output/site_data/", site, "/", site, "_ttops/", site, "_ttops.shp"))) %>% 
   dplyr::mutate(crowns_check = file.exists(paste0("data/data_output/site_data/", site, "/", site, "_crowns/", site, "_crowns.shp"))) %>% 
   dplyr::mutate(reflectance_extraction_check = file.exists(paste0("data/data_output/classified/model-classified/crowns-with-reflectance/", site, "_crowns-with-reflectance/", site, "_crowns-with-reflectance.shp"))) %>% 
