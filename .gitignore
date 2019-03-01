@@ -29,3 +29,6 @@ data/data_output/site_data/*/*_index.tif
 data/data_output/site_data/*/*_ortho.tif
 .DS_Store
 data/data_output/site_data/*/*_ground-trees/
+data/data_raw/california_species_data.csv
+data/data_raw/fresh-leaf-spectra-to-estimate-leaf-traits-for-california-ecosystems.csv
+data/data_raw/nasa-hyspiri-airborne-campaign-leaf-and-canopy-spectra-and-leaf-traits.csv
