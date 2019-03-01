@@ -28,3 +28,4 @@ data/data_output/site_data/*/*_dtm.tif
 data/data_output/site_data/*/*_index.tif
 data/data_output/site_data/*/*_ortho.tif
 .DS_Store
+data/data_output/site_data/*/*_ground-trees/
