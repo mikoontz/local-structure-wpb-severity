@@ -2,7 +2,6 @@
 
 library(sf)
 library(raster)
-library(tabularaster)
 library(tidyverse)
 library(viridis)
 library(purrr)
