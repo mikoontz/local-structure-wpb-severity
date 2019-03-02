@@ -37,12 +37,6 @@ sites_to_process <-
   dplyr::filter(overwrite | !reflectance_extraction_check) %>% 
   dplyr::pull(site)
 
-current_site <- sites_to_process[1]
-
-#   
-#   extract_reflectance_from_crowns
-# }  
-
 tic()
 crowns_with_reflectance <-
   lapply(seq_along(sites_to_process), FUN = function(i) {
@@ -105,8 +99,6 @@ survey_area <-
     
   })
 
-sum(survey_area) / 10000
-current_site <- "stan_3k_2"
 current_crowns_path <-  list.files(here::here("data/data_output/classified/model-classified/crowns-with-reflectance"))[27]
 # Subset the crowns here
 crowns <-
