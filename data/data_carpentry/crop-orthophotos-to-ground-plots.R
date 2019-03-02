@@ -27,11 +27,11 @@ merged_sites <- c("eldo_3k_2",
 # This is where I can put in sites that need their processing redone. An empty 
 # string means that no already-processed site output will be overwritten
 # (but sites that have yet to be processed will still have their processing done)
-
 sites_to_overwrite <- ""
-sites_checklist$overwrite <- FALSE
+sites_checklist$overwrite <- ifelse(sites_to_overwrite == "all", yes = TRUE, no = FALSE)
 
 sites_checklist[sites_checklist$site %in% sites_to_overwrite, "overwrite"] <- TRUE
+
 
 sites_to_process <- 
   sites_checklist %>% 
