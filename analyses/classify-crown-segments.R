@@ -24,4 +24,22 @@ classified_trees  <-
   dplyr::mutate(live = as.numeric(as.character(live))) %>%
   dplyr::mutate(species = ifelse(live == 1, yes = rdaFit$levels[predict(rdaFit, newdata = .)], no = NA))
 
-readr::write_csv(classified_trees, path = here::here("analyses/analyses_output/classified-trees.csv"))
+classified_trees_3310 <-
+  classified_trees %>% 
+  split(f = .$crs) %>% 
+  lapply(FUN = function(trees) {
+    current_crs <- unique(trees$crs)
+    
+    trees3310 <-
+      trees %>% 
+      st_as_sf(coords = c("x", "y"), crs = current_crs, remove = TRUE) %>% 
+      st_transform(3310) %>% 
+      tidyr::separate(col = treeID, into = c("forest", "elev", "rep", "id"), sep = "_", remove = FALSE) %>% 
+      dplyr::mutate(site = paste(forest, elev, rep, sep = "_")) %>% 
+      dplyr::select(-crs, -id) %>% 
+      dplyr::select(treeID, site, forest, elev, rep, live, species, everything())
+  }) %>% 
+  do.call("rbind", .)
+
+
+sf::st_write(classified_trees_3310, dsn = here::here("analyses/analyses_output/classified-trees/classified-trees.shp"))
