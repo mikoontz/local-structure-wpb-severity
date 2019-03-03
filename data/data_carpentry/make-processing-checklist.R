@@ -28,6 +28,6 @@ sites_checklist <-
   dplyr::mutate(ttops_check = file.exists(paste0("data/data_output/site_data/", site, "/", site, "_ttops/", site, "_ttops.shp"))) %>% 
   dplyr::mutate(crowns_check = file.exists(paste0("data/data_output/site_data/", site, "/", site, "_crowns/", site, "_crowns.shp"))) %>% 
   dplyr::mutate(reflectance_extraction_check = file.exists(paste0("data/data_output/classified/model-classified/crowns-with-reflectance/", site, "_crowns-with-reflectance/", site, "_crowns-with-reflectance.shp"))) %>% 
-  dplyr::mutate(classified_trees_check = file.exists(paste0("data/data_output/classified/model-classified/classified-trees/", site, "_classified-trees.csv")))
+  dplyr::mutate(rasterized_trees_check = file.exists(paste0("analyses/analyses_output/rasterized-trees/", site, "_rasterized-trees.tif")))
 
 sites_checklist
