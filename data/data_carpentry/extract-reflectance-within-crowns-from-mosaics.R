@@ -100,6 +100,7 @@ survey_area <-
   })
 
 current_crowns_path <-  list.files(here::here("data/data_output/classified/model-classified/crowns-with-reflectance"))[27]
+
 # Subset the crowns here
 crowns <-
   list.files(here::here("data/data_output/classified/model-classified/crowns-with-reflectance")) %>% 
@@ -119,16 +120,14 @@ crowns <-
       site_bounds %>% 
       st_transform(st_crs(current_crowns)) %>% 
       st_buffer(-35)
-  
-    current_crowns %>% st_is_valid()
-    
+
     buffered_trees <-
       current_crowns %>%
       st_drop_geometry() %>% 
       st_as_sf(coords = c("x", "y"), crs = st_crs(buffered_bounds)) %>% 
       st_intersection(buffered_bounds) %>% 
-      dplyr::mutate(x = st_coordinates(.)[1],
-                    y = st_coordinates(.)[2]) %>% 
+      dplyr::mutate(x = st_coordinates(.)[, 1],
+                    y = st_coordinates(.)[, 2]) %>% 
       st_drop_geometry()
 
     return(buffered_trees)
