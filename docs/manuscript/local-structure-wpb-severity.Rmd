@@ -1,6 +1,6 @@
 ---
-bibliography: 
-csl: 
+bibliography: ../docs_carpentry/local-structure-wpb-severity.bib
+csl: ../docs_carpentry/frontiers-in-ecology-and-the-environment.csl
 params:
   title: Relative influence of behavioral and environmental mechanisms underlying a mass insect-induced tree mortality event
   author: |
@@ -25,13 +25,15 @@ header-includes:
   - \linenumbers
   - \usepackage{setspace}
   - \doublespacing
-output: pdf_document
+output: 
+  pdf_document:
+    keep_tex: false
 ---
 
 ```{r setup, include=FALSE}
-library(here)
 knitr::opts_chunk$set(echo = TRUE)
 ```
+
 
 #`r params$title`
 
@@ -52,11 +54,11 @@ Bark beetles!
 Forest spatial structure, the size and distribution of trees in the forest, is thought to be a key determinant of forest resilience. To date, much of the work on Sierra Nevada forest resilience focuses on stem density, which belies the complexity of forest structure and how it interacts with disturbance. However, complex forest structure is challenging to quantify, as it requires labor-intensive field surveys (e.g., to generate stem maps) or highly specialized, expensive equipment (e.g., LiDAR). Small, unmanned aerial systems (sUAS) enable fast and relatively cheap remote imaging over dozens of hectares of forest, which can be used to determine both forest structure and tree condition at the individual tree scale. Implementing photogrammetry on the collected images can provide a rich picture of the complex, 3-dimensional forest structure to which bark beetles respond, and equipping the sUAS with a multispectral sensor will allow calculation of vegetation indices (e.g., NDVI) commonly used to assess tree condition. 
 Latitudinal and elevational gradients in the intensity of bark beetle activity during the recent California drought provide unique opportunities for a postmortem analysis of a major tree die off and how intersecting forces of forest structure and environmental conditions affect disturbance dynamics. Quantitative, fine-scale measures of tree condition across these geographic gradients will enable broad-scale assessment of forest structure as well as the intensity of western pine beetle-induced tree mortality. Combined, these measurements can better our understanding of how complex forest structure affects insect disturbance, and vice versa, across the Sierra Nevada. Sound forest management requires a better understanding of the relationships between forest spatial structure, environmental conditions, and disturbance, which ultimately depends on accurate measurement of forest structure at appropriate spatial scales.
 
-Aggressive bark beetles dealt the final blow to most of the 100+ million trees killed in the California drought of 2012 to 2016 along a strong south to north latitudinal gradient [@USDAFS2016; @Young2017]. A harbinger of climate change effects to come, high temperatures exacerbating the extreme drought led to tree mortality events of unprecedented size in the driest, densest forests across the state [@Millar2015; @Young2017]. A century of fire suppression policy has enabled forests to grow unchecked into dense stands, which increases water stress on trees and makes them more vulnerable to bark beetle attack [@Fettig2012; @North2015]. Previous studies show that bark beetles thrive in denser forests [@Fettig2012], but density is only a coarse gauge of the spatial distribution of trees– the forest structure– with which bark beetles interact [@Raffa2008]. Recent research has shown a strong link between complex forest structure and forest resilience, but measuring this complexity generally requires expensive equipment or labor-intensive field surveys [@Larson2012; @Kane2014]. These barriers restrict survey frequency and extent, which limits insights into phenomena like bark beetle outbreaks that rapidly emerge over weeks to months but have long-lasting effects on forest conditions. Further, the clear and vast latitudinal gradient of mortality challenges our ability to simultaneously consider how environmental conditions may interact with local forest structure to produce patterns of insect activity.
+Aggressive bark beetles dealt the final blow to many of the nearly 150 million trees killed in the California drought of 2012 to 2015 and its aftermath along a strong south to north latitudinal gradient [@usdafs2019; @young2017]. A harbinger of climate change effects to come, high temperatures exacerbating the extreme drought led to tree mortality events of unprecedented size in the driest, densest forests across the state [@millar2015; @young2017]. A century of fire suppression policy has enabled forests to grow unchecked into dense stands, which increases water stress on trees and makes them more vulnerable to bark beetle attack [@fettig2012b; @north2015]. Previous studies show that bark beetles thrive in denser forests [@fettig2012b], but density is only a coarse gauge of the spatial distribution of trees– the forest structure– with which bark beetles interact [@raffa2008]. Recent research has shown a strong link between complex forest structure and forest resilience, but measuring this complexity generally requires expensive equipment or labor-intensive field surveys [@larson2012; @kane2014]. These barriers restrict survey frequency and extent, which limits insights into phenomena like bark beetle outbreaks that rapidly emerge over weeks to months but have long-lasting effects on forest conditions. Further, the clear and vast latitudinal gradient of mortality challenges our ability to simultaneously consider how environmental conditions may interact with local forest structure to produce patterns of insect activity.
 
-Forests in California’s Sierra Nevada region are characterized by regular bark beetle disturbances that interact with forest structure. Bark beetles shape forest structure as they sporadically kill weakened trees under normal conditions, or wide swaths of even healthy trees under outbreak conditions. Forest structure also strongly influences bark beetle activity. Low-density forests are less prone to bark beetle attacks, but resolving the mechanism underlying this observation requires a more nuanced view of forest structure. For instance, a low-density forest may resist attack because its trees are in smaller clumps with greater average tree vigor, or because its wider canopy openings disrupt pheromone signaling between beetles [@Fettig2012]. Thus, it remains poorly understood how complex forest structure affects and is affected by bark beetle activity. 
+Forests in California’s Sierra Nevada region are characterized by regular bark beetle disturbances that interact with forest structure. Bark beetles shape forest structure as they sporadically kill weakened trees under normal conditions, or wide swaths of even healthy trees under outbreak conditions. Forest structure also strongly influences bark beetle activity. Low-density forests are less prone to bark beetle attacks, but resolving the mechanism underlying this observation requires a more nuanced view of forest structure. For instance, a low-density forest may resist attack because its trees are in smaller clumps with greater average tree vigor, or because its wider canopy openings disrupt pheromone signaling between beetles [@fettig2012b]. Thus, it remains poorly understood how complex forest structure affects and is affected by bark beetle activity. 
 
-Climate change mitigation strategies emphasize reducing tree densities [@North2015; @Young2017], but understanding the optimal scale and pattern of tree distribution that can mitigate bark beetle outbreaks will be vital for predicting how California forests may respond to these interventions. This project investigates this relationship with the following research questions: 
+Climate change mitigation strategies emphasize reducing tree densities [@north2015; @young2017], but understanding the optimal scale and pattern of tree distribution that can mitigate bark beetle outbreaks will be vital for predicting how California forests may respond to these interventions. This project investigates this relationship with the following research questions: 
 
 1.	At what scale does tree density most strongly correlate with bark beetle attack intensity?
 
@@ -68,20 +70,41 @@ Climate change mitigation strategies emphasize reducing tree densities [@North20
 
 ## Methods
 
-```{r, results = "hide", eval = FALSE}
+```{r, results = "hide", eval = FALSE, echo = FALSE}
 fig_nums(name = "fig-")
 ```
 
 ### Study system
 
-The study sites comprise mostly ponderosa pine trees, *Pinus ponderosa*, whose primary bark beetle predator in California is the western pine beetle (WPB), *Dendroctonus brevicomis*. The WPB is an aggressive bark beetle, meaning it must attack and kill live trees in order to successfully reproduce [@Raffa2008]. Pioneer WPBs disperse to a new host tree, determine the host's susceptibility to attack, and use pheromone signals to attract other WPBs. The attracted WPBs mass attack the tree by boring into its inner bark, laying eggs, and dying, leaving their offspring to develop inside the doomed tree before themselves dispersing [@Raffa2008]. Small WPB populations prefer weakened trees but large populations can overwhelm the defense mechanisms of even healthy trees. Successful attacks on large, healthy trees are boons to bark beetle fecundity and trigger outbreaks in which populations explode and massive tree mortality occurs. In California, the WPB can have 3 generations in a single year giving it a greater potential to spread rapidly through forests than its more infamous congener, the mountain pine beetle, *Dendroctonus ponderosa* (MPB).
+The study sites comprise mostly ponderosa pine trees, *Pinus ponderosa*, whose primary bark beetle predator in California is the western pine beetle (WPB), *Dendroctonus brevicomis*. The WPB is an aggressive bark beetle, meaning it must attack and kill live trees in order to successfully reproduce [@raffa2008]. Pioneer WPBs disperse to a new host tree, determine the host's susceptibility to attack, and use pheromone signals to attract other WPBs. The attracted WPBs mass attack the tree by boring into its inner bark, laying eggs, and dying, leaving their offspring to develop inside the doomed tree before themselves dispersing [rRaffa2008]. Small WPB populations prefer weakened trees but large populations can overwhelm the defense mechanisms of even healthy trees. Successful attacks on large, healthy trees are boons to bark beetle fecundity and trigger outbreaks in which populations explode and massive tree mortality occurs. In California, the WPB can have 3 generations in a single year giving it a greater potential to spread rapidly through forests than its more infamous congener, the mountain pine beetle, *Dendroctonus ponderosa* (MPB).
 
-We build our study on 180 vegetation monitoring plots at 36 sites established between 2016 and 2017. These established plots are located in beetle-attacked, mixed-conifer forests across the Eldorado, Stanislaus, Sierra and Sequoia National Forests across an elevation gradient (3000-4000 feet, 4000-5000 feet, and 5000+ feet above sea level) and have variable forest structure and disturbance history. Plot locations were selected specifically in areas with >40% ponderosa pine basal area and >10% ponderosa pine mortality. The 0.04ha circular plots are clustered along transects in groups of 5, with between 80 and 200m between each plot. All trees within the plot were assessed as dead or alive, and the year of death for dead trees was estimated based on the amount of needles remaining (no needles= 2+ years prior to survey, very few needles= one year prior to survey, lots of brown needles = same year as survey). The stem location of all trees was mapped relative to the center of each plot using azimuth/distance measurements. Tree identity to species and diameter at breast height (dbh) were recorded if dbh was greater than 6.35cm.
+We build our study on 180 vegetation monitoring plots at 36 sites established between 2016 and 2017 [@fettig2019]. These established plots are located in beetle-attacked, mixed-conifer forests across the Eldorado, Stanislaus, Sierra and Sequoia National Forests across an elevation gradient (3000-4000 feet, 4000-5000 feet, and 5000+ feet above sea level) and have variable forest structure and disturbance history. Plot locations were selected specifically in areas with >40% ponderosa pine basal area and >10% ponderosa pine mortality. The 0.04ha circular plots are clustered along transects in groups of 5, with between 80 and 200m between each plot. All trees within the plot were assessed as dead or alive, and the year of death for dead trees was estimated based on the amount of needles remaining (no needles= 2+ years prior to survey, very few needles= one year prior to survey, lots of brown needles = same year as survey). The stem location of all trees was mapped relative to the center of each plot using azimuth/distance measurements. Tree identity to species and diameter at breast height (dbh) were recorded if dbh was greater than 6.35cm. During the 2018 field season, all field plots were revisited to assess whether dead trees had fallen.
 
-We will fly preprogrammed transect flights using the sUAS over the 40 hectares surrounding each of transects (with 5 plots each) in the remaining sites within the Eldorado, Stanislaus, Sierra, and Sequoia National Forests.
+# Instrumentation
+DJI Zenmuse X3 12.4 megapixel RGB camera
+Micasense RedEdge3 5-band multispectral camera
+
+# Flight protocol
+We flew preprogrammed transect flights using the sUAS over the 40 hectares surrounding each of transects (with 5 plots each) over all field sites within the Eldorado, Stanislaus, Sierra, and Sequoia National Forests. For this analysis, we dropped 4 sites whose imagery was of insufficient quality to process to data.
+
+DJI Matrice 100 aircraft
+Map Pilot for DJI by Drones Made Easy (hereafter Map Pilot)
+90% front overlap/90% side overlap at 100m below the lens for the X3 camera parameters
+Translation to the RedEdge3 parameters
+Flown at an altitude of 120m agl with the "ground" derived from SRTM data [@farr2007] automatically in Map Pilot.
+Kept flights as close to solar noon as possible to minimize shadows.
+Calibration panel photos taken just before or just after flight (see SI).
+
+# Photogrammetric processing
+
+
+Buffered the study area to be ~2 transects in from the edge of the photographed study area to reduce edge effects.
+Used Pix4Dmapper Cloud to process imagery using processing parameters ideal for images of a densely vegetated area taken by a multispectral camera.
+
 As before, two types of data will be collected simultaneously: 1) georeferenced multispectral reflectance in red, blue, green, and infrared wavelengths, and 2) georeferenced photographs.
-Our primary response variable will be tree condition at the individual tree scale. We will use the multispectral data to calculate vegetation indices (e.g., NDVI) for each tree, which can be used to assess the various stages of bark beetle attack [@Nasi2015]. 
-The primary explanatory variable for our study will be the forest structure, which we can determine from the georeferenced photographs. We will apply the photogrammetry software to the photographs to stitch them together and generate a 3-D point cloud (akin to the data returned from LiDAR instruments) representing complex forest structure. We will develop a workflow to convert that 3-D point cloud to 2-D forest structure describing the forest’s ICO pattern [@Lydersen2013]. Individual trees (I), trees belonging to clusters (C), the number of trees in each cluster, and the openings between trees (O) will be mapped [@Lydersen2013]. 
+Our primary response variable will be tree condition at the individual tree scale. We will use the multispectral data to calculate vegetation indices (e.g., NDVI) for each tree, which can be used to assess the various stages of bark beetle attack [@nasi2015]. 
+
+The primary explanatory variable for our study will be the forest structure, which we can determine from the georeferenced photographs. We will apply the photogrammetry software to the photographs to stitch them together and generate a 3-D point cloud (akin to the data returned from LiDAR instruments) representing complex forest structure. We will develop a workflow to convert that 3-D point cloud to 2-D forest structure describing the forest’s ICO pattern [@lydersen2013]. Individual trees (I), trees belonging to clusters (C), the number of trees in each cluster, and the openings between trees (O) will be mapped [@lydersen2013]. 
 
 
 ### Statistical model
@@ -97,7 +120,7 @@ My goal is to tease apart the relative role of environmental drivers versus beha
 
 ### Statistical software and data availability
 
-We used `R` for all statistical analyses [@RCoreTeam2018].
+We used `R` for all statistical analyses [@rcoreteam2018]. Data are available via the Open Science Framework.
 
 ## Results
 
