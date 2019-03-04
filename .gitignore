@@ -33,4 +33,5 @@ data/data_raw/california_species_data.csv
 data/data_raw/fresh-leaf-spectra-to-estimate-leaf-traits-for-california-ecosystems.csv
 data/data_raw/nasa-hyspiri-airborne-campaign-leaf-and-canopy-spectra-and-leaf-traits.csv
 analyses/analyses_output/classified-trees.geojson
-data/data_raw/California_Species_clean_All_epsg_3310.csv
+data/features/California_Species_clean_All_epsg_3310.csv
+data/features/jepcodes-v7.kml
