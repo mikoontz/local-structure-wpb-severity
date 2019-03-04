@@ -31,18 +31,26 @@ site_centers <- st_read(here::here("data/features/plot-centers_ground-gps-measur
   sf::st_centroid() %>% 
   dplyr::ungroup() %>% 
   dplyr::mutate(cwd = raster::extract(cwd, ., method = "bilinear")) %>% 
-  dplyr::mutate(elevation_band = as.numeric(as.character(elevation_band)))
+  dplyr::mutate(elevation_band = as.numeric(as.character(elevation_band))) %>% 
+  dplyr::mutate(forest = substr(forest, start = 1, stop = 4)) %>% 
+  dplyr::mutate(elevation_band = paste0(substr(elevation_band, start = 1, stop = 1), "k")) %>% 
+  dplyr::mutate(site = paste(forest, elevation_band, rep, sep = "_"))
 
 plot(cwd)
 plot(site_centers$geometry, add = TRUE, pch = 19)
 
 site_centers
 
-ggplot(site_centers, aes(x = elevation_band, y = cwd, col = forest)) +
-  geom_smooth(method = "lm") +
-  scale_color_viridis_d()
+cwd_data <- 
+  site_centers %>% 
+  dplyr::select(site, cwd) %>% 
+  sf::st_drop_geometry()
 
-ggplot(site_centers, aes(col = cwd, shape = forest, size = elevation_band)) +
-  geom_sf() +
-  scale_color_viridis_c()
+# ggplot(site_centers, aes(x = elevation_band, y = cwd, col = forest)) +
+#   geom_smooth(method = "lm") +
+#   scale_color_viridis_d()
+# 
+# ggplot(site_centers, aes(col = cwd, shape = forest, size = elevation_band)) +
+#   geom_sf() +
+#   scale_color_viridis_c()
 
