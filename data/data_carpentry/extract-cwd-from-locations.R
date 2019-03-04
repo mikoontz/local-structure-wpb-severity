@@ -6,6 +6,8 @@ library(raster)
 library(sf)
 library(tidyverse)
 library(here)
+library(lubridate)
+
 
 cwd <- raster::raster(here::here("data/features/cwd1981_2010_ave_HST_1550861123/cwd1981_2010_ave_HST_1550861123.tif"))
 
@@ -36,16 +38,12 @@ site_centers <- st_read(here::here("data/features/plot-centers_ground-gps-measur
   dplyr::mutate(elevation_band = paste0(substr(elevation_band, start = 1, stop = 1), "k")) %>% 
   dplyr::mutate(site = paste(forest, elevation_band, rep, sep = "_"))
 
-plot(cwd)
-plot(site_centers$geometry, add = TRUE, pch = 19)
+# plot(cwd)
+# plot(site_centers$geometry, add = TRUE, pch = 19)
 
 site_centers
 
-cwd_data <- 
-  site_centers %>% 
-  dplyr::select(site, cwd) %>% 
-  sf::st_drop_geometry()
-
+# Quick exploratory plots
 # ggplot(site_centers, aes(x = elevation_band, y = cwd, col = forest)) +
 #   geom_smooth(method = "lm") +
 #   scale_color_viridis_d()
@@ -54,3 +52,38 @@ cwd_data <-
 #   geom_sf() +
 #   scale_color_viridis_c()
 
+# This is the raw CWD data. 
+cwd_data <- 
+  site_centers %>% 
+  dplyr::select(site, cwd) %>% 
+  sf::st_drop_geometry()
+
+# What do these CWD values mean for the overall PIPO distribution
+# in the Sierra Nevada?
+
+sn <- sf::st_read(here::here("data/data_output/sierra-nevada-jepson/sierra-nevada-jepson.shp"))
+
+herbarium_records <- 
+  data.table::fread(here::here("data/features/California_Species_clean_All_epsg_3310.csv")) %>% 
+  dplyr::as_tibble() %>% 
+  dplyr::filter(scientificName == "Pinus ponderosa")
+
+sn_pipo <-
+  herbarium_records %>% 
+  dplyr::mutate(current_genus = tolower(current_genus),
+                current_species = tolower(current_species)) %>% 
+  dplyr::filter(current_genus == "pinus") %>% 
+  dplyr::filter(current_species == "ponderosa") %>% 
+  sf::st_as_sf(coords = c("x_epsg_3310", "y_epsg_3310"), crs = 3310) %>% 
+  dplyr::select(id, early_julian_day, late_julian_day, verbatim_date, elevation) %>% 
+  sf::st_intersection(sn) %>% 
+  dplyr::mutate(date = parse_date_time(early_julian_day, c("mdy", "ymd", "ymdHM"))) %>% 
+  dplyr::mutate(year = year(date)) %>% 
+  dplyr::mutate(cwd = raster::extract(cwd, ., method = "bilinear"))
+
+mean_cwd_sn_pipo <- mean(sn_pipo$cwd, na.rm = TRUE)
+sd_cwd_sn_pipo <- sd(sn_pipo$cwd, na.rm = TRUE)
+
+cwd_data <-
+  cwd_data %>% 
+  dplyr::mutate(cwd_zscore = (cwd - mean_cwd_sn_pipo) / sd_cwd_sn_pipo)
