@@ -129,20 +129,5 @@ for(i in seq_along(sites_to_process)) {
 
 final_results <- do.call("rbind", results_list)
 
-glimpse(final_results)
+readr::write_csv(final_results, here::here("analyses/analyses_output/data-from-rasterized-classified-trees.csv"))
 
-analysis_df <-
-  final_results %>% 
-  dplyr::left_join(cwd_data, by = "site") %>% 
-  as_tibble() %>% 
-  dplyr::mutate(total_count = pipo_count + non_pipo_count) %>% 
-  dplyr::mutate(unique_cellID = 1:nrow(.))
-
-analysis_df
-
-library(lme4)
-
-fm1 <- glmer(cbind(dead_count, live_count) ~ cwd*pipo_count*pipo_ba + cwd*total_count*total_ba + (1 | site), data = analysis_df, family = "binomial")
-
-summary(fm1)
-unique(analysis_df$cwd)
