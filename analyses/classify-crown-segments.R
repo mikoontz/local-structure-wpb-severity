@@ -22,14 +22,14 @@ allometry_models %>% filter(species == "pipo") %>% pull(model) %>% magrittr::ext
 
 crowns_with_reflectance <- readr::read_csv(file = here::here("data/data_output/classified/model-classified/crowns-with-reflectance_35m-buffer.csv"))
 
-classified_trees  <-
+classified_trees_nonspatial  <-
   crowns_with_reflectance %>% 
   dplyr::mutate(live = live_or_dead_fit$levels[predict(live_or_dead_fit, newdata = .)]) %>% 
   dplyr::mutate(live = as.numeric(as.character(live))) %>%
   dplyr::mutate(species = ifelse(live == 1, yes = rdaFit$levels[predict(rdaFit, newdata = .)], no = NA)) 
 
 classified_and_allometried_trees <-
-  classified_trees %>% 
+  classified_trees_nonspatial %>% 
   dplyr::left_join(allometry_models, by = "species") %>% 
   dplyr::mutate(model = ifelse(test = live == 0, 
                                yes = allometry_models %>% 
@@ -38,7 +38,7 @@ classified_and_allometried_trees <-
                                no = model)) %>% 
   dplyr::do(modelr::add_predictions(., model = first(.$model), var = "estimated_dbh")) %>% 
   dplyr::select(-model) %>% 
-  dplyr::mutate(estimated_ba = (estimated_dbh / 2)^2 * pi)
+  dplyr::mutate(estimated_ba = (estimated_dbh / 2)^2 * pi / 10000)
 
 classified_trees_4326 <-
   classified_and_allometried_trees %>% 
