@@ -115,7 +115,7 @@ for(i in seq_along(sites_to_process)) {
   results_raster <- raster::stack(live_and_dead, pipo_count, non_pipo_count, pipo_basal_area, non_pipo_basal_area)
   names(results_raster) <- c("live_count", "dead_count", "pipo_count", "non_pipo_count", "pipo_ba", "non_pipo_ba")
   
-  writeRaster(x = results_raster, filename = here::here(paste0("analyses/analyses_output/rasterized-trees/", current_site, "_rasterized-trees.tif")), delete_dsn = TRUE)
+  writeRaster(x = results_raster, filename = here::here(paste0("analyses/analyses_output/rasterized-trees/", current_site, "_rasterized-trees.tif")), overwrite = TRUE)
   
   results_df <- 
     results_raster %>% 
