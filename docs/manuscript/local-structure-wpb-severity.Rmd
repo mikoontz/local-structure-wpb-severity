@@ -2,7 +2,7 @@
 bibliography: ../docs_carpentry/local-structure-wpb-severity.bib
 csl: ../docs_carpentry/frontiers-in-ecology-and-the-environment.csl
 params:
-  title: Relative influence of behavioral and environmental mechanisms underlying a mass insect-induced tree mortality event
+  title: Relative effect of host tree versus all tree basal area on forest insect severity depends on climatic water deficit
   author: |
     Michael J. Koontz^1,2,\*^,
     Andrew M. Latimer^1,2^,
@@ -25,6 +25,7 @@ header-includes:
   - \linenumbers
   - \usepackage{setspace}
   - \doublespacing
+  - \DeclareUnicodeCharacter{200E}{}
 output: 
   pdf_document:
     keep_tex: false
@@ -78,54 +79,123 @@ fig_nums(name = "fig-")
 
 The study sites comprise mostly ponderosa pine trees, *Pinus ponderosa*, whose primary bark beetle predator in California is the western pine beetle (WPB), *Dendroctonus brevicomis*. The WPB is an aggressive bark beetle, meaning it must attack and kill live trees in order to successfully reproduce [@raffa2008]. Pioneer WPBs disperse to a new host tree, determine the host's susceptibility to attack, and use pheromone signals to attract other WPBs. The attracted WPBs mass attack the tree by boring into its inner bark, laying eggs, and dying, leaving their offspring to develop inside the doomed tree before themselves dispersing [rRaffa2008]. Small WPB populations prefer weakened trees but large populations can overwhelm the defense mechanisms of even healthy trees. Successful attacks on large, healthy trees are boons to bark beetle fecundity and trigger outbreaks in which populations explode and massive tree mortality occurs. In California, the WPB can have 3 generations in a single year giving it a greater potential to spread rapidly through forests than its more infamous congener, the mountain pine beetle, *Dendroctonus ponderosa* (MPB).
 
-We build our study on 180 vegetation monitoring plots at 36 sites established between 2016 and 2017 [@fettig2019]. These established plots are located in beetle-attacked, mixed-conifer forests across the Eldorado, Stanislaus, Sierra and Sequoia National Forests across an elevation gradient (3000-4000 feet, 4000-5000 feet, and 5000+ feet above sea level) and have variable forest structure and disturbance history. Plot locations were selected specifically in areas with >40% ponderosa pine basal area and >10% ponderosa pine mortality. The 0.04ha circular plots are clustered along transects in groups of 5, with between 80 and 200m between each plot. All trees within the plot were assessed as dead or alive, and the year of death for dead trees was estimated based on the amount of needles remaining (no needles= 2+ years prior to survey, very few needles= one year prior to survey, lots of brown needles = same year as survey). The stem location of all trees was mapped relative to the center of each plot using azimuth/distance measurements. Tree identity to species and diameter at breast height (dbh) were recorded if dbh was greater than 6.35cm. During the 2018 field season, all field plots were revisited to assess whether dead trees had fallen.
+We built our study on 180 vegetation monitoring plots at 36 sites established between 2016 and 2017 [@fettig2019]. These established plots are located in beetle-attacked, mixed-conifer forests across the Eldorado, Stanislaus, Sierra and Sequoia National Forests across an elevation gradient (3000-4000 feet, 4000-5000 feet, and 5000+ feet above sea level) and have variable forest structure and disturbance history. Plot locations were selected specifically in areas with >40% ponderosa pine basal area and >10% ponderosa pine mortality. The 0.04ha circular plots are clustered along transects in groups of 5, with between 80 and 200m between each plot. All trees within the plot were assessed as dead or alive, and the year of death for dead trees was estimated based on the amount of needles remaining (no needles= 2+ years prior to survey, very few needles= one year prior to survey, lots of brown needles = same year as survey). The stem location of all trees was mapped relative to the center of each plot using azimuth/distance measurements. Tree identity to species and diameter at breast height (dbh) were recorded if dbh was greater than 6.35cm. During the 2018 field season, all field plots were revisited to assess whether dead trees had fallen.
 
-# Instrumentation
-DJI Zenmuse X3 12.4 megapixel RGB camera
-Micasense RedEdge3 5-band multispectral camera
+### Instrumentation
 
-# Flight protocol
-We flew preprogrammed transect flights using the sUAS over the 40 hectares surrounding each of transects (with 5 plots each) over all field sites within the Eldorado, Stanislaus, Sierra, and Sequoia National Forests. For this analysis, we dropped 4 sites whose imagery was of insufficient quality to process to data.
+Imagery was captured using a DJI Zenmuse X3 RGB camera [@dji2015] and a Micasense RedEdge3 5-band multispectral camera [@micasense2015].
 
-DJI Matrice 100 aircraft
-Map Pilot for DJI by Drones Made Easy (hereafter Map Pilot)
-90% front overlap/90% side overlap at 100m below the lens for the X3 camera parameters
-Translation to the RedEdge3 parameters
-Flown at an altitude of 120m agl with the "ground" derived from SRTM data [@farr2007] automatically in Map Pilot.
-Kept flights as close to solar noon as possible to minimize shadows.
-Calibration panel photos taken just before or just after flight (see SI).
+### Flight protocol
 
-# Photogrammetric processing
+We mounted both of these instruments simultaneously on a DJI Matrice 100 aircraft [@dji2015a] using the DJI 3-axis stabilized gimbal for the Zenmuse X3 camera and a Micasense angled fixed mount for the RedEdge3 camera. The gimbal and the angled fixed mount ensured both instruments were nadir-facing during image capture. Just prior or after image capture at each site, we calibrated the RedEdge3 camera by taking an image of a calibration panel on the ground in full sun with known reflectance values for each of the 5 narrow bands. Image capture was conducted as close to solar noon as possible to minimize shadow effects (always within 4 hours; usually within 2 hours). Prior to the aerial survey, two strips of bright orange drop cloth (~100cm x 15cm) were positioned as an "X" over the permanent monuments marking the center of the 5 field plots from @fettig2019.
 
+For each of the 36 sites (containing 5 plots each), we captured imagery over the surrounding 40 hectares of forested area using north-south aerial transects. For XXXXX sites, we surveyed less surrounding area in order to maintain visual and radio communication with the aircraft during flight.
 
-Buffered the study area to be ~2 transects in from the edge of the photographed study area to reduce edge effects.
-Used Pix4Dmapper Cloud to process imagery using processing parameters ideal for images of a densely vegetated area taken by a multispectral camera.
+We preprogrammed transect paths using Map Pilot for DJI on iOS (hereafter Map Pilot) [@dronesmadeeasy2018]. All transects tracked the terrain and their altitude remained approximately constant at 120 meters above ground level in order to maintain consistent ground sampling distance in the imagery. Ground level was based on a 1-arc-second digital elevation model [@farr2007] and we implemented terrain following using Map Pilot. For this analysis, we dropped 4 sites whose imagery was of insufficient quality to process.
 
-As before, two types of data will be collected simultaneously: 1) georeferenced multispectral reflectance in red, blue, green, and infrared wavelengths, and 2) georeferenced photographs.
-Our primary response variable will be tree condition at the individual tree scale. We will use the multispectral data to calculate vegetation indices (e.g., NDVI) for each tree, which can be used to assess the various stages of bark beetle attack [@nasi2015]. 
+Structure from motion (SfM) processing requires highly overlapping images, especially in densely vegetated areas. We planned transects with 90% forward overlap and 90% side overlap at 100 meters below the lens. Thus, with flights being at 120 meters above ground level, we achieved slightly higher than 90/90 overlap for objects 20 meters tall or shorter. Overlap values were based on focal length and field of view parameters of the Zenmuse X3 camera. Images were captured at a constant rate of 1 image every 2 seconds for both cameras. A forward overlap of 90% at 100 meters translates to a flight speed of approximately 6.3 m/s and a side overlap of 90% at 100 meters translates to transects approximately 18 meters apart. Approximately 1900 photos were captured over each 40 hectare survey area for each camera.
 
-The primary explanatory variable for our study will be the forest structure, which we can determine from the georeferenced photographs. We will apply the photogrammetry software to the photographs to stitch them together and generate a 3-D point cloud (akin to the data returned from LiDAR instruments) representing complex forest structure. We will develop a workflow to convert that 3-D point cloud to 2-D forest structure describing the forest’s ICO pattern [@lydersen2013]. Individual trees (I), trees belonging to clusters (C), the number of trees in each cluster, and the openings between trees (O) will be mapped [@lydersen2013]. 
+### Structure from motion/Photogrammetric processing
 
+We used structure from motion (SfM), aka photogrammetry, to generate orthorectified reflectance maps, digital surface models, and dense point clouds for each field site. We used Pix4Dmapper Cloud to process imagery using parameters ideal for images of a densely vegetated area taken by a multispectral camera. For three sites, we processed the RGB and the multispectral imagery in the same project to enhance the resolution of the dense point cloud. All SfM projects resulted in a single processing "block," indicating that all images in the project were optimized and processed together.
+
+### Creating canopy height models
+
+We classified each survey area's dense point cloud into "ground" and "non-ground" points using a cloth simulation filter algorithm [@zhang2016] implemented in the `lidR` [@roussel2019] package. We rasterized the ground points using the `raster` package [@hijmans2019] to create a digital terrain model representing the ground underneath the vegetation at 1 meter resolution. We created a canopy height model by subtracting the digital terrain model from the digital surface model created in Pix4Dmapper.
+
+### Tree detection
+
+Variable window filter in `ForestTools` [@plowright2018]
+Default variable window filter function in `ForestTools` as well as the "pines" and "combined" functions from @popescu2004.
+
+Local maximum filter in `lidR`
+
+Method from @li2012 using parameter sets from @shin2018 and @jakubowski2013 as well as dozens of others
+
+Watershed algorithm implemented in `lidR` as a wrapper for a function in the `EBImage` package [@pau2010].
+
+We used `R` for all statistical analyses, as well as for processing with the `lidR` package [@rcoreteam2018].
+
+Ptrees [@vega2014] implemented in `lidR` [@roussel2019] and `lidRplugins` [@roussel2019a].
+
+`multichm` [@eysn2015] implmented in `lidR` [@roussel2019] and `lidRplugins` [@roussel2019a].
+
+Experimental algorithm `lmfx` [@roussel2019a].
+
+### Map ground data
+
+Each orthorectified reflectance map was inspected to locate the 5 orange "X"s marking the center of the field plots. We were able to locate 110 out of 180 field plots and were then able to use these plots for validation of automated tree detection algorithms. We used the `sf` package [@pebesma2019] to convert distance-from-center and azimuth measurements of each tree in the ground plots to an x-y position on the SfM-derived reflectance map.
+
+### Correspondence of automatic tree detection with ground data
+
+We calculated 7 forest structure metrics for each field plot using the ground data collected by @fettig2019: total number of trees, number of trees greater than 15 meters, number of trees less than 15 meters, mean height of trees, 25^th^ percentile tree height, 75^th^ percentile tree height, mean distance to nearest tree neighbor, mean distance to 2^nd^ nearest neighbor.
+
+For each tree detection algorithm and parameter set described above, we calculated the same set of 7 structure metrics within the footprint of the validation field plots. We calculated the Pearson's correlation and root mean square error (RMSE) between the ground data and the aerial data for each of the 7 structure metrics for each of the XXXXX automatic tree detection algorithms.
+
+For each algorithm and parameter set, we calculated its performance relative to other algorithms as whether its Pearson's correlation was within 5% of the highest Pearson's correlation as well as whether its RMSE was within 5% of the lowest RMSE. For each algorithm/parameter set, we summed the number of forest structure metrics for which it reached these 5% thresholds. For automatically detecting trees across the whole study, we selected the algorithm/parameter set that performed well across the most number of forest metrics.
+
+### Segmentation of crowns
+
+We delineated individual tree crowns with a marker controlled watershed segmentation algorithm [@meyer1990] using the detected treetops as markers implemented in the `ForestTools` package [@plowright2018]. If the automatic segmentation algorithm failed to generate a crown segment for a detected tree (e.g., often snags with a very small crown footprint), a circular crown was generated with a radius of 0.5 meters. If the segmentation generated multiple polygons for a single detected tree, only the polygon containing the detected tree was retained. Image overlap decreases near the edges of the overall flight path, which reduces the quality of the SfM processing in those areas. Thus, we excluded segmented crowns within 35 meters of the edge of the survey area.
+
+We used the `velox` package [@hunziker2017] to extract all the pixel values from the orthorectified reflectance map for each of the 5 narrow bands within each segmented crown polygon. Per pixel, we additionally calculated the normalized difference vegetation index (NDVI; @rouse1973), the normalized difference red edge (NDRE; @gitelson1994), the red-green index (RGI; @coops2006), the red edge chlorophyll index (CI[red edge]; @clevers2013), and the green chlorophyll index (CI[green]; @clevers2013). For each crown polygon, we calculated the mean value for each raw and derived reflectance band (5 raw; 5 derived).
+
+### Classification of trees
+
+We overlaid the segmented crowns on the reflectance maps from 20 sites spanning the latitudinal and elevational gradient in the study. Using QGIS, we hand classified XXXX trees as live/dead and as one of 5 dominant species in the study area (*Pinus ponderosa*, *Pinus lambertiana*, *Abies concolor*, *Calocedrus decurrens*, or *Quercus kelloggi*) using the mapped ground data as a guide. 
+
+We used all 10 mean values of the reflectance bands for each tree crown polygon to predict whether the hand classified trees were alive or dead using a boosted logistic regression model implemented in the `caret` package [@kuhn2008]. For just the living trees, we similarly used all 10 reflectance values to predict the tree species using regularized discriminant analysis implemented in the `caret` package, which proved to have the highest accuracy for a training dataset (accuracy = XXXXX, kappa = XXXXX).
+
+Finally, we used these models to classify all tree crowns in the data set as alive or dead as well as the species of living trees.
+
+### Allometric scaling of height to basal area
+
+We converted the height of each tree (known from the canopy height model) to its basal area. Using the tree height and diameter at breast height (DBH; breast height = 1.37m) ground data, we fit a simple linear regression to predict DBH from height for each of the 5 dominant species. Using the model-classified tree species of each segmented tree, we used the corresponding linear relationship for that species to estimate the DBH given the tree's height. We then calculated each tree's basal area, assuming no tapering from breast height. 
+
+### Note on assumptions about dead trees
+
+For the purposes of this study, we assumed that all dead trees were ponderosa pine. This is a reasonably good assumption, given that @fettig2019 found that XXXXX% (~90) of the dead trees in the coincident ground plots were ponderosa pine.
+
+### Rasterizing individual tree data
+
+Because the tree detection algorithms were validated against ground data at the plot level, we rasterized the classified trees at a spatial resolution similar to that of the ground plots (rasterized to 20m x 20m equalling 400 m^2^; circular ground plots with 11.35m radius equalling 404 m^2^). In each raster cell, we tallied: number of alive trees, number of dead trees, number of ponderosa pine trees, number of non-ponderosa pine trees, basal area of ponderosa pine trees, basal area of non-ponderosa pine trees.
+
+### Environmental data
+
+We used climatic water deficit (CWD) [@stephenson1998] from the 1980-2010 mean value of the basin characterization model [@flint2013] as an integrated measure of temperature and moisture conditions for each of the 32 sites. Higher values of CWD correspond to hotter, drier sites and lower values correspond to cooler, wetter sites. CWD has been shown to correlate well with broad patterns of tree mortality in the Sierra Nevada [@young2017]. We converted the CWD value for each site into a z-score representing that sites deviation from the mean CWD across the climatic range of Sierra Nevada ponderosa pine as determined from XXXXX herbarium records described in @baldwin2017a. Thus, a CWD z-score of one would indicate that the CWD at that site is one standard deviation hotter/drier than the mean CWD across all geolocated herbarium records for this species.
 
 ### Statistical model
 
-The response would still be a Bernoulli distribution of alive/dead
-We'd use a logit link to the theta parameter of that Bernoulli distribution and a linear combination of predictors of logit(theta). That linear combination of predictors would include:
-A couple of tree-level covariates to predict logit(theta): tree size and voronoi polygon area (need to think more about how this might covary with the kernel parameters), perhaps topographic position (so as to augment the sub-site measure of CWD)
-One sub-site level covariate I'm thinking of to predict logit(theta): climatic water deficit (there are about 4 CWD pixels per site; but we could also just assign a bilinearly interpolated CWD value to each tree to eliminate this sub-site part of the hierarchy)
-One site-level effect I'm thinking of: the spatial covariance of logit(theta) within a site [so the site-level parameter to estimate would be the parameters of the decay kernel at each site]
+We used a mixed effects logistic regression with a logit link to predict the probability of *Pinus ponderosa* mortality within each raster cell as a function of climatic water deficit, the basal area of *Pinus ponderosa*, the basal area of all tree species, and interactions amongst all three variables along with partial pooling of intercept deviations across sites (i.e., a random intercept effect of site).
 
-My goal is to tease apart the relative role of environmental drivers versus behavioral drivers of bark beetle-induced tree mortality. I think teasing these apart will help with inference about the mechanism underlying the effect of forest structure on disturbance severity. Crowded forests means trees are both water stressed and are closer targets for new attacks [i.e., shorter dispersal needed to attack the next tree], and I think comparing the "voronoi polygon area" effect with the "spatial covariance of mortality kernel" effect across sites will tell us whether it's the water stress or the smaller dispersal requirements driving mortality patterns. A big voronoi polygon area effect and a short covariance kernel tells us that it's a water stress effect-- a crowded tree gets attacked regardless of whether nearby trees were attacked. A small voronoi polygon area effect and a long covariance kernel tells us that the mortality is patterned more based on there being spillover from nearby attacked neighbors instead of how crowded any given tree is. I expect we might see different relative magnitudes of voronoi polygon area and covariance kerenel effects depending on CWD.
+### Software and data availability
 
-
-### Statistical software and data availability
-
-We used `R` for all statistical analyses [@rcoreteam2018]. Data are available via the Open Science Framework.
+All data are available via the Open Science Framework. Statistical analyses were performed using the `brms` package. With the exception of the SfM software (Pix4Dmapper Cloud) and the GIS software QGIS, all data carpentry and analyses were performed using `R` (@rcoreteam2018).
 
 ## Results
 
+### Tree detection
 
+We found that the experimental `lmfx` algorithm with parameter values of XXXXX [@roussel2019] performed the best across 7 measures of forest structure as measured by Pearson's correlation with ground data (Table XXXX).
+
+### Effect of local structure on western pine beetle severity
+
+We found a strong main effect of climatic water deficit on the probability of ponderosa pine mortality within each 20m x 20m cell. Greater climatic water deficit, indicating hotter/drier conditions, increased the probability of ponderosa pine mortality. 
+
+We also found a strong effect of ponderosa pine basal area, accounting for the total basal area with greater ponderosa pine basal area increasing the probability of ponderosa pine mortality.
+
+We found a negative effect of total basal area on the probability of ponderosa pine mortality.
+
+We found no 2-way interaction between ponderosa pine basal area and total basal area.
+
+We found a significant 3-way interaction between ponderosa pine basal area, total basal area, and climatic water deficit. In hotter, drier sites, a positive interaction between ponderosa pine basal area and total basal area emerges.
 
 ## Discussion
+
+
+
+### Future directions
+
+My goal is to tease apart the relative role of environmental drivers versus behavioral drivers of bark beetle-induced tree mortality. I think teasing these apart will help with inference about the mechanism underlying the effect of forest structure on disturbance severity. Crowded forests means trees are both water stressed and are closer targets for new attacks [i.e., shorter dispersal needed to attack the next tree], and I think comparing the "voronoi polygon area" effect with the "spatial covariance of mortality kernel" effect across sites will tell us whether it's the water stress or the smaller dispersal requirements driving mortality patterns. A big voronoi polygon area effect and a short covariance kernel tells us that it's a water stress effect-- a crowded tree gets attacked regardless of whether nearby trees were attacked. A small voronoi polygon area effect and a long covariance kernel tells us that the mortality is patterned more based on there being spillover from nearby attacked neighbors instead of how crowded any given tree is. I expect we might see different relative magnitudes of voronoi polygon area and covariance kerenel effects depending on CWD.
 
 ## References
