@@ -30,6 +30,7 @@ analysis_df <-
   dplyr::left_join(cwd_data, by = "site") %>% 
   as_tibble() %>% 
   dplyr::mutate(total_count = pipo_count + non_pipo_count) %>% 
+  dplyr::mutate(total_ba = pipo_ba + non_pipo_ba) %>% 
   dplyr::mutate(unique_cellID = 1:nrow(.))
 
 summarized_df <-
@@ -41,6 +42,7 @@ summarized_df <-
             non_pipo_count = sum(non_pipo_count),
             total_count = sum(total_count),
             pipo_ba = sum(pipo_ba),
+            non_pipo_ba = sum(non_pipo_ba),
             total_ba = sum(total_ba),
             cwd_zscore = mean(cwd_zscore))
 
