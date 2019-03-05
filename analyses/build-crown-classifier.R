@@ -70,6 +70,7 @@ sites_to_hand_classify %>%
 # Extract the reflectance data from within hand-classified crowns ---------
 if(!file.exists(here::here("data/data_output/classified/hand-classified/hand-classified-crowns.csv"))) {
   
+  tic()
   crowns_with_reflectance <-
     map(.x = sites_to_hand_classify, .f = function(current_site) {
       
@@ -88,7 +89,7 @@ if(!file.exists(here::here("data/data_output/classified/hand-classified/hand-cla
       
       current_crowns <- 
         current_crowns %>%
-        dplyr::select(treeID, height, ch_area, live, species, x, y, b_mean, g_mean, r_mean, re_mean, nir_mean, ndvi_mean, rgi_mean, gbi_mean, ndre_mean) %>% 
+        dplyr::select(treeID, height, ch_area, live, species, x, y, b_mean, g_mean, r_mean, re_mean, nir_mean, ndvi_mean, rgi_mean, cire_mean, cig_mean, ndre_mean) %>% 
         dplyr::mutate(treeID = paste(current_site, treeID, sep = "_"),
                       crs = st_crs(.)$proj4string) %>% 
         st_drop_geometry()
@@ -116,7 +117,7 @@ live_or_dead_training <- crowns_with_reflectance[live_or_dead_idx, ]
 live_or_dead_testing <- crowns_with_reflectance[-live_or_dead_idx, ]
 
 live_or_dead_fit <- train(
-  as.factor(live) ~ b_mean + g_mean + r_mean + re_mean + nir_mean + ndvi_mean + rgi_mean + gbi_mean + ndre_mean,
+  as.factor(live) ~ b_mean + g_mean + r_mean + re_mean + nir_mean + ndvi_mean + rgi_mean + cire_mean + cig_mean + ndre_mean,
   data = live_or_dead_training,
   method = "LogitBoost"
 )
@@ -147,7 +148,7 @@ species_testing <- live_crowns[-species_idx, ]
 
 # Best classification method after tests (see docs/interim-reports/)
 rdaFit <- train(
-  species ~ b_mean + g_mean + r_mean + re_mean + nir_mean + ndvi_mean + rgi_mean + gbi_mean + ndre_mean,
+  species ~ b_mean + g_mean + r_mean + re_mean + nir_mean + ndvi_mean + rgi_mean + cire_mean + cig_mean + ndre_mean,
   data = species_training,
   method = "rda",
   preProcess = c("center", "scale"),

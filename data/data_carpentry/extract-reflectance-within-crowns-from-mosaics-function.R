@@ -32,7 +32,8 @@ extract_reflectance_from_crowns <- function(index, crowns, ttops) {
   # create new bands in the velox object using raster algebra on a pixel-by-pixel basis 
   # to get our vegetation indices that might be helpful (RGI and GBI)
   index$rasterbands$rgi <- index$rasterbands$r / index$rasterbands$g
-  index$rasterbands$gbi <- index$rasterbands$g / index$rasterbands$b
+  index$rasterbands$cire <- (index$rasterbands$nir / index$rasterbands$re) - 1
+  index$rasterbands$cig <- (index$rasterbands$nir / index$rasterbands$g) - 1
   index$rasterbands$ndvi <- (index$rasterbands$nir - index$rasterbands$r) / (index$rasterbands$nir + index$rasterbands$r)
   index$rasterbands$ndre <- (index$rasterbands$re - index$rasterbands$r) / (index$rasterbands$re + index$rasterbands$r)
   

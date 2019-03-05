@@ -40,7 +40,7 @@ live_or_dead_testing <- crowns_with_reflectance[-live_or_dead_idx, ]
 
 ```{r implement_boosted_logistic_regression}
 live_or_dead_fit <- train(
-  as.factor(live) ~ b_mean + g_mean + r_mean + re_mean + nir_mean + ndvi_mean + rgi_mean + gbi_mean + ndre_mean,
+  as.factor(live) ~ b_mean + g_mean + r_mean + re_mean + nir_mean + ndvi_mean + rgi_mean + cire_mean + cig_mean + ndre_mean,
   data = live_or_dead_training,
   method = "LogitBoost"
 )
@@ -98,7 +98,7 @@ functional_group_testing <- live_crowns[-functional_group_idx, ]
 # accuracy: 70%
 # kappa: 0.606
 rdaFit <- train(
-  species ~ b_mean + g_mean + r_mean + re_mean + nir_mean + ndvi_mean + rgi_mean + gbi_mean + ndre_mean,
+  species ~ b_mean + g_mean + r_mean + re_mean + nir_mean + ndvi_mean + rgi_mean + cire_mean + cig_mean + ndre_mean,
   data = species_training,
   method = "rda",
   preProcess = c("center", "scale"),
@@ -117,7 +117,7 @@ species_testing
 # accuracy: 67%
 # kappa: 0.566
 pdaFit <- train(
-  species ~ b_mean + g_mean + r_mean + re_mean + nir_mean + ndvi_mean + rgi_mean + gbi_mean + ndre_mean,
+  species ~ b_mean + g_mean + r_mean + re_mean + nir_mean + ndvi_mean + rgi_mean + cire_mean + cig_mean + ndre_mean,
   data = species_training,
   method = "pda",
   preProcess = c("center", "scale"),
@@ -137,7 +137,7 @@ species_testing
 # accuracy: 67%
 # kappa: 0.55
 locldaFit <- train(
-  species ~ b_mean + g_mean + r_mean + re_mean + nir_mean + ndvi_mean + rgi_mean + gbi_mean + ndre_mean,
+  species ~ b_mean + g_mean + r_mean + re_mean + nir_mean + ndvi_mean + rgi_mean + cire_mean + cig_mean + ndre_mean,
   data = species_training,
   method = "loclda",
   preProcess = c("center", "scale")
@@ -155,7 +155,7 @@ species_testing
 # accuracy: 66%
 # kappa: 0.54
 pda2Fit <- train(
-  species ~ b_mean + g_mean + r_mean + re_mean + nir_mean + ndvi_mean + rgi_mean + gbi_mean + ndre_mean,
+  species ~ b_mean + g_mean + r_mean + re_mean + nir_mean + ndvi_mean + rgi_mean + cire_mean + cig_mean + ndre_mean,
   data = species_training,
   method = "pda2",
   preProcess = c("center", "scale"),
@@ -174,7 +174,7 @@ species_testing
 # accuracy: 65%
 # kappa: 0.53
 ldaFit <- train(
-  species ~ b_mean + g_mean + r_mean + re_mean + nir_mean + ndvi_mean + rgi_mean + gbi_mean + ndre_mean,
+  species ~ b_mean + g_mean + r_mean + re_mean + nir_mean + ndvi_mean + rgi_mean + cire_mean + cig_mean + ndre_mean,
   data = species_training,
   method = "lda",
   preProcess = c("center", "scale")
@@ -192,7 +192,7 @@ species_testing
 # accuracy: 65.4%
 # kappa: 0.537
 mdaFit <- train(
-  species ~ b_mean + g_mean + r_mean + re_mean + nir_mean + ndvi_mean + rgi_mean + gbi_mean + ndre_mean,
+  species ~ b_mean + g_mean + r_mean + re_mean + nir_mean + ndvi_mean + rgi_mean + cire_mean + cig_mean + ndre_mean,
   data = species_training,
   method = "mda",
   preProcess = c("center", "scale"),
@@ -214,7 +214,7 @@ species_testing
 tuneGrid <- expand.grid(dimen = c(3:6))
 
 lda2Fit <- train(
-  species ~ b_mean + g_mean + r_mean + re_mean + nir_mean + ndvi_mean + rgi_mean + gbi_mean + ndre_mean,
+  species ~ b_mean + g_mean + r_mean + re_mean + nir_mean + ndvi_mean + rgi_mean + cire_mean + cig_mean + ndre_mean,
   data = species_training,
   method = "lda2",
   preProcess = c("center", "scale"),
@@ -233,7 +233,7 @@ species_testing
 # accuracy: 57%
 # kappa: 0.41
 rfFit <- train(
-  species ~ b_mean + g_mean + r_mean + re_mean + nir_mean + ndvi_mean + rgi_mean + gbi_mean + ndre_mean,
+  species ~ b_mean + g_mean + r_mean + re_mean + nir_mean + ndvi_mean + rgi_mean + cire_mean + cig_mean + ndre_mean,
   data = species_training,
   method = "rf",
   preProcess = c("center", "scale")
@@ -252,7 +252,7 @@ species_testing
 # kappa: 0.37
 
 cforestFit <- train(
-  species ~ b_mean + g_mean + r_mean + re_mean + nir_mean + ndvi_mean + rgi_mean + gbi_mean + ndre_mean,
+  species ~ b_mean + g_mean + r_mean + re_mean + nir_mean + ndvi_mean + rgi_mean + cire_mean + cig_mean + ndre_mean,
   data = species_training,
   method = "cforest",
   preProcess = c("center", "scale")
@@ -272,7 +272,7 @@ species_testing
 # kappa: 0.308
 
 bstTreeFit <- train(
-  species ~ b_mean + g_mean + r_mean + re_mean + nir_mean + ndvi_mean + rgi_mean + gbi_mean + ndre_mean,
+  species ~ b_mean + g_mean + r_mean + re_mean + nir_mean + ndvi_mean + rgi_mean + cire_mean + cig_mean + ndre_mean,
   data = species_training,
   method = "bstTree",
   preProcess = c("center", "scale")
@@ -286,7 +286,7 @@ bstTreeFit
 # accuracy: 55%
 # kappa: 0.40
 hdaFit <- train(
-  species ~ b_mean + g_mean + r_mean + re_mean + nir_mean + ndvi_mean + rgi_mean + gbi_mean + ndre_mean,
+  species ~ b_mean + g_mean + r_mean + re_mean + nir_mean + ndvi_mean + rgi_mean + cire_mean + cig_mean + ndre_mean,
   data = species_training,
   method = "hda",
   preProcess = c("center", "scale")
@@ -300,7 +300,7 @@ hdaFit
 # accuracy: 63%
 # kappa: 0.51
 hddaFit <- train(
-  species ~ b_mean + g_mean + r_mean + re_mean + nir_mean + ndvi_mean + rgi_mean + gbi_mean + ndre_mean,
+  species ~ b_mean + g_mean + r_mean + re_mean + nir_mean + ndvi_mean + rgi_mean + cire_mean + cig_mean + ndre_mean,
   data = species_training,
   method = "hdda",
   preProcess = c("center", "scale")
@@ -314,7 +314,7 @@ hddaFit
 # accuracy: 45%
 # kappa: 0.26
 stepLDAFit <- train(
-  species ~ b_mean + g_mean + r_mean + re_mean + nir_mean + ndvi_mean + rgi_mean + gbi_mean + ndre_mean,
+  species ~ b_mean + g_mean + r_mean + re_mean + nir_mean + ndvi_mean + rgi_mean + cire_mean + cig_mean + ndre_mean,
   data = species_training,
   method = "stepLDA",
   preProcess = c("center", "scale")
@@ -328,7 +328,7 @@ stepLDAFit
 # accuracy: 50%
 # kappa: 0.31
 MldaFit <- train(
-  species ~ b_mean + g_mean + r_mean + re_mean + nir_mean + ndvi_mean + rgi_mean + gbi_mean + ndre_mean,
+  species ~ b_mean + g_mean + r_mean + re_mean + nir_mean + ndvi_mean + rgi_mean + cire_mean + cig_mean + ndre_mean,
   data = species_training,
   method = "Mlda",
   preProcess = c("center", "scale")
@@ -342,7 +342,7 @@ MldaFit
 # accuracy: 56%
 # kappa: 0.39
 qdaFit <- train(
-  species ~ b_mean + g_mean + r_mean + re_mean + nir_mean + ndvi_mean + rgi_mean + gbi_mean + ndre_mean,
+  species ~ b_mean + g_mean + r_mean + re_mean + nir_mean + ndvi_mean + rgi_mean + cire_mean + cig_mean + ndre_mean,
   data = species_training,
   method = "qda",
   preProcess = c("center", "scale")
@@ -356,7 +356,7 @@ qdaFit
 # accuracy: 53%
 # kappa: 0.38
 LindaFit <- train(
-  species ~ b_mean + g_mean + r_mean + re_mean + nir_mean + ndvi_mean + rgi_mean + gbi_mean + ndre_mean,
+  species ~ b_mean + g_mean + r_mean + re_mean + nir_mean + ndvi_mean + rgi_mean + cire_mean + cig_mean + ndre_mean,
   data = species_training,
   method = "Linda",
   preProcess = c("center", "scale")
@@ -370,7 +370,7 @@ LindaFit
 # accuracy: 52%
 # kappa: 0.40
 rrldaFit <- train(
-  species ~ b_mean + g_mean + r_mean + re_mean + nir_mean + ndvi_mean + rgi_mean + gbi_mean + ndre_mean,
+  species ~ b_mean + g_mean + r_mean + re_mean + nir_mean + ndvi_mean + rgi_mean + cire_mean + cig_mean + ndre_mean,
   data = species_training,
   method = "rrlda",
   preProcess = c("center", "scale")
@@ -385,7 +385,7 @@ rrldaFit
 # accuracy: 63%
 # kappa: 0.51
 sdaFit <- train(
-  species ~ b_mean + g_mean + r_mean + re_mean + nir_mean + ndvi_mean + rgi_mean + gbi_mean + ndre_mean,
+  species ~ b_mean + g_mean + r_mean + re_mean + nir_mean + ndvi_mean + rgi_mean + cire_mean + cig_mean + ndre_mean,
   data = species_training,
   method = "sda",
   preProcess = c("center", "scale"),
@@ -401,7 +401,7 @@ sdaFit
 # accuracy: 63%
 # kappa: 0.51
 sparseLDAFit <- train(
-  species ~ b_mean + g_mean + r_mean + re_mean + nir_mean + ndvi_mean + rgi_mean + gbi_mean + ndre_mean,
+  species ~ b_mean + g_mean + r_mean + re_mean + nir_mean + ndvi_mean + rgi_mean + cire_mean + cig_mean + ndre_mean,
   data = species_training,
   method = "sparseLDA",
   preProcess = c("center", "scale")
@@ -419,7 +419,7 @@ species_testing
 # accuracy: 41%
 # kappa: 0.51
 sldaFit <- train(
-  species ~ b_mean + g_mean + r_mean + re_mean + nir_mean + ndvi_mean + rgi_mean + gbi_mean + ndre_mean,
+  species ~ b_mean + g_mean + r_mean + re_mean + nir_mean + ndvi_mean + rgi_mean + cire_mean + cig_mean + ndre_mean,
   data = species_training,
   method = "slda",
   preProcess = c("center", "scale")
@@ -587,14 +587,15 @@ spectral_library <-
   spectral_library %>%
   dplyr::mutate(ndvi_mean = (nir_mean - r_mean) / (nir_mean + r_mean),
                 rgi_mean = r_mean / g_mean,
-                gbi_mean = g_mean / b_mean,
+                cire_mean = (nir_mean / re_mean) - 1,
+                cig_mean = (nir_mean / g_mean) - 1,
                 ndre_mean = (re_mean - r_mean) / (re_mean + r_mean))
 ```
 
 Hmm... I'm not hopeful about this approach.
 ```{r train_on_spectral_library}
 ldaFit_library <- train(
-  species ~ b_mean + g_mean + r_mean + re_mean + nir_mean + ndvi_mean + rgi_mean + gbi_mean + ndre_mean,
+  species ~ b_mean + g_mean + r_mean + re_mean + nir_mean + ndvi_mean + rgi_mean + cire_mean + cig_mean + ndre_mean,
   data = spectral_library,
   method = "lda"
 )
@@ -612,7 +613,7 @@ head(test, 20)
 # accuracy: 70%
 # kappa: 0.606
 rda_library_Fit <- train(
-  species ~ b_mean + g_mean + r_mean + re_mean + nir_mean + ndvi_mean + rgi_mean + gbi_mean + ndre_mean,
+  species ~ b_mean + g_mean + r_mean + re_mean + nir_mean + ndvi_mean + rgi_mean + cire_mean + cig_mean + ndre_mean,
   data = spectral_library,
   method = "rda",
   preProcess = c("center", "scale"),
