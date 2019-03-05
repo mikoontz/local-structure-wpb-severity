@@ -39,7 +39,7 @@ merged_sites <- c("eldo_3k_2",
 # This is where I can put in sites that need their processing redone. An empty 
 # string means that no already-processed site output will be overwritten
 # (but sites that have yet to be processed will still have their processing done)
-sites_to_overwrite <- ""
+sites_to_overwrite <- "all"
 sites_checklist$overwrite <- ifelse(sites_to_overwrite == "all", yes = TRUE, no = FALSE)
 
 sites_checklist[sites_checklist$site %in% sites_to_overwrite, "overwrite"] <- TRUE
@@ -105,15 +105,15 @@ for(i in seq_along(sites_to_process)) {
                                        background = 0, 
                                        fun = sum)
   
-  all_basal_area <- raster::rasterize(x = current_trees, 
+  non_pipo_basal_area <- raster::rasterize(x = current_trees %>% dplyr::filter((live == 1 & species != "pipo")), 
                                       y = raster_template, 
                                       field = "estimated_ba", 
                                       background = 0, 
                                       fun = sum)
   
   
-  results_raster <- raster::stack(live_and_dead, pipo_count, non_pipo_count, pipo_basal_area, all_basal_area)
-  names(results_raster) <- c("live_count", "dead_count", "pipo_count", "non_pipo_count", "pipo_ba", "total_ba")
+  results_raster <- raster::stack(live_and_dead, pipo_count, non_pipo_count, pipo_basal_area, non_pipo_basal_area)
+  names(results_raster) <- c("live_count", "dead_count", "pipo_count", "non_pipo_count", "pipo_ba", "non_pipo_ba")
   
   writeRaster(x = results_raster, filename = here::here(paste0("analyses/analyses_output/rasterized-trees/", current_site, "_rasterized-trees.tif")), delete_dsn = TRUE)
   
