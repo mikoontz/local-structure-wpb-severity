@@ -57,7 +57,7 @@ crowns_with_reflectance <-
     
     current_crowns <- 
       current_crowns %>%
-      dplyr::select(treeID, height, ch_area, x, y, b_mean, g_mean, r_mean, re_mean, nir_mean, ndvi_mean, rgi_mean, gbi_mean, ndre_mean) %>% 
+      dplyr::select(treeID, height, ch_area, x, y, b_mean, g_mean, r_mean, re_mean, nir_mean, ndvi_mean, rgi_mean, cire_mean, cig_mean, ndre_mean) %>% 
       dplyr::mutate(treeID = paste(current_site, treeID, sep = "_"),
                     crs = st_crs(.)$proj4string)
     
