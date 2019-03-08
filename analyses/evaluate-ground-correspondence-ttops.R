@@ -96,8 +96,11 @@ best_ttops_detection <-
   dplyr::arrange(desc(both_within_threshold_pct)) %>% 
   dplyr::left_join(elapsed_time)
 
-best_ttops_detection %>% 
-  slice(1:20) %>% 
+
+algorithm_summary <-
+  best_ttops_detection %>% 
   separate(col = ttops_method, into = c("algorithm", "var1", "var1_val", "var2", "var2_val", "zu", "zu_val", "R", "R_val", "speedUp", "speedUp_val"), sep = "_") %>% 
-  dplyr::select(1:11)
+  dplyr::select(1:11) %>% 
+  dplyr::group_by(algorithm) %>% 
+  tally()
 
