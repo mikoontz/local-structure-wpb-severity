@@ -35,3 +35,4 @@ data/data_raw/nasa-hyspiri-airborne-campaign-leaf-and-canopy-spectra-and-leaf-tr
 analyses/analyses_output/classified-trees.geojson
 data/features/California_Species_clean_All_epsg_3310.csv
 data/features/jepcodes-v7.kml
+analyses/analyses_output/*.rds
