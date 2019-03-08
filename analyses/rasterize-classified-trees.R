@@ -72,48 +72,144 @@ for(i in seq_along(sites_to_process)) {
   buffered_bounds <-
     site_bounds %>% 
     st_transform(3310) %>% 
-    st_buffer(-40) # buffer in a little further than the trees were to reduce edge effects
+    st_buffer(-35) # buffer in a little further than the trees were to reduce edge effects (-40 worked)
   
   raster_template <- raster::raster(buffered_bounds, res = 20)
   
-  live_and_dead <- raster::rasterize(x = current_trees, 
-                                     y = raster_template, 
-                                     field = "live", 
-                                     background = 0, 
-                                     fun = function(x, ...) {
-                                       c(length(which(x == 1)), 
-                                         length(which(x == 0)))
-                                     })
   
-  pipo_count <- raster::rasterize(x = current_trees %>% 
-                                    dplyr::filter((species == "pipo") | live == 0), 
+  
+  # count of trees per cell -------------------------------------------------
+  
+  
+  live_count <- raster::rasterize(x = current_trees, 
                                   y = raster_template, 
-                                  field = "species", 
+                                  field = "live", 
+                                  background = 0,
+                                  fun = function(x, ...) {
+                                    length(which(na.omit(x) == 1))
+                                  })
+  
+  dead_count <- raster::rasterize(x = current_trees, 
+                                  y = raster_template, 
+                                  field = "live", 
                                   background = 0, 
-                                  fun = "count")
+                                  fun = function(x, ...) {
+                                    length(which(na.omit(x) != 1))
+                                  })
   
-  non_pipo_count <- raster::rasterize(x = current_trees %>% dplyr::filter((live == 1 & species != "pipo")), 
+  
+  pipo_count <- raster::rasterize(x = current_trees, 
+                                  y = raster_template, 
+                                  field = "species",
+                                  background = 0, 
+                                  fun = function(x, ...) {
+                                    length(which(na.omit(x) == "pipo"))
+                                  })
+  
+  non_pipo_count <- raster::rasterize(x = current_trees, 
                                       y = raster_template, 
-                                      field = "species", 
+                                      field = "species",
                                       background = 0, 
-                                      fun = "count")
+                                      fun = function(x, ...) {
+                                        length(which(na.omit(x) != "pipo"))
+                                      })
   
-  pipo_basal_area <- raster::rasterize(x = current_trees %>% 
-                                         dplyr::filter((species == "pipo") | live == 0), 
+  total_count <- raster::rasterize(x = current_trees, 
+                                   y = raster_template, 
+                                   field = "live", 
+                                   background = 0, 
+                                   fun = function(x, ...) {
+                                     length(na.omit(x))
+                                   })
+  
+  # r1 <- live_count + dead_count
+  # compareRaster(r1, total_count, values = TRUE)
+  # 
+  # r2 <- pipo_count + non_pipo_count
+  # compareRaster(r2, live_count, values = TRUE)
+  # 
+  
+  # total basal area per cell -----------------------------------------------
+  
+  
+  live_basal_area <- raster::rasterize(x = current_trees %>% dplyr::filter((live == 1)), 
                                        y = raster_template, 
                                        field = "estimated_ba", 
                                        background = 0, 
                                        fun = sum)
   
-  non_pipo_basal_area <- raster::rasterize(x = current_trees %>% dplyr::filter((live == 1 & species != "pipo")), 
-                                      y = raster_template, 
-                                      field = "estimated_ba", 
-                                      background = 0, 
-                                      fun = sum)
+  dead_basal_area <- raster::rasterize(x = current_trees %>% dplyr::filter((live == 0)), 
+                                       y = raster_template, 
+                                       field = "estimated_ba", 
+                                       background = 0, 
+                                       fun = sum)
+  
+  pipo_basal_area <- raster::rasterize(x = current_trees %>% dplyr::filter((species == "pipo")), 
+                                       y = raster_template, 
+                                       field = "estimated_ba", 
+                                       background = 0, 
+                                       fun = sum)
+  
+  non_pipo_basal_area <- raster::rasterize(x = current_trees %>% dplyr::filter((species != "pipo")), 
+                                           y = raster_template, 
+                                           field = "estimated_ba", 
+                                           background = 0, 
+                                           fun = sum)
+  
+  total_basal_area <- raster::rasterize(x = current_trees, 
+                                        y = raster_template, 
+                                        field = "estimated_ba", 
+                                        background = 0, 
+                                        fun = sum)
+  
+  # r3 <- live_basal_area + dead_basal_area
+  # compareRaster(r3, total_basal_area, values = TRUE)
+  # 
+  # r4 <- pipo_basal_area + non_pipo_basal_area
+  # compareRaster(r4, live_basal_area, values = TRUE)
+  
+  # mean basal area per tree ------------------------------------------------
   
   
-  results_raster <- raster::stack(live_and_dead, pipo_count, non_pipo_count, pipo_basal_area, non_pipo_basal_area)
-  names(results_raster) <- c("live_count", "dead_count", "pipo_count", "non_pipo_count", "pipo_ba", "non_pipo_ba")
+  live_mean_ba <- raster::rasterize(x = current_trees %>% dplyr::filter((live == 1)), 
+                                    y = raster_template, 
+                                    field = "estimated_ba", 
+                                    background = 0, 
+                                    fun = mean)
+  
+  dead_mean_ba <- raster::rasterize(x = current_trees %>% dplyr::filter((live == 0)), 
+                                    y = raster_template, 
+                                    field = "estimated_ba", 
+                                    background = 0, 
+                                    fun = mean)
+  
+  pipo_mean_ba <- raster::rasterize(x = current_trees %>% dplyr::filter((species == "pipo")), 
+                                    y = raster_template, 
+                                    field = "estimated_ba", 
+                                    background = 0, 
+                                    fun = mean)
+  
+  non_pipo_mean_ba <- raster::rasterize(x = current_trees %>% dplyr::filter((species != "pipo")), 
+                                        y = raster_template, 
+                                        field = "estimated_ba", 
+                                        background = 0, 
+                                        fun = mean)
+  
+  overall_mean_ba <- raster::rasterize(x = current_trees, 
+                                       y = raster_template, 
+                                       field = "estimated_ba", 
+                                       background = 0, 
+                                       fun = mean)
+  
+ 
+ 
+  results_raster <- raster::stack(live_count, dead_count, pipo_count, non_pipo_count, total_count, 
+                                  live_basal_area, dead_basal_area, pipo_basal_area, non_pipo_basal_area, total_basal_area,
+                                  live_mean_ba, dead_mean_ba, pipo_mean_ba, non_pipo_mean_ba, overall_mean_ba)
+  
+  names(results_raster) <- c("live_count", "dead_count", "pipo_count", "non_pipo_count", "total_count", 
+                             "live_ba", "dead_ba", "pipo_ba", "non_pipo_ba", "total_ba",
+                             "live_mean_ba", "dead_mean_ba", "pipo_mean_ba", "non_pipo_mean_ba", "overall_mean_ba")
   
   writeRaster(x = results_raster, filename = here::here(paste0("analyses/analyses_output/rasterized-trees/", current_site, "_rasterized-trees.tif")), overwrite = TRUE)
   
