@@ -14,8 +14,6 @@ cwd <- raster::raster(here::here("data/features/cwd1981_2010_ave_HST_1550861123/
 
 crs(cwd) <- st_crs(3310)$proj4string
 
-plot(cwd)
-
 # There are approximately 4 CWD pixels (at 270m spatial resolution) per
 # 40ha site (if square, about 625m on a side).
 # First pass, let's just extract the CWD values at the centers of each 
@@ -31,7 +29,7 @@ site_centers <- st_read(here::here("data/features/plot-centers_ground-gps-measur
   dplyr::summarize() %>% 
   sf::st_centroid() %>% 
   dplyr::ungroup() %>% 
-  dplyr::mutate(cwd = raster::extract(cwd, ., method = "bilinear")) %>% 
+  dplyr::mutate(site_cwd = raster::extract(cwd, ., method = "bilinear")) %>% 
   dplyr::mutate(elevation_band = as.numeric(as.character(elevation_band))) %>% 
   dplyr::mutate(forest = substr(forest, start = 1, stop = 4)) %>% 
   dplyr::mutate(elevation_band = paste0(substr(elevation_band, start = 1, stop = 1), "k")) %>% 
@@ -54,7 +52,7 @@ site_centers
 # This is the raw CWD data. 
 cwd_data <- 
   site_centers %>% 
-  dplyr::select(site, cwd) %>% 
+  dplyr::select(site, site_cwd) %>% 
   sf::st_drop_geometry()
 
 # What do these CWD values mean for the overall PIPO distribution
@@ -62,13 +60,9 @@ cwd_data <-
 
 sn <- sf::st_read(here::here("data/data_output/sierra-nevada-jepson/sierra-nevada-jepson.shp"))
 
-herbarium_records <- 
+sn_pipo <-
   data.table::fread(here::here("data/features/California_Species_clean_All_epsg_3310.csv")) %>% 
   dplyr::as_tibble() %>% 
-  dplyr::filter(scientificName == "Pinus ponderosa")
-
-sn_pipo <-
-  herbarium_records %>% 
   dplyr::mutate(current_genus = tolower(current_genus),
                 current_species = tolower(current_species)) %>% 
   dplyr::filter(current_genus == "pinus") %>% 
@@ -85,4 +79,6 @@ sd_cwd_sn_pipo <- sd(sn_pipo$cwd, na.rm = TRUE)
 
 cwd_data <-
   cwd_data %>% 
-  dplyr::mutate(cwd_zscore = (cwd - mean_cwd_sn_pipo) / sd_cwd_sn_pipo)
+  dplyr::mutate(site_cwd_zscore = (site_cwd - mean_cwd_sn_pipo) / sd_cwd_sn_pipo)
+
+readr::write_csv(cwd_data, here::here("data/data_output/cwd-data.csv"))
