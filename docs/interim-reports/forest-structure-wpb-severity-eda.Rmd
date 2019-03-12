@@ -1,0 +1,299 @@
+---
+title: "Model building"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(sf)
+library(tidyverse)
+library(brms)
+library(spdep)
+library(mgcv)
+library(tictoc)
+library(spind)
+library(future)
+library(mgcv)
+```
+
+```{r}
+source(here::here("data/data_carpentry/get-buffered-survey-area.R"))
+source(here::here("analyses/determine-priors-from-ground-data.R"))
+# priors objects called `priors_ba_plot_model` and `priors_qmd_plot_model` for priors when CWD is for the individual plots
+# priors objects called `priors_ba_site_model` and `priors_qmd_site_model` for priors when CWD is for the whole site
+```
+
+```{r}
+cwd_data <- readr::read_csv(here::here("data/data_output/cwd-data.csv"))
+
+if(file.exists(here::here("analyses/analyses_output/data-from-rasterized-classified-trees.csv"))) {
+  
+  data_from_rasterized_trees <- 
+    readr::read_csv(here::here("analyses/analyses_output/data-from-rasterized-classified-trees.csv"))
+} else {
+  stop("You need to extract the data from the rasterized version of the classified trees! See the analyses/rasterize-classified-trees.R script.")
+}
+
+glimpse(data_from_rasterized_trees)
+
+center_param <- TRUE
+scale_param <- TRUE
+
+analysis_df <-
+  data_from_rasterized_trees %>% 
+  dplyr::left_join(cwd_data, by = "site") %>% 
+  as_tibble() %>% 
+  dplyr::mutate(pipo_and_dead_tpha_s = scale(pipo_and_dead_tpha, center = center_param, scale = scale_param),
+                overall_tpha_s = scale(overall_tpha, center = center_param, scale = scale_param),
+                pipo_and_dead_bapha_s = scale(pipo_and_dead_bapha, center = center_param, scale = scale_param),
+                overall_bapha_s = scale(overall_bapha, center = center_param, scale = scale_param),
+                pipo_and_dead_qmd_s = scale(pipo_and_dead_qmd, center = center_param, scale = scale_param),
+                overall_qmd_s = scale(overall_qmd, center = center_param, scale = scale_param),
+                live_sdi_ac_s = scale(live_sdi_ac, center = center_param, scale = scale_param),
+                pipo_and_dead_sdi_ac_s = scale(pipo_and_dead_sdi_ac, center = center_param, scale = scale_param),
+                overall_sdi_ac_s = scale(overall_sdi_ac, center = center_param, scale = scale_param))
+
+```
+
+## Summarize the data in case we want to ask questions at the stand scale
+
+```{r}
+# summarized_df <-
+#   analysis_df %>%
+#   group_by(forest, elev, rep, site) %>%
+#   summarize(live_count = sum(live_count),
+#             dead_count = sum(dead_count),
+#             pipo_count = sum(pipo_count),
+#             non_pipo_count = sum(non_pipo_count),
+#             pipo_and_dead_count = sum(pipo_and_dead_count),
+#             total_count = sum(total_count),
+#             live_ba = sum(live_ba),
+#             dead_ba = sum(dead_ba),
+#             pipo_ba = sum(pipo_ba),
+#             non_pipo_ba = sum(non_pipo_ba),
+#             pipo_and_dead_ba = sum(pipo_and_dead_ba),
+#             total_ba = sum(total_ba),
+#             live_mean_ba = live_ba / live_count,
+#             dead_mean_ba = dead_ba / dead_count,
+#             pipo_mean_ba = pipo_ba / pipo_count,
+#             non_pipo_mean_ba = non_pipo_ba / non_pipo_count,
+#             pipo_and_dead_mean_ba = pipo_and_dead_ba / pipo_and_dead_count,
+#             overall_mean_ba = total_ba / total_count,
+#             x = mean(x),
+#             y = mean(y)) %>% 
+#   dplyr::left_join(survey_area, by = "site") %>% 
+#   dplyr::left_join(cwd_data, by = "site") %>% 
+#   dplyr::mutate(buffered_survey_area_ha = buffered_survey_area / 10000) %>% 
+#   dplyr::mutate(live_tpha = live_count / buffered_survey_area_ha,
+#                 dead_tpha = dead_count / buffered_survey_area_ha,
+#                 pipo_tpha = pipo_count / buffered_survey_area_ha,
+#                 non_pipo_tpha = non_pipo_count / buffered_survey_area_ha,
+#                 pipo_and_dead_tpha = pipo_and_dead_count / buffered_survey_area_ha,
+#                 overall_tpha = total_count / buffered_survey_area_ha,
+#                 live_bapha = live_ba / buffered_survey_area_ha,
+#                 dead_bapha = dead_ba / buffered_survey_area_ha,
+#                 pipo_bapha = pipo_ba / buffered_survey_area_ha,
+#                 non_pipo_bapha = non_pipo_ba / buffered_survey_area_ha,
+#                 pipo_and_dead_bapha = pipo_and_dead_ba / buffered_survey_area_ha,
+#                 overall_bapha = total_ba / buffered_survey_area_ha) %>% 
+#   dplyr::mutate(elev_band = case_when(forest != "sequ" & elev == "3k" ~ "lo",
+#                                       forest != "sequ" & elev == "4k" ~ "mi",
+#                                       forest != "sequ" & elev == "5k" ~ "hi",
+#                                       forest == "sequ" & elev == "4k" ~ "lo",
+#                                       forest == "sequ" & elev == "5k" ~ "mi",
+#                                       forest == "sequ" & elev == "6k" ~ "hi")) %>% 
+#   dplyr::mutate(elev_band = factor(elev_band, levels = c("lo", "mi", "hi"))) %>% 
+#   dplyr::mutate(lat_band = factor(forest, levels = c("sequ", "sier", "stan", "eldo"))) %>% 
+#   dplyr::ungroup() %>% 
+#   dplyr::mutate(pipo_and_dead_tpha_s = scale(pipo_and_dead_tpha, center = TRUE, scale = FALSE),
+#                 overall_tpha_s = scale(overall_tpha, center = TRUE, scale = FALSE),
+#                 pipo_and_dead_bapha_s = scale(pipo_and_dead_bapha, center = TRUE, scale = FALSE),
+#                 overall_bapha_s = scale(overall_bapha, center = TRUE, scale = FALSE))
+# 
+# summarized_df %>% 
+#   dplyr::mutate(prop_mortality = dead_count / total_count) %>% 
+#   dplyr::select(forest, elev, rep, site_cwd, site_cwd_zscore, live_tpha, dead_tpha, overall_tpha, overall_bapha, prop_mortality) %>% 
+#   dplyr::arrange(desc(prop_mortality)) %>% 
+#   print(n = 32)
+```
+
+
+## Basal area models
+
+### Using gam() in mgcv::
+```{r}
+adf <-
+  analysis_df %>% 
+  dplyr::filter(pipo_and_dead_count != 0) %>% 
+  dplyr::mutate(site = as.factor(site))
+
+tic()
+fm1_mgcv <- bam(cbind(dead_count, pipo_count) ~ 
+                  site_cwd_zscore*pipo_and_dead_tpha_s*pipo_and_dead_qmd_s +
+                  site_cwd_zscore*overall_tpha_s*overall_qmd_s +
+                  s(x, y, by = site, bs = "gp", k = 10), 
+                data = adf, 
+                family = binomial(link = "logit"))
+toc()
+summary(fm1_mgcv)
+plot(fm1_mgcv)
+
+```
+
+
+### Spatial autocorrelation adjustment using splines
+```{r}
+adf <-
+  analysis_df %>% 
+  dplyr::filter(pipo_and_dead_count != 0) %>% 
+  dplyr::slice(sample(nrow(.), 2000)) %>% 
+  dplyr::mutate(site = as.factor(site))
+
+fm1_brms <- brm(dead_count | trials(pipo_and_dead_count) ~ 
+                  local_cwd_zscore*pipo_and_dead_tpha_s*pipo_and_dead_bapha_s +
+                  local_cwd_zscore*overall_tpha_s*overall_bapha_s +
+                  s(x, y, by = site), 
+                data = as.data.frame(adf), 
+                family = binomial(link = "logit"),
+                prior = priors_ba_plot_model,
+                chains = 1,
+                iter = 1000,
+                control = list(max_treedepth = 15, adapt_delta = 0.9))
+summary(fm1_brms)
+
+
+```
+
+### Spatial autocorrelation and let CWD vary within site
+
+
+```{r}
+adf <-
+  analysis_df %>% 
+  dplyr::filter(site %in% sample(unique(.$site), 4))
+
+adf <-
+  analysis_df
+
+# set up distance and neighbourhood matrices
+
+# For a SAR-- not implemented for binomial family
+# xy <- adf %>% dplyr::select(x, y) %>% as.matrix()
+# W <- knn2nb(knearneigh(xy, k = 4))
+
+# For a CAR
+K <- nrow(adf)
+distance <- as.matrix(dist(as.matrix(adf[, 1:2])))
+W <- array(0, c(K, K))
+# W[distance == 20] <- 1 # Rook's case, where "neighbors" are only those pixels that share sides
+W[distance == 20 | distance == sqrt(800)] <- 1 # Queen's case, where neighbors can be diagonals to each other
+
+tic()
+future::plan(strategy = multiprocess)
+fm1_brms <- brm(dead_count | trials(pipo_and_dead_count) ~ 
+                  local_cwd_zscore*pipo_and_dead_tpha_s*pipo_and_dead_bapha_s +
+                  local_cwd_zscore*overall_tpha_s*overall_bapha_s, 
+                data = as.data.frame(adf), 
+                family = binomial(link = "logit"),
+                autocor = cor_car(W, type = "esicar"),
+                prior = c(set_prior("normal (0, 1)")),
+                chains = 4,
+                iter = 4000,
+                future = TRUE,
+                control = list(max_treedepth = 15))
+summary(fm1_brms)
+toc()
+
+
+```
+
+### Scaling and centering all variables, constrained but weakly informative priors
+```{r}
+center_param <- TRUE
+scale_param <- TRUE
+
+adf <-
+  data_from_rasterized_trees %>% 
+  dplyr::left_join(cwd_data, by = "site") %>% 
+  as_tibble() %>% 
+  dplyr::mutate(pipo_and_dead_tpha_s = scale(pipo_and_dead_tpha, center = center_param, scale = scale_param),
+                overall_tpha_s = scale(overall_tpha, center = center_param, scale = scale_param),
+                pipo_and_dead_bapha_s = scale(pipo_and_dead_bapha, center = center_param, scale = scale_param),
+                overall_bapha_s = scale(overall_bapha, center = center_param, scale = scale_param),
+                pipo_and_dead_qmd_s = scale(pipo_and_dead_qmd, center = center_param, scale = scale_param),
+                overall_qmd_s = scale(overall_qmd, center = center_param, scale = scale_param),
+                live_sdi_ac_s = scale(live_sdi_ac, center = center_param, scale = scale_param),
+                pipo_and_dead_sdi_ac_s = scale(pipo_and_dead_sdi_ac, center = center_param, scale = scale_param),
+                overall_sdi_ac_s = scale(overall_sdi_ac, center = center_param, scale = scale_param))
+
+# set up distance and neighbourhood matrices
+# For a CAR
+K <- nrow(adf)
+distance <- as.matrix(dist(as.matrix(adf[, 1:2])))
+W <- array(0, c(K, K))
+# W[distance == 20] <- 1 # Rook's case, where "neighbors" are only those pixels that share sides
+W[distance == 20 | distance == sqrt(800)] <- 1 # Queen's case, where neighbors can be diagonals to each other
+
+tic()
+future::plan(strategy = multiprocess)
+fm1_brms <- brm(dead_count | trials(pipo_and_dead_count) ~ 
+                  local_cwd_zscore*pipo_and_dead_tpha_s*pipo_and_dead_bapha_s +
+                  local_cwd_zscore*overall_tpha_s*overall_bapha_s, 
+                data = as.data.frame(adf), 
+                family = binomial(link = "logit"),
+                autocor = cor_car(W, type = "esicar"),
+                prior = c(set_prior("normal (0, 1)", class = "b"), set_prior("student (0, 3)", class = "Intercept")),
+                chains = 4,
+                iter = 4000,
+                future = TRUE,
+                control = list(max_treedepth = 15))
+summary(fm1_brms)
+toc()
+
+
+```
+
+
+### Spatial autocorrelation with site level CWD but informed priors
+```{r}
+tic()
+future::plan(strategy = multiprocess)
+fm2_brms <- brm(dead_count | trials(pipo_and_dead_count) ~ 
+                  site_cwd_zscore*pipo_and_dead_tpha_s*pipo_and_dead_bapha_s +
+                  site_cwd_zscore*overall_tpha_s*overall_bapha_s, 
+                data = as.data.frame(adf), 
+                family = binomial(link = "logit"),
+                autocor = cor_car(W, type = "esicar"),
+                prior = priors_ba_site_model,
+                chains = 4,
+                iter = 4000,
+                future = TRUE)
+summary(fm2_brms)
+toc()
+```
+
+### Spatial autocorrelation with local level CWD and informed priors
+```{r}
+tic()
+future::plan(strategy = multiprocess)
+fm3_brms <- brm(dead_count | trials(pipo_and_dead_count) ~ 
+                  local_cwd_zscore*pipo_and_dead_tpha_s*pipo_and_dead_bapha_s +
+                  local_cwd_zscore*overall_tpha_s*overall_bapha_s, 
+                data = as.data.frame(adf), 
+                family = binomial(link = "logit"),
+                autocor = cor_car(W, type = "esicar"),
+                prior = priors_ba_plot_model,
+                chains = 4,
+                iter = 4000,
+                future = TRUE,
+                control = list(max_treedepth = 15))
+summary(fm3_brms)
+toc()
+```
+
+
+## Quadratic mean diameter models
+
