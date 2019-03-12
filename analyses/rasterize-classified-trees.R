@@ -6,6 +6,16 @@ library(sf)
 library(velox)
 library(here)
 library(tictoc)
+library(lubridate)
+
+tpa <- function(r) {
+  r / (prod(res(r)) / 4046.856)
+} # returns trees per acre when r represents a raster with counts of trees per cell and raster has units of meters
+
+tpha <- function(r) {
+  r / (prod(res(r)) / 10000)
+} # returns trees per hectare when r represents a raster with counts of trees per cell
+
 
 if(file.exists(here::here("analyses/analyses_output/classified-trees.geojson"))) {
   
@@ -21,7 +31,37 @@ if(file.exists(here::here("analyses/analyses_output/classified-trees.geojson")))
 # infomation about how far along all processing steps are.
 source("data/data_carpentry/make-processing-checklist.R")
 
-source(here::here("data/data_carpentry/extract-cwd-from-locations.R"))
+cwd <- raster::raster(here::here("data/features/cwd1981_2010_ave_HST_1550861123/cwd1981_2010_ave_HST_1550861123.tif"))
+
+# The .prj file doesn't seem to be reading in properly with the .tif, but we can look at it in a text editor and see that it is EPSG3310
+
+crs(cwd) <- st_crs(3310)$proj4string
+
+sn <- sf::st_read(here::here("data/data_output/sierra-nevada-jepson/sierra-nevada-jepson.shp"))
+
+# herbarium_records <- 
+#   data.table::fread(here::here("data/features/California_Species_clean_All_epsg_3310.csv")) %>% 
+#   dplyr::as_tibble() %>% 
+#   dplyr::filter(scientificName == "Pinus ponderosa")
+
+sn_pipo <-
+  data.table::fread(here::here("data/features/California_Species_clean_All_epsg_3310.csv")) %>% 
+  dplyr::as_tibble() %>% 
+  dplyr::mutate(current_genus = tolower(current_genus),
+                current_species = tolower(current_species)) %>% 
+  dplyr::filter(current_genus == "pinus") %>% 
+  dplyr::filter(current_species == "ponderosa") %>% 
+  sf::st_as_sf(coords = c("x_epsg_3310", "y_epsg_3310"), crs = 3310) %>% 
+  dplyr::select(id, early_julian_day, late_julian_day, verbatim_date, elevation) %>% 
+  sf::st_intersection(sn) %>% 
+  dplyr::mutate(date = parse_date_time(early_julian_day, c("mdy", "ymd", "ymdHM"))) %>% 
+  dplyr::mutate(year = year(date)) %>% 
+  dplyr::mutate(cwd = raster::extract(cwd, ., method = "bilinear"))
+
+mean_cwd_sn_pipo <- mean(sn_pipo$cwd, na.rm = TRUE)
+sd_cwd_sn_pipo <- sd(sn_pipo$cwd, na.rm = TRUE)
+
+# source(here::here("data/data_carpentry/extract-cwd-from-locations.R"))
 # R object is called `cwd_data`
 
 
@@ -76,9 +116,15 @@ for(i in seq_along(sites_to_process)) {
   
   raster_template <- raster::raster(buffered_bounds, res = 20)
   
+  current_cwd <- raster::resample(cwd, raster_template, method = "bilinear")
+  current_cwd_zscore <- (current_cwd - mean_cwd_sn_pipo) / sd_cwd_sn_pipo
   
-  
-  # count of trees per cell -------------------------------------------------
+  # plot(crop(cwd, site_bounds %>% st_transform(3310) %>% st_buffer(200)))
+  # plot(buffered_bounds$geometry, add = TRUE)
+  # plot(current_cwd, add = TRUE)
+  # plot(buffered_bounds$geometry)
+  # plot(cwd, add = TRUE)
+  # # count of trees per cell -------------------------------------------------
   
   
   live_count <- raster::rasterize(x = current_trees, 
@@ -114,6 +160,8 @@ for(i in seq_along(sites_to_process)) {
                                         length(which(na.omit(x) != "pipo"))
                                       })
   
+  pipo_and_dead_count <- dead_count + pipo_count
+  
   total_count <- raster::rasterize(x = current_trees, 
                                    y = raster_template, 
                                    field = "live", 
@@ -128,6 +176,16 @@ for(i in seq_along(sites_to_process)) {
   # r2 <- pipo_count + non_pipo_count
   # compareRaster(r2, live_count, values = TRUE)
   # 
+  
+  
+  # convert counts to trees per hectare -------------------------------------
+  
+  live_tpha <- tpha(live_count)  
+  dead_tpha <- tpha(dead_count)
+  pipo_tpha <- tpha(pipo_count)
+  non_pipo_tpha <- tpha(non_pipo_count)
+  pipo_and_dead_tpha <- tpha(pipo_and_dead_count)
+  overall_tpha <- tpha(total_count)
   
   # total basal area per cell -----------------------------------------------
   
@@ -156,6 +214,8 @@ for(i in seq_along(sites_to_process)) {
                                            background = 0, 
                                            fun = sum)
   
+  pipo_and_dead_basal_area <- dead_basal_area + pipo_basal_area
+  
   total_basal_area <- raster::rasterize(x = current_trees, 
                                         y = raster_template, 
                                         field = "estimated_ba", 
@@ -167,6 +227,18 @@ for(i in seq_along(sites_to_process)) {
   # 
   # r4 <- pipo_basal_area + non_pipo_basal_area
   # compareRaster(r4, live_basal_area, values = TRUE)
+  
+
+# convert to basal area per hectare ---------------------------------------
+
+# We can actually use the same equations as for trees per hectare
+  
+  live_bapha <- tpha(live_basal_area)  
+  dead_bapha <- tpha(dead_basal_area)
+  pipo_bapha <- tpha(pipo_basal_area)
+  non_pipo_bapha <- tpha(non_pipo_basal_area)
+  pipo_and_dead_bapha <- tpha(pipo_and_dead_basal_area)
+  overall_bapha <- tpha(total_basal_area)
   
   # mean basal area per tree ------------------------------------------------
   
@@ -195,21 +267,103 @@ for(i in seq_along(sites_to_process)) {
                                         background = 0, 
                                         fun = mean)
   
+  pipo_and_dead_mean_ba <- raster::rasterize(x = current_trees %>% dplyr::filter((species == "pipo") | (live == 0)), 
+                                             y = raster_template, 
+                                             field = "estimated_ba", 
+                                             background = 0, 
+                                             fun = mean)
+  
   overall_mean_ba <- raster::rasterize(x = current_trees, 
                                        y = raster_template, 
                                        field = "estimated_ba", 
                                        background = 0, 
                                        fun = mean)
   
- 
- 
-  results_raster <- raster::stack(live_count, dead_count, pipo_count, non_pipo_count, total_count, 
-                                  live_basal_area, dead_basal_area, pipo_basal_area, non_pipo_basal_area, total_basal_area,
-                                  live_mean_ba, dead_mean_ba, pipo_mean_ba, non_pipo_mean_ba, overall_mean_ba)
+  # quadratic mean diameter -------------------------------------------------
   
-  names(results_raster) <- c("live_count", "dead_count", "pipo_count", "non_pipo_count", "total_count", 
-                             "live_ba", "dead_ba", "pipo_ba", "non_pipo_ba", "total_ba",
-                             "live_mean_ba", "dead_mean_ba", "pipo_mean_ba", "non_pipo_mean_ba", "overall_mean_ba")
+  live_qmd <- raster::rasterize(x = current_trees %>% dplyr::filter((live == 1)), 
+                                y = raster_template, 
+                                field = "estimated_dbh", 
+                                background = 0, 
+                                fun = function(x, ...) {sqrt(sum(x^2) / length(x))})
+  
+  dead_qmd <- raster::rasterize(x = current_trees %>% dplyr::filter((live == 0)), 
+                                y = raster_template, 
+                                field = "estimated_dbh", 
+                                background = 0, 
+                                fun = function(x, ...) {sqrt(sum(x^2) / length(x))})
+  
+  pipo_qmd <- raster::rasterize(x = current_trees %>% dplyr::filter((species == "pipo")), 
+                                y = raster_template, 
+                                field = "estimated_dbh", 
+                                background = 0, 
+                                fun = function(x, ...) {sqrt(sum(x^2) / length(x))})
+  
+  non_pipo_qmd <- raster::rasterize(x = current_trees %>% dplyr::filter((species != "pipo")), 
+                                    y = raster_template, 
+                                    field = "estimated_dbh", 
+                                    background = 0, 
+                                    fun = function(x, ...) {sqrt(sum(x^2) / length(x))})
+  
+  pipo_and_dead_qmd <- raster::rasterize(x = current_trees %>% dplyr::filter((species == "pipo") | (live == 0)), 
+                                         y = raster_template, 
+                                         field = "estimated_dbh", 
+                                         background = 0, 
+                                         fun = function(x, ...) {sqrt(sum(x^2) / length(x))})
+  
+  overall_qmd <- raster::rasterize(x = current_trees, 
+                                   y = raster_template, 
+                                   field = "estimated_dbh", 
+                                   background = 0, 
+                                   fun = function(x, ...) {sqrt(sum(x^2) / length(x))})  
+  
+  
+  # stand density index -----------------------------------------------------
+  # A transformation to the equivalent number of trees with a 10 inch diameter
+  # Original by Reineke 1933 (if qmd is in centimters)
+  # sdi = tpa * ( qmd / 25.4)^1.605
+  
+  # Proposed constant for ponderosa in California by Oliver 1995
+  # (if qmd is in centimeters)
+  # sdi = tpa * ( qmd / 25.4)^1.77
+  
+  live_sdi_ha <- tpha(live_count) * (live_qmd / 25.4)^1.77
+  live_sdi_ac <- tpa(live_count) * (live_qmd / 25.4)^1.77
+  
+  dead_sdi_ha <- tpha(dead_count) * (dead_qmd / 25.4)^1.77
+  dead_sdi_ac <- tpa(dead_count) * (dead_qmd / 25.4)^1.77
+  
+  pipo_sdi_ha <- tpha(pipo_count) * (pipo_qmd / 25.4)^1.77
+  pipo_sdi_ac <- tpa(pipo_count) * (pipo_qmd / 25.4)^1.77
+  
+  non_pipo_sdi_ha <- tpha(non_pipo_count) * (non_pipo_qmd / 25.4)^1.77
+  non_pipo_sdi_ac <- tpa(non_pipo_count) * (non_pipo_qmd / 25.4)^1.77
+  
+  pipo_and_dead_sdi_ha <- tpha(pipo_and_dead_count) * (pipo_and_dead_qmd / 25.4)^1.77
+  pipo_and_dead_sdi_ac <- tpa(pipo_and_dead_count) * (pipo_and_dead_qmd / 25.4)^1.77
+  
+  overall_sdi_ha <- tpha(total_count) * (overall_qmd / 25.4)^1.77
+  overall_sdi_ac <- tpa(total_count) * (overall_qmd / 25.4)^1.77
+  
+  results_raster <- raster::stack(live_count, dead_count, pipo_count, non_pipo_count, pipo_and_dead_count, total_count, 
+                                  live_tpha, dead_tpha, pipo_tpha, non_pipo_tpha, pipo_and_dead_tpha, overall_tpha, 
+                                  live_basal_area, dead_basal_area, pipo_basal_area, non_pipo_basal_area, pipo_and_dead_basal_area, total_basal_area,
+                                  live_bapha, dead_bapha, pipo_bapha, non_pipo_bapha, pipo_and_dead_bapha, overall_bapha,
+                                  live_mean_ba, dead_mean_ba, pipo_mean_ba, non_pipo_mean_ba, pipo_and_dead_mean_ba, overall_mean_ba,
+                                  live_qmd, dead_qmd, pipo_qmd, non_pipo_qmd, pipo_and_dead_qmd, overall_qmd,
+                                  live_sdi_ha, dead_sdi_ha, pipo_sdi_ha, non_pipo_sdi_ha, pipo_and_dead_sdi_ha, overall_sdi_ha,
+                                  live_sdi_ac, dead_sdi_ac, pipo_sdi_ac, non_pipo_sdi_ac, pipo_and_dead_sdi_ac, overall_sdi_ac,
+                                  current_cwd, current_cwd_zscore)
+  
+  names(results_raster) <- c("live_count", "dead_count", "pipo_count", "non_pipo_count", "pipo_and_dead_count", "total_count", 
+                             "live_tpha", "dead_tpha", "pipo_tpha", "non_pipo_tpha", "pipo_and_dead_tpha", "overall_tpha",
+                             "live_ba", "dead_ba", "pipo_ba", "non_pipo_ba", "pipo_and_dead_ba", "total_ba",
+                             "live_bapha", "dead_bapha", "pipo_bapha", "non_pipo_bapha", "pipo_and_dead_bapha", "overall_bapha",
+                             "live_mean_ba", "dead_mean_ba", "pipo_mean_ba", "non_pipo_mean_ba", "pipo_and_dead_mean_ba", "overall_mean_ba",
+                             "live_qmd", "dead_qmd", "pipo_qmd", "non_pipo_qmd", "pipo_and_dead_qmd", "overall_qmd",
+                             "live_sdi_ha", "dead_sdi_ha", "pipo_sdi_ha", "non_pipo_sdi_ha", "pipo_and_dead_sdi_ha", "overall_sdi_ha",
+                             "live_sdi_ac", "dead_sdi_ac", "pipo_sdi_ac", "non_pipo_sdi_ac", "pipo_and_dead_sdi_ac", "overall_sdi_ac",
+                             "local_cwd", "local_cwd_zscore")
   
   writeRaster(x = results_raster, filename = here::here(paste0("analyses/analyses_output/rasterized-trees/", current_site, "_rasterized-trees.tif")), overwrite = TRUE)
   
@@ -225,5 +379,4 @@ for(i in seq_along(sites_to_process)) {
 
 final_results <- do.call("rbind", results_list)
 
-readr::write_csv(final_results, here::here("analyses/analyses_output/data-from-rasterized-classified-trees.csv"))
-
+write.csv(final_results, file = here::here("analyses/analyses_output/data-from-rasterized-classified-trees.csv"), row.names = FALSE)
