@@ -46,15 +46,77 @@ set.seed(0314)
 adf <-
   analysis_df %>% 
   dplyr::filter(pipo_and_dead_count != 0) %>% 
+  dplyr::mutate(site = as.factor(site))
+
+  # dplyr::group_by(site) 
+  # dplyr::sample_n(10)
+  # dplyr::sample_frac(0.5)
+
+# Exact Gaussian Process
+# n = 10; total = 320; iter = 2000: 217 seconds (0.06 hours)
+# n = 50; total = 1600; iter = 2000: 1454/1570 seconds (0.4 hours)
+# n = 100; total = 3200; iter = 2000: 1.6 hours
+# n = 200; total = 6400; iter = 2500 = 8.9 hours
+
+# Approximate Gaussian Process
+# n = 10; total = 320; iter = 2000; k = 3; adapt_delta = 0.95; 212 seconds (0.059 hours) *7 divergent transitions
+# n = 50; total = 1600; iter = 2000; k = 3; adapt_delta = 0.95; 1084 seconds (0.3 hours) *39 divergent transitions
+# n = 100; total = 3200; iter = 2000; k = 3; adapt_delta = 0.95; 1945 seconds (0.54 hours) *132 divergent transitions
+# n = 100; total = 3200; iter = 2000; k = 3; adapt_delta = 0.99; 3816 seconds (1.06 hours) *40 divergent transitions **1598 transitions exceeding max_treedepth
+# n = 100; total = 3200; iter = 2000; k = 5; adapt_delta = 0.95; 2807.55 seconds (0.78 hours) *28 divergent transitions
+# n = 100; total = 3200; iter = 2000; k = 10; adapt_delta = 0.95; 2125 seconds (0.59 hours)
+# frac = 0.5; total = 11145; iter = 2000; k = 10; adapt_delta = 0.95; (4.07 hours)
+# all; total = 22289; iter = 2000; k = 10; adapt_delta = 0.95; 
+
+(start <- Sys.time())
+fm1_brms <- brm(dead_count | trials(pipo_and_dead_count) ~ 
+                  site_cwd_zscore*pipo_and_dead_tpha_s*pipo_and_dead_qmd_s +
+                  site_cwd_zscore*overall_tpha_s*overall_qmd_s +
+                  gp(x, y, by = site, k = 10, c = 5/4, scale = FALSE),
+                data = adf,
+                family = binomial(link = "logit"),
+                chains = 4,
+                cores = 4,
+                control = list(adapt_delta = 0.95))
+summary(fm1_brms)
+(elapsed <- Sys.time() - start)
+
+prior_summary(fm1_brms)
+
+# spatial_autocor <- Variogram(object = resid(fm1_brms)[, "Estimate"], dist(fm1_brms$data[, c("x", "y")]))
+# plot(spatial_autocor)
+
+saveRDS(fm1_brms, file = here::here("analyses/analyses_output/fitted-model_site-cwdZscore_pipo-tpha-qmd_overall-tpha-qmd_approx-gp-per-site.rds"))
+
+
+set.seed(0314)
+adf <-
+  analysis_df %>% 
+  dplyr::filter(pipo_and_dead_count != 0) %>% 
   dplyr::mutate(site = as.factor(site)) %>% 
-  dplyr::group_by(site) %>% 
-  dplyr::sample_n(200)
+  dplyr::sample_n(10)
+  
+
+(start <- Sys.time())
+fm2_brms <- brm(dead_count | trials(pipo_and_dead_count) ~ 
+                  gr(site_cwd_zscore)*pipo_and_dead_tpha_s*pipo_and_dead_qmd_s +
+                  gr(site_cwd_zscore)*overall_tpha_s*overall_qmd_s +
+                  (1 | site) +
+                  gp(x, y, by = site, k = 10, c = 5/4, scale = FALSE),
+                data = adf,
+                family = binomial(link = "logit"),
+                chains = 4,
+                cores = 4,
+                control = list(adapt_delta = 0.95))
+summary(fm2_brms)
+(elapsed <- Sys.time() - start)
+
+# test <- readRDS(here::here("analyses/analyses_output/fitted-model_site-cwdZscore_pipo-tpha-qmd_overall-tpha-qmd_approx-gp-per-site_50-percent-samples.rds"))
+
+# local_spatial_autocor <- Variogram(object = resid(test)[test$data$site == "eldo_3k_1", "Estimate"], dist(test$data[test$data$site == "eldo_3k_1", c("x", "y")]))
+# plot(local_spatial_autocor)
 
 
-# n = 10: 217 seconds (0.06 hours)
-# n = 50: 1454 seconds (0.4 hours)
-# n = 100: 1.6 hours
-# n = 200 = 8.9 hours
 
 # tic()
 # fm1_mgcv <- bam(cbind(dead_count, pipo_count) ~ 
@@ -116,23 +178,6 @@ adf <-
 # summary(fm5_mgcv)
 # stopCluster(cl)
 
-(start <- Sys.time())
-fm1_brms <- brm(dead_count | trials(pipo_and_dead_count) ~ 
-                  site_cwd_zscore*pipo_and_dead_tpha_s*pipo_and_dead_qmd_s +
-                  site_cwd_zscore*overall_tpha_s*overall_qmd_s +
-                  gp(x, y, by = site, k = 3, scale = FALSE),
-                data = adf,
-                family = binomial(link = "logit"),
-                chains = 4,
-                cores = 4,
-                iter = 2500,
-                control = list(adapt_delta = 0.95))
-summary(fm1_brms)
-(elapsed <- Sys.time() - start)
-
-prior_summary(fm1_brms)
-
-saveRDS(fm1_brms, file = here::here("analyses/analyses_output/fitted-model_site-cwdZscore_pipo-tpha-qmd_overall-tpha-qmd_gp-per-site_200-samples.rds"))
 
 # if(!file.exists(here::here("analyses/analyses_output/fitted-model_cwdZscore_pipo-count-ba_total-count-ba_uniqueCellID.rds"))) {
 #   # tic()
