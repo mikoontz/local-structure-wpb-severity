@@ -110,7 +110,7 @@ Station, Davis, CA, USA
 
 \textsuperscript{*}Correspondence: \texttt{michael.koontz@colorado.edu}
 
-Date report generated: March 11, 2019
+Date report generated: March 20, 2019
 
 \subsection{Abstract}\label{abstract}
 
@@ -151,20 +151,29 @@ interact with local forest structure to produce patterns of insect
 activity.
 
 along a strong south to north latitudinal gradient (Young \emph{et al.}
-2017; USDAFS 2019). Latitudinal and elevational gradients in the
-intensity of bark beetle activity during the recent California drought
-provide unique opportunities for a postmortem analysis of a major tree
-die off and how intersecting forces of forest structure and
-environmental conditions affect disturbance dynamics. Quantitative,
-fine-scale measures of tree condition across these geographic gradients
-will enable broad-scale assessment of forest structure as well as the
-intensity of western pine beetle-induced tree mortality. Combined, these
-measurements can better our understanding of how complex forest
-structure affects insect disturbance, and vice versa, across the Sierra
-Nevada. Sound forest management requires a better understanding of the
-relationships between forest spatial structure, environmental
-conditions, and disturbance, which ultimately depends on accurate
-measurement of forest structure at appropriate spatial scales.
+2017; USDAFS 2019).
+
+Latitudinal and elevational gradients in the intensity of bark beetle
+activity during the recent California drought provide unique
+opportunities for a postmortem analysis of a major tree die off and how
+intersecting forces of forest structure and environmental conditions
+affect disturbance dynamics. Quantitative, fine-scale measures of tree
+condition across these geographic gradients will enable broad-scale
+assessment of forest structure as well as the intensity of western pine
+beetle-induced tree mortality. Combined, these measurements can better
+our understanding of how complex forest structure affects insect
+disturbance, and vice versa, across the Sierra Nevada. Sound forest
+management requires a better understanding of the relationships between
+forest spatial structure, environmental conditions, and disturbance,
+which ultimately depends on accurate measurement of forest structure at
+appropriate spatial scales.
+
+\subsubsection{How forest structure affects bark beetle
+activity}\label{how-forest-structure-affects-bark-beetle-activity}
+
+Water stress and competition (Hayes \emph{et al.} 2009; Young \emph{et
+al.} 2017) Host availability (ease of dispersal to new hosts) Beetles
+prefer larger trees under outbreak conditions
 
 Forests in California's Sierra Nevada region are characterized by
 regular bark beetle disturbances that interact with forest structure.
@@ -206,11 +215,11 @@ this relationship with the following research questions:
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
 \item
-  How does local host tree density affect the severity of western pine
-  beetle disturbance?
+  How does local host tree density and size affect the severity of
+  western pine beetle disturbance?
 \item
-  How does total tree density affect the severity of western pine beetle
-  disturbance?
+  How does total tree density and size affect the severity of western
+  pine beetle disturbance?
 \item
   How does environmentally-driven tree moisture stress affect the
   severity of western pine beetle disturbance?
@@ -280,6 +289,8 @@ image of a calibration panel on the ground in full sun with known
 reflectance values for each of the 5 narrow bands.
 
 Table XXXXX. Reflectance sensitivity of the Micasense Rededge3 camera.
+The calibration panel value represents the reflectance of the
+calibration panel for the given wavelength.
 +------------+--------------+------------------+------------------+----------+-----------------+---------------+
 \textbar{} Band~ \textbar{} Band~ \textbar{} Band~ \textbar{} Center~
 \textbar{} Band~ \textbar{} Wavelength~ \textbar{} Calibration~
@@ -288,19 +299,19 @@ Table XXXXX. Reflectance sensitivity of the Micasense Rededge3 camera.
 value \textbar{}
 +============+==============+==================+==================+==========+=================+===============+
 \textbar{} 1 \textbar{}blue \textbar{}b \textbar{} 475 \textbar{} 20
-\textbar{} 465-485 \textbar{} 0.63 \textbar{}
+\textbar{} 465-485 \textbar{} 0.64 \textbar{}
 +------------+--------------+------------------+------------------+----------+-----------------+---------------+
 \textbar{} 2 \textbar{}green \textbar{}g \textbar{} 560 \textbar{} 20
-\textbar{} 550-570 \textbar{} 0.63 \textbar{}
+\textbar{} 550-570 \textbar{} 0.64 \textbar{}
 +------------+--------------+------------------+------------------+----------+-----------------+---------------+
 \textbar{} 3 \textbar{}red \textbar{}r \textbar{} 668 \textbar{} 10
-\textbar{} 663-673 \textbar{} 0.63 \textbar{}
+\textbar{} 663-673 \textbar{} 0.64 \textbar{}
 +------------+--------------+------------------+------------------+----------+-----------------+---------------+
 \textbar{} 4 \textbar{}near infrared \textbar{}nir \textbar{} 840
-\textbar{} 40 \textbar{} 820-860 \textbar{} 0.64 \textbar{}
+\textbar{} 40 \textbar{} 820-860 \textbar{} 0.60 \textbar{}
 +------------+--------------+------------------+------------------+----------+-----------------+---------------+
 \textbar{} 5 \textbar{}red edge \textbar{}re \textbar{} 717 \textbar{}
-10 \textbar{} 712-722 \textbar{} 0.60 \textbar{}
+10 \textbar{} 712-722 \textbar{} 0.63 \textbar{}
 +------------+--------------+------------------+------------------+----------+-----------------+---------------+
 
 \subsubsection{Flight protocol}\label{flight-protocol}
@@ -317,6 +328,9 @@ over the surrounding \textasciitilde{}40 hectares of forested area using
 north-south aerial transects. For XXXXX sites, we surveyed less
 surrounding area in order to maintain visual and radio communication
 with the aircraft during flight (Table XXXXXX).
+
+Table XXXX. Columns: Site, forest, elevation, rep, surveyed area, survey
+date
 
 We preprogrammed transect paths using Map Pilot for DJI on iOS
 (hereafter Map Pilot) (Easy 2018). All transects tracked the terrain and
@@ -483,14 +497,15 @@ set as alive or dead as well as the species of living trees.
 \subsubsection{Allometric scaling of height to basal
 area}\label{allometric-scaling-of-height-to-basal-area}
 
-We converted the height of each tree (known from the canopy height
-model) to its basal area. Using the tree height and diameter at breast
-height (DBH; breast height = 1.37m) ground data, we fit a simple linear
-regression to predict DBH from height for each of the 5 dominant
-species. Using the model-classified tree species of each segmented tree,
-we used the corresponding linear relationship for that species to
-estimate the DBH given the tree's height. We then calculated each tree's
-basal area, assuming no tapering from breast height.
+We converted the height of each tree determined using the canopy height
+model to its basal area. Using the tree height and diameter at breast
+height (DBH; breast height = 1.37m) ground data from Fettig \emph{et
+al.} (2019), we fit a simple linear regression to predict DBH from
+height for each of the 5 dominant species. Using the model-classified
+tree species of each segmented tree, we used the corresponding linear
+relationship for that species to estimate the DBH given the tree's
+height. We then calculated each tree's basal area, assuming no tapering
+from breast height.
 
 \subsubsection{Note on assumptions about dead
 trees}\label{note-on-assumptions-about-dead-trees}
@@ -534,28 +549,37 @@ Sierra Nevada.
 
 \subsubsection{Statistical model}\label{statistical-model}
 
-We used a generalized additive model with a binomial response and a
-logit link to predict the probability of ponderosa pine mortality within
-each raster cell as a function of the crossed effects of ponderosa pine
-quadratic mean diameter and count added to the crossed effect of
-non-ponderosa pine quadratic mean diameter and count as well as the
-interaction of each summand with climatic water deficit. To account for
-spatial autocorrelation of the processes underlying ponderosa mortality,
-we included a separate smoothing term per site of the interaction
-between the x- and y-position of each cell using the \texttt{mgcv}
-package (Wood \emph{et al.} 2016) with a thin plate spline basis having
-a dimension of 10.
+We used a generalized linear model with a binomial response and a logit
+link to predict the probability of ponderosa pine mortality within each
+raster cell as a function of the crossed effects of ponderosa pine
+quadratic mean diameter and density added to the crossed effect of
+overall quadratic mean diameter and density as well as the interaction
+of each summand with climatic water deficit.
+
+To measure and account for spatial autocorrelation of the bark beetle
+behavioral processes underlying ponderosa mortality, we first subsampled
+the data at each site to a random selection of 200, 20m x 20m cells
+representing approximately 27.5\% of the surveyed area.
+
+included a separate approximate Gaussian Process term per site of the
+interaction between the x- and y-position of each cell using the
+\texttt{gp()} function in the \texttt{brms} package (Bürkner 2017) with
+10 basis functions.
 
 Model checking\ldots{}
 
 \[
 \begin{aligned}
-y_i \sim &\ Binom(n_i, \theta_i) \\
-logit(\theta_i) = &\ \beta_0 + \gamma_i\ + \\
+y_{i,j} \sim &\ \begin{cases}
+    0, & \text{w.p. $zi$}.\\
+    Binom(n_i, \theta_i), & \text{w.p. $1-zi$}.
+  \end{cases} \\
+logit(\theta_i) = &\ \beta_0\ + \\
 & \beta_1X_{cwd, i}\ + \\
-& \beta_1X_{cwd, i}(\beta_2X_{pipoBA, i} + \beta_3X_{pipoCount, i} + \beta_4X_{pipoBA, i}X_{pipoCount, i})\ + \\ 
-& \beta_1X_{cwd, i}(\beta_5X_{nonpipoBA, i} + \beta_6X_{nonpipoCount, i} + \beta_7X_{nonpipoBA, i}X_{nonpipoCount, i}) \\
-\gamma_i \sim &\ Norm(\mu = 0, \sigma^2)
+& \beta_1X_{cwd, i}(\beta_2X_{pipoQMD, i} + \beta_3X_{pipoDensity, i} + \beta_4X_{pipoQMD, i}X_{pipoDensity, i})\ + \\ 
+& \beta_1X_{cwd, i}(\beta_5X_{overallQMD, i} + \beta_6X_{overallDensity, i} + \beta_7X_{overallQMD, i}X_{overallDensity, i})\ + \\
+& \mathcal{GP}_j(x_i, y_i) \\
+zi \sim &\ Bernoulli(\theta)
 \end{aligned}
 \] Where \(y_i\) is the number of dead ponderosa pine trees in cell
 \(i\), \(n_i\) is the total number of ponderosa pine trees in cell
@@ -599,20 +623,29 @@ probability of ponderosa pine mortality within each 20m x 20m cell.
 Greater climatic water deficit, indicating hotter/drier conditions,
 increased the probability of ponderosa pine mortality.
 
-We also found a strong effect of ponderosa pine basal area, accounting
-for the total basal area with greater ponderosa pine basal area
-increasing the probability of ponderosa pine mortality.
+We also found a strong effect of ponderosa pine local density,
+accounting for quadratic mean diamter with greater ponderosa pine
+density increasing the probability of ponderosa pine mortality.
+Conversely, we found a generally negative effect of quadratic mean
+diameter of ponderosa pine on the probability of ponderosa mortality,
+suggesting that the western pine beetle attacked smaller trees, on
+average. There was a strong positive interaction between the climatic
+water deficit and ponderosa pine quadratic mean diameter, such that
+larger trees were more likely to increase the probability of ponderosa
+mortality in hotter, drier sites.
 
-We found a negative effect of total basal area on the probability of
+We found negative main effects of overall tree density and overall
+quadratic mean diameter. There was a positive interaction between these
+variables, such that denser stands with larger trees did lead to greater
 ponderosa pine mortality.
 
-We found no 2-way interaction between ponderosa pine basal area and
-total basal area.
+\subsubsection{Spatial effects}\label{spatial-effects}
 
-We found a significant 3-way interaction between ponderosa pine basal
-area, total basal area, and climatic water deficit. In hotter, drier
-sites, a positive interaction between ponderosa pine basal area and
-total basal area emerges.
+We were able to calculate the range of the spatial autocorrelation in
+the probability of ponderosa pine mortality at each site, accounting for
+forest structure and environmental factors. By fitting a separate
+approximate Gaussian process for each site on the interacting variables
+of the x- and y- position
 
 \subsection{Discussion}\label{discussion}
 
@@ -733,6 +766,11 @@ of voronoi polygon area and covariance kerenel effects depending on CWD.
 Baldwin BG, Thornhill AH, and Freyman WA \emph{et al.} 2017. Species
 richness and endemism in the native flora of California. \emph{American
 Journal of Botany} \textbf{104}: 487--501.
+
+\hypertarget{ref-burkner2017}{}
+Bürkner P-C. 2017. \textbf{Brms} : An \emph{R} Package for Bayesian
+Multilevel Models Using \emph{Stan}. \emph{Journal of Statistical
+Software} \textbf{80}.
 
 \hypertarget{ref-clevers2013}{}
 Clevers J and Gitelson A. 2013. Remote estimation of crop and grass
@@ -922,11 +960,6 @@ Vega C, Hamrouni A, and El Mokhtari S \emph{et al.} 2014. PTrees: A
 point-based approach to forest tree extraction from lidar data.
 \emph{International Journal of Applied Earth Observation and
 Geoinformation} \textbf{33}: 98--108.
-
-\hypertarget{ref-wood2016}{}
-Wood SN, Pya N, and Säfken B. 2016. Smoothing Parameter and Model
-Selection for General Smooth Models. \emph{Journal of the American
-Statistical Association} \textbf{111}: 1548--63.
 
 \hypertarget{ref-young2017}{}
 Young DJN, Stevens JT, and Earles JM \emph{et al.} 2017. Long-term

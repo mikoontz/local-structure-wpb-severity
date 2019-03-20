@@ -197,7 +197,7 @@ We used a generalized linear model with a binomial response and a logit link to 
 
 To measure and account for spatial autocorrelation of the bark beetle behavioral processes underlying ponderosa mortality, we first subsampled the data at each site to a random selection of 200, 20m x 20m cells representing approximately 27.5% of the surveyed area.
 
-included a separate approximate Gaussian Process term per site of the interaction between the x- and y-position of each cell using the `gp()` function in the `brms` package [@burkner2017] with 3 basis functions.
+included a separate approximate Gaussian Process term per site of the interaction between the x- and y-position of each cell using the `gp()` function in the `brms` package [@burkner2017] with 10 basis functions.
 
 Model checking...
 
@@ -205,12 +205,16 @@ Model checking...
 
 $$
 \begin{aligned}
-y_{i,j} \sim &\ Binom(n_i, \theta_i) \\
-logit(\theta_i) = &\ \beta_0\ + \\
+y_{i,j} \sim &\ \begin{cases}
+    0, & p \\
+    Binom(n_i, \pi_i), & 1-p
+  \end{cases} \\
+logit(\pi_i) = &\ \beta_0\ + \\
 & \beta_1X_{cwd, i}\ + \\
 & \beta_1X_{cwd, i}(\beta_2X_{pipoQMD, i} + \beta_3X_{pipoDensity, i} + \beta_4X_{pipoQMD, i}X_{pipoDensity, i})\ + \\ 
 & \beta_1X_{cwd, i}(\beta_5X_{overallQMD, i} + \beta_6X_{overallDensity, i} + \beta_7X_{overallQMD, i}X_{overallDensity, i})\ + \\
-& \mathcal{GP}_j(x_i, y_i)
+& \mathcal{GP}_j(x_i, y_i) \\
+logit(p) \sim &\ Bernoulli(\eta)
 \end{aligned}
 $$
 Where $y_i$ is the number of dead ponderosa pine trees in cell $i$, $n_i$ is the total number of ponderosa pine trees in cell $i$, $\theta_i$ is the probability of a pine tree dying in cell $i$, $X_{cwd, i}$ is the z-score of climatic water deficit, $X_{pipoBA, i}$ is the centered basal area of ponderosa pine in a cell, $X_{pipoCount, i}$ is the centered number of ponderosa pine trees in a cell, $X_{nonpipoBA, i}$ is the centered total basal area of non-ponderosa pine trees in a cell, $X_{nonpipoCount, i}$ is the centered number of non-ponderosa pine trees in a cell, and $\gamma_i$ is a random deviation from the log-odds of ponderosa pine mortality at mean values of ponderosa pine basal area and count, mean values of non-ponderosa pine basal area and count, and mean value of climatic water deficit across the full range of Sierra Nevada ponderosa pine. $\sigma^2$ represents the pooled variance of these random deviations.
