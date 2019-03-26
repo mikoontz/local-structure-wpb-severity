@@ -27,6 +27,7 @@
             pdfborder={0 0 0},
             breaklinks=true}
 \urlstyle{same}  % don't use monospace font for urls
+\usepackage{longtable,booktabs}
 \usepackage{graphicx,grffile}
 \makeatletter
 \def\maxwidth{\ifdim\Gin@nat@width>\linewidth\linewidth\else\Gin@nat@width\fi}
@@ -80,6 +81,21 @@
     \date{}
     \predate{}\postdate{}
   
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{wrapfig}
+\usepackage{float}
+\usepackage{colortbl}
+\usepackage{pdflscape}
+\usepackage{tabu}
+\usepackage{threeparttable}
+\usepackage{threeparttablex}
+\usepackage[normalem]{ulem}
+\usepackage{makecell}
+\usepackage{xcolor}
+
 \usepackage[left]{lineno}
 \linenumbers
 \usepackage{setspace}
@@ -110,7 +126,7 @@ Station, Davis, CA, USA
 
 \textsuperscript{*}Correspondence: \texttt{michael.koontz@colorado.edu}
 
-Date report generated: March 20, 2019
+Date report generated: March 26, 2019
 
 \subsection{Abstract}\label{abstract}
 
@@ -126,21 +142,20 @@ million trees killed in the California drought of 2012 to 2015 and its
 aftermath (USDAFS 2019). A harbinger of climate change effects to come,
 high temperatures exacerbating the extreme drought led to tree mortality
 events of unprecedented size in the driest, densest forests across the
-state (Millar and Stephenson 2015; Young \emph{et al.} 2017). A century
-of fire suppression policy has enabled forests to grow unchecked into
-dense stands, which increases water stress on trees and makes them more
-vulnerable to bark beetle attack (Fettig 2012; North \emph{et al.}
-2015).
+state (Millar and Stephenson 2015, Young et al. 2017). A century of fire
+suppression policy has enabled forests to grow unchecked into dense
+stands, which increases water stress on trees and makes them more
+vulnerable to bark beetle attack (Fettig 2012, North et al. 2015).
 
 Previous studies show that bark beetles thrive in denser forests (Fettig
 2012), but density is often a coarse gauge of the size and spatial
 distribution of trees-- the forest structure-- with which bark beetles
-interact (Raffa \emph{et al.} 2008).
+interact (Raffa et al. 2008).
 
 Recent research has shown a strong link between complex forest structure
 and forest resilience, but measuring this complexity generally requires
 expensive equipment or labor-intensive field surveys (Larson and
-Churchill 2012; Kane \emph{et al.} 2014). These barriers restrict survey
+Churchill 2012, Kane et al. 2014). These barriers restrict survey
 frequency and extent, which limits insights into phenomena like bark
 beetle outbreaks that rapidly emerge over weeks to months but have
 long-lasting effects on forest conditions.
@@ -150,8 +165,8 @@ our ability to simultaneously consider how environmental conditions may
 interact with local forest structure to produce patterns of insect
 activity.
 
-along a strong south to north latitudinal gradient (Young \emph{et al.}
-2017; USDAFS 2019).
+along a strong south to north latitudinal gradient (Young et al. 2017,
+USDAFS 2019).
 
 Latitudinal and elevational gradients in the intensity of bark beetle
 activity during the recent California drought provide unique
@@ -171,9 +186,9 @@ appropriate spatial scales.
 \subsubsection{How forest structure affects bark beetle
 activity}\label{how-forest-structure-affects-bark-beetle-activity}
 
-Water stress and competition (Hayes \emph{et al.} 2009; Young \emph{et
-al.} 2017) Host availability (ease of dispersal to new hosts) Beetles
-prefer larger trees under outbreak conditions
+Water stress and competition (Hayes et al. 2009, Young et al. 2017) Host
+availability (ease of dispersal to new hosts) Beetles prefer larger
+trees under outbreak conditions
 
 Forests in California's Sierra Nevada region are characterized by
 regular bark beetle disturbances that interact with forest structure.
@@ -205,12 +220,14 @@ structure to which bark beetles respond, and equipping the sUAS with a
 multispectral sensor will allow calculation of vegetation indices (e.g.,
 NDVI) commonly used to assess tree condition.
 
+Use drones for insect attack studies! (Morris et al. 2017).
+
 Climate change mitigation strategies emphasize reducing tree densities
-(North \emph{et al.} 2015; Young \emph{et al.} 2017), but understanding
-the optimal scale and pattern of tree distribution that can mitigate
-bark beetle outbreaks will be vital for predicting how California
-forests may respond to these interventions. This project investigates
-this relationship with the following research questions:
+(North et al. 2015, Young et al. 2017), but understanding the optimal
+scale and pattern of tree distribution that can mitigate bark beetle
+outbreaks will be vital for predicting how California forests may
+respond to these interventions. This project investigates this
+relationship with the following research questions:
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
@@ -233,7 +250,7 @@ unhumanned aerial system (sUAS, aka drone) over a network of 32 sites in
 the Sierra Nevada spanning 1000m of elevation and 350km of latitude and
 covering a total of 9 square kilometers of forest to ask how fine-scale
 forest structure affected the probability of tree mortality during the
-cumulative mortality event of
+cumulative mortality event of 2012 to 2018.
 
 \subsection{Methods}\label{methods}
 
@@ -243,23 +260,22 @@ The study sites comprise mostly ponderosa pine trees, \emph{Pinus
 ponderosa}, whose primary bark beetle predator in California is the
 western pine beetle (WPB), \emph{Dendroctonus brevicomis}. The WPB is an
 aggressive bark beetle, meaning it must attack and kill live trees in
-order to successfully reproduce (Raffa \emph{et al.} 2008). Pioneer WPBs
+order to successfully reproduce (Raffa et al. 2008). Pioneer WPBs
 disperse to a new host tree, determine the host's susceptibility to
 attack, and use pheromone signals to attract other WPBs. The attracted
 WPBs mass attack the tree by boring into its inner bark, laying eggs,
 and dying, leaving their offspring to develop inside the doomed tree
-before themselves dispersing (Raffa \emph{et al.} 2008). Small WPB
-populations prefer weakened trees but large populations can overwhelm
-the defense mechanisms of even healthy trees. Successful attacks on
-large, healthy trees are boons to bark beetle fecundity and trigger
-outbreaks in which populations explode and massive tree mortality
-occurs. In California, the WPB can have 3 generations in a single year
-giving it a greater potential to spread rapidly through forests than its
-more infamous congener, the mountain pine beetle, \emph{Dendroctonus
-ponderosa} (MPB).
+before themselves dispersing (Raffa et al. 2008). Small WPB populations
+prefer weakened trees but large populations can overwhelm the defense
+mechanisms of even healthy trees. Successful attacks on large, healthy
+trees are boons to bark beetle fecundity and trigger outbreaks in which
+populations explode and massive tree mortality occurs. In California,
+the WPB can have 3 generations in a single year giving it a greater
+potential to spread rapidly through forests than its more infamous
+congener, the mountain pine beetle, \emph{Dendroctonus ponderosa} (MPB).
 
 We built our study on 180 vegetation monitoring plots at 36 sites
-established between 2016 and 2017 (Fettig \emph{et al.} 2019). These
+established between 2016 and 2017 (Fettig et al. 2019). These
 established plots are located in beetle-attacked, mixed-conifer forests
 across the Eldorado, Stanislaus, Sierra and Sequoia National Forests
 across an elevation gradient (3000-4000 feet, 4000-5000 feet, and 5000+
@@ -291,28 +307,110 @@ reflectance values for each of the 5 narrow bands.
 Table XXXXX. Reflectance sensitivity of the Micasense Rededge3 camera.
 The calibration panel value represents the reflectance of the
 calibration panel for the given wavelength.
-+------------+--------------+------------------+------------------+----------+-----------------+---------------+
-\textbar{} Band~ \textbar{} Band~ \textbar{} Band~ \textbar{} Center~
-\textbar{} Band~ \textbar{} Wavelength~ \textbar{} Calibration~
-\textbar{} \textbar{} number \textbar{} name \textbar{} abbreviation
-\textbar{} wavelength \textbar{} width \textbar{} range \textbar{} panel
-value \textbar{}
-+============+==============+==================+==================+==========+=================+===============+
-\textbar{} 1 \textbar{}blue \textbar{}b \textbar{} 475 \textbar{} 20
-\textbar{} 465-485 \textbar{} 0.64 \textbar{}
-+------------+--------------+------------------+------------------+----------+-----------------+---------------+
-\textbar{} 2 \textbar{}green \textbar{}g \textbar{} 560 \textbar{} 20
-\textbar{} 550-570 \textbar{} 0.64 \textbar{}
-+------------+--------------+------------------+------------------+----------+-----------------+---------------+
-\textbar{} 3 \textbar{}red \textbar{}r \textbar{} 668 \textbar{} 10
-\textbar{} 663-673 \textbar{} 0.64 \textbar{}
-+------------+--------------+------------------+------------------+----------+-----------------+---------------+
-\textbar{} 4 \textbar{}near infrared \textbar{}nir \textbar{} 840
-\textbar{} 40 \textbar{} 820-860 \textbar{} 0.60 \textbar{}
-+------------+--------------+------------------+------------------+----------+-----------------+---------------+
-\textbar{} 5 \textbar{}red edge \textbar{}re \textbar{} 717 \textbar{}
-10 \textbar{} 712-722 \textbar{} 0.63 \textbar{}
-+------------+--------------+------------------+------------------+----------+-----------------+---------------+
+
+\begin{longtable}[]{@{}lllllll@{}}
+\toprule
+\begin{minipage}[b]{0.09\columnwidth}\raggedright\strut
+Band\\
+number\strut
+\end{minipage} & \begin{minipage}[b]{0.11\columnwidth}\raggedright\strut
+Band\\
+name\strut
+\end{minipage} & \begin{minipage}[b]{0.14\columnwidth}\raggedright\strut
+Band\\
+abbreviation\strut
+\end{minipage} & \begin{minipage}[b]{0.14\columnwidth}\raggedright\strut
+Center\\
+wavelength\strut
+\end{minipage} & \begin{minipage}[b]{0.08\columnwidth}\raggedright\strut
+Band\\
+width\strut
+\end{minipage} & \begin{minipage}[b]{0.13\columnwidth}\raggedright\strut
+Wavelength\\
+range\strut
+\end{minipage} & \begin{minipage}[b]{0.13\columnwidth}\raggedright\strut
+Calibration\\
+panel value\strut
+\end{minipage}\tabularnewline
+\midrule
+\endhead
+\begin{minipage}[t]{0.09\columnwidth}\raggedright\strut
+1\strut
+\end{minipage} & \begin{minipage}[t]{0.11\columnwidth}\raggedright\strut
+blue\strut
+\end{minipage} & \begin{minipage}[t]{0.14\columnwidth}\raggedright\strut
+b\strut
+\end{minipage} & \begin{minipage}[t]{0.14\columnwidth}\raggedright\strut
+475\strut
+\end{minipage} & \begin{minipage}[t]{0.08\columnwidth}\raggedright\strut
+20\strut
+\end{minipage} & \begin{minipage}[t]{0.13\columnwidth}\raggedright\strut
+465-485\strut
+\end{minipage} & \begin{minipage}[t]{0.13\columnwidth}\raggedright\strut
+0.64\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.09\columnwidth}\raggedright\strut
+2\strut
+\end{minipage} & \begin{minipage}[t]{0.11\columnwidth}\raggedright\strut
+green\strut
+\end{minipage} & \begin{minipage}[t]{0.14\columnwidth}\raggedright\strut
+g\strut
+\end{minipage} & \begin{minipage}[t]{0.14\columnwidth}\raggedright\strut
+560\strut
+\end{minipage} & \begin{minipage}[t]{0.08\columnwidth}\raggedright\strut
+20\strut
+\end{minipage} & \begin{minipage}[t]{0.13\columnwidth}\raggedright\strut
+550-570\strut
+\end{minipage} & \begin{minipage}[t]{0.13\columnwidth}\raggedright\strut
+0.64\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.09\columnwidth}\raggedright\strut
+3\strut
+\end{minipage} & \begin{minipage}[t]{0.11\columnwidth}\raggedright\strut
+red\strut
+\end{minipage} & \begin{minipage}[t]{0.14\columnwidth}\raggedright\strut
+r\strut
+\end{minipage} & \begin{minipage}[t]{0.14\columnwidth}\raggedright\strut
+668\strut
+\end{minipage} & \begin{minipage}[t]{0.08\columnwidth}\raggedright\strut
+10\strut
+\end{minipage} & \begin{minipage}[t]{0.13\columnwidth}\raggedright\strut
+663-673\strut
+\end{minipage} & \begin{minipage}[t]{0.13\columnwidth}\raggedright\strut
+0.64\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.09\columnwidth}\raggedright\strut
+4\strut
+\end{minipage} & \begin{minipage}[t]{0.11\columnwidth}\raggedright\strut
+near infrared\strut
+\end{minipage} & \begin{minipage}[t]{0.14\columnwidth}\raggedright\strut
+nir\strut
+\end{minipage} & \begin{minipage}[t]{0.14\columnwidth}\raggedright\strut
+840\strut
+\end{minipage} & \begin{minipage}[t]{0.08\columnwidth}\raggedright\strut
+40\strut
+\end{minipage} & \begin{minipage}[t]{0.13\columnwidth}\raggedright\strut
+820-860\strut
+\end{minipage} & \begin{minipage}[t]{0.13\columnwidth}\raggedright\strut
+0.60\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.09\columnwidth}\raggedright\strut
+5\strut
+\end{minipage} & \begin{minipage}[t]{0.11\columnwidth}\raggedright\strut
+red edge\strut
+\end{minipage} & \begin{minipage}[t]{0.14\columnwidth}\raggedright\strut
+re\strut
+\end{minipage} & \begin{minipage}[t]{0.14\columnwidth}\raggedright\strut
+717\strut
+\end{minipage} & \begin{minipage}[t]{0.08\columnwidth}\raggedright\strut
+10\strut
+\end{minipage} & \begin{minipage}[t]{0.13\columnwidth}\raggedright\strut
+712-722\strut
+\end{minipage} & \begin{minipage}[t]{0.13\columnwidth}\raggedright\strut
+0.63\strut
+\end{minipage}\tabularnewline
+\bottomrule
+\end{longtable}
 
 \subsubsection{Flight protocol}\label{flight-protocol}
 
@@ -321,7 +419,7 @@ minimize shadow effects (always within 4 hours; usually within 2 hours).
 Prior to the aerial survey, two strips of bright orange drop cloth
 (\textasciitilde{}100cm x 15cm) were positioned as an ``X'' over the
 permanent monuments marking the center of the 5 field plots from Fettig
-\emph{et al.} (2019).
+et al. (2019).
 
 For each of the 36 sites (containing 5 plots each), we captured imagery
 over the surrounding \textasciitilde{}40 hectares of forested area using
@@ -337,9 +435,9 @@ We preprogrammed transect paths using Map Pilot for DJI on iOS
 their altitude remained approximately constant at 120 meters above
 ground level in order to maintain consistent ground sampling distance in
 the imagery. Ground level was based on a 1-arc-second digital elevation
-model (Farr \emph{et al.} 2007) and we implemented terrain following
-using Map Pilot. For this analysis, we dropped 4 sites whose imagery was
-of insufficient quality to process.
+model (Farr et al. 2007) and we implemented terrain following using Map
+Pilot. For this analysis, we dropped 4 sites whose imagery was of
+insufficient quality to process.
 
 Structure from motion (SfM) processing requires highly overlapping
 images, especially in densely vegetated areas. We planned transects with
@@ -372,13 +470,12 @@ models}\label{creating-canopy-height-models}
 
 We classified each survey area's dense point cloud into ``ground'' and
 ``non-ground'' points using a cloth simulation filter algorithm (Zhang
-\emph{et al.} 2016) implemented in the \texttt{lidR} (Roussel \emph{et
-al.} 2019) package. We rasterized the ground points using the
-\texttt{raster} package (Hijmans \emph{et al.} 2019) to create a digital
-terrain model representing the ground underneath the vegetation at 1
-meter resolution. We created a canopy height model by subtracting the
-digital terrain model from the digital surface model created in
-Pix4Dmapper.
+et al. 2016) implemented in the \texttt{lidR} (Roussel et al. 2019)
+package. We rasterized the ground points using the \texttt{raster}
+package (Hijmans et al. 2019) to create a digital terrain model
+representing the ground underneath the vegetation at 1 meter resolution.
+We created a canopy height model by subtracting the digital terrain
+model from the digital surface model created in Pix4Dmapper.
 
 \subsubsection{Tree detection}\label{tree-detection}
 
@@ -391,21 +488,20 @@ including the default variable window filter function in
 \texttt{ForestTools} as well as the ``pines'' and ``combined'' functions
 from Popescu and Wynne (2004). We used 6 parameter sets of a local
 maximum filter implemented in \texttt{lidR}. We used 131 parameter sets
-of the algorithm from Li \emph{et al.} (2012), which operates on the
-original point cloud. These parameter sets included those from Shin
-\emph{et al.} (2018) and Jakubowski \emph{et al.} (2013). We used 3
-parameter sets of the \texttt{watershed} algorithm implemented in
-\texttt{lidR}, which is a wrapper for a function in the \texttt{EBImage}
-package (Pau \emph{et al.} 2010). We used 3 parameter sets of
-\texttt{ptrees} (Vega \emph{et al.} 2014) implemented in \texttt{lidR}
-(Roussel \emph{et al.} 2019) and \texttt{lidRplugins} (Roussel 2019) and
-which operates on the raw point cloud, without first normalizing it to
-height above ground level (i.e.. subtracting the ground elevation from
-the dense point cloud). We used the default parameter set of the
-\texttt{multichm} (Eysn \emph{et al.} 2015) algorithm implmented in
-\texttt{lidR} (Roussel \emph{et al.} 2019) and \texttt{lidRplugins}
-(Roussel 2019). We used 30 parameter sets of the experimental algorithm
-\texttt{lmfx} (Roussel 2019).
+of the algorithm from Li et al. (2012), which operates on the original
+point cloud. These parameter sets included those from Shin et al. (2018)
+and Jakubowski et al. (2013). We used 3 parameter sets of the
+\texttt{watershed} algorithm implemented in \texttt{lidR}, which is a
+wrapper for a function in the \texttt{EBImage} package (Pau et al.
+2010). We used 3 parameter sets of \texttt{ptrees} (Vega et al. 2014)
+implemented in \texttt{lidR} (Roussel et al. 2019) and
+\texttt{lidRplugins} (Roussel 2019) and which operates on the raw point
+cloud, without first normalizing it to height above ground level (i.e..
+subtracting the ground elevation from the dense point cloud). We used
+the default parameter set of the \texttt{multichm} (Eysn et al. 2015)
+algorithm implmented in \texttt{lidR} (Roussel et al. 2019) and
+\texttt{lidRplugins} (Roussel 2019). We used 30 parameter sets of the
+experimental algorithm \texttt{lmfx} (Roussel 2019).
 
 \subsubsection{Map ground data}\label{map-ground-data}
 
@@ -413,7 +509,7 @@ Each orthorectified reflectance map was inspected to locate the 5 orange
 ``X''s marking the center of the field plots. We were able to locate 110
 out of 180 field plots and were then able to use these plots for
 validation of automated tree detection algorithms. We used the
-\texttt{sf} package (Pebesma \emph{et al.} 2019) to convert
+\texttt{sf} package (Pebesma et al. 2019) to convert
 distance-from-center and azimuth measurements of each tree in the ground
 plots to an x-y position on the SfM-derived reflectance map using the
 x-y position of the orange X visible in the reflectance map as the
@@ -423,9 +519,9 @@ center.
 data}\label{correspondence-of-automatic-tree-detection-with-ground-data}
 
 We calculated 7 forest structure metrics for each field plot using the
-ground data collected by Fettig \emph{et al.} (2019): total number of
-trees, number of trees greater than 15 meters, number of trees less than
-15 meters, mean height of trees, 25\textsuperscript{th} percentile tree
+ground data collected by Fettig et al. (2019): total number of trees,
+number of trees greater than 15 meters, number of trees less than 15
+meters, mean height of trees, 25\textsuperscript{th} percentile tree
 height, 75\textsuperscript{th} percentile tree height, mean distance to
 nearest tree neighbor, mean distance to 2\textsuperscript{nd} nearest
 neighbor.
@@ -434,8 +530,8 @@ For each tree detection algorithm and parameter set described above, we
 calculated the same set of 7 structure metrics within the footprint of
 the validation field plots. We calculated the Pearson's correlation and
 root mean square error (RMSE) between the ground data and the aerial
-data for each of the 7 structure metrics for each of the XXXXX automatic
-tree detection algorithms.
+data for each of the 7 structure metrics for each of the 177 automatic
+tree detection algorithms/parameter sets.
 
 For each algorithm and parameter set, we calculated its performance
 relative to other algorithms as whether its Pearson's correlation was
@@ -465,13 +561,12 @@ We used the \texttt{velox} package (Hunziker 2017) to extract all the
 pixel values from the orthorectified reflectance map for each of the 5
 narrow bands within each segmented crown polygon. Per pixel, we
 additionally calculated the normalized difference vegetation index
-(NDVI; Rouse \emph{et al.} (1973)), the normalized difference red edge
-(NDRE; Gitelson and Merzlyak (1994)), the red-green index (RGI; Coops
-\emph{et al.} (2006)), the red edge chlorophyll index (CI{[}red edge{]};
-Clevers and Gitelson (2013)), and the green chlorophyll index
-(CI{[}green{]}; Clevers and Gitelson (2013)). For each crown polygon, we
-calculated the mean value for each raw and derived reflectance band (5
-raw; 5 derived).
+(NDVI; Rouse et al. (1973)), the normalized difference red edge (NDRE;
+Gitelson and Merzlyak (1994)), the red-green index (RGI; Coops et al.
+(2006)), the red edge chlorophyll index (CI{[}red edge{]}; Clevers and
+Gitelson (2013)), and the green chlorophyll index (CI{[}green{]};
+Clevers and Gitelson (2013)). For each crown polygon, we calculated the
+mean value for each raw and derived reflectance band (5 raw; 5 derived).
 
 \subsubsection{Classification of trees}\label{classification-of-trees}
 
@@ -499,20 +594,20 @@ area}\label{allometric-scaling-of-height-to-basal-area}
 
 We converted the height of each tree determined using the canopy height
 model to its basal area. Using the tree height and diameter at breast
-height (DBH; breast height = 1.37m) ground data from Fettig \emph{et
-al.} (2019), we fit a simple linear regression to predict DBH from
-height for each of the 5 dominant species. Using the model-classified
-tree species of each segmented tree, we used the corresponding linear
-relationship for that species to estimate the DBH given the tree's
-height. We then calculated each tree's basal area, assuming no tapering
-from breast height.
+height (DBH; breast height = 1.37m) ground data from Fettig et al.
+(2019), we fit a simple linear regression to predict DBH from height for
+each of the 5 dominant species. Using the model-classified tree species
+of each segmented tree, we used the corresponding linear relationship
+for that species to estimate the DBH given the tree's height. We then
+calculated each tree's basal area, assuming no tapering from breast
+height.
 
 \subsubsection{Note on assumptions about dead
 trees}\label{note-on-assumptions-about-dead-trees}
 
 For the purposes of this study, we assumed that all dead trees were
-ponderosa pine. This is a reasonably good assumption, given that Fettig
-\emph{et al.} (2019) found that XXXXX\% (\textasciitilde{}90) of the
+ponderosa pine and were thus host trees. This is a reasonably good
+assumption, given that Fettig et al. (2019) found that 73.4\% of the
 dead trees in the coincident ground plots were ponderosa pine.
 
 \subsubsection{Rasterizing individual tree
@@ -530,90 +625,148 @@ ponderosa pine trees, basal area of non-ponderosa pine trees.
 \subsubsection{Environmental data}\label{environmental-data}
 
 We used climatic water deficit (CWD) (Stephenson 1998) from the
-1980-2010 mean value of the basin characterization model (Flint \emph{et
-al.} 2013) as an integrated measure of temperature and moisture
-conditions for each cell. Higher values of CWD correspond to hotter,
-drier conditions and lower values correspond to cooler, wetter
-conditions CWD has been shown to correlate well with broad patterns of
-tree mortality in the Sierra Nevada (Young \emph{et al.} 2017). We
-resampled the climatic water deficit product using bilinear
-interpolation implemented in the \texttt{raster} package to match the
-20m x 20m spatial scale of the other variables. We converted the CWD
-value for each cell into a z-score representing that cell's deviation
-from the mean CWD across the climatic range of Sierra Nevada ponderosa
-pine as determined from XXXXX herbarium records described in Baldwin
-\emph{et al.} (2017). Thus, a CWD z-score of one would indicate that the
-CWD at that cell is one standard deviation hotter/drier than the mean
-CWD across all geolocated herbarium records for ponderosa pine in the
-Sierra Nevada.
+1980-2010 mean value of the basin characterization model (Flint et al.
+2013) as an integrated measure of temperature and moisture conditions
+for each cell. Higher values of CWD correspond to hotter, drier
+conditions and lower values correspond to cooler, wetter conditions CWD
+has been shown to correlate well with broad patterns of tree mortality
+in the Sierra Nevada (Young et al. 2017). We resampled the climatic
+water deficit product using bilinear interpolation implemented in the
+\texttt{raster} package to match the 20m x 20m spatial scale of the
+other variables. We converted the CWD value for each cell into a z-score
+representing that cell's deviation from the mean CWD across the climatic
+range of Sierra Nevada ponderosa pine as determined from XXXXX herbarium
+records described in Baldwin et al. (2017). Thus, a CWD z-score of one
+would indicate that the CWD at that cell is one standard deviation
+hotter/drier than the mean CWD across all geolocated herbarium records
+for ponderosa pine in the Sierra Nevada.
 
 \subsubsection{Statistical model}\label{statistical-model}
 
-We used a generalized linear model with a binomial response and a logit
-link to predict the probability of ponderosa pine mortality within each
-raster cell as a function of the crossed effects of ponderosa pine
-quadratic mean diameter and density added to the crossed effect of
-overall quadratic mean diameter and density as well as the interaction
-of each summand with climatic water deficit.
+We used a generalized linear model with a zero-inflated binomial
+response and a logit link to predict the probability of ponderosa pine
+mortality within each raster cell as a function of the crossed effects
+of ponderosa pine quadratic mean diameter and density added to the
+crossed effect of overall quadratic mean diameter and density as well as
+the interaction of each summand with climatic water deficit at each
+site.
 
 To measure and account for spatial autocorrelation of the bark beetle
 behavioral processes underlying ponderosa mortality, we first subsampled
 the data at each site to a random selection of 200, 20m x 20m cells
-representing approximately 27.5\% of the surveyed area.
-
-included a separate approximate Gaussian Process term per site of the
-interaction between the x- and y-position of each cell using the
-\texttt{gp()} function in the \texttt{brms} package (Bürkner 2017) with
-10 basis functions.
-
-Model checking\ldots{}
+representing approximately 27.5\% of the surveyed area. With these
+subsampled data, we included a separate exact Gaussian process term per
+site of the interaction between the x- and y-position of each cell using
+the \texttt{gp()} function in the \texttt{brms} package (Bürkner 2017).
+The Gaussian process accounts for spatial autocorrelation in the model
+by jointly estimating the spatial covariance of the response variable
+with the effects of the other covariates.
 
 \[
 \begin{aligned}
 y_{i,j} \sim &\ \begin{cases}
-    0, & \text{w.p. $zi$}.\\
-    Binom(n_i, \theta_i), & \text{w.p. $1-zi$}.
+    0, & p \\
+    Binom(n_i, \pi_i), & 1-p
   \end{cases} \\
-logit(\theta_i) = &\ \beta_0\ + \\
-& \beta_1X_{cwd, i}\ + \\
-& \beta_1X_{cwd, i}(\beta_2X_{pipoQMD, i} + \beta_3X_{pipoDensity, i} + \beta_4X_{pipoQMD, i}X_{pipoDensity, i})\ + \\ 
-& \beta_1X_{cwd, i}(\beta_5X_{overallQMD, i} + \beta_6X_{overallDensity, i} + \beta_7X_{overallQMD, i}X_{overallDensity, i})\ + \\
+logit(\pi_i) = &\ \beta_0\ + \\
+& \beta_1X_{cwd, j}\ + \\
+& \beta_1X_{cwd, j}(\beta_2X_{pipoQMD, i} + \beta_3X_{pipoDensity, i} + \beta_4X_{pipoQMD, i}X_{pipoDensity, i})\ + \\ 
+& \beta_1X_{cwd, j}(\beta_5X_{overallQMD, i} + \beta_6X_{overallDensity, i} + \beta_7X_{overallQMD, i}X_{overallDensity, i})\ + \\
 & \mathcal{GP}_j(x_i, y_i) \\
-zi \sim &\ Bernoulli(\theta)
 \end{aligned}
-\] Where \(y_i\) is the number of dead ponderosa pine trees in cell
-\(i\), \(n_i\) is the total number of ponderosa pine trees in cell
-\(i\), \(\theta_i\) is the probability of a pine tree dying in cell
-\(i\), \(X_{cwd, i}\) is the z-score of climatic water deficit,
-\(X_{pipoBA, i}\) is the centered basal area of ponderosa pine in a
-cell, \(X_{pipoCount, i}\) is the centered number of ponderosa pine
-trees in a cell, \(X_{nonpipoBA, i}\) is the centered total basal area
-of non-ponderosa pine trees in a cell, \(X_{nonpipoCount, i}\) is the
-centered number of non-ponderosa pine trees in a cell, and \(\gamma_i\)
-is a random deviation from the log-odds of ponderosa pine mortality at
-mean values of ponderosa pine basal area and count, mean values of
-non-ponderosa pine basal area and count, and mean value of climatic
-water deficit across the full range of Sierra Nevada ponderosa pine.
-\(\sigma^2\) represents the pooled variance of these random deviations.
+\]
+
+Where \(y_i\) is the number of dead trees in cell \(i\), \(n_i\) is the
+sum of the dead trees and live ponderosa pine trees in cell \(i\),
+\(\pi_i\) is the probability of ponderosa pine tree mortality in cell
+\(i\), \(p\) is the probability of there being zero dead trees in a cell
+arising as a result of an unmodeled process, \(X_{cwd, j}\) is the
+z-score of climatic water deficit for site \(j\), \(X_{pipoQMD, i}\) is
+the scaled quadratic mean diameter of ponderosa pine in cell \(i\),
+\(X_{pipoDensity, i}\) is the scaled density of ponderosa pine trees in
+cell \(i\), \(X_{overallQMD, i}\) is the scaled quadratic mean diameter
+of all trees in cell \(i\), \(X_{overallDensity, i}\) is the scaled
+density of all trees in cell \(i\), \(x_i\) and \(y_i\) are the x- and
+y- coordinates of the centroid of the cell in an EPSG3310 coordinate
+reference system, and \(\mathcal{GP}_j\) represents the exact Gaussian
+process describing the spatial covariance between cells at site \(j\).
+
+We used 4 chains with 2000 iterations each (1000 warmup, 1000 samples),
+and confirmed chain convergence by ensuring all \texttt{Rhat} values
+were less than 1.1 (Brooks and Gelman 1998). We used posterior
+predictive checks to visually confirm model performance by overlaying
+the density curves of the predicted number of dead trees per cell over
+the observed number (Gabry et al. 2019). We used 50 random samples from
+the model fit to generate 50 density curves and ensured curves were
+centered on the observed distribution, paying special attention to model
+performance at capturing counts of zero.
 
 \subsubsection{Software and data
 availability}\label{software-and-data-availability}
 
 All data are available via the Open Science Framework. Statistical
-analyses were performed using the \texttt{mgcv} and \texttt{brms}
-packages. With the exception of the SfM software (Pix4Dmapper Cloud) and
-the GIS software QGIS, all data carpentry and analyses were performed
-using \texttt{R} (R Core Team 2018).
+analyses were performed using the \texttt{brms} packages. With the
+exception of the SfM software (Pix4Dmapper Cloud) and the GIS software
+QGIS, all data carpentry and analyses were performed using \texttt{R} (R
+Core Team 2018).
 
 \subsection{Results}\label{results}
+
+\begin{figure}
+\centering
+\includegraphics{../../figures/eldo_3k_1_dsm.png}
+\caption{Example digital surface model (DSM) that is a direct output
+from the dense point cloud generated using structure from motion (SfM)
+processing. The DSM represents the ground elevation plus the vegetation
+height.}
+\end{figure}
+
+\begin{figure}
+\centering
+\includegraphics{../../figures/eldo_3k_1_dtm.png}
+\caption{Example digital terrain model (DTM) resulting from processing
+the digital surface model using the cloth simulation filter algorithm
+(Zhang et al. 2016), which classifies points in the dense point cloud as
+``ground'' or ``not-ground'' and then interpolates the ``ground''
+elevation for the rest of the dense point cloud footprint. The DTM
+represents the ground elevation without any vegetation.}
+\end{figure}
+
+\begin{figure}
+\centering
+\includegraphics{../../figures/eldo_3k_1_chm.png}
+\caption{Example canopy height model (CHM) generated by subtracting the
+digital terrain model from the digital surface model. The CHM represents
+the height of all of the elevation above ground level.}
+\end{figure}
 
 \subsubsection{Tree detection}\label{tree-detection-1}
 
 We found that the experimental \texttt{lmfx} algorithm with parameter
-values of XXXXX (Roussel \emph{et al.} 2019) performed the best across 7
-measures of forest structure as measured by Pearson's correlation with
-ground data (Table XXXX; rows are different forest metrics, columns are
-correlation and RMSE).
+values of \texttt{dist2d\ =\ 1} and \texttt{ws\ =\ 2.5} (Roussel et al.
+2019) performed the best across 7 measures of forest structure as
+measured by Pearson's correlation with ground data (Table XXXX; rows are
+different forest metrics, columns are correlation and RMSE).
+
+\begin{longtable}[]{@{}lrrrrrr@{}}
+\toprule
+Forest metric & Correlation with ground & RMSE & me & med\_error &
+Correlation within top 5\%? & RMSE within top 5\%?\tabularnewline
+\midrule
+\endhead
+height\_lwr\_25 & 0.16 & 8.46 & -2.30 & -1.16 & 0 & 0\tabularnewline
+height\_mean & 0.29 & 7.81 & -3.43 & -2.29 & 0 & 1\tabularnewline
+height\_upr\_25 & 0.35 & 10.33 & -4.85 & -3.98 & 0 & 1\tabularnewline
+nn\_1\_mean & 0.55 & 1.16 & 0.13 & 0.26 & 1 & 1\tabularnewline
+nn\_2\_mean & 0.61 & 1.70 & 0.08 & 0.12 & 1 & 1\tabularnewline
+nn\_3\_mean & 0.50 & 2.29 & 0.17 & 0.19 & 0 & 0\tabularnewline
+total\_tree\_count & 0.67 & 8.68 & 0.37 & 2.00 & 1 & 1\tabularnewline
+tree\_count\_above\_15m & 0.43 & 7.38 & 1.18 & 0.00 & 0 &
+0\tabularnewline
+tree\_count\_below\_15m & 0.58 & 8.42 & -0.66 & 2.00 & 0 &
+0\tabularnewline
+\bottomrule
+\end{longtable}
 
 \subsubsection{Effect of local structure on western pine beetle
 severity}\label{effect-of-local-structure-on-western-pine-beetle-severity}
@@ -641,49 +794,48 @@ ponderosa pine mortality.
 
 \subsubsection{Spatial effects}\label{spatial-effects}
 
-We were able to calculate the range of the spatial autocorrelation in
-the probability of ponderosa pine mortality at each site, accounting for
-forest structure and environmental factors. By fitting a separate
-approximate Gaussian process for each site on the interacting variables
-of the x- and y- position
+We were able to calculate the length scale of the spatial
+autocorrelation in the probability of ponderosa pine mortality at each
+site, accounting for forest structure and environmental factors. By
+fitting a separate approximate Gaussian process for each site on the
+interacting variables of the x- and y- position, we measured the spatial
+covariance inherent in the data, accounting for other factors.
+
+(Seidl et al. 2015) (Preisler et al. 2017)
 
 \subsection{Discussion}\label{discussion}
 
-\subsubsection{\texorpdfstring{Similarities and differences with Fettig
-\emph{et al.}
-(2019)}{Similarities and differences with Fettig et al. (2019)}}\label{similarities-and-differences-with-fettig2019}
+\subsubsection{Similarities and differences with Fettig et al.
+(2019)}\label{similarities-and-differences-with-fettig2019}
 
-Fettig \emph{et al.} (2019) found positive relationship between number
-of trees killed and: total number of trees, total basal area, stand
-density index.
-
-Fettig \emph{et al.} (2019) found negative relationship between the
-proportion of trees killed and: total number of trees, stand density
+Fettig et al. (2019) found positive relationship between number of trees
+killed and: total number of trees, total basal area, stand density
 index.
 
-Hayes \emph{et al.} (2009) and Fettig \emph{et al.} (2019) found
-measures of host availability explained less variation in mortality than
-measures of stand density.
+Fettig et al. (2019) found negative relationship between the proportion
+of trees killed and: total number of trees, stand density index.
 
-Negrón \emph{et al.} (2009) reported positive association of probability
-of ponderosa pine mortality and tree density during a drought in
-Arizona.
+Hayes et al. (2009) and Fettig et al. (2019) found measures of host
+availability explained less variation in mortality than measures of
+stand density.
+
+Negrón et al. (2009) reported positive association of probability of
+ponderosa pine mortality and tree density during a drought in Arizona.
 
 Effect of competition may be masked because drought was so extreme
-Fettig \emph{et al.} (2019); Floyd \emph{et al.} (2009), which is
-perhaps why we saw a counter-intuitive signal of increasing total basal
-area leading to lower probability of ponderosa pine mortality.
+Fettig et al. (2019); Floyd et al. (2009), which is perhaps why we saw a
+counter-intuitive signal of increasing total basal area leading to lower
+probability of ponderosa pine mortality.
 
 \subsubsection{Broader context around field
 plots}\label{broader-context-around-field-plots}
 
 We surveyed 9 square kilometers of forest representing XXXXXX trees
 along a broad gradient. Site selection and small plot size can influence
-inference. For instance, Fettig \emph{et al.} (2019) reported
-statistically undetectable differences in overall mortality in their
-plot network across 4 national forests. By expanding the hectarage
-surveyed by a factor of 200, we detected dramatic differences in overall
-mortality.
+inference. For instance, Fettig et al. (2019) reported statistically
+undetectable differences in overall mortality in their plot network
+across 4 national forests. By expanding the hectarage surveyed by a
+factor of 200, we detected dramatic differences in overall mortality.
 
 This is about more than sample size. This is also about capturing the
 local disturbance phenomenon.
@@ -733,10 +885,48 @@ deficit}\label{interactions-with-climatic-water-deficit}
 Are any of the above mechanisms exacerbated by water stress of the
 trees?
 
+\subsubsection{Spatial effect}\label{spatial-effect}
+
+The western pine beetle is known to exhibit strong aggregation and
+anti-aggregation behavior arising from its pheromone communication, and
+thus it is likely that the measured spatial covariance in this study is
+attributable to the magnitude of this effect at each site.
+
+Some studies have suggested that ``outbreak'' conditions are
+distinguishable by clustered tree mortality, but this is perhaps
+challenging to tease apart (Raffa et al. 2008). Our modeling framework
+allows for a joint estimation of the effects of forest structure,
+environmental condition, and the spatial effect. This framework would be
+enhanced with confidence in individual tree level data, and a lot of it,
+along with a strong gradient of environmental conditions and forest
+structure.
+
+We won't interpret this measure of contagion, because the uncertainties
+in this particular study are too great (tree detection, species
+classification, dead trees all assumed to be WPB hosts, didn't account
+for topographic effects which could also manifest as part of this
+spatial covariance process).
+
 \subsubsection{Important considerations}\label{important-considerations}
 
 Cumulative effect of elevated insect activity, as mortality was spread
-out over 5 years and we surveyed at the end.
+out over 5 years and we surveyed at the end. All the detected dead trees
+were considered ponderosa pine-- we know this is wrong.'
+
+\subsubsection{Room for improvement}\label{room-for-improvement}
+
+\begin{itemize}
+\tightlist
+\item
+  Better geometry by using higher overlap, more spatially resolved
+  images.
+\item
+  Better image classification and scalability by using instrumentation
+  having spectral overlap with more widely deployed instrumentation
+  (e.g., Landsat).
+\item
+  Better tree detection using
+\end{itemize}
 
 \subsubsection{Future directions}\label{future-directions}
 
@@ -763,213 +953,250 @@ of voronoi polygon area and covariance kerenel effects depending on CWD.
 
 \hypertarget{refs}{}
 \hypertarget{ref-baldwin2017a}{}
-Baldwin BG, Thornhill AH, and Freyman WA \emph{et al.} 2017. Species
-richness and endemism in the native flora of California. \emph{American
-Journal of Botany} \textbf{104}: 487--501.
+Baldwin, B. G., A. H. Thornhill, W. A. Freyman, D. D. Ackerly, M. M.
+Kling, N. Morueta-Holme, and B. D. Mishler. 2017. Species richness and
+endemism in the native flora of California. American Journal of Botany
+104:487--501.
+
+\hypertarget{ref-brooks1998}{}
+Brooks, S. P., and A. Gelman. 1998. General Methods for Monitoring
+Convergence of Iterative Simulations. Journal of Computational and
+Graphical Statistics 7:434.
 
 \hypertarget{ref-burkner2017}{}
-Bürkner P-C. 2017. \textbf{Brms} : An \emph{R} Package for Bayesian
-Multilevel Models Using \emph{Stan}. \emph{Journal of Statistical
-Software} \textbf{80}.
+Bürkner, P.-C. 2017. \textbf{Brms} : An \emph{R} Package for Bayesian
+Multilevel Models Using \emph{Stan}. Journal of Statistical Software 80.
 
 \hypertarget{ref-clevers2013}{}
-Clevers J and Gitelson A. 2013. Remote estimation of crop and grass
+Clevers, J., and A. Gitelson. 2013. Remote estimation of crop and grass
 chlorophyll and nitrogen content using red-edge bands on Sentinel-2 and
--3. \emph{International Journal of Applied Earth Observation and
-Geoinformation} \textbf{23}: 344--51.
+-3. International Journal of Applied Earth Observation and
+Geoinformation 23:344--351.
 
 \hypertarget{ref-coops2006}{}
-Coops NC, Johnson M, Wulder MA, and White JC. 2006. Assessment of
-QuickBird high spatial resolution imagery to detect red attack damage
-due to mountain pine beetle infestation. \emph{Remote Sensing of
-Environment} \textbf{103}: 67--80.
+Coops, N. C., M. Johnson, M. A. Wulder, and J. C. White. 2006.
+Assessment of QuickBird high spatial resolution imagery to detect red
+attack damage due to mountain pine beetle infestation. Remote Sensing of
+Environment 103:67--80.
 
 \hypertarget{ref-dji2015}{}
-DJI. 2015a. Zenmuse X3 - Creativity
-Unleashed\url{https://www.dji.com/zenmuse-x3/info}. Viewed 4 Mar 2019.
+DJI. 2015a. Zenmuse X3 - Creativity Unleashed.
+\url{https://www.dji.com/zenmuse-x3/info}.
 
 \hypertarget{ref-dji2015a}{}
 DJI. 2015b. DJI - The World Leader in Camera Drones/Quadcopters for
-Aerial Photography\url{https://www.dji.com/matrice100/info}. Viewed 4
-Mar 2019.
+Aerial Photography. \url{https://www.dji.com/matrice100/info}.
 
 \hypertarget{ref-dronesmadeeasy2018}{}
-Easy DM. 2018. ‎Map Pilot for
-DJI\url{https://itunes.apple.com/us/app/map-pilot-for-dji/id1014765000?mt=8}.
-Viewed 4 Mar 2019.
+Easy, D. M. 2018. ‎Map Pilot for DJI.
+\url{https://itunes.apple.com/us/app/map-pilot-for-dji/id1014765000?mt=8}.
 
 \hypertarget{ref-eysn2015}{}
-Eysn L, Hollaus M, and Lindberg E \emph{et al.} 2015. A Benchmark of
-Lidar-Based Single Tree Detection Methods Using Heterogeneous Forest
-Data from the Alpine Space. \emph{Forests} \textbf{6}: 1721--47.
+Eysn, L., M. Hollaus, E. Lindberg, F. Berger, J.-M. Monnet, M. Dalponte,
+M. Kobal, M. Pellegrini, E. Lingua, D. Mongus, and N. Pfeifer. 2015. A
+Benchmark of Lidar-Based Single Tree Detection Methods Using
+Heterogeneous Forest Data from the Alpine Space. Forests 6:1721--1747.
 
 \hypertarget{ref-farr2007}{}
-Farr TG, Rosen PA, and Caro E \emph{et al.} 2007. The Shuttle Radar
-Topography Mission. \emph{Reviews of Geophysics} \textbf{45}.
+Farr, T. G., P. A. Rosen, E. Caro, R. Crippen, R. Duren, S. Hensley, M.
+Kobrick, M. Paller, E. Rodriguez, L. Roth, D. Seal, S. Shaffer, J.
+Shimada, J. Umland, M. Werner, M. Oskin, D. Burbank, and D. Alsdorf.
+2007. The Shuttle Radar Topography Mission. Reviews of Geophysics 45.
 
 \hypertarget{ref-fettig2012b}{}
-Fettig CJ. 2012. Chapter 2: Forest health and bark beetles. In: Managing
-Sierra Nevada Forests. PSW-GTR-237. USDA Forest Service.
+Fettig, C. J. 2012. Chapter 2: Forest health and bark beetles. \emph{in}
+Managing Sierra Nevada Forests. PSW-GTR-237. USDA Forest Service.
 
 \hypertarget{ref-fettig2019}{}
-Fettig CJ, Mortenson LA, Bulaon BM, and Foulk PB. 2019. Tree mortality
-following drought in the central and southern Sierra Nevada, California,
-U.S. \emph{Forest Ecology and Management} \textbf{432}: 164--78.
+Fettig, C. J., L. A. Mortenson, B. M. Bulaon, and P. B. Foulk. 2019.
+Tree mortality following drought in the central and southern Sierra
+Nevada, California, U.S. Forest Ecology and Management 432:164--178.
 
 \hypertarget{ref-flint2013}{}
-Flint LE, Flint AL, Thorne JH, and Boynton R. 2013. Fine-scale
-hydrologic modeling for regional landscape applications: The California
-Basin Characterization Model development and performance.
-\emph{Ecological Processes} \textbf{2}: 25.
+Flint, L. E., A. L. Flint, J. H. Thorne, and R. Boynton. 2013.
+Fine-scale hydrologic modeling for regional landscape applications: The
+California Basin Characterization Model development and performance.
+Ecological Processes 2:25.
 
 \hypertarget{ref-floyd2009}{}
-Floyd ML, Clifford M, and Cobb NS \emph{et al.} 2009. Relationship of
-stand characteristics to drought-induced mortality in three Southwestern
-piñonJuniper woodlands. \emph{Ecological Applications} \textbf{19}:
-1223--30.
+Floyd, M. L., M. Clifford, N. S. Cobb, D. Hanna, R. Delph, P. Ford, and
+D. Turner. 2009. Relationship of stand characteristics to
+drought-induced mortality in three Southwestern piñonJuniper woodlands.
+Ecological Applications 19:1223--1230.
+
+\hypertarget{ref-gabry2019}{}
+Gabry, J., D. Simpson, A. Vehtari, M. Betancourt, and A. Gelman. 2019.
+Visualization in Bayesian workflow. Journal of the Royal Statistical
+Society: Series A (Statistics in Society) 182:389--402.
 
 \hypertarget{ref-gitelson1994}{}
-Gitelson A and Merzlyak MN. 1994. Spectral Reflectance Changes
+Gitelson, A., and M. N. Merzlyak. 1994. Spectral Reflectance Changes
 Associated with Autumn Senescence of Aesculus hippocastanum L. and Acer
 platanoides L. Leaves. Spectral Features and Relation to Chlorophyll
-Estimation. \emph{Journal of Plant Physiology} \textbf{143}: 286--92.
+Estimation. Journal of Plant Physiology 143:286--292.
 
 \hypertarget{ref-hayes2009}{}
-Hayes CJ, Fettig CJ, and Merrill LD. 2009. Evaluation of Multiple Funnel
-Traps and Stand Characteristics for Estimating Western Pine
-Beetle-Caused Tree Mortality. \emph{Journal of Economic Entomology}
-\textbf{102}: 2170--82.
+Hayes, C. J., C. J. Fettig, and L. D. Merrill. 2009. Evaluation of
+Multiple Funnel Traps and Stand Characteristics for Estimating Western
+Pine Beetle-Caused Tree Mortality. Journal of Economic Entomology
+102:2170--2182.
 
 \hypertarget{ref-hijmans2019}{}
-Hijmans RJ, Etten J van, and Sumner M \emph{et al.} 2019. Raster:
-Geographic Data Analysis and Modeling.
+Hijmans, R. J., J. van Etten, M. Sumner, J. Cheng, A. Bevan, R. Bivand,
+L. Busetto, M. Canty, D. Forrest, A. Ghosh, D. Golicher, J. Gray, J. A.
+Greenberg, P. Hiemstra, I. for M. A. Geosciences, C. Karney, M.
+Mattiuzzi, S. Mosher, J. Nowosad, E. Pebesma, O. P. Lamigueiro, E. B.
+Racine, B. Rowlingson, A. Shortridge, B. Venables, and R. Wueest. 2019.
+Raster: Geographic Data Analysis and Modeling.
 
 \hypertarget{ref-hunziker2017}{}
-Hunziker P. 2017. Velox: Fast Raster Manipulation and Extraction.
+Hunziker, P. 2017. Velox: Fast Raster Manipulation and Extraction.
 
 \hypertarget{ref-jakubowski2013}{}
-Jakubowski MK, Li W, Guo Q, and Kelly M. 2013. Delineating Individual
-Trees from Lidar Data: A Comparison of Vector- and Raster-based
-Segmentation Approaches. \emph{Remote Sensing} \textbf{5}: 4163--86.
+Jakubowski, M. K., W. Li, Q. Guo, and M. Kelly. 2013. Delineating
+Individual Trees from Lidar Data: A Comparison of Vector- and
+Raster-based Segmentation Approaches. Remote Sensing 5:4163--4186.
 
 \hypertarget{ref-kane2014}{}
-Kane VR, North MP, and Lutz JA \emph{et al.} 2014. Assessing fire
-effects on forest spatial structure using a fusion of Landsat and
-airborne LiDAR data in Yosemite National Park. \emph{Remote Sensing of
-Environment} \textbf{151}: 89--101.
+Kane, V. R., M. P. North, J. A. Lutz, D. J. Churchill, S. L. Roberts, D.
+F. Smith, R. J. McGaughey, J. T. Kane, and M. L. Brooks. 2014. Assessing
+fire effects on forest spatial structure using a fusion of Landsat and
+airborne LiDAR data in Yosemite National Park. Remote Sensing of
+Environment 151:89--101.
 
 \hypertarget{ref-kuhn2008}{}
-Kuhn M. 2008. Building Predictive Models in R Using the caret Package.
-\emph{Journal of Statistical Software} \textbf{28}: 1--26.
+Kuhn, M. 2008. Building Predictive Models in R Using the caret Package.
+Journal of Statistical Software 28:1--26.
 
 \hypertarget{ref-larson2012}{}
-Larson AJ and Churchill D. 2012. Tree spatial patterns in fire-frequent
-forests of western North America, including mechanisms of pattern
-formation and implications for designing fuel reduction and restoration
-treatments. \emph{Forest Ecology and Management} \textbf{267}: 74--92.
+Larson, A. J., and D. Churchill. 2012. Tree spatial patterns in
+fire-frequent forests of western North America, including mechanisms of
+pattern formation and implications for designing fuel reduction and
+restoration treatments. Forest Ecology and Management 267:74--92.
 
 \hypertarget{ref-li2012}{}
-Li W, Guo Q, Jakubowski MK, and Kelly M. 2012. A New Method for
-Segmenting Individual Trees from the Lidar Point Cloud.
-\emph{Photogrammetric Engineering \& Remote Sensing} \textbf{78}:
-75--84.
+Li, W., Q. Guo, M. K. Jakubowski, and M. Kelly. 2012. A New Method for
+Segmenting Individual Trees from the Lidar Point Cloud. Photogrammetric
+Engineering \& Remote Sensing 78:75--84.
 
 \hypertarget{ref-meyer1990}{}
-Meyer F and Beucher S. 1990. Morphological segmentation. \emph{Journal
-of Visual Communication and Image Representation} \textbf{1}: 21--46.
+Meyer, F., and S. Beucher. 1990. Morphological segmentation. Journal of
+Visual Communication and Image Representation 1:21--46.
 
 \hypertarget{ref-micasense2015}{}
-Micasense. 2015.
-MicaSense\url{https://support.micasense.com/hc/en-us/articles/215261448-RedEdge-User-Manual-PDF-Download-}.
-Viewed 4 Mar 2019.
+Micasense. 2015. MicaSense.
+\url{https://support.micasense.com/hc/en-us/articles/215261448-RedEdge-User-Manual-PDF-Download-}.
 
 \hypertarget{ref-millar2015}{}
-Millar CI and Stephenson NL. 2015. Temperate forest health in an era of
-emerging megadisturbance. \emph{Science} \textbf{349}: 823--6.
+Millar, C. I., and N. L. Stephenson. 2015. Temperate forest health in an
+era of emerging megadisturbance. Science 349:823--826.
+
+\hypertarget{ref-morris2017}{}
+Morris, J. L., S. Cottrell, C. J. Fettig, W. D. Hansen, R. L. Sherriff,
+V. A. Carter, J. L. Clear, J. Clement, R. J. DeRose, J. A. Hicke, P. E.
+Higuera, K. M. Mattor, A. W. R. Seddon, H. T. Seppä, J. D. Stednick, and
+S. J. Seybold. 2017. Managing bark beetle impacts on ecosystems and
+society: Priority questions to motivate future research. Journal of
+Applied Ecology 54:750--760.
 
 \hypertarget{ref-negron2009}{}
-Negrón JF, McMillin JD, Anhold JA, and Coulson D. 2009. Bark
+Negrón, J. F., J. D. McMillin, J. A. Anhold, and D. Coulson. 2009. Bark
 beetle-caused mortality in a drought-affected ponderosa pine landscape
-in Arizona, USA. \emph{Forest Ecology and Management} \textbf{257}:
-1353--62.
+in Arizona, USA. Forest Ecology and Management 257:1353--1362.
 
 \hypertarget{ref-north2015}{}
-North MP, Stephens SL, and Collins BM \emph{et al.} 2015. Reform forest
-fire management. \emph{Science} \textbf{349}: 1280--1.
+North, M. P., S. L. Stephens, B. M. Collins, J. K. Agee, G. Aplet, J. F.
+Franklin, and P. Z. Fule. 2015. Reform forest fire management. Science
+349:1280--1281.
 
 \hypertarget{ref-pau2010}{}
-Pau G, Fuchs F, and Sklyar O \emph{et al.} 2010. EBImagean R package for
-image processing with applications to cellular phenotypes.
-\emph{Bioinformatics} \textbf{26}: 979--81.
+Pau, G., F. Fuchs, O. Sklyar, M. Boutros, and W. Huber. 2010. EBImagean
+R package for image processing with applications to cellular phenotypes.
+Bioinformatics 26:979--981.
 
 \hypertarget{ref-pebesma2019}{}
-Pebesma E, Bivand R, and Racine E \emph{et al.} 2019. Sf: Simple
-Features for R.
+Pebesma, E., R. Bivand, E. Racine, M. Sumner, I. Cook, T. Keitt, R.
+Lovelace, H. Wickham, J. Ooms, K. Müller, and T. L. Pedersen. 2019. Sf:
+Simple Features for R.
 
 \hypertarget{ref-plowright2018}{}
-Plowright A. 2018. ForestTools: Analyzing Remotely Sensed Forest Data.
+Plowright, A. 2018. ForestTools: Analyzing Remotely Sensed Forest Data.
 
 \hypertarget{ref-popescu2004}{}
-Popescu SC and Wynne RH. 2004. Seeing the Trees in the Forest: Using
-Lidar and Multispectral Data Fusion with Local Filtering and Variable
-Window Size for Estimating Tree Height. \emph{PHOTOGRAMMETRIC
-ENGINEERING}: 16.
+Popescu, S. C., and R. H. Wynne. 2004. Seeing the Trees in the Forest:
+Using Lidar and Multispectral Data Fusion with Local Filtering and
+Variable Window Size for Estimating Tree Height. PHOTOGRAMMETRIC
+ENGINEERING:16.
+
+\hypertarget{ref-preisler2017}{}
+Preisler, H. K., N. E. Grulke, Z. Heath, and S. L. Smith. 2017. Analysis
+and out-year forecast of beetle, borer, and drought-induced tree
+mortality in California. Forest Ecology and Management. 399: 166-178
+399:166--178.
 
 \hypertarget{ref-rcoreteam2018}{}
 R Core Team. 2018. R: A Language and Environment for Statistical
-Computing. Vienna, Austria: R Foundation for Statistical Computing.
+Computing. R Foundation for Statistical Computing, Vienna, Austria.
 
 \hypertarget{ref-raffa2008}{}
-Raffa KF, Aukema BH, and Bentz BJ \emph{et al.} 2008. Cross-scale
-Drivers of Natural Disturbances Prone to Anthropogenic Amplification:
-The Dynamics of Bark Beetle Eruptions. \emph{BioScience} \textbf{58}:
-501--17.
+Raffa, K. F., B. H. Aukema, B. J. Bentz, A. L. Carroll, J. A. Hicke, M.
+G. Turner, and W. H. Romme. 2008. Cross-scale Drivers of Natural
+Disturbances Prone to Anthropogenic Amplification: The Dynamics of Bark
+Beetle Eruptions. BioScience 58:501--517.
 
 \hypertarget{ref-rouse1973}{}
-Rouse W, Haas RH, Deering W, and Schell JA. 1973. MONITORING THE VERNAL
-ADVANCEMENT AND RETROGRADATION (GREEN WAVE EFFECT) OF NATURAL
-VEGETATION. Greenbelt, MD, USA: Goddard Space Flight Center.
+Rouse, W., R. H. Haas, W. Deering, and J. A. Schell. 1973. MONITORING
+THE VERNAL ADVANCEMENT AND RETROGRADATION (GREEN WAVE EFFECT) OF NATURAL
+VEGETATION. Type II Report, Goddard Space Flight Center, Greenbelt, MD,
+USA.
 
 \hypertarget{ref-roussel2019a}{}
-Roussel J-R. 2019. lidRplugins: Extra functions and algorithms for lidR
-package.
+Roussel, J.-R. 2019. lidRplugins: Extra functions and algorithms for
+lidR package.
 
 \hypertarget{ref-roussel2019}{}
-Roussel J-R, documentation) DA( the, and improved catalog features) FDB(
-bugs, and lassnags) ASM(. 2019. lidR: Airborne LiDAR Data Manipulation
-and Visualization for Forestry Applications.
+Roussel, J.-R., D. A. (. the documentation), F. D. B. (. bugs and
+improved catalog features), and A. S. M. (. lassnags). 2019. lidR:
+Airborne LiDAR Data Manipulation and Visualization for Forestry
+Applications.
+
+\hypertarget{ref-seidl2015}{}
+Seidl, R., J. Müller, T. Hothorn, C. Bässler, M. Heurich, and M. Kautz.
+2015. Small beetle, large-scale drivers: How regional and landscape
+factors affect outbreaks of the European spruce bark beetle. The Journal
+of applied ecology 53:530--540.
 
 \hypertarget{ref-shin2018}{}
-Shin P, Sankey T, Moore M, and Thode A. 2018. Evaluating Unmanned Aerial
-Vehicle Images for Estimating Forest Canopy Fuels in a Ponderosa Pine
-Stand. \emph{Remote Sensing} \textbf{10}: 1266.
+Shin, P., T. Sankey, M. Moore, and A. Thode. 2018. Evaluating Unmanned
+Aerial Vehicle Images for Estimating Forest Canopy Fuels in a Ponderosa
+Pine Stand. Remote Sensing 10:1266.
 
 \hypertarget{ref-stephenson1998}{}
-Stephenson N. 1998. Actual evapotranspiration and deficit: Biologically
+Stephenson, N. 1998. Actual evapotranspiration and deficit: Biologically
 meaningful correlates of vegetation distribution across spatial scales.
-\emph{Journal of Biogeography} \textbf{25}: 855--70.
+Journal of Biogeography 25:855--870.
 
 \hypertarget{ref-usdafs2019}{}
-USDAFS. 2019. Press Release: Survey finds 18 million trees died in
-California in
-2018\url{https://www.fs.usda.gov/Internet/FSE_DOCUMENTS/FSEPRD609321.pdf}.
-Viewed 22 Feb 2019.
+USDAFS. 2019, February 11. Press Release: Survey finds 18 million trees
+died in California in 2018.
+\url{https://www.fs.usda.gov/Internet/FSE_DOCUMENTS/FSEPRD609321.pdf}.
 
 \hypertarget{ref-vega2014}{}
-Vega C, Hamrouni A, and El Mokhtari S \emph{et al.} 2014. PTrees: A
-point-based approach to forest tree extraction from lidar data.
-\emph{International Journal of Applied Earth Observation and
-Geoinformation} \textbf{33}: 98--108.
+Vega, C., A. Hamrouni, S. El Mokhtari, J. Morel, J. Bock, J. P. Renaud,
+M. Bouvier, and S. Durrieu. 2014. PTrees: A point-based approach to
+forest tree extraction from lidar data. International Journal of Applied
+Earth Observation and Geoinformation 33:98--108.
 
 \hypertarget{ref-young2017}{}
-Young DJN, Stevens JT, and Earles JM \emph{et al.} 2017. Long-term
-climate and competition explain forest mortality patterns under extreme
-drought. \emph{Ecology Letters} \textbf{20}: 78--86.
+Young, D. J. N., J. T. Stevens, J. M. Earles, J. Moore, A. Ellis, A. L.
+Jirka, and A. M. Latimer. 2017. Long-term climate and competition
+explain forest mortality patterns under extreme drought. Ecology Letters
+20:78--86.
 
 \hypertarget{ref-zhang2016}{}
-Zhang W, Qi J, and Wan P \emph{et al.} 2016. An Easy-to-Use Airborne
-LiDAR Data Filtering Method Based on Cloth Simulation. \emph{Remote
-Sensing} \textbf{8}: 501.
+Zhang, W., J. Qi, P. Wan, H. Wang, D. Xie, X. Wang, and G. Yan. 2016. An
+Easy-to-Use Airborne LiDAR Data Filtering Method Based on Cloth
+Simulation. Remote Sensing 8:501.
 
 
 \end{document}

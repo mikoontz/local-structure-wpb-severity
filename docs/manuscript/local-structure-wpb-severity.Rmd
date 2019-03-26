@@ -1,6 +1,6 @@
 ---
 bibliography: ../docs_carpentry/local-structure-wpb-severity.bib
-csl: ../docs_carpentry/frontiers-in-ecology-and-the-environment.csl
+csl: ../docs_carpentry/ecological-applications.csl
 params:
   title: Relative effect of host versus non-host vegetation structure on forest insect severity depends on climatic water deficit
   author: |
@@ -29,16 +29,65 @@ header-includes:
 output: pdf_document
 ---
 
-```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+```{r setup, include = FALSE, echo = FALSE}
+knitr::opts_chunk$set(echo = FALSE, include = FALSE)
 ```
 
-```{r, include = FALSE}
+```{r libraries}
+library(tidyverse)
+library(kableExtra)
+```
+
+
+```{r algorithm_deets}
 source(here::here("analyses/evaluate-ground-correspondence-ttops.R"))
 # Object to get information about extent of algorithm/paramter set coverage
 # is called `algorithm_summary`
+algorithm_summary_print <-
+  algorithm_summary %>% 
+  dplyr::rename(`Parameter sets tested` = n,
+                Algorithm = algorithm) %>%
+  dplyr::mutate(`Reference(s)` = c("[@li2012; @shin2018; @jakubowski2013]", "[@roussel2019a]", "[@roussel2019]", "[@eysn2015]", "[@vega2014]", "[@plowright2018]", "[@pau2010]"))
+
 ```
 
+```{r ground_data_deets}
+source(here::here("data/data_carpentry/format-ground-data.R"))
+pipo_pct_of_all_dead <-
+  d %>%
+  dplyr::filter(is.na(year_fall), !is.na(year_dead)) %>%
+  group_by(species) %>%
+  summarize(n = n(),
+            prop_of_all_dead = n() / nrow(.),
+            print_prop = round(prop_of_all_dead * 100, digits = 2)) %>%
+  dplyr::filter(species == "PIPO") %>%
+  pull(print_prop)
+```
+
+```{r site_characteristics}
+# Need a table that includes the site name, elevation, CWD, surveyed area
+```
+
+```{r hand_classified_trees}
+# Need to count the number of trees that we hand classified. Perhaps a table
+# that includes live/dead and species counts
+```
+
+```{r tree_classification_summary}
+# Need to get the accuracy and kappa for the live/dead and species classification
+```
+
+```{r pp_check_visuals}
+# Plot of the posterior predictive check and the zoomed in version at 0?
+```
+
+```{r summary_of_model}
+# Would be good to have a summary table of the model
+# Triptych of low, average, and high CWD in different facets
+# pondo qmd vs. pondo density with color of point representing probability of
+# pondo mortality
+# all tree qmd vs. all tree density with color of point representing Pr(pipo mortality)
+```
 
 #`r params$title`
 
@@ -80,6 +129,8 @@ Forests in California’s Sierra Nevada region are characterized by regular bark
 
 Forest spatial structure, the size and distribution of trees in the forest, is thought to be a key determinant of forest resilience. To date, much of the work on Sierra Nevada forest resilience focuses on stem density, which belies the complexity of forest structure and how it interacts with disturbance. However, complex forest structure is challenging to quantify, as it requires labor-intensive field surveys (e.g., to generate stem maps) or highly specialized, expensive equipment (e.g., LiDAR). Small, unmanned aerial systems (sUAS) enable fast and relatively cheap remote imaging over dozens of hectares of forest, which can be used to determine both forest structure and tree condition at the individual tree scale. Implementing photogrammetry on the collected images can provide a rich picture of the complex, 3-dimensional forest structure to which bark beetles respond, and equipping the sUAS with a multispectral sensor will allow calculation of vegetation indices (e.g., NDVI) commonly used to assess tree condition. 
 
+Use drones for insect attack studies! [@morris2017].
+
 Climate change mitigation strategies emphasize reducing tree densities [@north2015; @young2017], but understanding the optimal scale and pattern of tree distribution that can mitigate bark beetle outbreaks will be vital for predicting how California forests may respond to these interventions. This project investigates this relationship with the following research questions: 
 
 1. How does local host tree density and size affect the severity of western pine beetle disturbance? 
@@ -90,7 +141,7 @@ Climate change mitigation strategies emphasize reducing tree densities [@north20
 
 4. Do the effects of forest structure and environmental condition on western pine beetle disturbance interact?
 
-We used ultra-high resolution remote sensing data from a small, unhumanned aerial system (sUAS, aka drone) over a network of 32 sites in the Sierra Nevada spanning 1000m of elevation and 350km of latitude and covering a total of 9 square kilometers of forest to ask how fine-scale forest structure affected the probability of tree mortality during the cumulative mortality event of 
+We used ultra-high resolution remote sensing data from a small, unhumanned aerial system (sUAS, aka drone) over a network of 32 sites in the Sierra Nevada spanning 1000m of elevation and 350km of latitude and covering a total of 9 square kilometers of forest to ask how fine-scale forest structure affected the probability of tree mortality during the cumulative mortality event of 2012 to 2018.
 
 ## Methods
 
@@ -109,6 +160,7 @@ We built our study on 180 vegetation monitoring plots at 36 sites established be
 Imagery was captured using a DJI Zenmuse X3 RGB camera [@dji2015] and a Micasense RedEdge3 5-band multispectral camera [@micasense2015]. We mounted both of these instruments simultaneously on a DJI Matrice 100 aircraft [@dji2015a] using the DJI 3-axis stabilized gimbal for the Zenmuse X3 camera and a Micasense angled fixed mount for the RedEdge3 camera. The gimbal and the angled fixed mount ensured both instruments were nadir-facing during image capture. Just prior or after image capture at each site, we calibrated the RedEdge3 camera by taking an image of a calibration panel on the ground in full sun with known reflectance values for each of the 5 narrow bands.
 
 Table XXXXX. Reflectance sensitivity of the Micasense Rededge3 camera. The calibration panel value represents the reflectance of the calibration panel for the given wavelength.
+
 +------------+--------------+------------------+------------------+----------+-----------------+---------------+
 | Band\      | Band\        | Band\            | Center\          | Band\    |  Wavelength\    | Calibration\  |
 | number     | name         | abbreviation     | wavelength       | width    |  range          | panel value   |
@@ -157,7 +209,7 @@ Each orthorectified reflectance map was inspected to locate the 5 orange "X"s ma
 
 We calculated 7 forest structure metrics for each field plot using the ground data collected by @fettig2019: total number of trees, number of trees greater than 15 meters, number of trees less than 15 meters, mean height of trees, 25^th^ percentile tree height, 75^th^ percentile tree height, mean distance to nearest tree neighbor, mean distance to 2^nd^ nearest neighbor.
 
-For each tree detection algorithm and parameter set described above, we calculated the same set of 7 structure metrics within the footprint of the validation field plots. We calculated the Pearson's correlation and root mean square error (RMSE) between the ground data and the aerial data for each of the 7 structure metrics for each of the XXXXX automatic tree detection algorithms.
+For each tree detection algorithm and parameter set described above, we calculated the same set of 7 structure metrics within the footprint of the validation field plots. We calculated the Pearson's correlation and root mean square error (RMSE) between the ground data and the aerial data for each of the 7 structure metrics for each of the `r sum(algorithm_summary$n)` automatic tree detection algorithms/parameter sets.
 
 For each algorithm and parameter set, we calculated its performance relative to other algorithms as whether its Pearson's correlation was within 5% of the highest Pearson's correlation as well as whether its RMSE was within 5% of the lowest RMSE. For each algorithm/parameter set, we summed the number of forest structure metrics for which it reached these 5% thresholds. For automatically detecting trees across the whole study, we selected the algorithm/parameter set that performed well across the most number of forest metrics.
 
@@ -181,7 +233,7 @@ We converted the height of each tree determined using the canopy height model to
 
 ### Note on assumptions about dead trees
 
-For the purposes of this study, we assumed that all dead trees were ponderosa pine. This is a reasonably good assumption, given that @fettig2019 found that XXXXX% (~90) of the dead trees in the coincident ground plots were ponderosa pine.
+For the purposes of this study, we assumed that all dead trees were ponderosa pine and were thus host trees. This is a reasonably good assumption, given that @fettig2019 found that `r pipo_pct_of_all_dead`% of the dead trees in the coincident ground plots were ponderosa pine.
 
 ### Rasterizing individual tree data
 
@@ -193,15 +245,9 @@ We used climatic water deficit (CWD) [@stephenson1998] from the 1980-2010 mean v
 
 ### Statistical model
 
-We used a generalized linear model with a binomial response and a logit link to predict the probability of ponderosa pine mortality within each raster cell as a function of the crossed effects of ponderosa pine quadratic mean diameter and density added to the crossed effect of overall quadratic mean diameter and density as well as the interaction of each summand with climatic water deficit. 
+We used a generalized linear model with a zero-inflated binomial response and a logit link to predict the probability of ponderosa pine mortality within each raster cell as a function of the crossed effects of ponderosa pine quadratic mean diameter and density added to the crossed effect of overall quadratic mean diameter and density as well as the interaction of each summand with climatic water deficit at each site. 
 
-To measure and account for spatial autocorrelation of the bark beetle behavioral processes underlying ponderosa mortality, we first subsampled the data at each site to a random selection of 200, 20m x 20m cells representing approximately 27.5% of the surveyed area.
-
-included a separate approximate Gaussian Process term per site of the interaction between the x- and y-position of each cell using the `gp()` function in the `brms` package [@burkner2017] with 10 basis functions.
-
-Model checking...
-
-<!-- We used a mixed effects logistic regression with a logit link to predict the probability of *Pinus ponderosa* mortality within each raster cell as a function of the crossed effects of ponderosa pine basal area and count added to the crossed effect of non-ponderosa pine basal area and count as well as the interaction of each summand with climatic water deficit. To conservatively account for spatial autocorrelation in the model, we included partially pooled intercept deviations for each cell in the dataset (i.e., a random intercept effect of cell): -->
+To measure and account for spatial autocorrelation of the bark beetle behavioral processes underlying ponderosa mortality, we first subsampled the data at each site to a random selection of 200, 20m x 20m cells representing approximately 27.5% of the surveyed area. With these subsampled data, we included a separate exact Gaussian process term per site of the interaction between the x- and y-position of each cell using the `gp()` function in the `brms` package [@burkner2017]. The Gaussian process accounts for spatial autocorrelation in the model by jointly estimating the spatial covariance of the response variable with the effects of the other covariates.
 
 $$
 \begin{aligned}
@@ -210,24 +256,48 @@ y_{i,j} \sim &\ \begin{cases}
     Binom(n_i, \pi_i), & 1-p
   \end{cases} \\
 logit(\pi_i) = &\ \beta_0\ + \\
-& \beta_1X_{cwd, i}\ + \\
-& \beta_1X_{cwd, i}(\beta_2X_{pipoQMD, i} + \beta_3X_{pipoDensity, i} + \beta_4X_{pipoQMD, i}X_{pipoDensity, i})\ + \\ 
-& \beta_1X_{cwd, i}(\beta_5X_{overallQMD, i} + \beta_6X_{overallDensity, i} + \beta_7X_{overallQMD, i}X_{overallDensity, i})\ + \\
+& \beta_1X_{cwd, j}\ + \\
+& \beta_1X_{cwd, j}(\beta_2X_{pipoQMD, i} + \beta_3X_{pipoDensity, i} + \beta_4X_{pipoQMD, i}X_{pipoDensity, i})\ + \\ 
+& \beta_1X_{cwd, j}(\beta_5X_{overallQMD, i} + \beta_6X_{overallDensity, i} + \beta_7X_{overallQMD, i}X_{overallDensity, i})\ + \\
 & \mathcal{GP}_j(x_i, y_i) \\
-logit(p) \sim &\ Bernoulli(\eta)
 \end{aligned}
 $$
-Where $y_i$ is the number of dead ponderosa pine trees in cell $i$, $n_i$ is the total number of ponderosa pine trees in cell $i$, $\theta_i$ is the probability of a pine tree dying in cell $i$, $X_{cwd, i}$ is the z-score of climatic water deficit, $X_{pipoBA, i}$ is the centered basal area of ponderosa pine in a cell, $X_{pipoCount, i}$ is the centered number of ponderosa pine trees in a cell, $X_{nonpipoBA, i}$ is the centered total basal area of non-ponderosa pine trees in a cell, $X_{nonpipoCount, i}$ is the centered number of non-ponderosa pine trees in a cell, and $\gamma_i$ is a random deviation from the log-odds of ponderosa pine mortality at mean values of ponderosa pine basal area and count, mean values of non-ponderosa pine basal area and count, and mean value of climatic water deficit across the full range of Sierra Nevada ponderosa pine. $\sigma^2$ represents the pooled variance of these random deviations.
+
+Where $y_i$ is the number of dead trees in cell $i$, $n_i$ is the sum of the dead trees and live ponderosa pine trees in cell $i$, $\pi_i$ is the probability of ponderosa pine tree mortality in cell $i$, $p$ is the probability of there being zero dead trees in a cell arising as a result of an unmodeled process, $X_{cwd, j}$ is the z-score of climatic water deficit for site $j$, $X_{pipoQMD, i}$ is the scaled quadratic mean diameter of ponderosa pine in cell $i$, $X_{pipoDensity, i}$ is the scaled density of ponderosa pine trees in cell $i$, $X_{overallQMD, i}$ is the scaled quadratic mean diameter of all trees in cell $i$, $X_{overallDensity, i}$ is the scaled density of all trees in cell $i$, $x_i$ and $y_i$ are the x- and y- coordinates of the centroid of the cell in an EPSG3310 coordinate reference system, and $\mathcal{GP}_j$ represents the exact Gaussian process describing the spatial covariance between cells at site $j$.
+
+We used 4 chains with 2000 iterations each (1000 warmup, 1000 samples), and confirmed chain convergence by ensuring all `Rhat` values were less than 1.1 [@brooks1998]. We used posterior predictive checks to visually confirm model performance by overlaying the density curves of the predicted number of dead trees per cell over the observed number [@gabry2019]. We used 50 random samples from the model fit to generate 50 density curves and ensured curves were centered on the observed distribution, paying special attention to model performance at capturing counts of zero.
 
 ### Software and data availability
 
-All data are available via the Open Science Framework. Statistical analyses were performed using the `mgcv` and `brms` packages. With the exception of the SfM software (Pix4Dmapper Cloud) and the GIS software QGIS, all data carpentry and analyses were performed using `R` [@rcoreteam2018].
+All data are available via the Open Science Framework. Statistical analyses were performed using the `brms` packages. With the exception of the SfM software (Pix4Dmapper Cloud) and the GIS software QGIS, all data carpentry and analyses were performed using `R` [@rcoreteam2018].
 
 ## Results
 
+![Example digital surface model (DSM) that is a direct output from the dense point cloud generated using structure from motion (SfM) processing. The DSM represents the ground elevation plus the vegetation height.](../../figures/eldo_3k_1_dsm.png)
+
+![Example digital terrain model (DTM) resulting from processing the digital surface model using the cloth simulation filter algorithm [@zhang2016], which classifies points in the dense point cloud as "ground" or "not-ground" and then interpolates the "ground" elevation for the rest of the dense point cloud footprint. The DTM represents the ground elevation without any vegetation.](../../figures/eldo_3k_1_dtm.png)
+
+![Example canopy height model (CHM) generated by subtracting the digital terrain model from the digital surface model. The CHM represents the height of all of the elevation above ground level.](../../figures/eldo_3k_1_chm.png)
+
 ### Tree detection
 
-We found that the experimental `lmfx` algorithm with parameter values of XXXXX [@roussel2019] performed the best across 7 measures of forest structure as measured by Pearson's correlation with ground data (Table XXXX; rows are different forest metrics, columns are correlation and RMSE).
+We found that the experimental `lmfx` algorithm with parameter values of `dist2d = `r algorithm_details[1, "var1_val"]`` and `ws = `r algorithm_details[1, "var2_val"]`` [@roussel2019] performed the best across 7 measures of forest structure as measured by Pearson's correlation with ground data (Table XXXX; rows are different forest metrics, columns are correlation and RMSE).
+
+```{r best_algorithm_deets_table, echo = FALSE, include = TRUE}
+best_algorithm_deets_print <-
+  best_algorithm_deets %>% 
+  dplyr::select(forest_metric, ground_correlation, rmse, me, med_error, ground_cor_within_threshold_pct, rmse_within_threshold_pct) %>% 
+  dplyr::rename(`Forest metric` = forest_metric,
+                `Correlation with ground` = ground_correlation,
+                RMSE = rmse,
+                # `Mean error` = me,
+                # `Median error` = med_error,
+                `Correlation within top 5%?` = ground_cor_within_threshold_pct,
+                `RMSE within top 5%?` = rmse_within_threshold_pct)
+
+knitr::kable(best_algorithm_deets_print, digits = 2, format = "pandoc")
+```
+
 
 ### Effect of local structure on western pine beetle severity
 
@@ -239,8 +309,10 @@ We found negative main effects of overall tree density and overall quadratic mea
 
 ### Spatial effects
 
-We were able to calculate the range of the spatial autocorrelation in the probability of ponderosa pine mortality at each site, accounting for forest structure and environmental factors. By fitting a separate approximate Gaussian process for each site on the interacting variables of the x- and y- position
+We were able to calculate the length scale of the spatial autocorrelation in the probability of ponderosa pine mortality at each site, accounting for forest structure and environmental factors. By fitting a separate approximate Gaussian process for each site on the interacting variables of the x- and y- position, we measured the spatial covariance inherent in the data, accounting for other factors. 
 
+[@seidl2015]
+[@preisler2017]
 
 ## Discussion
 
@@ -290,9 +362,23 @@ A positive coefficient would indicate a combined effect of tree crowding and phe
 
 Are any of the above mechanisms exacerbated by water stress of the trees?
 
+### Spatial effect
+
+The western pine beetle is known to exhibit strong aggregation and anti-aggregation behavior arising from its pheromone communication, and thus it is likely that the measured spatial covariance in this study is attributable to the magnitude of this effect at each site. 
+
+Some studies have suggested that "outbreak" conditions are distinguishable by clustered tree mortality, but this is perhaps challenging to tease apart [@raffa2008]. Our modeling framework allows for a joint estimation of the effects of forest structure, environmental condition, and the spatial effect. This framework would be enhanced with confidence in individual tree level data, and a lot of it, along with a strong gradient of environmental conditions and forest structure.
+
+We won't interpret this measure of contagion, because the uncertainties in this particular study are too great (tree detection, species classification, dead trees all assumed to be WPB hosts, didn't account for topographic effects which could also manifest as part of this spatial covariance process).
+
 ### Important considerations
 
-Cumulative effect of elevated insect activity, as mortality was spread out over 5 years and we surveyed at the end.
+Cumulative effect of elevated insect activity, as mortality was spread out over 5 years and we surveyed at the end. All the detected dead trees were considered ponderosa pine-- we know this is wrong.'
+
+### Room for improvement
+
+- Better geometry by using higher overlap, more spatially resolved images.
+- Better image classification and scalability by using instrumentation having spectral overlap with more widely deployed instrumentation (e.g., Landsat).
+- Better tree detection using 
 
 ### Future directions
 
