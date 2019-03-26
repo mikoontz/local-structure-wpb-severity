@@ -3,7 +3,6 @@
 
 library(tidyverse)
 library(sf)
-library(lme4)
 
 d <- 
   readr::read_csv("data/data_raw/ground-data.csv") %>% 
