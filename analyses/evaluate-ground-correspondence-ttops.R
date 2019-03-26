@@ -7,7 +7,8 @@ library(purrr)
 library(viridis)
 library(raster)
 
-ttops_summary <- read_csv(here::here("analyses/analyses_output/ttops-summary.csv"))
+ttops_summary <- read.csv(here::here("analyses/analyses_output/ttops-summary.csv"),
+                          stringsAsFactors = FALSE)
 
 ground <- 
   ttops_summary %>% 
@@ -96,6 +97,16 @@ best_ttops_detection <-
   dplyr::arrange(desc(both_within_threshold_pct)) %>% 
   dplyr::left_join(elapsed_time)
 
+single_best_algorithm <- best_ttops_detection %>% slice(1) %>% pull(ttops_method)
+
+best_algorithm_deets <-
+  comps %>% 
+  dplyr::filter(ttops_method == single_best_algorithm)
+
+algorithm_details <-
+  best_ttops_detection %>% 
+  separate(col = ttops_method, into = c("algorithm", "var1", "var1_val", "var2", "var2_val", "zu", "zu_val", "R", "R_val", "speedUp", "speedUp_val"), sep = "_") %>% 
+  dplyr::select(1:11)
 
 algorithm_summary <-
   best_ttops_detection %>% 
