@@ -42,15 +42,15 @@ analysis_df <-
                 pipo_and_dead_sdi_ac_s = scale(pipo_and_dead_sdi_ac, center = center_param, scale = scale_param),
                 overall_sdi_ac_s = scale(overall_sdi_ac, center = center_param, scale = scale_param))
 
-set.seed(0314)
+set.seed(0314) # Only meaningful for when randomly subsetting data
 adf <-
   analysis_df %>% 
   dplyr::filter(pipo_and_dead_count != 0) %>% 
   dplyr::mutate(site = as.factor(site))
 
-  # dplyr::group_by(site) 
-  # dplyr::sample_n(10)
-  # dplyr::sample_frac(0.5)
+# dplyr::group_by(site) %>% 
+# dplyr::sample_n(50) # ...OR...
+# dplyr::sample_frac(0.5)
 
 # Exact Gaussian Process
 # n = 10; total = 320; iter = 2000: 217 seconds (0.06 hours)
@@ -60,143 +60,75 @@ adf <-
 
 # Approximate Gaussian Process
 # n = 10; total = 320; iter = 2000; k = 3; adapt_delta = 0.95; 212 seconds (0.059 hours) *7 divergent transitions
+# n = 10; total = 320; iter = 2000; k = 10; adapt_delta = 0.95; 342 seconds (0.095 hours) *393 divergent transitions
 # n = 50; total = 1600; iter = 2000; k = 3; adapt_delta = 0.95; 1084 seconds (0.3 hours) *39 divergent transitions
+# n = 50; total = 1600; iter = 2000; k = 10; adapt_delta = 0.95; 989 seconds (0.275 hours) *48 divergent transitions
 # n = 100; total = 3200; iter = 2000; k = 3; adapt_delta = 0.95; 1945 seconds (0.54 hours) *132 divergent transitions
 # n = 100; total = 3200; iter = 2000; k = 3; adapt_delta = 0.99; 3816 seconds (1.06 hours) *40 divergent transitions **1598 transitions exceeding max_treedepth
 # n = 100; total = 3200; iter = 2000; k = 5; adapt_delta = 0.95; 2807.55 seconds (0.78 hours) *28 divergent transitions
 # n = 100; total = 3200; iter = 2000; k = 10; adapt_delta = 0.95; 2125 seconds (0.59 hours)
 # frac = 0.5; total = 11145; iter = 2000; k = 10; adapt_delta = 0.95; (4.07 hours)
-# all; total = 22289; iter = 2000; k = 10; adapt_delta = 0.95; 
+# all; total = 22289; iter = 2000; k = 10; adapt_delta = 0.95; (15.08 hours)
 
-(start <- Sys.time())
-fm1_brms <- brm(dead_count | trials(pipo_and_dead_count) ~ 
-                  site_cwd_zscore*pipo_and_dead_tpha_s*pipo_and_dead_qmd_s +
-                  site_cwd_zscore*overall_tpha_s*overall_qmd_s +
-                  gp(x, y, by = site, k = 10, c = 5/4, scale = FALSE),
-                data = adf,
-                family = binomial(link = "logit"),
-                chains = 4,
-                cores = 4,
-                control = list(adapt_delta = 0.95))
-summary(fm1_brms)
-(elapsed <- Sys.time() - start)
+# (start <- Sys.time())
+# fm1_brms <- brm(dead_count | trials(pipo_and_dead_count) ~ 
+#                   site_cwd_zscore*pipo_and_dead_tpha_s*pipo_and_dead_qmd_s +
+#                   site_cwd_zscore*overall_tpha_s*overall_qmd_s +
+#                   gp(x, y, by = site, k = 10, c = 5/4, scale = FALSE),
+#                 data = adf,
+#                 family = binomial(link = "logit"),
+#                 chains = 4,
+#                 cores = 4,
+#                 control = list(adapt_delta = 0.95))
+# summary(fm1_brms)
+# (elapsed <- Sys.time() - start)
+# 
+# prior_summary(fm1_brms)
 
-prior_summary(fm1_brms)
+# saveRDS(fm1_brms, file = here::here("analyses/analyses_output/fitted-model_binomial_site-cwdZscore_pipo-tpha-qmd_overall-tpha-qmd_approx-gp-per-site.rds"))
 
-# spatial_autocor <- Variogram(object = resid(fm1_brms)[, "Estimate"], dist(fm1_brms$data[, c("x", "y")]))
-# plot(spatial_autocor)
+# Posterior predictive checks
+# Indicate a pretty bad model fit. Way underpredicting zeros
 
-saveRDS(fm1_brms, file = here::here("analyses/analyses_output/fitted-model_site-cwdZscore_pipo-tpha-qmd_overall-tpha-qmd_approx-gp-per-site.rds"))
+# fm1 <- readRDS(here::here("analyses/analyses_output/fitted-model_site-cwdZscore_pipo-tpha-qmd_overall-tpha-qmd_approx-gp-per-site.rds"))
+# pp_check(fm1, nsamples = 50)
 
-
-set.seed(0314)
+# Implement a zero-inflated binomial instead
+# exact GP 200 samples ----------------------------------------------------
+# 7.7 hours
+set.seed(0314) # Only meaningful for when randomly subsetting data
 adf <-
   analysis_df %>% 
   dplyr::filter(pipo_and_dead_count != 0) %>% 
   dplyr::mutate(site = as.factor(site)) %>% 
-  dplyr::sample_n(10)
-  
+  dplyr::group_by(site) %>%
+  dplyr::sample_n(200)
 
 (start <- Sys.time())
-fm2_brms <- brm(dead_count | trials(pipo_and_dead_count) ~ 
-                  gr(site_cwd_zscore)*pipo_and_dead_tpha_s*pipo_and_dead_qmd_s +
-                  gr(site_cwd_zscore)*overall_tpha_s*overall_qmd_s +
-                  (1 | site) +
-                  gp(x, y, by = site, k = 10, c = 5/4, scale = FALSE),
-                data = adf,
-                family = binomial(link = "logit"),
-                chains = 4,
-                cores = 4,
-                control = list(adapt_delta = 0.95))
-summary(fm2_brms)
+fm16_brms <- brm(dead_count | trials(pipo_and_dead_count) ~ 
+                   site_cwd_zscore*pipo_and_dead_tpha_s*pipo_and_dead_qmd_s +
+                   site_cwd_zscore*overall_tpha_s*overall_qmd_s +
+                   gp(x, y, by = site, scale = FALSE),
+                 data = adf,
+                 family = zero_inflated_binomial(),
+                 chains = 4,
+                 cores = 4,
+                 control = list(adapt_delta = 0.95))
+summary(fm16_brms)
 (elapsed <- Sys.time() - start)
+pp_check(fm16_brms, nsamples = 50)
 
-# test <- readRDS(here::here("analyses/analyses_output/fitted-model_site-cwdZscore_pipo-tpha-qmd_overall-tpha-qmd_approx-gp-per-site_50-percent-samples.rds"))
+# saveRDS(fm16_brms, here::here('analyses/analyses_output/fitted-model_zibinomial_site-cwdZscore_pipo-tpha-qmd_overall-tpha-qmd_exact-gp-per-site_200-samples.rds'))
+fm16_brms <- readRDS(here::here('analyses/analyses_output/fitted-model_zibinomial_site-cwdZscore_pipo-tpha-qmd_overall-tpha-qmd_exact-gp-per-site_200-samples.rds'))
 
-# local_spatial_autocor <- Variogram(object = resid(test)[test$data$site == "eldo_3k_1", "Estimate"], dist(test$data[test$data$site == "eldo_3k_1", c("x", "y")]))
-# plot(local_spatial_autocor)
-
-
-
-# tic()
-# fm1_mgcv <- bam(cbind(dead_count, pipo_count) ~ 
-#                   site_cwd_zscore*pipo_and_dead_tpha_s*pipo_and_dead_qmd_s +
-#                   site_cwd_zscore*overall_tpha_s*overall_qmd_s +
-#                   s(x, y, by = site, bs = "gp", k = 5), 
-#                 data = adf, 
-#                 family = binomial(link = "logit"))
-# toc()
-# summary(fm1_mgcv)
-# plot(fm1_mgcv)
-
-# tic()
-# fm2_mgcv <- bam(cbind(dead_count, pipo_count) ~ 
-#                   site_cwd_zscore*pipo_and_dead_tpha_s*pipo_and_dead_qmd_s +
-#                   site_cwd_zscore*overall_tpha_s*overall_qmd_s +
-#                   s(x, y, by = site, bs = "gp", k = 10, m = c(3, 5)), 
-#                 data = adf, 
-#                 family = binomial(link = "logit"))
-# toc()
-# summary(fm2_mgcv)
-
-
-# 
-# tic()
-# fm3_mgcv <- bam(cbind(dead_count, pipo_count) ~ 
-#                   local_cwd_zscore*pipo_and_dead_tpha_s*pipo_and_dead_qmd_s +
-#                   local_cwd_zscore*overall_tpha_s*overall_qmd_s +
-#                   s(x, y, by = site, k = 10), 
-#                 data = adf, 
-#                 family = binomial(link = "logit"))
-# toc()
-# summary(fm3_mgcv)
-# 
-# 
-# tic()
-# fm4_mgcv <- bam(cbind(dead_count, pipo_count) ~ 
-#                   site_cwd_zscore*pipo_and_dead_tpha_s*pipo_and_dead_qmd_s +
-#                   site_cwd_zscore*overall_tpha_s*overall_qmd_s +
-#                   s(x, y, by = site, k = 10), 
-#                 data = adf, 
-#                 family = binomial(link = "logit"))
-# toc()
-# summary(fm4_mgcv)
-
-# library(parallel)  
-# nc <- 6   ## cluster size, set for example portability
-# cl <- makeCluster(nc) 
-# tic()
-# fm5_mgcv <- bam(cbind(dead_count, pipo_count) ~ 
-#                   site_cwd_zscore*pipo_and_dead_tpha_s*pipo_and_dead_qmd_s +
-#                   site_cwd_zscore*overall_tpha_s*overall_qmd_s +
-#                   te(x, y, by = site), 
-#                 data = adf, 
-#                 family = binomial(link = "logit"))
-# # ,
-# #                 cluster = cl)
-# toc()
-# summary(fm5_mgcv)
-# stopCluster(cl)
-
-
-# if(!file.exists(here::here("analyses/analyses_output/fitted-model_cwdZscore_pipo-count-ba_total-count-ba_uniqueCellID.rds"))) {
-#   # tic()
-#   future::plan(strategy = multiprocess)
-#   fm1_brms <- brm(dead_count | trials(live_and_dead_pipo_count) ~ 
-#                     cwd_zscore*live_and_dead_pipo_count_s*live_and_dead_pipo_ba_s +
-#                     cwd_zscore*total_count_s*total_ba_s + 
-#                     (1 | unique_cellID), 
-#                   data = analysis_df, 
-#                   family = binomial(link = "logit"),
-#                   prior=c(set_prior("normal (0, 8)")),
-#                   chains = 4,
-#                   future = TRUE)
-#   summary(fm1_brms)
-#   # toc() # 7200 seconds
-#   
-#   saveRDS(fm1_brms, here::here("analyses/analyses_output/fitted-model_cwdZscore_pipo-count-ba_total-count-ba_uniqueCellID.rds"))
-# } else {
-#   fm1_brms <- readRDS(here::here("analyses/analyses_output/fitted-model_cwdZscore_pipo-count-ba_total-count-ba_uniqueCellID.rds"))
-# }
-# 
-
+for (i in seq_along(unique(adf$site))) {
+  current_site <- unique(adf$site)[i]
+  current_site_idx <- which(adf$site == current_site)
+  
+  resids <- resid(fm16_brms)[current_site_idx, "Estimate"]
+  coords <- fm16_brms$data[current_site_idx, c("x", "y")]
+  
+  spatial_autocor <- Variogram(object = resids, dist(coords))
+  # plot(spatial_autocor)
+  
+}
