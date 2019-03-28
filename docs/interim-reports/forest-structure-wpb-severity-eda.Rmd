@@ -297,3 +297,629 @@ toc()
 
 ## Quadratic mean diameter models
 
+```{r}
+# Purpose: build the primary paper analysis
+
+library(tidyverse)
+library(raster)
+library(sf)
+library(here)
+library(tictoc)
+library(mgcv)
+library(brms)
+library(lme4)
+library(effects)
+library(future)
+
+
+if(file.exists(here::here("analyses/analyses_output/data-from-rasterized-classified-trees.csv"))) {
+  
+  data_from_rasterized_trees <- 
+    readr::read_csv(here::here("analyses/analyses_output/data-from-rasterized-classified-trees.csv"))
+} else {
+  stop("You need to extract the data from the rasterized version of the classified trees! See the analyses/rasterize-classified-trees.R script.")
+}
+
+glimpse(data_from_rasterized_trees)
+
+# Get the CWD data
+cwd_data <- readr::read_csv(here::here("data/data_output/cwd-data.csv"))
+
+center_param <- TRUE
+scale_param <- TRUE
+
+analysis_df <-
+  data_from_rasterized_trees %>% 
+  dplyr::left_join(cwd_data, by = "site") %>% 
+  as_tibble() %>% 
+  dplyr::mutate(pipo_and_dead_tpha_s = scale(pipo_and_dead_tpha, center = center_param, scale = scale_param),
+                overall_tpha_s = scale(overall_tpha, center = center_param, scale = scale_param),
+                pipo_and_dead_bapha_s = scale(pipo_and_dead_bapha, center = center_param, scale = scale_param),
+                overall_bapha_s = scale(overall_bapha, center = center_param, scale = scale_param),
+                pipo_and_dead_qmd_s = scale(pipo_and_dead_qmd, center = center_param, scale = scale_param),
+                overall_qmd_s = scale(overall_qmd, center = center_param, scale = scale_param),
+                live_sdi_ac_s = scale(live_sdi_ac, center = center_param, scale = scale_param),
+                pipo_and_dead_sdi_ac_s = scale(pipo_and_dead_sdi_ac, center = center_param, scale = scale_param),
+                overall_sdi_ac_s = scale(overall_sdi_ac, center = center_param, scale = scale_param))
+
+set.seed(0314) # Only meaningful for when randomly subsetting data
+adf <-
+  analysis_df %>% 
+  dplyr::filter(pipo_and_dead_count != 0) %>% 
+  dplyr::mutate(site = as.factor(site))
+
+# dplyr::group_by(site) %>% 
+# dplyr::sample_n(50) # ...OR...
+# dplyr::sample_frac(0.5)
+
+# Exact Gaussian Process
+# n = 10; total = 320; iter = 2000: 217 seconds (0.06 hours)
+# n = 50; total = 1600; iter = 2000: 1454/1570 seconds (0.4 hours)
+# n = 100; total = 3200; iter = 2000: 1.6 hours
+# n = 200; total = 6400; iter = 2500 = 8.9 hours
+
+# Approximate Gaussian Process
+# n = 10; total = 320; iter = 2000; k = 3; adapt_delta = 0.95; 212 seconds (0.059 hours) *7 divergent transitions
+# n = 10; total = 320; iter = 2000; k = 10; adapt_delta = 0.95; 342 seconds (0.095 hours) *393 divergent transitions
+# n = 50; total = 1600; iter = 2000; k = 3; adapt_delta = 0.95; 1084 seconds (0.3 hours) *39 divergent transitions
+# n = 50; total = 1600; iter = 2000; k = 10; adapt_delta = 0.95; 989 seconds (0.275 hours) *48 divergent transitions
+# n = 100; total = 3200; iter = 2000; k = 3; adapt_delta = 0.95; 1945 seconds (0.54 hours) *132 divergent transitions
+# n = 100; total = 3200; iter = 2000; k = 3; adapt_delta = 0.99; 3816 seconds (1.06 hours) *40 divergent transitions **1598 transitions exceeding max_treedepth
+# n = 100; total = 3200; iter = 2000; k = 5; adapt_delta = 0.95; 2807.55 seconds (0.78 hours) *28 divergent transitions
+# n = 100; total = 3200; iter = 2000; k = 10; adapt_delta = 0.95; 2125 seconds (0.59 hours)
+# frac = 0.5; total = 11145; iter = 2000; k = 10; adapt_delta = 0.95; (4.07 hours)
+# all; total = 22289; iter = 2000; k = 10; adapt_delta = 0.95; (15.08 hours)
+
+(start <- Sys.time())
+fm1_brms <- brm(dead_count | trials(pipo_and_dead_count) ~ 
+                  site_cwd_zscore*pipo_and_dead_tpha_s*pipo_and_dead_qmd_s +
+                  site_cwd_zscore*overall_tpha_s*overall_qmd_s +
+                  gp(x, y, by = site, k = 10, c = 5/4, scale = FALSE),
+                data = adf,
+                family = binomial(link = "logit"),
+                chains = 4,
+                cores = 4,
+                control = list(adapt_delta = 0.95))
+summary(fm1_brms)
+(elapsed <- Sys.time() - start)
+
+prior_summary(fm1_brms)
+
+# spatial_autocor <- Variogram(object = resid(fm1_brms)[, "Estimate"], dist(fm1_brms$data[, c("x", "y")]))
+# plot(spatial_autocor)
+
+# saveRDS(fm1_brms, file = here::here("analyses/analyses_output/fitted-model_binomial_site-cwdZscore_pipo-tpha-qmd_overall-tpha-qmd_approx-gp-per-site.rds"))
+
+
+# zero inflated binomial --------------------------------------------------
+
+set.seed(0314) # Only meaningful for when randomly subsetting data
+adf <-
+  analysis_df %>% 
+  dplyr::filter(pipo_and_dead_count != 0) %>% 
+  dplyr::mutate(site = as.factor(site)) %>% 
+  dplyr::group_by(site) %>%
+  dplyr::sample_n(100)
+
+(start <- Sys.time())
+fm2_brms <- brm(dead_count | trials(pipo_and_dead_count) ~ 
+                  site_cwd_zscore*pipo_and_dead_tpha_s*pipo_and_dead_qmd_s +
+                  site_cwd_zscore*overall_tpha_s*overall_qmd_s +
+                  gp(x, y, by = site, k = 10, c = 5/4, scale = FALSE),
+                data = adf,
+                family = zero_inflated_binomial(),
+                chains = 4,
+                cores = 4,
+                control = list(adapt_delta = 0.95))
+summary(fm2_brms)
+(elapsed <- Sys.time() - start)
+pp_check(fm2_brms, nsamples = 50)
+ppcheck_fm2 <- pp_check(fm2_brms, nsamples = 50)
+pp_check(fm1_brms, nsamples = 50, type = "ecdf_overlay")
+
+ppcheck_fm2 +
+  geom_density(data = analysis_df %>% dplyr::filter(pipo_and_dead_count != 0), aes(x = dead_count), color = "red")
+
+
+# zero inflated negbinomial ---------------------------------------------------
+set.seed(0314) # Only meaningful for when randomly subsetting data
+adf <-
+  analysis_df %>% 
+  # dplyr::filter(pipo_and_dead_count != 0) %>% 
+  dplyr::mutate(site = as.factor(site)) %>% 
+  dplyr::group_by(site) %>%
+  dplyr::sample_n(100)
+
+(start <- Sys.time())
+fm3_brms <- brm(dead_count ~ 
+                  site_cwd_zscore*pipo_and_dead_tpha_s*pipo_and_dead_qmd_s +
+                  site_cwd_zscore*overall_tpha_s*overall_qmd_s +
+                  gp(x, y, by = site, k = 10, c = 5/4, scale = FALSE),
+                data = adf,
+                family = zero_inflated_negbinomial(),
+                chains = 4,
+                cores = 4,
+                control = list(adapt_delta = 0.95))
+summary(fm3_brms)
+(elapsed <- Sys.time() - start)
+pp_check(fm3_brms, nsamples = 50) + xlim(c(0, 40))
+
+
+# zero one inflated beta --------------------------------------------------
+
+set.seed(0314) # Only meaningful for when randomly subsetting data
+adf <-
+  analysis_df %>% 
+  dplyr::filter(pipo_and_dead_count != 0) %>% 
+  dplyr::mutate(site = as.factor(site)) %>% 
+  dplyr::group_by(site) %>%
+  dplyr::sample_n(10)
+
+(start <- Sys.time())
+fm4_brms <- brm(dead_count / pipo_and_dead_count ~ 
+                  site_cwd_zscore*pipo_and_dead_tpha_s*pipo_and_dead_qmd_s +
+                  site_cwd_zscore*overall_tpha_s*overall_qmd_s +
+                  gp(x, y, by = site, k = 20, c = 5/4, scale = FALSE),
+                data = adf,
+                family = zero_one_inflated_beta(),
+                chains = 4,
+                cores = 4,
+                control = list(adapt_delta = 0.95))
+summary(fm4_brms)
+(elapsed <- Sys.time() - start)
+pp_check(fm4_brms, nsamples = 50)
+
+
+# zero inflated poisson ---------------------------------------------------
+
+set.seed(0314) # Only meaningful for when randomly subsetting data
+adf <-
+  analysis_df %>% 
+  # dplyr::filter(pipo_and_dead_count != 0) %>% 
+  dplyr::mutate(site = as.factor(site)) %>% 
+  dplyr::group_by(site) %>%
+  dplyr::sample_n(100)
+
+(start <- Sys.time())
+fm5_brms <- brm(dead_count ~ 
+                  site_cwd_zscore*pipo_and_dead_tpha_s*pipo_and_dead_qmd_s +
+                  site_cwd_zscore*overall_tpha_s*overall_qmd_s +
+                  gp(x, y, by = site, k = 10, c = 5/4, scale = FALSE),
+                data = adf,
+                family = zero_inflated_poisson(),
+                chains = 4,
+                cores = 4,
+                control = list(adapt_delta = 0.95))
+summary(fm5_brms)
+(elapsed <- Sys.time() - start)
+pp_check(fm5_brms, nsamples = 50) + xlim(c(0, 40))
+pp_check(fm5_brms, nsamples = 50, type = "ecdf_overlay")
+
+
+# hurdle poisson ----------------------------------------------------------
+
+set.seed(0314) # Only meaningful for when randomly subsetting data
+adf <-
+  analysis_df %>% 
+  # dplyr::filter(pipo_and_dead_count != 0) %>% 
+  dplyr::mutate(site = as.factor(site)) %>% 
+  dplyr::group_by(site) %>%
+  dplyr::sample_n(100)
+
+(start <- Sys.time())
+fm6_brms <- brm(dead_count ~ 
+                  site_cwd_zscore*pipo_and_dead_tpha_s*pipo_and_dead_qmd_s +
+                  site_cwd_zscore*overall_tpha_s*overall_qmd_s +
+                  gp(x, y, by = site, k = 10, c = 5/4, scale = FALSE),
+                data = adf,
+                family = hurdle_poisson(),
+                chains = 4,
+                cores = 4,
+                control = list(adapt_delta = 0.95))
+summary(fm6_brms)
+(elapsed <- Sys.time() - start)
+ppcheck_fm6 <- pp_check(fm6_brms, nsamples = 50) + xlim(c(0, 40))
+pp_check(fm6_brms, type = "ecdf_overlay")
+ppcheck_fm6 +
+  geom_density(data = analysis_df, aes(x = dead_count), color = "red") +
+  xlim(c(0, 40))
+
+
+
+# hurdle negbinomial ------------------------------------------------------
+
+
+set.seed(0314) # Only meaningful for when randomly subsetting data
+adf <-
+  analysis_df %>% 
+  # dplyr::filter(pipo_and_dead_count != 0) %>% 
+  dplyr::mutate(site = as.factor(site)) %>% 
+  dplyr::group_by(site) %>%
+  dplyr::sample_n(100)
+
+(start <- Sys.time())
+fm7_brms <- brm(dead_count ~ 
+                  site_cwd_zscore*pipo_and_dead_tpha_s*pipo_and_dead_qmd_s +
+                  site_cwd_zscore*overall_tpha_s*overall_qmd_s +
+                  gp(x, y, by = site, k = 10, c = 5/4, scale = FALSE),
+                data = adf,
+                family = hurdle_negbinomial(),
+                chains = 4,
+                cores = 4,
+                control = list(adapt_delta = 0.95))
+summary(fm7_brms)
+(elapsed <- Sys.time() - start)
+ppcheck_fm7 <- pp_check(fm7_brms, nsamples = 50) + xlim(c(0, 40))
+
+ppcheck_fm7 +
+  geom_density(data = analysis_df, aes(x = dead_count), color = "red")
+
+
+# poisson -----------------------------------------------------------------
+
+set.seed(0314) # Only meaningful for when randomly subsetting data
+adf <-
+  analysis_df %>% 
+  # dplyr::filter(pipo_and_dead_count != 0) %>% 
+  dplyr::mutate(site = as.factor(site)) %>% 
+  dplyr::group_by(site) %>%
+  dplyr::sample_n(100)
+
+(start <- Sys.time())
+fm8_brms <- brm(dead_count ~ 
+                  site_cwd_zscore*pipo_and_dead_tpha_s*pipo_and_dead_qmd_s +
+                  site_cwd_zscore*overall_tpha_s*overall_qmd_s +
+                  gp(x, y, by = site, k = 10, c = 5/4, scale = FALSE),
+                data = adf,
+                family = poisson(),
+                chains = 4,
+                cores = 4,
+                control = list(adapt_delta = 0.95))
+summary(fm8_brms)
+(elapsed <- Sys.time() - start)
+pp_check(fm8_brms, nsamples = 50) + xlim(c(0, 40))
+pp_check(fm8_brms, nsamples = 50, type = "ecdf_overlay")
+
+
+# negative binomial -------------------------------------------------------
+
+set.seed(0314) # Only meaningful for when randomly subsetting data
+adf <-
+  analysis_df %>% 
+  # dplyr::filter(pipo_and_dead_count != 0) %>% 
+  dplyr::mutate(site = as.factor(site)) %>% 
+  dplyr::group_by(site) %>%
+  dplyr::sample_n(100)
+
+(start <- Sys.time())
+fm9_brms <- brm(dead_count ~ 
+                  site_cwd_zscore*pipo_and_dead_tpha_s*pipo_and_dead_qmd_s +
+                  site_cwd_zscore*overall_tpha_s*overall_qmd_s +
+                  gp(x, y, by = site, k = 10, c = 5/4, scale = FALSE),
+                data = adf,
+                family = negbinomial(),
+                chains = 4,
+                cores = 4,
+                control = list(adapt_delta = 0.95))
+summary(fm9_brms)
+(elapsed <- Sys.time() - start)
+pp_check(fm9_brms, nsamples = 50) + xlim(c(0, 40))
+pp_check(fm9_brms, nsamples = 50, type = "ecdf_overlay")
+
+
+
+# zero inflated binomial (k = 15) ---------------------------------------
+# 53 minutes *8 divergent transitions
+set.seed(0314) # Only meaningful for when randomly subsetting data
+adf <-
+  analysis_df %>% 
+  dplyr::filter(pipo_and_dead_count != 0) %>% 
+  dplyr::mutate(site = as.factor(site)) %>% 
+  dplyr::group_by(site) %>%
+  dplyr::sample_n(100)
+
+(start <- Sys.time())
+fm10_brms <- brm(dead_count | trials(pipo_and_dead_count) ~ 
+                  site_cwd_zscore*pipo_and_dead_tpha_s*pipo_and_dead_qmd_s +
+                  site_cwd_zscore*overall_tpha_s*overall_qmd_s +
+                  gp(x, y, by = site, k = 15, c = 5/4, scale = FALSE),
+                data = adf,
+                family = zero_inflated_binomial(),
+                chains = 4,
+                cores = 4,
+                control = list(adapt_delta = 0.95))
+summary(fm10_brms)
+(elapsed <- Sys.time() - start)
+pp_check(fm10_brms, nsamples = 50)
+
+
+# zero inflated binomial exact GP -----------------------------------------
+# 1.66 hours
+# Wow! The posterior predictive checks look really good for this! Let's find an approximation with no divergent transitions
+set.seed(0314) # Only meaningful for when randomly subsetting data
+adf <-
+  analysis_df %>% 
+  dplyr::filter(pipo_and_dead_count != 0) %>% 
+  dplyr::mutate(site = as.factor(site)) %>% 
+  dplyr::group_by(site) %>%
+  dplyr::sample_n(100)
+
+(start <- Sys.time())
+fm11_brms <- brm(dead_count | trials(pipo_and_dead_count) ~ 
+                   site_cwd_zscore*pipo_and_dead_tpha_s*pipo_and_dead_qmd_s +
+                   site_cwd_zscore*overall_tpha_s*overall_qmd_s +
+                   gp(x, y, by = site, scale = FALSE),
+                 data = adf,
+                 family = zero_inflated_binomial(),
+                 chains = 4,
+                 cores = 4,
+                 control = list(adapt_delta = 0.95))
+summary(fm11_brms)
+(elapsed <- Sys.time() - start)
+pp_check(fm11_brms, nsamples = 50)
+
+# saveRDS(fm11_brms, here::here("analyses/analyses_output/fitted-model_site-cwdZscore_pipo-tpha-qmd_overall-tpha-qmd_exact-gp-per-site_100-samples.rds"))
+
+# zero inflated binomial (k = 20) ---------------------------------------
+# 1.05 hours
+# Better than k = 15 because no divergent samples and because pp_check looks better
+# Still not as good as the pp_check for the exact gaussian process.
+set.seed(0314) # Only meaningful for when randomly subsetting data
+adf <-
+  analysis_df %>% 
+  dplyr::filter(pipo_and_dead_count != 0) %>% 
+  dplyr::mutate(site = as.factor(site)) %>% 
+  dplyr::group_by(site) %>%
+  dplyr::sample_n(100)
+
+(start <- Sys.time())
+fm12_brms <- brm(dead_count | trials(pipo_and_dead_count) ~ 
+                   site_cwd_zscore*pipo_and_dead_tpha_s*pipo_and_dead_qmd_s +
+                   site_cwd_zscore*overall_tpha_s*overall_qmd_s +
+                   gp(x, y, by = site, k = 20, c = 5/4, scale = FALSE),
+                 data = adf,
+                 family = zero_inflated_binomial(),
+                 chains = 4,
+                 cores = 4,
+                 control = list(adapt_delta = 0.95))
+summary(fm12_brms)
+(elapsed <- Sys.time() - start)
+pp_check(fm12_brms, nsamples = 50)
+
+
+
+# zero inflated binomial (k = 25) ---------------------------------------
+# 1.54 hours; better, but still not ideal pp_check
+# Getting to the time where it is just as fast to fit an exact GP
+set.seed(0314) # Only meaningful for when randomly subsetting data
+adf <-
+  analysis_df %>% 
+  dplyr::filter(pipo_and_dead_count != 0) %>% 
+  dplyr::mutate(site = as.factor(site)) %>% 
+  dplyr::group_by(site) %>%
+  dplyr::sample_n(100)
+
+(start <- Sys.time())
+fm13_brms <- brm(dead_count | trials(pipo_and_dead_count) ~ 
+                   site_cwd_zscore*pipo_and_dead_tpha_s*pipo_and_dead_qmd_s +
+                   site_cwd_zscore*overall_tpha_s*overall_qmd_s +
+                   gp(x, y, by = site, k = 25, c = 5/4, scale = FALSE),
+                 data = adf,
+                 family = zero_inflated_binomial(),
+                 chains = 4,
+                 cores = 4,
+                 control = list(adapt_delta = 0.95))
+summary(fm13_brms)
+(elapsed <- Sys.time() - start)
+pp_check(fm13_brms, nsamples = 50)
+
+
+# zero inflated binomial (k = 35; adapt_delta = 0.8) ---------------------------------------
+# 2.5 hours
+# Try increasing k a lot and reducing adapt_delta
+# Looks pretty good on the pp_check; *5 divergent transitions
+set.seed(0314) # Only meaningful for when randomly subsetting data
+adf <-
+  analysis_df %>% 
+  dplyr::filter(pipo_and_dead_count != 0) %>% 
+  dplyr::mutate(site = as.factor(site)) %>% 
+  dplyr::group_by(site) %>%
+  dplyr::sample_n(100)
+
+(start <- Sys.time())
+fm14_brms <- brm(dead_count | trials(pipo_and_dead_count) ~ 
+                   site_cwd_zscore*pipo_and_dead_tpha_s*pipo_and_dead_qmd_s +
+                   site_cwd_zscore*overall_tpha_s*overall_qmd_s +
+                   gp(x, y, by = site, k = 35, c = 5/4, scale = FALSE),
+                 data = adf,
+                 family = zero_inflated_binomial(),
+                 chains = 4,
+                 cores = 4,
+                 control = list(adapt_delta = 0.8))
+summary(fm14_brms)
+(elapsed <- Sys.time() - start)
+pp_check(fm14_brms, nsamples = 50)
+
+# zero inflated binomial (k = 35; adapt_delta = 0.9) ---------------------------------------
+# Try reducing k to where we had it for binomial() family but increasing adapt_delta
+# 4.8 hours *931 divergent transitions **Did not converge
+
+set.seed(0314) # Only meaningful for when randomly subsetting data
+adf <-
+  analysis_df %>% 
+  dplyr::filter(pipo_and_dead_count != 0) %>% 
+  dplyr::mutate(site = as.factor(site)) %>% 
+  dplyr::group_by(site) %>%
+  dplyr::sample_n(200)
+
+(start <- Sys.time())
+fm15_brms <- brm(dead_count | trials(pipo_and_dead_count) ~ 
+                   site_cwd_zscore*pipo_and_dead_tpha_s*pipo_and_dead_qmd_s +
+                   site_cwd_zscore*overall_tpha_s*overall_qmd_s +
+                   gp(x, y, by = site, k = 35, c = 5/4, scale = FALSE),
+                 data = adf,
+                 family = zero_inflated_binomial(),
+                 chains = 4,
+                 cores = 4,
+                 control = list(adapt_delta = 0.9))
+summary(fm15_brms)
+(elapsed <- Sys.time() - start)
+pp_check(fm15_brms, nsamples = 50)
+
+
+# exact GP 200 samples ----------------------------------------------------
+# 7.7 hours
+set.seed(0314) # Only meaningful for when randomly subsetting data
+adf <-
+  analysis_df %>% 
+  dplyr::filter(pipo_and_dead_count != 0) %>% 
+  dplyr::mutate(site = as.factor(site)) %>% 
+  dplyr::group_by(site) %>%
+  dplyr::sample_n(200)
+
+(start <- Sys.time())
+fm16_brms <- brm(dead_count | trials(pipo_and_dead_count) ~ 
+                   site_cwd_zscore*pipo_and_dead_tpha_s*pipo_and_dead_qmd_s +
+                   site_cwd_zscore*overall_tpha_s*overall_qmd_s +
+                   gp(x, y, by = site, scale = FALSE),
+                 data = adf,
+                 family = zero_inflated_binomial(),
+                 chains = 4,
+                 cores = 4,
+                 control = list(adapt_delta = 0.95))
+summary(fm16_brms)
+(elapsed <- Sys.time() - start)
+pp_check(fm16_brms, nsamples = 50)
+
+saveRDS(fm16_brms, here::here('analyses/analyses_output/fitted-model_zibinomial_site-cwdZscore_pipo-tpha-qmd_overall-tpha-qmd_exact-gp-per-site_200-samples.rds'))
+
+# zero inflated binomial (k = 10; c = 1.02)--------------------------------
+# 36 minutes
+set.seed(0314) # Only meaningful for when randomly subsetting data
+adf <-
+  analysis_df %>% 
+  dplyr::filter(pipo_and_dead_count != 0) %>% 
+  dplyr::mutate(site = as.factor(site)) %>% 
+  dplyr::group_by(site) %>%
+  dplyr::sample_n(100)
+
+(start <- Sys.time())
+fm17_brms <- brm(dead_count | trials(pipo_and_dead_count) ~ 
+                  site_cwd_zscore*pipo_and_dead_tpha_s*pipo_and_dead_qmd_s +
+                  site_cwd_zscore*overall_tpha_s*overall_qmd_s +
+                  gp(x, y, by = site, k = 10, c = 1.02, scale = FALSE),
+                data = adf,
+                family = zero_inflated_binomial(),
+                chains = 4,
+                cores = 4,
+                control = list(adapt_delta = 0.95))
+summary(fm17_brms)
+(elapsed <- Sys.time() - start)
+pp_check(fm17_brms, nsamples = 50)
+ppcheck_fm17 <- pp_check(fm17_brms, nsamples = 50)
+
+# zero inflated binomial exact GP (scaling X/Y)-----------------
+# Non-scaled with 50 n per site took 0.4 hours
+# What does the true GP say the lengthscale is?
+
+set.seed(0314) # Only meaningful for when randomly subsetting data
+adf <-
+  analysis_df %>% 
+  dplyr::filter(pipo_and_dead_count != 0) %>% 
+  dplyr::mutate(site = as.factor(site)) %>% 
+  dplyr::group_by(site) %>%
+  dplyr::sample_n(50)
+
+(start <- Sys.time())
+fm18_brms <- brm(dead_count | trials(pipo_and_dead_count) ~ 
+                   site_cwd_zscore*pipo_and_dead_tpha_s*pipo_and_dead_qmd_s +
+                   site_cwd_zscore*overall_tpha_s*overall_qmd_s +
+                   gp(x, y, by = site, scale = TRUE),
+                 data = adf,
+                 family = zero_inflated_binomial(),
+                 chains = 4,
+                 cores = 4,
+                 control = list(adapt_delta = 0.95))
+summary(fm18_brms)
+(elapsed <- Sys.time() - start)
+pp_check(fm18_brms, nsamples = 50)
+ppcheck_fm18 <- pp_check(fm18_brms, nsamples = 50)
+
+# zero inflated binomial exact GP (NOT scaling X/Y)-----------------
+# 28 minutes
+# Non-scaled with 50 n per site took 0.4 hours before
+# What does the true GP say the lengthscale is?
+# Doing this again and saving it because I want to try to translate the raw lscale to the scaled lscale
+# using the maximum Euclidean distance at each site. Turns out it's the maximum distance
+# across *all* the sites that is equivalent to a distance of 1. So multiply each
+# scaled lscale estimate by the max(dist(adf[, c("x", "y")]))
+
+set.seed(0314) # Only meaningful for when randomly subsetting data
+adf <-
+  analysis_df %>% 
+  dplyr::filter(pipo_and_dead_count != 0) %>% 
+  dplyr::mutate(site = as.factor(site)) %>% 
+  dplyr::group_by(site) %>%
+  dplyr::sample_n(50)
+
+(start <- Sys.time())
+fm19_brms <- brm(dead_count | trials(pipo_and_dead_count) ~ 
+                   site_cwd_zscore*pipo_and_dead_tpha_s*pipo_and_dead_qmd_s +
+                   site_cwd_zscore*overall_tpha_s*overall_qmd_s +
+                   gp(x, y, by = site, scale = FALSE),
+                 data = adf,
+                 family = zero_inflated_binomial(),
+                 chains = 4,
+                 cores = 4,
+                 control = list(adapt_delta = 0.95))
+summary(fm19_brms)
+(elapsed <- Sys.time() - start)
+pp_check(fm19_brms, nsamples = 50)
+ppcheck_fm19 <- pp_check(fm19_brms, nsamples = 50)
+
+max_distances_per_site <-
+  adf %>% 
+  split(adf$site) %>% 
+  lapply(FUN = function(site) {
+    xy <- site[, c("x", "y")]
+    distance_mat <- dist(xy)
+    return(max(distance_mat))
+  }) %>% do.call("c", .)
+
+post_fm18 <- posterior_summary(fm18_brms)
+post_fm19 <- posterior_summary(fm19_brms)
+
+post_fm18[rownames(post_fm18) == "lscale_gpxysiteeldo_3k_1", "Estimate"] * max_distances_per_site[names(max_distances_per_site) == "eldo_3k_1"]
+post_fm18[rownames(post_fm18) == "lscale_gpxysiteeldo_3k_1", "Estimate"] * max(dist(adf[, c("x", "y")]))
+
+post_fm19[rownames(post_fm19) == "lscale_gpxysiteeldo_3k_1", "Estimate"]
+
+post_fm19[rownames(post_fm19) == "lscale_gpxysiteeldo_3k_1", "Estimate"] / post_fm18[rownames(post_fm18) == "lscale_gpxysiteeldo_3k_1", "Estimate"]
+
+# zero inflated binomial (k = 10; c = 1.02)--------------------------------
+# 36 minutes
+set.seed(0314) # Only meaningful for when randomly subsetting data
+adf <-
+  analysis_df %>% 
+  dplyr::filter(pipo_and_dead_count != 0) %>% 
+  dplyr::mutate(site = as.factor(site)) %>% 
+  dplyr::group_by(site) %>%
+  dplyr::sample_n(20)
+
+(start <- Sys.time())
+fm20_brms <- brm(dead_count | trials(pipo_and_dead_count) ~ 
+                   site_cwd_zscore*pipo_and_dead_tpha_s*pipo_and_dead_qmd_s +
+                   site_cwd_zscore*overall_tpha_s*overall_qmd_s +
+                   gp(x, y, by = site, k = 20, c = 5/4, scale = TRUE),
+                 data = adf,
+                 family = zero_inflated_binomial(),
+                 chains = 4,
+                 cores = 4,
+                 control = list(adapt_delta = 0.95))
+summary(fm20_brms)
+(elapsed <- Sys.time() - start)
+pp_check(fm20_brms, nsamples = 10)
+ppcheck_fm20 <- pp_check(fm20_brms, nsamples = 10)
+
+```
+
