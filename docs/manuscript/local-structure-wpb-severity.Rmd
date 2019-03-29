@@ -159,22 +159,32 @@ We built our study on 180 vegetation monitoring plots at 36 sites established be
 
 Imagery was captured using a DJI Zenmuse X3 RGB camera [@dji2015] and a Micasense RedEdge3 5-band multispectral camera [@micasense2015]. We mounted both of these instruments simultaneously on a DJI Matrice 100 aircraft [@dji2015a] using the DJI 3-axis stabilized gimbal for the Zenmuse X3 camera and a Micasense angled fixed mount for the RedEdge3 camera. The gimbal and the angled fixed mount ensured both instruments were nadir-facing during image capture. Just prior or after image capture at each site, we calibrated the RedEdge3 camera by taking an image of a calibration panel on the ground in full sun with known reflectance values for each of the 5 narrow bands.
 
-Table XXXXX. Reflectance sensitivity of the Micasense Rededge3 camera. The calibration panel value represents the reflectance of the calibration panel for the given wavelength.
+```{r rededge_deets, echo = FALSE, include = TRUE}
+rededge_print <- 
+  tibble(`Band number` = 1:5,
+         `Band name` = c("blue (b)", "green (g)", "red (r)", "near infrared (nir)", "red edge (re)"),
+         `Center wavelength` = c(475, 560, 668, 840, 717),
+         `Band width` = c(20, 20, 10, 40, 10),
+         `Wavelength range` = c("465-485", "550-570", "663-673", "820-860", "712-722"),
+         `Panel reflectance` = c(0.64, 0.64, 0.64, 0.60, 0.63))
 
-+------------+--------------+------------------+------------------+----------+-----------------+---------------+
-| Band\      | Band\        | Band\            | Center\          | Band\    |  Wavelength\    | Calibration\  |
-| number     | name         | abbreviation     | wavelength       | width    |  range          | panel value   |
-+============+==============+==================+==================+==========+=================+===============+
-| 1          |blue          |b                 |  475             | 20       |  465-485        |  0.64         |
-+------------+--------------+------------------+------------------+----------+-----------------+---------------+
-| 2          |green         |g                 |  560             | 20       |  550-570        |  0.64         |
-+------------+--------------+------------------+------------------+----------+-----------------+---------------+
-| 3          |red           |r                 |  668             | 10       |  663-673        |  0.64         |
-+------------+--------------+------------------+------------------+----------+-----------------+---------------+
-| 4          |near infrared |nir               |  840             | 40       |  820-860        |  0.60         |
-+------------+--------------+------------------+------------------+----------+-----------------+---------------+
-| 5          |red edge      |re                |  717             | 10       |  712-722        |  0.63         |
-+------------+--------------+------------------+------------------+----------+-----------------+---------------+
+kable(rededge_print, format = "pandoc", caption = "Reflectance sensitivity of the Micasense Rededge3 camera. The calibration panel value represents the reflectance of the calibration panel for the given wavelength.")
+```
+
+<!-- +------------+--------------+------------------+------------------+----------+-----------------+---------------+ -->
+<!-- | Band\      | Band\        | Band\            | Center\          | Band\    |  Wavelength\    | Calibration\  | -->
+<!-- | number     | name         | abbreviation     | wavelength       | width    |  range          | panel value   | -->
+<!-- +============+==============+==================+==================+==========+=================+===============+ -->
+<!-- | 1          |blue          |b                 |  475             | 20       |  465-485        |  0.64         | -->
+<!-- +------------+--------------+------------------+------------------+----------+-----------------+---------------+ -->
+<!-- | 2          |green         |g                 |  560             | 20       |  550-570        |  0.64         | -->
+<!-- +------------+--------------+------------------+------------------+----------+-----------------+---------------+ -->
+<!-- | 3          |red           |r                 |  668             | 10       |  663-673        |  0.64         | -->
+<!-- +------------+--------------+------------------+------------------+----------+-----------------+---------------+ -->
+<!-- | 4          |near infrared |nir               |  840             | 40       |  820-860        |  0.60         | -->
+<!-- +------------+--------------+------------------+------------------+----------+-----------------+---------------+ -->
+<!-- | 5          |red edge      |re                |  717             | 10       |  712-722        |  0.63         | -->
+<!-- +------------+--------------+------------------+------------------+----------+-----------------+---------------+ -->
 
 ### Flight protocol
 
@@ -283,19 +293,32 @@ All data are available via the Open Science Framework. Statistical analyses were
 
 We found that the experimental `lmfx` algorithm with parameter values of `dist2d = `r algorithm_details[1, "var1_val"]`` and `ws = `r algorithm_details[1, "var2_val"]`` [@roussel2019] performed the best across 7 measures of forest structure as measured by Pearson's correlation with ground data (Table XXXX; rows are different forest metrics, columns are correlation and RMSE).
 
+Asterisk indicates within 5% of the value of the best-performing model.
+
 ```{r best_algorithm_deets_table, echo = FALSE, include = TRUE}
 best_algorithm_deets_print <-
   best_algorithm_deets %>% 
   dplyr::select(forest_metric, ground_correlation, rmse, me, med_error, ground_cor_within_threshold_pct, rmse_within_threshold_pct) %>% 
-  dplyr::rename(`Forest metric` = forest_metric,
+  dplyr::mutate(ground_correlation = ifelse(ground_cor_within_threshold_pct == 1, yes = paste0(as.character(sprintf("%0.2f", ground_correlation)), "*"), no = as.character(sprintf("%0.2f", ground_correlation)))) %>% 
+  dplyr::mutate(rmse = ifelse(rmse_within_threshold_pct == 1, yes = paste0(as.character(sprintf("%0.2f", rmse)), "*"), no = as.character(sprintf("%0.2f", rmse)))) %>% 
+  dplyr::select(forest_metric, ground_correlation, rmse, me, med_error) %>% 
+  dplyr::ungroup() %>% 
+  dplyr::mutate(forest_metric = c("height (m); 25th percentile",
+                                  "height (m); mean",
+                                  "height (m); 75th percentile",
+                                  "dist to 1st nearest neighbor (m)",
+                                  "dist to 2nd nearest neighbor (m)",
+                                  "dist to 3rd nearest neighbor (m)",
+                                  "total tree count",
+                                  "count of trees > 15m",
+                                  "count of trees < 15m")) %>% 
+  dplyr::rename(`Forest structure metric` = forest_metric,
                 `Correlation with ground` = ground_correlation,
                 RMSE = rmse,
-                # `Mean error` = me,
-                # `Median error` = med_error,
-                `Correlation within top 5%?` = ground_cor_within_threshold_pct,
-                `RMSE within top 5%?` = rmse_within_threshold_pct)
+                `Mean error` = me,
+                `Median error` = med_error)
 
-knitr::kable(best_algorithm_deets_print, digits = 2, format = "pandoc")
+knitr::kable(best_algorithm_deets_print, digits = 2, format = "pandoc", caption = paste0("Correlation and differences between the best performing tree detection algorithm (lmfx with dist2d = ", algorithm_details[1, "var1_val"], " and ws = ", algorithm_details[1, "var2_val"], ") and the ground data. An asterisk next to the correlation or RMSE indicates that this value was within 5% of the value of the best-performing algorithm/parameter set."))
 ```
 
 
