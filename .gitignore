@@ -36,3 +36,5 @@ analyses/analyses_output/classified-trees.geojson
 data/features/California_Species_clean_All_epsg_3310.csv
 data/features/jepcodes-v7.kml
 analyses/analyses_output/*.rds
+analyses/analyses_output/model-predictions.csv
+analyses/analyses_output/newdata-for-model-predictions.csv

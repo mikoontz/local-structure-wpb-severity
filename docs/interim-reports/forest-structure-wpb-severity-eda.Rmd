@@ -923,3 +923,18 @@ ppcheck_fm20 <- pp_check(fm20_brms, nsamples = 10)
 
 ```
 
+```{r}
+(start <- Sys.time())
+fm17_brms <- brm(dead_count | trials(pipo_and_dead_count) ~ 
+                   site_cwd_zscore*pipo_and_dead_tpha_s*pipo_and_dead_qmd_s +
+                   site_cwd_zscore*overall_tpha_s*overall_qmd_s,
+                 data = adf,
+                 family = zero_inflated_binomial(),
+                 chains = 4,
+                 cores = 4,
+                 control = list(adapt_delta = 0.95))
+summary(fm17_brms)
+pp_check(fm17_brms) # Not so good!
+# saveRDS(fm17_brms, file = "analyses/analyses_output/fitted-model_zibinomial_site-cwdZscore_pipo-tpha-qmd_overall-tpha-qmd_no-gp_200-samples")
+```
+
