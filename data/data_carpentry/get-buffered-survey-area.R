@@ -41,8 +41,13 @@ survey_area <-
   })) %>% 
   dplyr::mutate(geometry = st_as_sfc(purrr::flatten(geometry))) %>% 
   dplyr::select(site, geometry) %>% 
-  sf::st_as_sf() %>% 
+  sf::st_as_sf(crs = 3310) %>% 
   dplyr::mutate(survey_area = st_area(geometry)) %>% 
   dplyr::mutate(buffered_survey_area = st_area(st_buffer(geometry, -35)))
 
+units(survey_area$survey_area) <- "ha"
+units(survey_area$buffered_survey_area) <- "ha"
+
 survey_area
+
+sf::st_write(obj = survey_area, dsn = "data/data_output/surveyed-area-3310.gpkg")
