@@ -79,6 +79,7 @@ site_characteristics <-
                                    Forest == "sequ" ~ "Sequoia")) %>% 
   dplyr::mutate(Forest = factor(Forest, levels = c("Eldorado", "Stanislaus", "Sierra", "Sequoia"))) %>% dplyr::arrange(Forest, `Elevation band`, Rep) %>% 
   dplyr::select(Forest, `Elevation band`, Rep, `CWD (mm)`, `CWD (z-score)`, `Survey area (ha)`, Mortality, `Density (tpha)`)
+# Need to say it's air/ground measurements for mortality and density
 ```
 
 ```{r hand_classified_trees}
