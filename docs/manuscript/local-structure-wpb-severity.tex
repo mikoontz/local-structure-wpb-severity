@@ -104,9 +104,9 @@
 
 \begin{document}
 
-\section{Relative effect of host versus non-host vegetation structure on
-forest insect severity depends on climatic water
-deficit}\label{relative-effect-of-host-versus-non-host-vegetation-structure-on-forest-insect-severity-depends-on-climatic-water-deficit}
+\section{Effect of local host density and size forest insect severity
+depends on climatic water
+deficit}\label{effect-of-local-host-density-and-size-forest-insect-severity-depends-on-climatic-water-deficit}
 
 Michael J. Koontz\textsuperscript{1,2,*}, Andrew M.
 Latimer\textsuperscript{1,2}, Leif A. Mortenson\textsuperscript{3},
@@ -130,10 +130,53 @@ Date report generated: March 31, 2019
 
 \subsection{Abstract}\label{abstract}
 
-Forest insects are a primary mortality agent of trees in Sierra Nevada
-mixed-conifer forests. The recent hot drought from 2012 to 2015 led to
-massive tree die-off throughout the state of California, and especially
-in the Sierra Nevada.
+Bark beetles are a primary mortality agent of trees in western U.S.
+forests, and the recent Californian hot drought of 2012 to 2015 created
+favorable conditions for bark beetle-induced tree mortality throughout
+the yellow pine/mixed-conifer forest system in the Sierra Nevada
+mountain range. The western pine beetle, \emph{Dendroctonus brevicomis},
+is the forest insect that is largely responsible for the especially
+common deaths of its main host in California, the ponderosa pine tree
+(\emph{Pinus ponderosa}). While previous work has demonstrated a link
+between climate conditions related to tree water stress and forest
+density on the severity of the western pine beetle disturbance, it
+remains challenging to disentangle the relative effects of these
+variables. Further, forest density can affect western pine beetle
+behavior in a number of ways, which creates a need for more information
+on complex forest structure (including local density, tree size, and the
+heterogeneity of these variables across a forest stand) to uncover the
+most likely mechanism.
+
+We conducted aerial surveys over an established network of 32 permanent
+vegetation monitoring plots along a 350km and 1000m elevation gradient
+in the Sierra Nevada mountain range of California using a small,
+unhumanned aerial system (sUAS aka drone) equipped with a narrow-band
+multispectral camera. Using Structure from Motion (SfM) processing on
+over 450,000 images, we reconstructed the complex vegetation structure
+of over 9 square kilometers of forest that experienced ponderosa pine
+mortality as a result of western pine beetle activity. Using this
+dataset, we built a model to predict the probability of ponderosa pine
+mortality as a function of forest structure variables (including
+ponderosa pine density and mean size, as well as all tree density and
+mean size), an environmental gradient of climatic water deficit, and a
+Gaussian process to capture spatial covariance in the response. We found
+that host tree
+
+Data from small, unhummaned aerial systems (sUAS) can provide important
+context surrounding ground plots, which enables inference and generates
+new insights into ecological processes. sUAS are best-suited to
+enhancing ground data, which implies that we need not abandon lessons
+learned from sound experimental design (i.e., a network of plots along a
+gradient is still a powerful way to use sUAS data).
+
+Host availability for aggressive bark beetles appears to have played the
+dominant role in increasing the probability of ponderosa pine mortality
+in the most hard-hit forest stands during the cumulative mortality event
+of 2012 to 2018. Host size played a role in its interaction with
+environmental condition-- climatic water deficit-- such that smaller
+trees increased the probability of ponderosa mortality at cool/wet
+sites, while larger trees increased the probability of ponderosa
+mortality at hot/dry sites.
 
 \subsection{Introduction}\label{introduction}
 
@@ -143,91 +186,53 @@ aftermath (USDAFS 2019). A harbinger of climate change effects to come,
 high temperatures exacerbating the extreme drought led to tree mortality
 events of unprecedented size in the driest, densest forests across the
 state (Millar and Stephenson 2015, Young et al. 2017). A century of fire
-suppression policy has enabled forests to grow unchecked into dense
-stands, which increases water stress on trees and makes them more
-vulnerable to bark beetle attack (Fettig 2012, North et al. 2015).
-
-Previous studies show that bark beetles thrive in denser forests (Fettig
-2012), but density is often a coarse gauge of the size and spatial
-distribution of trees-- the forest structure-- with which bark beetles
-interact (Raffa et al. 2008).
-
-Recent research has shown a strong link between complex forest structure
-and forest resilience, but measuring this complexity generally requires
-expensive equipment or labor-intensive field surveys (Larson and
-Churchill 2012, Kane et al. 2014). These barriers restrict survey
-frequency and extent, which limits insights into phenomena like bark
-beetle outbreaks that rapidly emerge over weeks to months but have
-long-lasting effects on forest conditions.
-
-Further, the clear and vast latitudinal gradient of mortality challenges
-our ability to simultaneously consider how environmental conditions may
-interact with local forest structure to produce patterns of insect
-activity.
-
-along a strong south to north latitudinal gradient (Young et al. 2017,
-USDAFS 2019).
-
-Latitudinal and elevational gradients in the intensity of bark beetle
-activity during the recent California drought provide unique
-opportunities for a postmortem analysis of a major tree die off and how
-intersecting forces of forest structure and environmental conditions
-affect disturbance dynamics. Quantitative, fine-scale measures of tree
-condition across these geographic gradients will enable broad-scale
-assessment of forest structure as well as the intensity of western pine
-beetle-induced tree mortality. Combined, these measurements can better
-our understanding of how complex forest structure affects insect
-disturbance, and vice versa, across the Sierra Nevada. Sound forest
-management requires a better understanding of the relationships between
-forest spatial structure, environmental conditions, and disturbance,
-which ultimately depends on accurate measurement of forest structure at
-appropriate spatial scales.
-
-\subsubsection{How forest structure affects bark beetle
-activity}\label{how-forest-structure-affects-bark-beetle-activity}
-
-Water stress and competition (Hayes et al. 2009, Young et al. 2017) Host
-availability (ease of dispersal to new hosts) Beetles prefer larger
-trees under outbreak conditions
+suppression policy has enabled forests to grow into dense stands, which
+increases water stress on trees and makes them more vulnerable to bark
+beetle attack (Fettig 2012, North et al. 2015).
 
 Forests in California's Sierra Nevada region are characterized by
 regular bark beetle disturbances that interact with forest structure.
 Bark beetles shape forest structure as they sporadically kill weakened
 trees under normal conditions, or wide swaths of even healthy trees
-under outbreak conditions. Forest structure also strongly influences
-bark beetle activity. Low-density forests are less prone to bark beetle
-attacks, but resolving the mechanism underlying this observation
-requires a more nuanced view of forest structure. For instance, a
-low-density forest may resist attack because its trees are in smaller
-clumps with greater average tree vigor, or because its wider canopy
-openings disrupt pheromone signaling between beetles (Fettig 2012).
-Thus, it remains poorly understood how complex forest structure affects
-and is affected by bark beetle activity.
+under outbreak conditions (Raffa et al. 2015). Forest structure also
+strongly influences bark beetle activity. Low-density forests are less
+prone to bark beetle attacks (Fettig 2012), but resolving the mechanism
+underlying this observation requires a more nuanced view of forest
+structure. For instance, a low-density forest may resist attack because
+longer dispersal distances are required for successful colonization of
+new hosts, because widely-spaced trees experience less competition for
+water resources and thus average tree vigor is greater (Hayes et al.
+2009), or because its wider canopy openings disrupt pheromone signaling
+between beetles (Fettig 2012).
 
-Forest spatial structure, the size and distribution of trees in the
-forest, is thought to be a key determinant of forest resilience. To
-date, much of the work on Sierra Nevada forest resilience focuses on
-stem density, which belies the complexity of forest structure and how it
-interacts with disturbance. However, complex forest structure is
-challenging to quantify, as it requires labor-intensive field surveys
-(e.g., to generate stem maps) or highly specialized, expensive equipment
-(e.g., LiDAR). Small, unmanned aerial systems (sUAS) enable fast and
-relatively cheap remote imaging over dozens of hectares of forest, which
-can be used to determine both forest structure and tree condition at the
-individual tree scale. Implementing photogrammetry on the collected
-images can provide a rich picture of the complex, 3-dimensional forest
-structure to which bark beetles respond, and equipping the sUAS with a
-multispectral sensor will allow calculation of vegetation indices (e.g.,
-NDVI) commonly used to assess tree condition.
+Density is often a coarse gauge of the size and spatial distribution of
+trees-- the forest structure-- with which bark beetles interact (Raffa
+et al. 2008). Climate change mitigation strategies emphasize reducing
+tree densities (North et al. 2015, Young et al. 2017), but understanding
+the optimal scale and pattern of tree distribution that can mitigate
+bark beetle outbreaks will be vital for predicting how California
+forests may respond to these interventions. Recent research has shown a
+strong link between complex forest structure and forest resilience, but
+measuring this complexity generally requires expensive equipment or
+labor-intensive field surveys (Larson and Churchill 2012, Kane et al.
+2014). These barriers restrict survey frequency and extent, which limits
+insights into phenomena like bark beetle outbreaks that rapidly emerge
+over weeks to months but have long-lasting effects on forest conditions.
+Further, the vast spatial extent and environmental gradient of mortality
+(Young et al. 2017, USDAFS 2019) challenges our ability to
+simultaneously consider how environmental conditions may interact with
+local forest structure to produce patterns of insect activity. Small,
+unhumanned aerial systems (sUAS) enable fast and relatively cheap remote
+imaging over dozens of hectares of forest, which can be used to
+determine both forest structure and tree condition at the individual
+tree scale (Morris et al. 2017).
 
-Use drones for insect attack studies! (Morris et al. 2017).
-
-Climate change mitigation strategies emphasize reducing tree densities
-(North et al. 2015, Young et al. 2017), but understanding the optimal
-scale and pattern of tree distribution that can mitigate bark beetle
-outbreaks will be vital for predicting how California forests may
-respond to these interventions. This project investigates this
-relationship with the following research questions:
+We used ultra-high resolution remote sensing data from a small,
+unhumanned aerial system over a network of 32 sites in the Sierra Nevada
+spanning 1000m of elevation and 350km of latitude and covering a total
+of 9 square kilometers of forest to ask how fine-scale forest structure
+affected the probability of tree mortality during the cumulative
+mortality event of 2012 to 2018. We asked:
 
 \begin{enumerate}
 \def\labelenumi{\arabic{enumi}.}
@@ -244,13 +249,6 @@ relationship with the following research questions:
   Do the effects of forest structure and environmental condition on
   western pine beetle disturbance interact?
 \end{enumerate}
-
-We used ultra-high resolution remote sensing data from a small,
-unhumanned aerial system (sUAS, aka drone) over a network of 32 sites in
-the Sierra Nevada spanning 1000m of elevation and 350km of latitude and
-covering a total of 9 square kilometers of forest to ask how fine-scale
-forest structure affected the probability of tree mortality during the
-cumulative mortality event of 2012 to 2018.
 
 \subsection{Methods}\label{methods}
 
@@ -339,10 +337,8 @@ For each of the 36 sites (containing 5 plots each), we captured imagery
 over the surrounding \textasciitilde{}40 hectares of forested area using
 north-south aerial transects. For XXXXX sites, we surveyed less
 surrounding area in order to maintain visual and radio communication
-with the aircraft during flight (Table XXXXXX).
-
-Table XXXX. Columns: Site, forest, elevation, rep, surveyed area, survey
-date
+with the aircraft during flight (Table XXXXXX; as a supplement, I think;
+Columns: Site, forest, elevation, rep, CWD, surveyed area, survey date).
 
 We preprogrammed transect paths using Map Pilot for DJI on iOS
 (hereafter Map Pilot) (Easy 2018). All transects tracked the terrain and
@@ -357,14 +353,19 @@ Structure from motion (SfM) processing requires highly overlapping
 images, especially in densely vegetated areas. We planned transects with
 90\% forward overlap and 90\% side overlap at 100 meters below the lens.
 Thus, with flights being at 120 meters above ground level, we achieved
-slightly higher than 90/90 overlap for objects 20 meters tall or
-shorter. Overlap values were based on focal length and field of view
-parameters of the Zenmuse X3 camera. Images were captured at a constant
-rate of 1 image every 2 seconds for both cameras. A forward overlap of
-90\% at 100 meters translates to a flight speed of approximately 6.3 m/s
-and a side overlap of 90\% at 100 meters translates to transects
-approximately 18 meters apart. Approximately 1900 photos were captured
-over each 40 hectare survey area for each camera.
+slightly higher than 90/90 overlap for objects 20 meters tall or shorter
+(91.6/91.6 overlap at the ground). Overlap values were based on focal
+length (3.6mm), sensor width (6.2mm), and image dimension (4000x3000
+pixels) parameters of the Zenmuse X3 camera. Images were captured at a
+constant rate of 1 image every 2 seconds for both cameras. A forward
+overlap of 90\% at 100 meters translates to a flight speed of
+approximately 6.45 m/s and a side overlap of 90\% at 100 meters
+translates to transects approximately 17.2 meters apart. The Rededge
+camera has a different focal length (5.4mm), sensor width (4.8mm), and
+image dimension (1280x960 pixels), which translates to image overlap of
+80.7/80.7 at 100m below the lens and 83.9/83.9 at ground level.
+Approximately 1900 photos were captured over each 40 hectare survey area
+for each camera.
 
 \subsubsection{Structure from motion/Photogrammetric
 processing}\label{structure-from-motionphotogrammetric-processing}
@@ -610,10 +611,11 @@ and confirmed chain convergence by ensuring all \texttt{Rhat} values
 were less than 1.1 (Brooks and Gelman 1998). We used posterior
 predictive checks to visually confirm model performance by overlaying
 the density curves of the predicted number of dead trees per cell over
-the observed number (Gabry et al. 2019). We used 50 random samples from
-the model fit to generate 50 density curves and ensured curves were
-centered on the observed distribution, paying special attention to model
-performance at capturing counts of zero.
+the observed number (Gabry et al. 2019). For the posterior predictive
+checks, we used 50 random samples from the model fit to generate 50
+density curves and ensured curves were centered on the observed
+distribution, paying special attention to model performance at capturing
+counts of zero.
 
 \subsubsection{Software and data
 availability}\label{software-and-data-availability}
@@ -626,36 +628,118 @@ Core Team 2018).
 
 \subsection{Results}\label{results}
 
-\begin{figure}
-\centering
-\includegraphics{../../figures/eldo_3k_3_dsm.png}
-\caption{Example digital surface model (DSM) that is a direct output
-from the dense point cloud generated using structure from motion (SfM)
-processing. The DSM represents the ground elevation plus the vegetation
-height.}
-\end{figure}
+\begin{longtable}[]{@{}lllrrrll@{}}
+\caption{Site characteristics for each of the 32 sites.}\tabularnewline
+\toprule
+Forest & Elevation band & Rep & CWD (mm) & CWD (z-score) & Survey area
+(ha) & Mortality & Density (tpha)\tabularnewline
+\midrule
+\endfirsthead
+\toprule
+Forest & Elevation band & Rep & CWD (mm) & CWD (z-score) & Survey area
+(ha) & Mortality & Density (tpha)\tabularnewline
+\midrule
+\endhead
+Eldorado & 3k & 1 & 678.45 & 0.32 & 31.02 & 0.11/0.61 &
+630.01/410.19\tabularnewline
+Eldorado & 3k & 2 & 706.48 & 0.50 & 30.61 & 0.12/0.36 &
+444.26/647.42\tabularnewline
+Eldorado & 3k & 3 & 654.51 & 0.16 & 30.95 & 0.22/0.36 &
+492.63/410.19\tabularnewline
+Eldorado & 4k & 1 & 570.43 & -0.38 & 28.04 & 0.09/0.39 &
+632.82/588.11\tabularnewline
+Eldorado & 4k & 2 & 642.20 & 0.08 & 28.41 & 0.15/0.78 &
+338.20/271.82\tabularnewline
+Eldorado & 5k & 1 & 663.09 & 0.22 & 28.44 & 0.11/0.44 &
+661.80/543.63\tabularnewline
+Eldorado & 5k & 2 & 627.38 & -0.01 & 30.02 & 0.12/0.36 &
+584.89/968.65\tabularnewline
+Eldorado & 5k & 3 & 598.66 & -0.20 & 29.73 & 0.07/0.32 &
+488.66/622.71\tabularnewline
+Stanislaus & 3k & 1 & 638.49 & 0.06 & 31.04 & 0.10/0.52 &
+739.45/1037.84\tabularnewline
+Stanislaus & 3k & 2 & 739.23 & 0.71 & 18.78 & 0.40/0.78 &
+433.53/405.25\tabularnewline
+Stanislaus & 3k & 3 & 761.64 & 0.86 & 30.10 & 0.22/0.41 &
+558.43/326.18\tabularnewline
+Stanislaus & 4k & 1 & 540.16 & -0.58 & 29.62 & 0.29/0.63 &
+507.61/711.66\tabularnewline
+Stanislaus & 4k & 2 & 528.07 & -0.66 & 30.54 & 0.18/0.56 &
+481.85/256.99\tabularnewline
+Stanislaus & 5k & 1 & 523.51 & -0.69 & 30.94 & 0.19/0.54 &
+388.89/336.06\tabularnewline
+Stanislaus & 5k & 2 & 523.95 & -0.68 & 29.94 & 0.21/0.44 &
+399.33/622.71\tabularnewline
+Sierra & 3k & 1 & 763.54 & 0.87 & 30.42 & 0.19/0.48 &
+651.46/850.04\tabularnewline
+Sierra & 3k & 2 & 767.64 & 0.90 & 30.05 & 0.20/0.77 &
+438.84/153.21\tabularnewline
+Sierra & 3k & 3 & 772.98 & 0.93 & 29.77 & 0.32/0.77 &
+511.26/459.62\tabularnewline
+Sierra & 4k & 1 & 841.25 & 1.38 & 30.43 & 0.54/0.51 &
+576.15/538.69\tabularnewline
+Sierra & 4k & 2 & 764.38 & 0.88 & 29.30 & 0.33/0.57 &
+499.43/854.98\tabularnewline
+Sierra & 4k & 3 & 688.34 & 0.38 & 26.39 & 0.48/0.59 &
+454.23/499.15\tabularnewline
+Sierra & 5k & 1 & 721.59 & 0.60 & 14.59 & 0.41/0.43 &
+631.30/716.60\tabularnewline
+Sierra & 5k & 2 & 709.96 & 0.52 & 27.53 & 0.53/0.74 &
+477.29/454.67\tabularnewline
+Sierra & 5k & 3 & 778.53 & 0.97 & 28.93 & 0.33/0.43 &
+569.44/484.33\tabularnewline
+Sequoia & 4k & 1 & 766.61 & 0.89 & 29.59 & 0.50/0.56 &
+365.81/607.88\tabularnewline
+Sequoia & 4k & 3 & 815.60 & 1.21 & 29.69 & 0.35/0.71 &
+433.35/306.41\tabularnewline
+Sequoia & 5k & 1 & 718.24 & 0.58 & 27.12 & 0.35/0.52 &
+364.01/444.79\tabularnewline
+Sequoia & 5k & 2 & 587.26 & -0.27 & 29.10 & 0.45/0.43 &
+478.31/499.15\tabularnewline
+Sequoia & 5k & 3 & 611.33 & -0.12 & 31.34 & 0.42/0.48 &
+348.68/494.21\tabularnewline
+Sequoia & 6k & 1 & 730.52 & 0.66 & 27.78 & 0.30/0.70 &
+433.43/360.77\tabularnewline
+Sequoia & 6k & 2 & 689.51 & 0.39 & 11.83 & 0.26/0.43 &
+699.04/934.06\tabularnewline
+Sequoia & 6k & 3 & 602.65 & -0.17 & 26.51 & 0.36/0.32 &
+535.54/691.89\tabularnewline
+\bottomrule
+\end{longtable}
 
 \begin{figure}
 \centering
 \includegraphics{../../figures/eldo_3k_3_point_cloud.png}
-\caption{Point cloud from Pix4D}
+\caption{A dense point cloud representing \textasciitilde{}40 hectares
+of forest is generated using Structure from Motion (SfM) processing of
+\textasciitilde{}1900 images. The dense point cloud z- position
+represents the ground elevation plus the vegetation height.}
+\end{figure}
+
+\begin{figure}
+\centering
+\includegraphics{../../figures/eldo_3k_3_dsm.png}
+\caption{The digital surface model (DSM) is a 2-dimensional
+representation of the dense point cloud generated using structure from
+motion (SfM) processing. The DSM represents the ground elevation plus
+the vegetation height.}
 \end{figure}
 
 \begin{figure}
 \centering
 \includegraphics{../../figures/eldo_3k_3_dtm.png}
-\caption{Example digital terrain model (DTM) resulting from processing
-the digital surface model using the cloth simulation filter algorithm
-(Zhang et al. 2016), which classifies points in the dense point cloud as
-``ground'' or ``not-ground'' and then interpolates the ``ground''
-elevation for the rest of the dense point cloud footprint. The DTM
-represents the ground elevation without any vegetation.}
+\caption{The digital terrain model (DTM) is generated by processing the
+dense point cloud using the cloth simulation filter algorithm (Zhang et
+al. 2016), which classifies points as ``ground'' or ``not-ground'' and
+then interpolates the ``ground'' elevation using Delaunay triangulation
+for the rest of the dense point cloud footprint. The DTM represents the
+ground elevation without any vegetation.}
 \end{figure}
 
 \begin{figure}
 \centering
 \includegraphics{../../figures/eldo_3k_3_chm.png}
-\caption{Example canopy height model (CHM) generated by subtracting the
+\caption{The canopy height model (CHM) is generated by subtracting the
 digital terrain model from the digital surface model. The CHM represents
 the height of all of the elevation above ground level.}
 \end{figure}
@@ -663,48 +747,70 @@ the height of all of the elevation above ground level.}
 \begin{figure}
 \centering
 \includegraphics{../../figures/eldo_3k_3_ttops.png}
-\caption{Tree top detection}
+\caption{Tree locations are detected using the \texttt{lmfx} (Roussel et
+al. 2019) treetop detection algorithm on the dense point cloud.}
 \end{figure}
 
 \begin{figure}
 \centering
 \includegraphics{../../figures/eldo_3k_3_crowns.png}
-\caption{Crown segmentation}
+\caption{Individual crowns are delineated using a marker controlled
+watershed segmentation algorithm (Meyer and Beucher 1990, Plowright
+2018) on the canopy height model (CHM) using the detected tree locations
+as a priority map. If the algorithm failed to delineate a crown for a
+tree that was identified in the tree detection step, a circular crown
+with a 0.5m buffer centered on point location of the detected tree was
+added as a crown. The crowns of snags were sometimes too small to be
+properly delineated, and the manually-created circular buffer}
 \end{figure}
 
 \begin{figure}
 \centering
 \includegraphics{../../figures/eldo_3k_3_live_dead.png}
-\caption{Live/dead classification}
+\caption{Each tree is classified as live or dead by extracting the pixel
+values from the 5 narrow bands of the Rededge3 camera (and 5 derived
+bands-- see methods) in the orthomosaic within each segmented tree crown
+of the detected trees, taking their mean value, and using those means to
+predict live/dead status with a boosted logistic regression previously
+trained on a hand-classified set of segmented crowns from across the
+study area.}
 \end{figure}
 
 \begin{figure}
 \centering
 \includegraphics{../../figures/eldo_3k_3_host_nonhost.png}
-\caption{Host/non-host classification}
+\caption{For each live tree, we classified its species using the same
+means of extracted pixel values across the 5 Rededge3 narrow bands (and
+5 derived bands) as predictors in a regularized discriminant analysis
+previously trained on a hand-classified set of segmented crowns from
+across the study area.}
 \end{figure}
 
 \begin{figure}
 \centering
 \includegraphics{../../figures/effect-sizes-halfeye.png}
-\caption{Halfeye plot showing posterior distributions of the effect
-sizes for the model}
-\end{figure}
-
-\begin{figure}
-\centering
-\includegraphics{../../figures/pipo_tpha_qmd_cwd_interaction_raster.png}
-\caption{Raster version of model results showing the primary influence
-of Ponderosa pine structure on the probability of ponderosa pine
-mortality, and the interaction across climatic water deficit}
+\caption{Posterior distributions of effect size from zero-inflated
+binomial model predicting the probability of ponderosa pine mortality in
+a 20m x 20m cell given forest structure characteristics of host trees
+and all trees within the cell, as well as a site-level climatic water
+deficit. The gray density distribution for each model covariate
+represents the density of the posterior distribution, the point
+underneath each density curve represents the median of the estimate, the
+bold interval surrounding the point estimate represents the 66\%
+credible interval, and the thin interval surrounding the point estimate
+represents the 95\% credible interval.}
 \end{figure}
 
 \begin{figure}
 \centering
 \includegraphics{../../figures/pipo_tpha_qmd_cwd_interaction.png}
-\caption{Line version with credible intervals showing primary influence
-of Ponderosa pine structure on the probability of ponderosa pine
-mortality, and the interaction across climatic water deficit}
+\caption{Line version of model results with 95\% credible intervals
+showing primary influence of ponderosa pine structure on the probability
+of ponderosa pine mortality, and the interaction across climatic water
+deficit. The ``larger trees'' line represents the quadratic mean
+diameter of ponderosa pine 0.7 standard deviations above the mean, and
+the ``smaller trees'' line represents the quadratic mean diameter of
+ponderosa pine 0.7 standard deviations below the mean.}
 \end{figure}
 
 \subsubsection{Tree detection}\label{tree-detection-1}
@@ -748,21 +854,23 @@ count of trees \textless{} 15m & 0.58 & 8.42 & -0.66 &
 \bottomrule
 \end{longtable}
 
-\subsubsection{Effect of local structure on western pine beetle
-severity}\label{effect-of-local-structure-on-western-pine-beetle-severity}
+\subsubsection{Effect of local structure and regional climate on western
+pine beetle
+severity}\label{effect-of-local-structure-and-regional-climate-on-western-pine-beetle-severity}
 
-We found no main effect of climatic water deficit on the probability of
-ponderosa pine mortality within each 20m x 20m cell.
+We detected no main effect of climatic water deficit on the probability
+of ponderosa pine mortality within each 20m x 20m cell.
 
-We found a strong effect of ponderosa pine local density, accounting for
-quadratic mean diameter, with greater ponderosa pine density increasing
-the probability of ponderosa pine mortality. Conversely, we found a
-generally negative effect of quadratic mean diameter of ponderosa pine
-on the probability of ponderosa mortality, suggesting that the western
-pine beetle attacked smaller trees, on average. There was a strong
-positive interaction between the climatic water deficit and ponderosa
-pine quadratic mean diameter, such that larger trees were more likely to
-increase the probability of ponderosa mortality in hotter, drier sites.
+We found a strong main effect of ponderosa pine local density,
+accounting for quadratic mean diameter of ponderosa pine, with greater
+density increasing the probability of ponderosa pine mortality.
+Conversely, we found a generally negative effect of quadratic mean
+diameter of ponderosa pine on the probability of ponderosa mortality,
+suggesting that the western pine beetle attacked smaller trees, on
+average. There was a strong positive interaction between the climatic
+water deficit and ponderosa pine quadratic mean diameter, such that
+larger trees were more likely to increase the probability of ponderosa
+mortality in hotter, drier sites.
 
 We found negative main effects of overall tree density and overall
 quadratic mean diameter. There was a positive interaction between these
@@ -776,11 +884,70 @@ autocorrelation in the probability of ponderosa pine mortality at each
 site, accounting for forest structure and environmental factors. By
 fitting a separate approximate Gaussian process for each site on the
 interacting variables of the x- and y- position, we measured the spatial
-covariance inherent in the data, accounting for other factors.
+covariance inherent in the data, accounting for other factors. \#\#
+Discussion
 
-(Seidl et al. 2015) (Preisler et al. 2017)
+\subsubsection{Closer spacing between potential host trees facilitates
+dispersal}\label{closer-spacing-between-potential-host-trees-facilitates-dispersal}
 
-\subsection{Discussion}\label{discussion}
+If this drives mortality patterns, then we'd expect the local density of
+ponderosa pine trees, accounting for other variables, to have a strong
+positive effect.
+
+\subsubsection{Host preference for large
+trees}\label{host-preference-for-large-trees}
+
+If this drives mortality patterns, then we'd expect the quadratic mean
+diameter of ponderosa pine trees, accounting for other variables, to
+have a strong positive effect.
+
+\subsubsection{Denser forests augment pheromone
+communication}\label{denser-forests-augment-pheromone-communication}
+
+If this drives mortality patterns, then we'd expect the local density of
+all trees, accounting for other variables, to have a strong positive
+effect.
+
+\subsubsection{Tree crowding leads to greater average water stress per
+tree}\label{tree-crowding-leads-to-greater-average-water-stress-per-tree}
+
+If this drives mortality patterns, then we'd expect the quadratic mean
+dimater of all trees, accounting for other factors, to have a strong
+positive effect.
+
+\subsubsection{Interaction between host density and host
+size}\label{interaction-between-host-density-and-host-size}
+
+A positive coefficient would indicate a combined effect of WPB
+preference for large trees and nearby host availability.
+
+\subsubsection{Interaction between all tree density and all tree
+size}\label{interaction-between-all-tree-density-and-all-tree-size}
+
+A positive coefficient would indicate a combined effect of tree crowding
+and pheromone communication enhancement.
+
+\subsubsection{Implications of forest structure/regional climate
+interactions}\label{implications-of-forest-structureregional-climate-interactions}
+
+We found that the probability of ponderosa pine mortality generally
+increased with local host availability (host density), but also
+interacted with both host size and regional climate such that the role
+of tree size became increasingly important in more climatically extreme
+sites. A smaller average tree size led to a lower probability of
+ponderosa mortality in cool/wet sites and a larger average tree size led
+to a greater probability of ponderosa mortality in hot/dry sites. These
+mortality patterns highlight a possible distinction in behavior between
+the recent western bark beetle activity across the gradient of climatic
+water deficit. Even in the most highly impacted forest stands (because
+our study sites were selected conditional on there being high levels of
+western pine beetle activity), there is still a detectable effect of
+tree size such that the smaller (presumably weaker) trees are getting
+killed in cooler/wetter sites, and the larger (presumably more
+well-defended) trees are getting killed more in the hotter/drier sites.
+So while mortality is high everywhere, there does appear to be a
+difference in the beetle choosiness across the climatic water deficit
+gradient.
 
 \subsubsection{Similarities and differences with Fettig et al.
 (2019)}\label{similarities-and-differences-with-fettig2019}
@@ -807,67 +974,36 @@ probability of ponderosa pine mortality.
 \subsubsection{Broader context around field
 plots}\label{broader-context-around-field-plots}
 
-We surveyed 9 square kilometers of forest representing XXXXXX trees
-along a broad gradient. Site selection and small plot size can influence
-inference. For instance, Fettig et al. (2019) reported statistically
-undetectable differences in overall mortality in their plot network
-across 4 national forests. By expanding the hectarage surveyed by a
-factor of 200, we detected dramatic differences in overall mortality.
+We surveyed 9 square kilometers of forest representing
+\textasciitilde{}450,000 trees along a broad gradient. Site selection
+and small plot size can influence inference. For instance, Fettig et al.
+(2019) reported statistically undetectable differences in overall
+mortality in their plot network across 4 national forests. By expanding
+the hectarage surveyed by a factor of 200, we detected dramatic
+differences in overall mortality.
 
-This is about more than sample size. This is also about capturing the
-local disturbance phenomenon.
+This is about more than sample size (though that helps). This is also
+about capturing the local disturbance phenomenon.
 
-\subsubsection{Closer spacing between potential host trees facilitates
-dispersal}\label{closer-spacing-between-potential-host-trees-facilitates-dispersal}
+\subsubsection{Implications for future forest
+structure}\label{implications-for-future-forest-structure}
 
-If this drives mortality patterns, then we'd expect the count of
-ponderosa pine trees, accounting for other variables, to have a strong
-positive effect.
+We have demonstrated that forest structure (local host density and size)
+affected the cumulative severity of the western pine beetle in the
+Sierra Nevada in the 2012 to 2015 drought and its aftermath. Clearly,
+this forest insect disturbance has reciprically impacted the forest
+structure, with uncertain consequences for long-term forest dynamics.
 
-\subsubsection{Host preference for large
-trees}\label{host-preference-for-large-trees}
-
-If this drives mortality patterns, then we'd expect the quadratic mean
-diameter of ponderosa pine trees, accounting for other variables, to
-have a strong positive effect.
-
-\subsubsection{Denser forests augment pheromone
-communication}\label{denser-forests-augment-pheromone-communication}
-
-If this drives mortality patterns, then we'd expect the count of all
-trees, accounting for other variables, to have a strong positive effect.
-
-\subsubsection{Tree crowding leads to greater average water stress per
-tree}\label{tree-crowding-leads-to-greater-average-water-stress-per-tree}
-
-If this drives mortality patterns, then we'd expect the quadratic mean
-dimater of all trees, accounting for other factors, to have a strong
-positive effect.
-
-\subsubsection{Interaction between host density and host
-size}\label{interaction-between-host-density-and-host-size}
-
-A positive coefficient would indicate a combined effect of WPB
-preference for large trees and nearby host availability.
-
-\subsubsection{Interaction between all tree density and all tree
-size}\label{interaction-between-all-tree-density-and-all-tree-size}
-
-A positive coefficient would indicate a combined effect of tree crowding
-and pheromone communication enhancement.
-
-\subsubsection{Interactions with climatic water
-deficit}\label{interactions-with-climatic-water-deficit}
-
-Are any of the above mechanisms exacerbated by water stress of the
-trees?
+Small trees are getting killed in cooler/wetter sites, larger trees
+getting killed in hotter/drier sites. Perhaps the cooler/wetter sites
+are resisting even this massive disturbance event?
 
 \subsubsection{Spatial effect}\label{spatial-effect}
 
 The western pine beetle is known to exhibit strong aggregation and
 anti-aggregation behavior arising from its pheromone communication, and
 thus it is likely that the measured spatial covariance in this study is
-attributable to the magnitude of this effect at each site.
+attributable in part to the magnitude of this effect at each site.
 
 Some studies have suggested that ``outbreak'' conditions are
 distinguishable by clustered tree mortality, but this is perhaps
@@ -882,14 +1018,31 @@ We won't interpret this measure of contagion, because the uncertainties
 in this particular study are too great (tree detection, species
 classification, dead trees all assumed to be WPB hosts, didn't account
 for topographic effects which could also manifest as part of this
-spatial covariance process). But suggest that this could be a meaningful
-and quantifiable
+spatial covariance process). We do suggest that this could be a
+meaningful and quantifiable means of assessing bark beetle ``stage of
+outbreak''.
+
+\subsubsection{Future spatial directions (will cut this; here for now so
+I can write it down
+elsewhere)}\label{future-spatial-directions-will-cut-this-here-for-now-so-i-can-write-it-down-elsewhere}
+
+Perhaps could also compare relative effect of individual tree spacing
+(Voronoi polygon area) with the length scale parameter at a certain site
+to get at a similar question. A big voronoi polygon area effect and a
+short covariance kernel tells us that it's a water stress effect-- a
+crowded tree gets attacked regardless of whether nearby trees were
+attacked. A small voronoi polygon area effect and a long covariance
+kernel tells us that the mortality is patterned more based on there
+being spillover from nearby attacked neighbors instead of how crowded
+any given tree is. I expect we might see different relative magnitudes
+of voronoi polygon area and covariance kerenel effects depending on CWD.
 
 \subsubsection{Important considerations}\label{important-considerations}
 
 Cumulative effect of elevated insect activity, as mortality was spread
 out over 5 years and we surveyed at the end. All the detected dead trees
-were considered ponderosa pine-- we know this is wrong.'
+were considered ponderosa pine-- we know this is wrong. Only about 3 out
+of 4 dead trees in Fettig et al. (2019) were ponderosa.
 
 \subsubsection{Room for improvement}\label{room-for-improvement}
 
@@ -903,28 +1056,15 @@ were considered ponderosa pine-- we know this is wrong.'
   having spectral overlap with more widely deployed instrumentation
   (e.g., Landsat).
 \item
-  Better tree detection using
+  Better tree detection using machine learning approaches
+\item
+  Our live/dead classifier works pretty well.
+\item
+  Our species classifier could improve. Perhaps also using machine
+  learning approaches.
 \end{itemize}
 
-\subsubsection{Future directions}\label{future-directions}
-
-My goal is to tease apart the relative role of environmental drivers
-versus behavioral drivers of bark beetle-induced tree mortality. I think
-teasing these apart will help with inference about the mechanism
-underlying the effect of forest structure on disturbance severity.
-Crowded forests means trees are both water stressed and are closer
-targets for new attacks {[}i.e., shorter dispersal needed to attack the
-next tree{]}, and I think comparing the ``voronoi polygon area'' effect
-with the ``spatial covariance of mortality kernel'' effect across sites
-will tell us whether it's the water stress or the smaller dispersal
-requirements driving mortality patterns. A big voronoi polygon area
-effect and a short covariance kernel tells us that it's a water stress
-effect-- a crowded tree gets attacked regardless of whether nearby trees
-were attacked. A small voronoi polygon area effect and a long covariance
-kernel tells us that the mortality is patterned more based on there
-being spillover from nearby attacked neighbors instead of how crowded
-any given tree is. I expect we might see different relative magnitudes
-of voronoi polygon area and covariance kerenel effects depending on CWD.
+(Seidl et al. 2015) (Preisler et al. 2017)
 
 \subsection*{References}\label{references}
 \addcontentsline{toc}{subsection}{References}
@@ -1121,6 +1261,11 @@ Raffa, K. F., B. H. Aukema, B. J. Bentz, A. L. Carroll, J. A. Hicke, M.
 G. Turner, and W. H. Romme. 2008. Cross-scale Drivers of Natural
 Disturbances Prone to Anthropogenic Amplification: The Dynamics of Bark
 Beetle Eruptions. BioScience 58:501--517.
+
+\hypertarget{ref-raffa2015}{}
+Raffa, K. F., J.-C. Grégoire, and B. Staffan Lindgren. 2015. Natural
+History and Ecology of Bark Beetles. Pages 1--40 \emph{in} Bark Beetles.
+Elsevier.
 
 \hypertarget{ref-rouse1973}{}
 Rouse, W., R. H. Haas, W. Deering, and J. A. Schell. 1973. MONITORING
