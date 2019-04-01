@@ -67,18 +67,19 @@ pipo_pct_of_all_dead <-
 ```{r site_characteristics_get_data}
 site_characteristics <- 
   read_csv(here::here("analyses/analyses_output/summarized-non-spatial-site-data.csv")) %>% 
-  tidyr::separate(site, into = c("Forest", "Elevation band", "Rep"), remove = TRUE) %>% 
-  dplyr::mutate(Mortality = paste(sprintf("%0.2f", prop_mortality), sprintf("%0.2f", ground_mortality), sep = "/"),
-                `Density (tpha)` = paste(sprintf("%0.2f", air_tpha), sprintf("%0.2f", ground_tpha), sep = "/")) %>% 
+  tidyr::separate(site, into = c("Forest", "Elevation band", "Rep"), remove = FALSE) %>% 
+  dplyr::mutate(`Mortality (aerial/ground)` = paste(sprintf("%0.2f", prop_mortality), sprintf("%0.2f", ground_mortality), sep = "/"),
+                `Density (tpha; aerial/ground)` = paste(sprintf("%0.2f", air_tpha), sprintf("%0.2f", ground_tpha), sep = "/")) %>% 
   dplyr::rename(`CWD (mm)` = site_cwd,
                 `CWD (z-score)` = site_cwd_zscore,
-                `Survey area (ha)` = buffered_survey_area) %>% 
+                `Survey area (ha)` = buffered_survey_area,
+                Site = site) %>% 
   dplyr::mutate(Forest = case_when(Forest == "eldo" ~ "Eldorado",
                                    Forest == "stan" ~ "Stanislaus",
                                    Forest == "sier" ~ "Sierra",
                                    Forest == "sequ" ~ "Sequoia")) %>% 
   dplyr::mutate(Forest = factor(Forest, levels = c("Eldorado", "Stanislaus", "Sierra", "Sequoia"))) %>% dplyr::arrange(Forest, `Elevation band`, Rep) %>% 
-  dplyr::select(Forest, `Elevation band`, Rep, `CWD (mm)`, `CWD (z-score)`, `Survey area (ha)`, Mortality, `Density (tpha)`)
+  dplyr::select(Site, `CWD (mm)`, `CWD (z-score)`, `Survey area (ha)`, `Mortality (aerial/ground)`, `Density (tpha; aerial/ground)`)
 # Need to say it's air/ground measurements for mortality and density
 ```
 
@@ -281,7 +282,7 @@ All data are available via the Open Science Framework. Statistical analyses were
 ## Results
 
 ```{r site_characteristics, echo = FALSE, include = TRUE}
-kable(site_characteristics, digits = 2, format = "pandoc", caption = "Site characteristics for each of the 32 sites.")
+kable(site_characteristics, digits = 2, format = "pandoc", caption = "Site characteristics for each of the 32 sites. The site name consists of the forest name, elevation band, and rep separated by an underscore. The Eldorado National Forest is 'eldo', the Stanislaus National Forest is 'stan', the Sierra National Forest is 'sier', and the Sequoia National Forest is 'sequ'. The elevation band represents the lower bounds (in feet) of the 1000 foot elevation bands. Thus '3k' implies that site was located between 3,000 and 4,000 feet. Aerially detected mortality and density of the whole site is presented along with the mortality and density calculated from the ground data (aerial / ground).")
 ```
 
 ![A dense point cloud representing ~40 hectares of forest is generated using Structure from Motion (SfM) processing of ~1900 images. The dense point cloud z- position represents the ground elevation plus the vegetation height.](../../figures/eldo_3k_3_point_cloud.png)
