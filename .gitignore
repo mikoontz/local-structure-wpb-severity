@@ -38,3 +38,4 @@ data/features/jepcodes-v7.kml
 analyses/analyses_output/*.rds
 analyses/analyses_output/model-predictions.csv
 analyses/analyses_output/newdata-for-model-predictions.csv
+data/features/S_USA.AdministrativeForest/*

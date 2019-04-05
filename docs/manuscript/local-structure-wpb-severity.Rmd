@@ -2,20 +2,18 @@
 bibliography: ../docs_carpentry/local-structure-wpb-severity.bib
 csl: ../docs_carpentry/ecological-applications.csl
 params:
-  title: Effect of local host density and size forest insect severity depends on climatic water deficit
+  title: Effect of local host density and size on forest insect severity depends on climatic water deficit
   author: |
     Michael J. Koontz^1,2,\*^,
     Andrew M. Latimer^1,2^,
     Leif A. Mortenson^3^,
     Christopher J. Fettig^3^,
-    Constance I. Millar^4^,
-    Malcolm P. North^1,2,5^
+    Malcolm P. North^1,2,4^
   affiliation: |
     ^1^Graduate Group in Ecology, University of California, Davis, CA, USA  
     ^2^Department of Plant Sciences, University of California, Davis, CA, USA  
     ^3^USDA Forest Service, Pacific Southwest Research Station, Placerville, CA, USA  
-    ^4^USDA Forest Service, Pacific Southwest Research Station, Albany, CA, USA  
-    ^5^USDA Forest Service, Pacific Southwest Research Station, Davis, CA, USA
+    ^4^USDA Forest Service, Pacific Southwest Research Station, Davis, CA, USA
   correspondence: |
     michael.koontz@colorado.edu
   date_generated: !r format(Sys.Date(), "%B %d, %Y")
@@ -92,17 +90,29 @@ site_characteristics <-
 # Need to get the accuracy and kappa for the live/dead and species classification
 ```
 
-```{r pp_check_visuals}
-# Could plot of the posterior predictive check and the zoomed in version at 0. But this feels more like plotting the diagnostic plots for some statistics test-- not that generally useful. Just a check for ourselves.
+```{r map_of_sites}
+# Need a map of the sites and the locations of the National Forests that we sampled
 ```
 
-```{r summary_of_model}
-# Would be good to have a summary table of the model
-# Triptych of low, average, and high CWD in different facets
-# pondo qmd vs. pondo density with color of point representing probability of
-# pondo mortality
-# all tree qmd vs. all tree density with color of point representing Pr(pipo mortality)
+```{r orthophoto}
+# Include an example orthophoto
+# next to it an example of the orange X zoomed in?
 ```
+
+```{r rasterized_view}
+# include a rasterized depiction of the same site?
+```
+
+```{r feet_to_meters}
+# 3000 = 914.4
+# 4000 = 1219.2
+# 5000 = 1524
+# 6000 = 1828
+# 7000 = 2133.6
+```
+
+
+
 
 #`r params$title`
 
@@ -118,12 +128,14 @@ Date report generated: `r params$date_generated`
 
 Bark beetles are a primary mortality agent of trees in western U.S. forests, and the recent Californian hot drought of 2012 to 2015 created favorable conditions for bark beetle-induced tree mortality throughout the yellow pine/mixed-conifer forest system in the Sierra Nevada mountain range. The western pine beetle, *Dendroctonus brevicomis*, is the forest insect that is largely responsible for the especially common deaths of its main host in California, the ponderosa pine tree (*Pinus ponderosa*). While previous work has demonstrated a link between climate conditions related to tree water stress and forest density on the severity of the western pine beetle disturbance, it remains challenging to disentangle the relative effects of these variables. Further, forest density can affect western pine beetle behavior in a number of ways, which creates a need for more information on complex forest structure (including local density, tree size, and the heterogeneity of these variables across a forest stand) to uncover the most likely mechanism.
 
-We conducted aerial surveys over an established network of 32 permanent vegetation monitoring plots along a 350km and 1000m elevation gradient in the Sierra Nevada mountain range of California using a small, unhumanned aerial system (sUAS aka drone) equipped with a narrow-band multispectral camera. Using Structure from Motion (SfM) processing on over 450,000 images, we reconstructed the complex vegetation structure of over 9 square kilometers of forest that experienced ponderosa pine mortality as a result of western pine beetle activity. Using this dataset, we built a model to predict the probability of ponderosa pine mortality as a function of forest structure variables (including ponderosa pine density and mean size, as well as all tree density and mean size), an environmental gradient of climatic water deficit, and a Gaussian process to capture spatial covariance in the response. We found that host tree 
+We conducted aerial surveys over an established network of 32 permanent vegetation monitoring plots along a 350km and 1000m elevation gradient in the Sierra Nevada mountain range of California using a small, unhumanned aerial system (sUAS aka drone) equipped with a narrow-band multispectral camera. Using Structure from Motion (SfM) processing on over 450,000 images, we reconstructed the complex vegetation structure of over 9 square kilometers of forest that experienced ponderosa pine mortality as a result of western pine beetle activity. Using this dataset, we built a model to predict the probability of ponderosa pine mortality as a function of forest structure variables (including ponderosa pine density and mean size, as well as all tree density and mean size), an environmental gradient of climatic water deficit, and a Gaussian process to capture spatial covariance in the response.
 
 Data from small, unhummaned aerial systems (sUAS) can provide important context surrounding ground plots, which enables inference and generates new insights into ecological processes.
 sUAS are best-suited to enhancing ground data, which implies that we need not abandon lessons learned from sound experimental design (i.e., a network of plots along a gradient is still a powerful way to use sUAS data).
 
-Host availability for aggressive bark beetles appears to have played the dominant role in increasing the probability of ponderosa pine mortality in the most hard-hit forest stands during the cumulative mortality event of 2012 to 2018. Host size played a role in its interaction with environmental condition-- climatic water deficit-- such that smaller trees increased the probability of ponderosa mortality at cool/wet sites, while larger trees increased the probability of ponderosa mortality at hot/dry sites. 
+Host availability for aggressive bark beetles appears to have played the dominant role in increasing the probability of ponderosa pine mortality in the most hard-hit forest stands during the cumulative mortality event of 2012 to 2018. Host size played a role in its interaction with environmental condition-- climatic water deficit-- such that numerous and smaller host trees increased the probability of ponderosa mortality at cool/wet sites, while numerous and larger host trees increased the probability of ponderosa mortality at hot/dry sites.
+
+Our results corroborate the role of host tree density and regional climate conditions on the severity of forest insect disturbance, but also highlight the importance of complex forest structure (i.e., both host density and average host size) in its interaction with regional climate. Thus, the future forest structure may be affected differently by a large-scale forest insect disturbance for the same host tree/forest insect pairing, and during the same extreme drought, but across a gradient of regional climate conditions.
 
 ## Introduction
 
@@ -131,7 +143,7 @@ Aggressive bark beetles dealt the final blow to many of the nearly 150 million t
 
 Forests in California’s Sierra Nevada region are characterized by regular bark beetle disturbances that interact with forest structure. Bark beetles shape forest structure as they sporadically kill weakened trees under normal conditions, or wide swaths of even healthy trees under outbreak conditions [@raffa2015]. Forest structure also strongly influences bark beetle activity. Low-density forests are less prone to bark beetle attacks [@fettig2012b], but resolving the mechanism underlying this observation requires a more nuanced view of forest structure. For instance, a low-density forest may resist attack because longer dispersal distances are required for successful colonization of new hosts, because widely-spaced trees experience less competition for water resources and thus average tree vigor is greater [@hayes2009], or because its wider canopy openings disrupt pheromone signaling between beetles [@fettig2012b].
 
-Density is often a coarse gauge of the size and spatial distribution of trees– the forest structure– with which bark beetles interact [@raffa2008]. Climate change mitigation strategies emphasize reducing tree densities [@north2015; @young2017], but understanding the optimal scale and pattern of tree distribution that can mitigate bark beetle outbreaks will be vital for predicting how California forests may respond to these interventions. Recent research has shown a strong link between complex forest structure and forest resilience, but measuring this complexity generally requires expensive equipment or labor-intensive field surveys [@larson2012; @kane2014]. These barriers restrict survey frequency and extent, which limits insights into phenomena like bark beetle outbreaks that rapidly emerge over weeks to months but have long-lasting effects on forest conditions. Further, the vast spatial extent and environmental gradient of mortality [@usdafs2019; @young2017] challenges our ability to simultaneously consider how environmental conditions may interact with local forest structure to produce patterns of insect activity. Small, unhumanned aerial systems (sUAS) enable fast and relatively cheap remote imaging over dozens of hectares of forest, which can be used to determine both forest structure and tree condition at the individual tree scale [@morris2017; @shiklomanov2019].
+Tree density is often a coarse gauge of the size and spatial distribution of trees– the forest structure– with which bark beetles interact [@raffa2008]. Climate change mitigation strategies emphasize reducing tree densities [@north2015; @young2017], but understanding the optimal scale and pattern of tree distribution that can mitigate bark beetle outbreaks will be vital for predicting how California forests may respond to these interventions. Recent research has shown a strong link between complex forest structure and forest resilience, but measuring this complexity generally requires expensive equipment or labor-intensive field surveys [@larson2012; @kane2014]. These barriers restrict survey frequency and extent, which limits insights into phenomena like bark beetle outbreaks that rapidly emerge over weeks to months but have long-lasting effects on forest conditions. Further, the vast spatial extent and environmental gradient of mortality [@usdafs2019; @young2017] challenges our ability to simultaneously consider how environmental conditions may interact with local forest structure to produce patterns of insect activity. Small, unhumanned aerial systems (sUAS) enable fast and relatively cheap remote imaging over dozens of hectares of forest, which can be used to determine both forest structure and tree condition at the individual tree scale [@morris2017; @shiklomanov2019].
 
 We used ultra-high resolution remote sensing data from a small, unhumanned aerial system over a network of 32 sites in the Sierra Nevada spanning 1000m of elevation and 350km of latitude and covering a total of 9 square kilometers of forest to ask how fine-scale forest structure affected the probability of tree mortality during the cumulative mortality event of 2012 to 2018. We asked:
 
@@ -155,7 +167,9 @@ fig_nums(name = "fig-")
 
 The study sites comprise mostly ponderosa pine trees, *Pinus ponderosa*, whose primary bark beetle predator in California is the western pine beetle (WPB), *Dendroctonus brevicomis*. The WPB is an aggressive bark beetle, meaning it must attack and kill live trees in order to successfully reproduce [@raffa2008]. Pioneer WPBs disperse to a new host tree, determine the host's susceptibility to attack, and use pheromone signals to attract other WPBs. The attracted WPBs mass attack the tree by boring into its inner bark, laying eggs, and dying, leaving their offspring to develop inside the doomed tree before themselves dispersing [@raffa2008]. Small WPB populations prefer weakened trees but large populations can overwhelm the defense mechanisms of even healthy trees. Successful attacks on large, healthy trees are boons to bark beetle fecundity and trigger outbreaks in which populations explode and massive tree mortality occurs. In California, the WPB can have 3 generations in a single year giving it a greater potential to spread rapidly through forests than its more infamous congener, the mountain pine beetle, *Dendroctonus ponderosa* (MPB).
 
-We built our study on 180 vegetation monitoring plots at 36 sites established between 2016 and 2017 [@fettig2019]. These established plots are located in beetle-attacked, mixed-conifer forests across the Eldorado, Stanislaus, Sierra and Sequoia National Forests across an elevation gradient (3000-4000 feet, 4000-5000 feet, and 5000+ feet above sea level) and have variable forest structure and disturbance history. Plot locations were selected specifically in areas with >40% ponderosa pine basal area and >10% ponderosa pine mortality. The 0.04ha circular plots are clustered along transects in groups of 5, with between 80 and 200m between each plot. All trees within the plot were assessed as dead or alive. The stem location of all trees was mapped relative to the center of each plot using azimuth/distance measurements. Tree identity to species and diameter at breast height (dbh) were recorded if dbh was greater than 6.35cm. During the spring and early summer of 2018, all field plots were revisited to assess whether dead trees had fallen.
+We built our study on 180 vegetation/forest insect monitoring plots at 36 sites established between 2016 and 2017 [@fettig2019]. These established plots were located in beetle-attacked, mixed-conifer forests across the Eldorado, Stanislaus, Sierra and Sequoia National Forests and were stratified by elevation (914-1219 meters [3000-4000 feet], 1219-1524 meters [4000-5000 feet], 1524-1828 meters [5000-6000 feet] above sea level). In the Sequoia National Forest, the National Forest that is furthest south, plots were stratified with the lowest elevation band between 1219 and 1524 (4000-5000 feet) and extended to an upper elevation band of 1828-2133 (6000-7000 feet) to capture a more similar forest community composition as at the more northern National Forests. The sites have variable forest structure and disturbance history and plot locations were selected specifically in areas with >40% ponderosa pine basal area and >10% ponderosa pine mortality. The 0.04ha circular plots are clustered along transects in groups of 5, with between 80 and 200m between each plot. All trees within the plot were assessed as dead or alive. The stem location of all trees was mapped relative to the center of each plot using azimuth/distance measurements. Tree identity to species and diameter at breast height (dbh) were recorded if dbh was greater than 6.35cm. During the spring and early summer of 2018, all field plots were revisited to assess whether dead trees had fallen [@fettig2019].
+
+![Geographic extent of the study.](../../figures/study-geographic-extent-inset.png)
 
 ### Instrumentation
 
@@ -283,7 +297,7 @@ All data are available via the Open Science Framework. Statistical analyses were
 ## Results
 
 ```{r site_characteristics, echo = FALSE, include = TRUE}
-kable(site_characteristics, digits = 2, format = "pandoc", caption = "Site characteristics for each of the 32 sites. The site name consists of the forest name, elevation band, and rep separated by an underscore. The Eldorado National Forest is 'eldo', the Stanislaus National Forest is 'stan', the Sierra National Forest is 'sier', and the Sequoia National Forest is 'sequ'. The elevation band represents the lower bounds (in feet) of the 1000 foot elevation bands. Thus '3k' implies that site was located between 3,000 and 4,000 feet. Aerially detected mortality and density of the whole site is presented along with the mortality and density calculated from the ground data (aerial / ground).")
+kable(site_characteristics, digits = 2, format = "pandoc", caption = "Site characteristics for each of the 32 sites. The site name consists of the forest name, elevation band, and rep separated by an underscore. The Eldorado National Forest is 'eldo', the Stanislaus National Forest is 'stan', the Sierra National Forest is 'sier', and the Sequoia National Forest is 'sequ'. The elevation band represents the lower bounds of the 305 meter (1000 foot) elevation bands in feet. Thus '3k' implies that site was located between 3,000 and 4,000 feet (914-1219 meters). Aerially detected mortality and density of the whole site is presented along with the mortality and density calculated from the ground data (aerial / ground). The density is measured in trees per hectare (tpha).")
 ```
 
 ![A dense point cloud representing ~40 hectares of forest is generated using Structure from Motion (SfM) processing of ~1900 images. The dense point cloud z- position represents the ground elevation plus the vegetation height.](../../figures/eldo_3k_3_point_cloud.png)

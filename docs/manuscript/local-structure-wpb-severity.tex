@@ -104,14 +104,14 @@
 
 \begin{document}
 
-\section{Effect of local host density and size forest insect severity
+\section{Effect of local host density and size on forest insect severity
 depends on climatic water
-deficit}\label{effect-of-local-host-density-and-size-forest-insect-severity-depends-on-climatic-water-deficit}
+deficit}\label{effect-of-local-host-density-and-size-on-forest-insect-severity-depends-on-climatic-water-deficit}
 
 Michael J. Koontz\textsuperscript{1,2,*}, Andrew M.
 Latimer\textsuperscript{1,2}, Leif A. Mortenson\textsuperscript{3},
-Christopher J. Fettig\textsuperscript{3}, Constance I.
-Millar\textsuperscript{4}, Malcolm P. North\textsuperscript{1,2,5}
+Christopher J. Fettig\textsuperscript{3}, Malcolm P.
+North\textsuperscript{1,2,4}
 
 \textsuperscript{1}Graduate Group in Ecology, University of California,
 Davis, CA, USA\\
@@ -120,13 +120,11 @@ California, Davis, CA, USA\\
 \textsuperscript{3}USDA Forest Service, Pacific Southwest Research
 Station, Placerville, CA, USA\\
 \textsuperscript{4}USDA Forest Service, Pacific Southwest Research
-Station, Albany, CA, USA\\
-\textsuperscript{5}USDA Forest Service, Pacific Southwest Research
 Station, Davis, CA, USA
 
 \textsuperscript{*}Correspondence: \texttt{michael.koontz@colorado.edu}
 
-Date report generated: April 03, 2019
+Date report generated: April 05, 2019
 
 \subsection{Abstract}\label{abstract}
 
@@ -159,8 +157,7 @@ dataset, we built a model to predict the probability of ponderosa pine
 mortality as a function of forest structure variables (including
 ponderosa pine density and mean size, as well as all tree density and
 mean size), an environmental gradient of climatic water deficit, and a
-Gaussian process to capture spatial covariance in the response. We found
-that host tree
+Gaussian process to capture spatial covariance in the response.
 
 Data from small, unhummaned aerial systems (sUAS) can provide important
 context surrounding ground plots, which enables inference and generates
@@ -173,10 +170,19 @@ Host availability for aggressive bark beetles appears to have played the
 dominant role in increasing the probability of ponderosa pine mortality
 in the most hard-hit forest stands during the cumulative mortality event
 of 2012 to 2018. Host size played a role in its interaction with
-environmental condition-- climatic water deficit-- such that smaller
-trees increased the probability of ponderosa mortality at cool/wet
-sites, while larger trees increased the probability of ponderosa
-mortality at hot/dry sites.
+environmental condition-- climatic water deficit-- such that numerous
+and smaller host trees increased the probability of ponderosa mortality
+at cool/wet sites, while numerous and larger host trees increased the
+probability of ponderosa mortality at hot/dry sites.
+
+Our results corroborate the role of host tree density and regional
+climate conditions on the severity of forest insect disturbance, but
+also highlight the importance of complex forest structure (i.e., both
+host density and average host size) in its interaction with regional
+climate. Thus, the future forest structure may be affected differently
+by a large-scale forest insect disturbance for the same host tree/forest
+insect pairing, and during the same extreme drought, but across a
+gradient of regional climate conditions.
 
 \subsection{Introduction}\label{introduction}
 
@@ -205,27 +211,28 @@ water resources and thus average tree vigor is greater (Hayes et al.
 2009), or because its wider canopy openings disrupt pheromone signaling
 between beetles (Fettig 2012).
 
-Density is often a coarse gauge of the size and spatial distribution of
-trees-- the forest structure-- with which bark beetles interact (Raffa
-et al. 2008). Climate change mitigation strategies emphasize reducing
-tree densities (North et al. 2015, Young et al. 2017), but understanding
-the optimal scale and pattern of tree distribution that can mitigate
-bark beetle outbreaks will be vital for predicting how California
-forests may respond to these interventions. Recent research has shown a
-strong link between complex forest structure and forest resilience, but
-measuring this complexity generally requires expensive equipment or
-labor-intensive field surveys (Larson and Churchill 2012, Kane et al.
-2014). These barriers restrict survey frequency and extent, which limits
-insights into phenomena like bark beetle outbreaks that rapidly emerge
-over weeks to months but have long-lasting effects on forest conditions.
-Further, the vast spatial extent and environmental gradient of mortality
-(Young et al. 2017, USDAFS 2019) challenges our ability to
-simultaneously consider how environmental conditions may interact with
-local forest structure to produce patterns of insect activity. Small,
-unhumanned aerial systems (sUAS) enable fast and relatively cheap remote
-imaging over dozens of hectares of forest, which can be used to
-determine both forest structure and tree condition at the individual
-tree scale (Morris et al. 2017, Shiklomanov et al. 2019).
+Tree density is often a coarse gauge of the size and spatial
+distribution of trees-- the forest structure-- with which bark beetles
+interact (Raffa et al. 2008). Climate change mitigation strategies
+emphasize reducing tree densities (North et al. 2015, Young et al.
+2017), but understanding the optimal scale and pattern of tree
+distribution that can mitigate bark beetle outbreaks will be vital for
+predicting how California forests may respond to these interventions.
+Recent research has shown a strong link between complex forest structure
+and forest resilience, but measuring this complexity generally requires
+expensive equipment or labor-intensive field surveys (Larson and
+Churchill 2012, Kane et al. 2014). These barriers restrict survey
+frequency and extent, which limits insights into phenomena like bark
+beetle outbreaks that rapidly emerge over weeks to months but have
+long-lasting effects on forest conditions. Further, the vast spatial
+extent and environmental gradient of mortality (Young et al. 2017,
+USDAFS 2019) challenges our ability to simultaneously consider how
+environmental conditions may interact with local forest structure to
+produce patterns of insect activity. Small, unhumanned aerial systems
+(sUAS) enable fast and relatively cheap remote imaging over dozens of
+hectares of forest, which can be used to determine both forest structure
+and tree condition at the individual tree scale (Morris et al. 2017,
+Shiklomanov et al. 2019).
 
 We used ultra-high resolution remote sensing data from a small,
 unhumanned aerial system over a network of 32 sites in the Sierra Nevada
@@ -281,13 +288,19 @@ the WPB can have 3 generations in a single year giving it a greater
 potential to spread rapidly through forests than its more infamous
 congener, the mountain pine beetle, \emph{Dendroctonus ponderosa} (MPB).
 
-We built our study on 180 vegetation monitoring plots at 36 sites
-established between 2016 and 2017 (Fettig et al. 2019). These
-established plots are located in beetle-attacked, mixed-conifer forests
-across the Eldorado, Stanislaus, Sierra and Sequoia National Forests
-across an elevation gradient (3000-4000 feet, 4000-5000 feet, and 5000+
-feet above sea level) and have variable forest structure and disturbance
-history. Plot locations were selected specifically in areas with
+We built our study on 180 vegetation/forest insect monitoring plots at
+36 sites established between 2016 and 2017 (Fettig et al. 2019). These
+established plots were located in beetle-attacked, mixed-conifer forests
+across the Eldorado, Stanislaus, Sierra and Sequoia National Forests and
+were stratified by elevation (914-1219 meters {[}3000-4000 feet{]},
+1219-1524 meters {[}4000-5000 feet{]}, 1524-1828 meters {[}5000-6000
+feet{]} above sea level). In the Sequoia National Forest, the National
+Forest that is furthest south, plots were stratified with the lowest
+elevation band between 1219 and 1524 (4000-5000 feet) and extended to an
+upper elevation band of 1828-2133 (6000-7000 feet) to capture a more
+similar forest community composition as at the more northern National
+Forests. The sites have variable forest structure and disturbance
+history and plot locations were selected specifically in areas with
 \textgreater{}40\% ponderosa pine basal area and \textgreater{}10\%
 ponderosa pine mortality. The 0.04ha circular plots are clustered along
 transects in groups of 5, with between 80 and 200m between each plot.
@@ -296,7 +309,13 @@ location of all trees was mapped relative to the center of each plot
 using azimuth/distance measurements. Tree identity to species and
 diameter at breast height (dbh) were recorded if dbh was greater than
 6.35cm. During the spring and early summer of 2018, all field plots were
-revisited to assess whether dead trees had fallen.
+revisited to assess whether dead trees had fallen (Fettig et al. 2019).
+
+\begin{figure}
+\centering
+\includegraphics{../../figures/study-geographic-extent-inset.png}
+\caption{Geographic extent of the study.}
+\end{figure}
 
 \subsubsection{Instrumentation}\label{instrumentation}
 
@@ -643,11 +662,12 @@ consists of the forest name, elevation band, and rep separated by an
 underscore. The Eldorado National Forest is `eldo', the Stanislaus
 National Forest is `stan', the Sierra National Forest is `sier', and the
 Sequoia National Forest is `sequ'. The elevation band represents the
-lower bounds (in feet) of the 1000 foot elevation bands. Thus `3k'
-implies that site was located between 3,000 and 4,000 feet. Aerially
-detected mortality and density of the whole site is presented along with
-the mortality and density calculated from the ground data (aerial /
-ground).}\tabularnewline
+lower bounds of the 305 meter (1000 foot) elevation bands in feet. Thus
+`3k' implies that site was located between 3,000 and 4,000 feet
+(914-1219 meters). Aerially detected mortality and density of the whole
+site is presented along with the mortality and density calculated from
+the ground data (aerial / ground). The density is measured in trees per
+hectare (tpha).}\tabularnewline
 \toprule
 Site & CWD (mm) & CWD (z-score) & Survey area (ha) & Mortality
 (aerial/ground) & Density (tpha; aerial/ground)\tabularnewline
