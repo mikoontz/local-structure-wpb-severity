@@ -104,9 +104,9 @@
 
 \begin{document}
 
-\section{Effect of local host density and size on forest insect severity
-depends on climatic water
-deficit}\label{effect-of-local-host-density-and-size-on-forest-insect-severity-depends-on-climatic-water-deficit}
+\section{Local host tree density increases forest insect disturbance
+severity, but host size effect depends on climatic water
+deficit}\label{local-host-tree-density-increases-forest-insect-disturbance-severity-but-host-size-effect-depends-on-climatic-water-deficit}
 
 Michael J. Koontz\textsuperscript{1,2,*}, Andrew M.
 Latimer\textsuperscript{1,2}, Leif A. Mortenson\textsuperscript{3},
@@ -124,7 +124,7 @@ Station, Davis, CA, USA
 
 \textsuperscript{*}Correspondence: \texttt{michael.koontz@colorado.edu}
 
-Date report generated: April 05, 2019
+Date report generated: April 06, 2019
 
 \subsection{Abstract}\label{abstract}
 
@@ -185,6 +185,9 @@ insect pairing, and during the same extreme drought, but across a
 gradient of regional climate conditions.
 
 \subsection{Introduction}\label{introduction}
+
+Framing: environmental drivers of insect severity, forest structure
+drivers of insect severity,
 
 Aggressive bark beetles dealt the final blow to many of the nearly 150
 million trees killed in the California drought of 2012 to 2015 and its
@@ -313,8 +316,14 @@ revisited to assess whether dead trees had fallen (Fettig et al. 2019).
 
 \begin{figure}
 \centering
-\includegraphics{../../figures/study-geographic-extent-inset.png}
-\caption{Geographic extent of the study.}
+\includegraphics[height=7.00000in]{../../figures/study-geographic-extent-inset.png}
+\caption{The network of field plots spanned a 350 km latitudinal
+gradient from the Eldorado National Forest in the north to the Sequoia
+National Forest in the south. Plots were stratified by three elevation
+bands in each forest, with the plots in the Sequoia National Forest (the
+southern-most National Forest) occupying elevation bands 305m above the
+three bands in the other National Forests in order to capture a similar
+community composition.}
 \end{figure}
 
 \subsubsection{Instrumentation}\label{instrumentation}
@@ -804,6 +813,17 @@ properly delineated, and the manually-created circular buffer}
 
 \begin{figure}
 \centering
+\includegraphics{../../figures/eldo_3k_3_2_ortho-rgb.png}
+\caption{The orthomosaic for each site is generated with the Structure
+from Motion (SfM) processing, showing a top-down view of the whole
+survey area such that distances between objects in the scene are
+preserved and can be measured. This is a cropped example of an
+orthomosaic showing the orange X placed at exactly the plot center prior
+to flight.}
+\end{figure}
+
+\begin{figure}
+\centering
 \includegraphics{../../figures/eldo_3k_3_live_dead.png}
 \caption{Each tree is classified as live or dead by extracting the pixel
 values from the 5 narrow bands of the Rededge3 camera (and 5 derived
@@ -816,12 +836,21 @@ study area.}
 
 \begin{figure}
 \centering
+\includegraphics{../../figures/proportion-dead-rasterized.png}
+\caption{We rasterized the individual tree data by aggregating values to
+20m x 20m cells. This example shows the proportion of dead trees per
+cell for the same example site as in the previous figures.}
+\end{figure}
+
+\begin{figure}
+\centering
 \includegraphics{../../figures/eldo_3k_3_host_nonhost.png}
 \caption{For each live tree, we classified its species using the same
 means of extracted pixel values across the 5 Rededge3 narrow bands (and
 5 derived bands) as predictors in a regularized discriminant analysis
 previously trained on a hand-classified set of segmented crowns from
-across the study area.}
+across the study area. Host/non-host data were also rasterized as in the
+previous figure prior to analyses (not shown).}
 \end{figure}
 
 \begin{figure}
@@ -1013,12 +1042,12 @@ probability of ponderosa pine mortality.
 plots}\label{broader-context-around-field-plots}
 
 We surveyed 9 square kilometers of forest representing
-\textasciitilde{}450,000 trees along a broad gradient. Site selection
-and small plot size can influence inference. For instance, Fettig et al.
-(2019) reported statistically undetectable differences in overall
-mortality in their plot network across 4 national forests. By expanding
-the hectarage surveyed by a factor of 200, we detected dramatic
-differences in overall mortality.
+\textasciitilde{}450,000 trees along a broad environmental gradient of
+climatic water deficit. Site selection and small plot size can influence
+inference. For instance, Fettig et al. (2019) reported statistically
+undetectable differences in overall mortality in their plot network
+across 4 national forests. By expanding the hectarage surveyed by a
+factor of 200, we detected dramatic differences in overall mortality.
 
 This is about more than sample size (though that helps). This is also
 about capturing the local disturbance phenomenon.

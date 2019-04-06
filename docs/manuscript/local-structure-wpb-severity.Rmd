@@ -2,7 +2,7 @@
 bibliography: ../docs_carpentry/local-structure-wpb-severity.bib
 csl: ../docs_carpentry/ecological-applications.csl
 params:
-  title: Effect of local host density and size on forest insect severity depends on climatic water deficit
+  title: Local host tree density increases forest insect disturbance severity, but host size effect depends on climatic water deficit
   author: |
     Michael J. Koontz^1,2,\*^,
     Andrew M. Latimer^1,2^,
@@ -24,7 +24,8 @@ header-includes:
   - \usepackage{setspace}
   - \doublespacing
   - \DeclareUnicodeCharacter{200E}{}
-output: pdf_document
+output: 
+  - pdf_document
 ---
 
 ```{r setup, include = FALSE, echo = FALSE}
@@ -81,28 +82,6 @@ site_characteristics <-
 # Need to say it's air/ground measurements for mortality and density
 ```
 
-```{r hand_classified_trees}
-# Need to count the number of trees that we hand classified. Perhaps a table
-# that includes live/dead and species counts
-```
-
-```{r tree_classification_summary}
-# Need to get the accuracy and kappa for the live/dead and species classification
-```
-
-```{r map_of_sites}
-# Need a map of the sites and the locations of the National Forests that we sampled
-```
-
-```{r orthophoto}
-# Include an example orthophoto
-# next to it an example of the orange X zoomed in?
-```
-
-```{r rasterized_view}
-# include a rasterized depiction of the same site?
-```
-
 ```{r feet_to_meters}
 # 3000 = 914.4
 # 4000 = 1219.2
@@ -110,9 +89,6 @@ site_characteristics <-
 # 6000 = 1828
 # 7000 = 2133.6
 ```
-
-
-
 
 #`r params$title`
 
@@ -138,6 +114,8 @@ Host availability for aggressive bark beetles appears to have played the dominan
 Our results corroborate the role of host tree density and regional climate conditions on the severity of forest insect disturbance, but also highlight the importance of complex forest structure (i.e., both host density and average host size) in its interaction with regional climate. Thus, the future forest structure may be affected differently by a large-scale forest insect disturbance for the same host tree/forest insect pairing, and during the same extreme drought, but across a gradient of regional climate conditions.
 
 ## Introduction
+
+Framing: environmental drivers of insect severity, forest structure drivers of insect severity, 
 
 Aggressive bark beetles dealt the final blow to many of the nearly 150 million trees killed in the California drought of 2012 to 2015 and its aftermath [@usdafs2019]. A harbinger of climate change effects to come, high temperatures exacerbating the extreme drought led to tree mortality events of unprecedented size in the driest, densest forests across the state [@millar2015; @young2017]. A century of fire suppression policy has enabled forests to grow into dense stands, which increases water stress on trees and makes them more vulnerable to bark beetle attack [@fettig2012b; @north2015]. 
 
@@ -169,7 +147,7 @@ The study sites comprise mostly ponderosa pine trees, *Pinus ponderosa*, whose p
 
 We built our study on 180 vegetation/forest insect monitoring plots at 36 sites established between 2016 and 2017 [@fettig2019]. These established plots were located in beetle-attacked, mixed-conifer forests across the Eldorado, Stanislaus, Sierra and Sequoia National Forests and were stratified by elevation (914-1219 meters [3000-4000 feet], 1219-1524 meters [4000-5000 feet], 1524-1828 meters [5000-6000 feet] above sea level). In the Sequoia National Forest, the National Forest that is furthest south, plots were stratified with the lowest elevation band between 1219 and 1524 (4000-5000 feet) and extended to an upper elevation band of 1828-2133 (6000-7000 feet) to capture a more similar forest community composition as at the more northern National Forests. The sites have variable forest structure and disturbance history and plot locations were selected specifically in areas with >40% ponderosa pine basal area and >10% ponderosa pine mortality. The 0.04ha circular plots are clustered along transects in groups of 5, with between 80 and 200m between each plot. All trees within the plot were assessed as dead or alive. The stem location of all trees was mapped relative to the center of each plot using azimuth/distance measurements. Tree identity to species and diameter at breast height (dbh) were recorded if dbh was greater than 6.35cm. During the spring and early summer of 2018, all field plots were revisited to assess whether dead trees had fallen [@fettig2019].
 
-![Geographic extent of the study.](../../figures/study-geographic-extent-inset.png)
+![The network of field plots spanned a 350 km latitudinal gradient from the Eldorado National Forest in the north to the Sequoia National Forest in the south. Plots were stratified by three elevation bands in each forest, with the plots in the Sequoia National Forest (the southern-most National Forest) occupying elevation bands 305m above the three bands in the other National Forests in order to capture a similar community composition.](../../figures/study-geographic-extent-inset.png){ height=7in }
 
 ### Instrumentation
 
@@ -312,13 +290,18 @@ kable(site_characteristics, digits = 2, format = "pandoc", caption = "Site chara
 
 ![Individual crowns are delineated using a marker controlled watershed segmentation algorithm [@meyer1990; @plowright2018] on the canopy height model (CHM) using the detected tree locations as a priority map. If the algorithm failed to delineate a crown for a tree that was identified in the tree detection step, a circular crown with a 0.5m buffer centered on point location of the detected tree was added as a crown. The crowns of snags were sometimes too small to be properly delineated, and the manually-created circular buffer ](../../figures/eldo_3k_3_crowns.png)
 
+![The orthomosaic for each site is generated with the Structure from Motion (SfM) processing, showing a top-down view of the whole survey area such that distances between objects in the scene are preserved and can be measured. This is a cropped example of an orthomosaic showing the orange X placed at exactly the plot center prior to flight.](../../figures/eldo_3k_3_2_ortho-rgb.png)
+
 ![Each tree is classified as live or dead by extracting the pixel values from the 5 narrow bands of the Rededge3 camera (and 5 derived bands-- see methods) in the orthomosaic within each segmented tree crown of the detected trees, taking their mean value, and using those means to predict live/dead status with a boosted logistic regression previously trained on a hand-classified set of segmented crowns from across the study area.](../../figures/eldo_3k_3_live_dead.png)
 
-![For each live tree, we classified its species using the same means of extracted pixel values across the 5 Rededge3 narrow bands (and 5 derived bands) as predictors in a regularized discriminant analysis previously trained on a hand-classified set of segmented crowns from across the study area.](../../figures/eldo_3k_3_host_nonhost.png)
+![We rasterized the individual tree data by aggregating values to 20m x 20m cells. This example shows the proportion of dead trees per cell for the same example site as in the previous figures.](../../figures/proportion-dead-rasterized.png)
+
+![For each live tree, we classified its species using the same means of extracted pixel values across the 5 Rededge3 narrow bands (and 5 derived bands) as predictors in a regularized discriminant analysis previously trained on a hand-classified set of segmented crowns from across the study area. Host/non-host data were also rasterized as in the previous figure prior to analyses (not shown).](../../figures/eldo_3k_3_host_nonhost.png)
 
 ![Posterior distributions of effect size from zero-inflated binomial model predicting the probability of ponderosa pine mortality in a 20m x 20m cell given forest structure characteristics of host trees and all trees within the cell, as well as a site-level climatic water deficit. The gray density distribution for each model covariate represents the density of the posterior distribution, the point underneath each density curve represents the median of the estimate, the bold interval surrounding the point estimate represents the 66% credible interval, and the thin interval surrounding the point estimate represents the 95% credible interval.](../../figures/effect-sizes-halfeye.png)
 
 ![Line version of model results with 95% credible intervals showing primary influence of ponderosa pine structure on the probability of ponderosa pine mortality, and the interaction across climatic water deficit. The "larger trees" line represents the quadratic mean diameter of ponderosa pine 0.7 standard deviations above the mean, and the "smaller trees" line represents the quadratic mean diameter of ponderosa pine 0.7 standard deviations below the mean.](../../figures/pipo_tpha_qmd_cwd_interaction.png)
+
 
 
 ### Tree detection
@@ -407,7 +390,7 @@ Effect of competition may be masked because drought was so extreme @fettig2019; 
 
 ### Broader context around field plots
 
-We surveyed 9 square kilometers of forest representing ~450,000 trees along a broad gradient. Site selection and small plot size can influence inference. For instance, @fettig2019 reported statistically undetectable differences in overall mortality in their plot network across 4 national forests. By expanding the hectarage surveyed by a factor of 200, we detected dramatic differences in overall mortality.
+We surveyed 9 square kilometers of forest representing ~450,000 trees along a broad environmental gradient of climatic water deficit. Site selection and small plot size can influence inference. For instance, @fettig2019 reported statistically undetectable differences in overall mortality in their plot network across 4 national forests. By expanding the hectarage surveyed by a factor of 200, we detected dramatic differences in overall mortality.
 
 This is about more than sample size (though that helps). This is also about capturing the local disturbance phenomenon.
 
