@@ -11,7 +11,7 @@ library(lidR)
 # Now there is an R object in the environment called "sites_checklist" that has
 # infomation about how far along all processing steps are.
 
-source("data/data_carpentry/make_processing-checklist.R")
+source("data/data_carpentry/make-processing-checklist.R")
 
 unusable_sites <- c("eldo_4k_3", # too many blocks
                     "stan_4k_3", # too many blocks
@@ -42,6 +42,10 @@ sites_to_overwrite <- ""
 sites_checklist$overwrite <- FALSE
 
 sites_checklist[sites_checklist$site %in% sites_to_overwrite, "overwrite"] <- TRUE
+
+if (sites_to_overwrite == "all") {
+  sites_checklist$overwrite <- TRUE
+}
 
 sites_to_process <- 
   sites_checklist %>% 
