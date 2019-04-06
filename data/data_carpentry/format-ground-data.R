@@ -3,9 +3,10 @@
 
 library(tidyverse)
 library(sf)
+library(here)
 
 d <- 
-  readr::read_csv("data/data_raw/ground-data.csv") %>% 
+  readr::read_csv(here::here("data/data_raw/ground-data.csv")) %>% 
   dplyr::rename(leif_name = `Plot #`,
          forest = Forest,
          elev = `Elev. Band`,
