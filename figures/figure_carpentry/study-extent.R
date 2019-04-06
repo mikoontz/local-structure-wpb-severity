@@ -20,10 +20,11 @@ veg_plots <-
   group_by(forest, elevation_band, site) %>% 
   summarize() %>% 
   st_centroid() %>% 
-  dplyr::mutate(elev = case_when(elevation_band == 3000 ~ "1219-1524",
+  dplyr::mutate(elev = case_when(elevation_band == 3000 ~ "914-1219",
                                  elevation_band == 4000 ~ "1219-1524",
                                  elevation_band == 5000 ~ "1524-1828",
-                                 elevation_band == 6000 ~ "1828-2133"))
+                                 elevation_band == 6000 ~ "1828-2133")) %>% 
+  dplyr::mutate(elev = factor(elev, levels = c("914-1219", "1219-1524", "1524-1828", "1828-2133")))
 
 western_states <- 
   us_states %>% 
@@ -41,21 +42,22 @@ relevant_forests <-
                                        FORESTNAME == "Sierra National Forest" ~ "Sierra NF",
                                        FORESTNAME == "Sequoia National Forest" ~ "Sequoia NF")) %>% 
   dplyr::mutate(x = st_coordinates(st_centroid(st_geometry(.)))[, 1],
-                y = st_coordinates(st_centroid(st_geometry(.)))[, 2])
+                y = st_coordinates(st_centroid(st_geometry(.)))[, 2]) %>% 
+  dplyr::mutate(FORESTNAME = factor(FORESTNAME, levels = c("Eldorado NF", "Stanislaus NF", "Sierra NF", "Sequoia NF")))
 
 study_extent_bbox <- st_bbox(sn) + c(0, 0, 90000, 0)
 
 study_extent <-
   tm_shape(sn, bbox = study_extent_bbox) +
-  tm_borders() +
+  tm_borders(lwd = 2) +
   tm_shape(relevant_forests) +
   tm_fill(col = "FORESTNAME", title = "Forest name", palette = get_brewer_pal("Accent", n = 4)) +
   tm_shape(veg_plots) +
-  tm_dots(shape = "elev", title.shape = "Elevation band (m)", size = 0.15) +
+  tm_symbols(shape = "elev", shapes = c(0:3), title.shape = "Elevation band (m)", size = 0.15, col = "black") +
   tm_layout(legend.position = c("left", "bottom"), legend.width = 1, outer.margins = c(0.02, 0.02, 0, 0)) +
   tm_ylab(text = "Latitude (km)", space = 2) +
   tm_xlab(text = "Longitude (km)", space = 1.5) +
-  tm_grid(alpha = 0.2, labels.inside.frame = FALSE, labels.format = list(fun = function(x) as.character(x / 1000))) +
+  tm_grid(alpha = 0.05, labels.inside.frame = FALSE, labels.format = list(fun = function(x) as.character(x / 1000))) +
   tm_compass(type = "arrow", position = c(0.85, 0.05))
 
 broader_extent_bbox <- st_bbox(western_states) + c(0, 0, -450000, -750000)
@@ -66,6 +68,8 @@ broader_extent <-
   tm_shape(sn) +
   tm_fill() +
   tm_shape(relevant_forests) +
+  tm_fill(col = "FORESTNAME", title = "Forest name", palette = get_brewer_pal("Accent", n = 4)) +
+  tm_layout(legend.show = FALSE) +
   tm_borders()
 
   # tm_compass(type = "arrow", position = c("left", "bottom"))
