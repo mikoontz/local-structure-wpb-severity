@@ -122,9 +122,10 @@ Station, Placerville, CA, USA\\
 \textsuperscript{4}USDA Forest Service, Pacific Southwest Research
 Station, Davis, CA, USA
 
-\textsuperscript{*}Correspondence: \texttt{michael.koontz@colorado.edu}
+\textsuperscript{*}Correspondence:
+\texttt{michael.koontz@colorado.edu\ date\_generated:\ !r\ format(Sys.Date(),\ "\%B\ \%d,\ \%Y")}
 
-Date report generated: April 06, 2019
+Date report generated:
 
 \subsection{Abstract}\label{abstract}
 
@@ -374,7 +375,7 @@ For each of the 36 sites (containing 5 plots each), we captured imagery
 over the surrounding \textasciitilde{}40 hectares of forested area using
 north-south aerial transects. For XXXXX sites, we surveyed less
 surrounding area in order to maintain visual and radio communication
-with the aircraft during flight (Table XXXXXX; as a supplement, I think;
+with the aircraft during flight (Table 2; as a supplement, I think;
 Columns: Site, forest, elevation, rep, CWD, surveyed area, survey date).
 
 We preprogrammed transect paths using Map Pilot for DJI on iOS
@@ -472,11 +473,10 @@ data}\label{correspondence-of-automatic-tree-detection-with-ground-data}
 
 We calculated 7 forest structure metrics for each field plot using the
 ground data collected by Fettig et al. (2019): total number of trees,
-number of trees greater than 15 meters, number of trees less than 15
-meters, mean height of trees, 25\textsuperscript{th} percentile tree
-height, 75\textsuperscript{th} percentile tree height, mean distance to
-nearest tree neighbor, mean distance to 2\textsuperscript{nd} nearest
-neighbor.
+number of trees greater than 15 meters, mean height of trees,
+25\textsuperscript{th} percentile tree height, 75\textsuperscript{th}
+percentile tree height, mean distance to nearest tree neighbor, mean
+distance to 2\textsuperscript{nd} nearest neighbor.
 
 For each tree detection algorithm and parameter set described above, we
 calculated the same set of 7 structure metrics within the footprint of
@@ -617,9 +617,9 @@ with the effects of the other covariates.
 \[
 \begin{aligned}
 y_{i,j} \sim &\ \begin{cases}
-    0, & p \\
-    Binom(n_i, \pi_i), & 1-p
-  \end{cases} \\
+0, & p \\
+Binom(n_i, \pi_i), & 1-p
+\end{cases} \\
 logit(\pi_i) = &\ \beta_0\ + \\
 & \beta_1X_{cwd, j}\ + \\
 & \beta_1X_{cwd, j}(\beta_2X_{pipoQMD, i} + \beta_3X_{pipoDensity, i} + \beta_4X_{pipoQMD, i}X_{pipoDensity, i})\ + \\ 
@@ -807,19 +807,21 @@ watershed segmentation algorithm (Meyer and Beucher 1990, Plowright
 as a priority map. If the algorithm failed to delineate a crown for a
 tree that was identified in the tree detection step, a circular crown
 with a 0.5m buffer centered on point location of the detected tree was
-added as a crown. The crowns of snags were sometimes too small to be
-properly delineated, and the manually-created circular buffer}
+added as a crown.}
 \end{figure}
 
 \begin{figure}
 \centering
 \includegraphics{../../figures/eldo_3k_3_2_ortho-rgb.png}
-\caption{The orthomosaic for each site is generated with the Structure
-from Motion (SfM) processing, showing a top-down view of the whole
-survey area such that distances between objects in the scene are
-preserved and can be measured. This is a cropped example of an
-orthomosaic showing the orange X placed at exactly the plot center prior
-to flight.}
+\caption{The orthomosaic for each of the 32 sites is generated with the
+Structure from Motion (SfM) processing, showing a top-down view of the
+whole survey area such that distances between objects in the scene are
+preserved and can be measured. Depicted is an example orthomosaic for
+one of the 32 sites cropped to the extent of a single ground plot (5
+ground plots per site) showing the orange X placed at exactly the plot
+center prior to flight. The original orthomosaic for the whole site
+represents an area approximately 1000 times as large as the area
+depicted here.}
 \end{figure}
 
 \begin{figure}
@@ -887,37 +889,39 @@ values of \texttt{dist2d\ =\ 1} and \texttt{ws\ =\ 2.5} (Roussel et al.
 2019) performed the best across 7 measures of forest structure as
 measured by Pearson's correlation with ground data (Table 2).
 
-\begin{longtable}[]{@{}lllrr@{}}
+\begin{longtable}[]{@{}lcccc@{}}
 \caption{Correlation and differences between the best performing tree
 detection algorithm (lmfx with dist2d = 1 and ws = 2.5) and the ground
 data. An asterisk next to the correlation or RMSE indicates that this
 value was within 5\% of the value of the best-performing
-algorithm/parameter set.}\tabularnewline
+algorithm/parameter set. Ground mean represents the mean value of the
+forest metric across the 110 ground plots that were visible from the
+sUAS-derived imagery. The median error is calculated as the median of
+the differences between the air and ground values for the 110 visible
+plots. Thus, a positive number indicates an overestimate by the sUAS
+workflow and a negative number indicates an
+underestimate.}\tabularnewline
 \toprule
-Forest structure metric & Correlation with ground & RMSE & Mean error &
+Forest structure metric & Ground mean & Correlation with ground & RMSE &
 Median error\tabularnewline
 \midrule
 \endfirsthead
 \toprule
-Forest structure metric & Correlation with ground & RMSE & Mean error &
+Forest structure metric & Ground mean & Correlation with ground & RMSE &
 Median error\tabularnewline
 \midrule
 \endhead
-height (m); 25th percentile & 0.16 & 8.46 & -2.30 & -1.16\tabularnewline
-height (m); mean & 0.29 & 7.81* & -3.43 & -2.29\tabularnewline
-height (m); 75th percentile & 0.35 & 10.33* & -4.85 &
--3.98\tabularnewline
-dist to 1st nearest neighbor (m) & 0.55* & 1.16* & 0.13 &
-0.26\tabularnewline
-dist to 2nd nearest neighbor (m) & 0.61* & 1.70* & 0.08 &
-0.12\tabularnewline
-dist to 3rd nearest neighbor (m) & 0.50 & 2.29 & 0.17 &
-0.19\tabularnewline
-total tree count & 0.67* & 8.68* & 0.37 & 2.00\tabularnewline
-count of trees \textgreater{} 15m & 0.43 & 7.38 & 1.18 &
+total tree count & 18.52 & 0.67* & 8.68* & 2.00\tabularnewline
+count of trees \textgreater{} 15m & 9.89 & 0.43 & 7.38 &
 0.00\tabularnewline
-count of trees \textless{} 15m & 0.58 & 8.42 & -0.66 &
-2.00\tabularnewline
+dist to 1st nearest neighbor (m) & 2.82 & 0.55* & 1.16* &
+0.26\tabularnewline
+dist to 2nd nearest neighbor (m) & 4.30 & 0.61* & 1.70* &
+0.12\tabularnewline
+height (m); 25th percentile & 12.42 & 0.16 & 8.46 & -1.16\tabularnewline
+height (m); mean & 18.49 & 0.29 & 7.81* & -2.29\tabularnewline
+height (m); 75th percentile & 24.55 & 0.35 & 10.33* &
+-3.98\tabularnewline
 \bottomrule
 \end{longtable}
 
@@ -931,6 +935,7 @@ of ponderosa pine mortality within each 20m x 20m cell.
 We found a strong main effect of ponderosa pine local density,
 accounting for quadratic mean diameter of ponderosa pine, with greater
 density increasing the probability of ponderosa pine mortality.
+
 Conversely, we found a generally negative effect of quadratic mean
 diameter of ponderosa pine on the probability of ponderosa mortality,
 suggesting that the western pine beetle attacked smaller trees, on

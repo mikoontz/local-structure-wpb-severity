@@ -16,7 +16,7 @@ params:
     ^4^USDA Forest Service, Pacific Southwest Research Station, Davis, CA, USA
   correspondence: |
     michael.koontz@colorado.edu
-  date_generated: !r format(Sys.Date(), "%B %d, %Y")
+    date_generated: !r format(Sys.Date(), "%B %d, %Y")
 geometry: margin=1in
 header-includes:
   - \usepackage[left]{lineno}
@@ -24,8 +24,7 @@ header-includes:
   - \usepackage{setspace}
   - \doublespacing
   - \DeclareUnicodeCharacter{200E}{}
-output: 
-  - pdf_document
+output: pdf_document
 ---
 
 ```{r setup, include = FALSE, echo = FALSE}
@@ -80,6 +79,23 @@ site_characteristics <-
   dplyr::mutate(Forest = factor(Forest, levels = c("Eldorado", "Stanislaus", "Sierra", "Sequoia"))) %>% dplyr::arrange(Forest, `Elevation band`, Rep) %>% 
   dplyr::select(Site, `CWD (mm)`, `CWD (z-score)`, `Survey area (ha)`, `Mortality (aerial/ground)`, `Density (tpha; aerial/ground)`)
 # Need to say it's air/ground measurements for mortality and density
+```
+
+```{r ground_tree_summary}
+ground_tree_summary <- readr::read_csv(here::here("analyses/analyses_output/ground-tree-summary.csv"))
+
+ground_tree_summary_print <-
+  ground_tree_summary %>% 
+  summarize(mean_total_count = mean(total_tree_count),
+            mean_short_count = mean(tree_count_below_15m),
+            mean_tall_count = mean(tree_count_above_15m),
+            mean_nn1 = mean(nn_1_mean),
+            mean_nn2 = mean(nn_2_mean),
+            mean_nn3 = mean(nn_3_mean),
+            mean_short_height = mean(height_lwr_25),
+            mean_height = mean(height_mean),
+            mean_tall_height = mean(height_upr_25))
+
 ```
 
 ```{r feet_to_meters}
@@ -184,7 +200,7 @@ kable(rededge_print, format = "pandoc", caption = "Reflectance sensitivity of th
 
 Image capture was conducted as close to solar noon as possible to minimize shadow effects (always within 4 hours; usually within 2 hours). Prior to the aerial survey, two strips of bright orange drop cloth (~100cm x 15cm) were positioned as an "X" over the permanent monuments marking the center of the 5 field plots from @fettig2019.
 
-For each of the 36 sites (containing 5 plots each), we captured imagery over the surrounding ~40 hectares of forested area using north-south aerial transects. For XXXXX sites, we surveyed less surrounding area in order to maintain visual and radio communication with the aircraft during flight (Table XXXXXX; as a supplement, I think; Columns: Site, forest, elevation, rep, CWD, surveyed area, survey date).
+For each of the 36 sites (containing 5 plots each), we captured imagery over the surrounding ~40 hectares of forested area using north-south aerial transects. For XXXXX sites, we surveyed less surrounding area in order to maintain visual and radio communication with the aircraft during flight (Table 2; as a supplement, I think; Columns: Site, forest, elevation, rep, CWD, surveyed area, survey date).
 
 We preprogrammed transect paths using Map Pilot for DJI on iOS (hereafter Map Pilot) [@dronesmadeeasy2018]. All transects tracked the terrain and their altitude remained approximately constant at 120 meters above ground level in order to maintain consistent ground sampling distance in the imagery. Ground level was based on a 1-arc-second digital elevation model [@farr2007] and we implemented terrain following using Map Pilot. For this analysis, we dropped 4 sites whose imagery was of insufficient quality to process.
 
@@ -208,7 +224,7 @@ Each orthorectified reflectance map was inspected to locate the 5 orange "X"s ma
 
 ### Correspondence of automatic tree detection with ground data
 
-We calculated 7 forest structure metrics for each field plot using the ground data collected by @fettig2019: total number of trees, number of trees greater than 15 meters, number of trees less than 15 meters, mean height of trees, 25^th^ percentile tree height, 75^th^ percentile tree height, mean distance to nearest tree neighbor, mean distance to 2^nd^ nearest neighbor.
+We calculated 7 forest structure metrics for each field plot using the ground data collected by @fettig2019: total number of trees, number of trees greater than 15 meters, mean height of trees, 25^th^ percentile tree height, 75^th^ percentile tree height, mean distance to nearest tree neighbor, mean distance to 2^nd^ nearest neighbor.
 
 For each tree detection algorithm and parameter set described above, we calculated the same set of 7 structure metrics within the footprint of the validation field plots. We calculated the Pearson's correlation and root mean square error (RMSE) between the ground data and the aerial data for each of the 7 structure metrics for each of the `r sum(algorithm_summary$n)` automatic tree detection algorithms/parameter sets.
 
@@ -253,9 +269,9 @@ To measure and account for spatial autocorrelation of the bark beetle behavioral
 $$
 \begin{aligned}
 y_{i,j} \sim &\ \begin{cases}
-    0, & p \\
-    Binom(n_i, \pi_i), & 1-p
-  \end{cases} \\
+0, & p \\
+Binom(n_i, \pi_i), & 1-p
+\end{cases} \\
 logit(\pi_i) = &\ \beta_0\ + \\
 & \beta_1X_{cwd, j}\ + \\
 & \beta_1X_{cwd, j}(\beta_2X_{pipoQMD, i} + \beta_3X_{pipoDensity, i} + \beta_4X_{pipoQMD, i}X_{pipoDensity, i})\ + \\ 
@@ -288,9 +304,9 @@ kable(site_characteristics, digits = 2, format = "pandoc", caption = "Site chara
 
 ![Tree locations are detected using the `lmfx` [@roussel2019] treetop detection algorithm on the dense point cloud.](../../figures/eldo_3k_3_ttops.png)
 
-![Individual crowns are delineated using a marker controlled watershed segmentation algorithm [@meyer1990; @plowright2018] on the canopy height model (CHM) using the detected tree locations as a priority map. If the algorithm failed to delineate a crown for a tree that was identified in the tree detection step, a circular crown with a 0.5m buffer centered on point location of the detected tree was added as a crown. The crowns of snags were sometimes too small to be properly delineated, and the manually-created circular buffer ](../../figures/eldo_3k_3_crowns.png)
+![Individual crowns are delineated using a marker controlled watershed segmentation algorithm [@meyer1990; @plowright2018] on the canopy height model (CHM) using the detected tree locations as a priority map. If the algorithm failed to delineate a crown for a tree that was identified in the tree detection step, a circular crown with a 0.5m buffer centered on point location of the detected tree was added as a crown.](../../figures/eldo_3k_3_crowns.png)
 
-![The orthomosaic for each site is generated with the Structure from Motion (SfM) processing, showing a top-down view of the whole survey area such that distances between objects in the scene are preserved and can be measured. This is a cropped example of an orthomosaic showing the orange X placed at exactly the plot center prior to flight.](../../figures/eldo_3k_3_2_ortho-rgb.png)
+![The orthomosaic for each of the 32 sites is generated with the Structure from Motion (SfM) processing, showing a top-down view of the whole survey area such that distances between objects in the scene are preserved and can be measured. Depicted is an example orthomosaic for one of the 32 sites cropped to the extent of a single ground plot (5 ground plots per site) showing the orange X placed at exactly the plot center prior to flight. The original orthomosaic for the whole site represents an area approximately 1000 times as large as the area depicted here.](../../figures/eldo_3k_3_2_ortho-rgb.png)
 
 ![Each tree is classified as live or dead by extracting the pixel values from the 5 narrow bands of the Rededge3 camera (and 5 derived bands-- see methods) in the orthomosaic within each segmented tree crown of the detected trees, taking their mean value, and using those means to predict live/dead status with a boosted logistic regression previously trained on a hand-classified set of segmented crowns from across the study area.](../../figures/eldo_3k_3_live_dead.png)
 
@@ -302,8 +318,6 @@ kable(site_characteristics, digits = 2, format = "pandoc", caption = "Site chara
 
 ![Line version of model results with 95% credible intervals showing primary influence of ponderosa pine structure on the probability of ponderosa pine mortality, and the interaction across climatic water deficit. The "larger trees" line represents the quadratic mean diameter of ponderosa pine 0.7 standard deviations above the mean, and the "smaller trees" line represents the quadratic mean diameter of ponderosa pine 0.7 standard deviations below the mean.](../../figures/pipo_tpha_qmd_cwd_interaction.png)
 
-
-
 ### Tree detection
 
 We found that the experimental `lmfx` algorithm with parameter values of `dist2d = `r algorithm_details[1, "var1_val"]`` and `ws = `r algorithm_details[1, "var2_val"]`` [@roussel2019] performed the best across 7 measures of forest structure as measured by Pearson's correlation with ground data (Table 2).
@@ -311,11 +325,11 @@ We found that the experimental `lmfx` algorithm with parameter values of `dist2d
 ```{r best_algorithm_deets_table, echo = FALSE, include = TRUE}
 best_algorithm_deets_print <-
   best_algorithm_deets %>% 
+  ungroup() %>% 
   dplyr::select(forest_metric, ground_correlation, rmse, me, med_error, ground_cor_within_threshold_pct, rmse_within_threshold_pct) %>% 
   dplyr::mutate(ground_correlation = ifelse(ground_cor_within_threshold_pct == 1, yes = paste0(as.character(sprintf("%0.2f", ground_correlation)), "*"), no = as.character(sprintf("%0.2f", ground_correlation)))) %>% 
   dplyr::mutate(rmse = ifelse(rmse_within_threshold_pct == 1, yes = paste0(as.character(sprintf("%0.2f", rmse)), "*"), no = as.character(sprintf("%0.2f", rmse)))) %>% 
   dplyr::select(forest_metric, ground_correlation, rmse, me, med_error) %>% 
-  dplyr::ungroup() %>% 
   dplyr::mutate(forest_metric = c("height (m); 25th percentile",
                                   "height (m); mean",
                                   "height (m); 75th percentile",
@@ -329,17 +343,34 @@ best_algorithm_deets_print <-
                 `Correlation with ground` = ground_correlation,
                 RMSE = rmse,
                 `Mean error` = me,
-                `Median error` = med_error)
+                `Median error` = med_error) %>% 
+  dplyr::mutate(sort = c(7:9, 4:6, 1:3)) %>% 
+  dplyr::arrange(sort) %>% 
+  dplyr::mutate(`Ground mean` = t(ground_tree_summary_print)[, 1]) %>% 
+  dplyr::select(`Forest structure metric`,
+                `Ground mean`,
+                `Correlation with ground`,
+                RMSE,
+                `Median error`) %>% 
+  dplyr::filter(`Forest structure metric` %in% 
+                  c("height (m); 25th percentile",
+                    "height (m); mean",
+                    "height (m); 75th percentile",
+                    "dist to 1st nearest neighbor (m)",
+                    "dist to 2nd nearest neighbor (m)",
+                     "total tree count",
+                    "count of trees > 15m"))
 
-knitr::kable(best_algorithm_deets_print, digits = 2, format = "pandoc", caption = paste0("Correlation and differences between the best performing tree detection algorithm (lmfx with dist2d = ", algorithm_details[1, "var1_val"], " and ws = ", algorithm_details[1, "var2_val"], ") and the ground data. An asterisk next to the correlation or RMSE indicates that this value was within 5% of the value of the best-performing algorithm/parameter set."))
+knitr::kable(best_algorithm_deets_print, digits = 2, align = c("l", "c", "c", "c", "c"), format = "pandoc", caption = paste0("Correlation and differences between the best performing tree detection algorithm (lmfx with dist2d = ", algorithm_details[1, "var1_val"], " and ws = ", algorithm_details[1, "var2_val"], ") and the ground data. An asterisk next to the correlation or RMSE indicates that this value was within 5% of the value of the best-performing algorithm/parameter set. Ground mean represents the mean value of the forest metric across the 110 ground plots that were visible from the sUAS-derived imagery. The median error is calculated as the median of the differences between the air and ground values for the 110 visible plots. Thus, a positive number indicates an overestimate by the sUAS workflow and a negative number indicates an underestimate."))
 ```
-
 
 ### Effect of local structure and regional climate on western pine beetle severity
 
 We detected no main effect of climatic water deficit on the probability of ponderosa pine mortality within each 20m x 20m cell. 
 
-We found a strong main effect of ponderosa pine local density, accounting for quadratic mean diameter of ponderosa pine, with greater density increasing the probability of ponderosa pine mortality. Conversely, we found a generally negative effect of quadratic mean diameter of ponderosa pine on the probability of ponderosa mortality, suggesting that the western pine beetle attacked smaller trees, on average. There was a strong positive interaction between the climatic water deficit and ponderosa pine quadratic mean diameter, such that larger trees were more likely to increase the probability of ponderosa mortality in hotter, drier sites.
+We found a strong main effect of ponderosa pine local density, accounting for quadratic mean diameter of ponderosa pine, with greater density increasing the probability of ponderosa pine mortality. 
+
+Conversely, we found a generally negative effect of quadratic mean diameter of ponderosa pine on the probability of ponderosa mortality, suggesting that the western pine beetle attacked smaller trees, on average. There was a strong positive interaction between the climatic water deficit and ponderosa pine quadratic mean diameter, such that larger trees were more likely to increase the probability of ponderosa mortality in hotter, drier sites.
 
 We found negative main effects of overall tree density and overall quadratic mean diameter. There was a positive interaction between these variables, such that denser stands with larger trees did lead to greater ponderosa pine mortality.
 
