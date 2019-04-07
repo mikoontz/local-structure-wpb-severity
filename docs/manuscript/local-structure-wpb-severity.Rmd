@@ -343,7 +343,7 @@ pandoc.table(site_characteristics,
 
 We found that the experimental `lmfx` algorithm with parameter values of `dist2d = `r algorithm_details[1, "var1_val"]`` and `ws = `r algorithm_details[1, "var2_val"]`` [@roussel2019] performed the best across 7 measures of forest structure as measured by Pearson's correlation with ground data (Table 3).
 
-```{r best_algorithm_deets_table, echo = FALSE, include = TRUE}
+```{r best_algorithm_deets_table, echo = FALSE, include = TRUE, results = 'asis'}
 best_algorithm_deets_print <-
   best_algorithm_deets %>% 
   ungroup() %>% 

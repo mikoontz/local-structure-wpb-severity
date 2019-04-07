@@ -1423,30 +1423,125 @@ values of \texttt{dist2d\ =\ 1} and \texttt{ws\ =\ 2.5} (Roussel et al.
 2019) performed the best across 7 measures of forest structure as
 measured by Pearson's correlation with ground data (Table 3).
 
-\begin{verbatim}
-## 
-## ----------------------------------------------------------------------------------------------
-##    Forest structure metric      Ground mean   Correlation with ground    RMSE    Median error 
-## ------------------------------ ------------- ------------------------- -------- --------------
-##        total tree count             19                 0.67*            8.68*         2       
-## 
-##      count of trees > 15m           9.9                0.43              7.38         0       
-## 
-##  dist to 1st nearest neighbor       2.8                0.55*            1.16*        0.26     
-##              (m)                                                                              
-## 
-##  dist to 2nd nearest neighbor       4.3                0.61*            1.70*        0.12     
-##              (m)                                                                              
-## 
-##  height (m); 25th percentile        12                 0.16              8.46        -1.2     
-## 
-##        height (m); mean             18                 0.29             7.81*        -2.3     
-## 
-##  height (m); 75th percentile        25                 0.35             10.33*        -4      
-## ----------------------------------------------------------------------------------------------
-## 
-## Table: Correlation and differences between the best performing tree detection algorithm (lmfx with dist2d = 1 and ws = 2.5) and the ground data. An asterisk next to the correlation or RMSE indicates that this value was within 5% of the value of the best-performing algorithm/parameter set. Ground mean represents the mean value of the forest metric across the 110 ground plots that were visible from the sUAS-derived imagery. The median error is calculated as the median of the differences between the air and ground values for the 110 visible plots. Thus, a positive number indicates an overestimate by the sUAS workflow and a negative number indicates an underestimate.
-\end{verbatim}
+\begin{longtable}[]{@{}ccccc@{}}
+\caption{Correlation and differences between the best performing tree
+detection algorithm (lmfx with dist2d = 1 and ws = 2.5) and the ground
+data. An asterisk next to the correlation or RMSE indicates that this
+value was within 5\% of the value of the best-performing
+algorithm/parameter set. Ground mean represents the mean value of the
+forest metric across the 110 ground plots that were visible from the
+sUAS-derived imagery. The median error is calculated as the median of
+the differences between the air and ground values for the 110 visible
+plots. Thus, a positive number indicates an overestimate by the sUAS
+workflow and a negative number indicates an
+underestimate.}\tabularnewline
+\toprule
+\begin{minipage}[b]{0.28\columnwidth}\centering\strut
+Forest structure metric\strut
+\end{minipage} & \begin{minipage}[b]{0.13\columnwidth}\centering\strut
+Ground mean\strut
+\end{minipage} & \begin{minipage}[b]{0.24\columnwidth}\centering\strut
+Correlation with ground\strut
+\end{minipage} & \begin{minipage}[b]{0.08\columnwidth}\centering\strut
+RMSE\strut
+\end{minipage} & \begin{minipage}[b]{0.13\columnwidth}\centering\strut
+Median error\strut
+\end{minipage}\tabularnewline
+\midrule
+\endfirsthead
+\toprule
+\begin{minipage}[b]{0.28\columnwidth}\centering\strut
+Forest structure metric\strut
+\end{minipage} & \begin{minipage}[b]{0.13\columnwidth}\centering\strut
+Ground mean\strut
+\end{minipage} & \begin{minipage}[b]{0.24\columnwidth}\centering\strut
+Correlation with ground\strut
+\end{minipage} & \begin{minipage}[b]{0.08\columnwidth}\centering\strut
+RMSE\strut
+\end{minipage} & \begin{minipage}[b]{0.13\columnwidth}\centering\strut
+Median error\strut
+\end{minipage}\tabularnewline
+\midrule
+\endhead
+\begin{minipage}[t]{0.28\columnwidth}\centering\strut
+total tree count\strut
+\end{minipage} & \begin{minipage}[t]{0.13\columnwidth}\centering\strut
+19\strut
+\end{minipage} & \begin{minipage}[t]{0.24\columnwidth}\centering\strut
+0.67*\strut
+\end{minipage} & \begin{minipage}[t]{0.08\columnwidth}\centering\strut
+8.68*\strut
+\end{minipage} & \begin{minipage}[t]{0.13\columnwidth}\centering\strut
+2\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.28\columnwidth}\centering\strut
+count of trees \textgreater{} 15m\strut
+\end{minipage} & \begin{minipage}[t]{0.13\columnwidth}\centering\strut
+9.9\strut
+\end{minipage} & \begin{minipage}[t]{0.24\columnwidth}\centering\strut
+0.43\strut
+\end{minipage} & \begin{minipage}[t]{0.08\columnwidth}\centering\strut
+7.38\strut
+\end{minipage} & \begin{minipage}[t]{0.13\columnwidth}\centering\strut
+0\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.28\columnwidth}\centering\strut
+dist to 1st nearest neighbor (m)\strut
+\end{minipage} & \begin{minipage}[t]{0.13\columnwidth}\centering\strut
+2.8\strut
+\end{minipage} & \begin{minipage}[t]{0.24\columnwidth}\centering\strut
+0.55*\strut
+\end{minipage} & \begin{minipage}[t]{0.08\columnwidth}\centering\strut
+1.16*\strut
+\end{minipage} & \begin{minipage}[t]{0.13\columnwidth}\centering\strut
+0.26\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.28\columnwidth}\centering\strut
+dist to 2nd nearest neighbor (m)\strut
+\end{minipage} & \begin{minipage}[t]{0.13\columnwidth}\centering\strut
+4.3\strut
+\end{minipage} & \begin{minipage}[t]{0.24\columnwidth}\centering\strut
+0.61*\strut
+\end{minipage} & \begin{minipage}[t]{0.08\columnwidth}\centering\strut
+1.70*\strut
+\end{minipage} & \begin{minipage}[t]{0.13\columnwidth}\centering\strut
+0.12\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.28\columnwidth}\centering\strut
+height (m); 25th percentile\strut
+\end{minipage} & \begin{minipage}[t]{0.13\columnwidth}\centering\strut
+12\strut
+\end{minipage} & \begin{minipage}[t]{0.24\columnwidth}\centering\strut
+0.16\strut
+\end{minipage} & \begin{minipage}[t]{0.08\columnwidth}\centering\strut
+8.46\strut
+\end{minipage} & \begin{minipage}[t]{0.13\columnwidth}\centering\strut
+-1.2\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.28\columnwidth}\centering\strut
+height (m); mean\strut
+\end{minipage} & \begin{minipage}[t]{0.13\columnwidth}\centering\strut
+18\strut
+\end{minipage} & \begin{minipage}[t]{0.24\columnwidth}\centering\strut
+0.29\strut
+\end{minipage} & \begin{minipage}[t]{0.08\columnwidth}\centering\strut
+7.81*\strut
+\end{minipage} & \begin{minipage}[t]{0.13\columnwidth}\centering\strut
+-2.3\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.28\columnwidth}\centering\strut
+height (m); 75th percentile\strut
+\end{minipage} & \begin{minipage}[t]{0.13\columnwidth}\centering\strut
+25\strut
+\end{minipage} & \begin{minipage}[t]{0.24\columnwidth}\centering\strut
+0.35\strut
+\end{minipage} & \begin{minipage}[t]{0.08\columnwidth}\centering\strut
+10.33*\strut
+\end{minipage} & \begin{minipage}[t]{0.13\columnwidth}\centering\strut
+-4\strut
+\end{minipage}\tabularnewline
+\bottomrule
+\end{longtable}
 
 \subsubsection{Effect of local structure and regional climate on western
 pine beetle
