@@ -45,7 +45,7 @@ algorithm_summary_print <-
   algorithm_summary %>% 
   dplyr::rename(`Parameter sets tested` = n,
                 Algorithm = algorithm) %>%
-  dplyr::mutate(`Reference(s)` = c("[@li2012; @shin2018; @jakubowski2013]", "[@roussel2019a]", "[@roussel2019]", "[@eysn2015]", "[@vega2014]", "[@plowright2018]", "[@pau2010]"))
+  dplyr::mutate(`Reference(s)` = c("@li2012; @jakubowski2013; @shin2018", "@roussel2019a", "@roussel2019", "@eysn2015", "@vega2014", "@plowright2018", "@pau2010"))
 
 ```
 
@@ -59,6 +59,16 @@ pipo_pct_of_all_dead <-
             prop_of_all_dead = n() / nrow(.),
             print_prop = round(prop_of_all_dead * 100, digits = 2)) %>%
   dplyr::filter(species == "PIPO") %>%
+  pull(print_prop)
+
+cade_pct_of_all_dead <-
+  d %>%
+  dplyr::filter(is.na(year_fall), !is.na(year_dead)) %>%
+  group_by(species) %>%
+  summarize(n = n(),
+            prop_of_all_dead = n() / nrow(.),
+            print_prop = round(prop_of_all_dead * 100, digits = 2)) %>%
+  dplyr::filter(species == "CADE") %>%
   pull(print_prop)
 ```
 
@@ -96,6 +106,16 @@ ground_tree_summary_print <-
             mean_height = mean(height_mean),
             mean_tall_height = mean(height_upr_25))
 
+```
+
+
+```{r classifier_stats}
+classifier_stats <- read_csv(here::here("analyses/analyses_output/classification-summary-stats.csv"))
+```
+
+```{r hand_classified_crowns}
+hand_classified_crowns <- read_csv(here::here("data/data_output/classified/hand-classified/hand-classified-crowns.csv")) %>% 
+  dplyr::mutate(site = substr(treeID, start = 1, stop = 9))
 ```
 
 ```{r feet_to_meters}
@@ -200,7 +220,7 @@ kable(rededge_print, format = "pandoc", caption = "Reflectance sensitivity of th
 
 Image capture was conducted as close to solar noon as possible to minimize shadow effects (always within 4 hours; usually within 2 hours). Prior to the aerial survey, two strips of bright orange drop cloth (~100cm x 15cm) were positioned as an "X" over the permanent monuments marking the center of the 5 field plots from @fettig2019.
 
-For each of the 36 sites (containing 5 plots each), we captured imagery over the surrounding ~40 hectares of forested area using north-south aerial transects. For XXXXX sites, we surveyed less surrounding area in order to maintain visual and radio communication with the aircraft during flight (Table 2; as a supplement, I think; Columns: Site, forest, elevation, rep, CWD, surveyed area, survey date).
+For each of the 36 sites (containing 5 plots each), we captured imagery over the surrounding ~40 hectares of forested area using north-south aerial transects. For three sites, we surveyed less surrounding area in order to maintain visual and radio communication with the aircraft during flight which can be obstructed by steep terrain or non-centrally available takeoff locations. (Table 3; as a supplement, I think; Columns: Site, forest, elevation, rep, CWD, surveyed area, survey date).
 
 We preprogrammed transect paths using Map Pilot for DJI on iOS (hereafter Map Pilot) [@dronesmadeeasy2018]. All transects tracked the terrain and their altitude remained approximately constant at 120 meters above ground level in order to maintain consistent ground sampling distance in the imagery. Ground level was based on a 1-arc-second digital elevation model [@farr2007] and we implemented terrain following using Map Pilot. For this analysis, we dropped 4 sites whose imagery was of insufficient quality to process.
 
@@ -216,7 +236,11 @@ We classified each survey area's dense point cloud into "ground" and "non-ground
 
 ### Tree detection
 
-We tested a total of `r nrow(algorithm_summary)` automatic tree detection algorithms and a total of `r sum(algorithm_summary$n)` parameter sets on the canopy height model or the dense point cloud to locate trees within each site (Table XXXXX; algorithm, number of parameter sets, reference). We used `r algorithm_summary %>% dplyr::filter(algorithm == "vwf") %>% pull(n)` parameter sets of a variable window filter implmented in `ForestTools` [@plowright2018] including the default variable window filter function in `ForestTools` as well as the "pines" and "combined" functions from @popescu2004. We used `r algorithm_summary %>% dplyr::filter(algorithm == "localMaxima") %>% pull(n)` parameter sets of a local maximum filter implemented in `lidR`. We used `r algorithm_summary %>% dplyr::filter(algorithm == "li2012") %>% pull(n)` parameter sets of the algorithm from @li2012, which operates on the original point cloud. These parameter sets included those from @shin2018 and @jakubowski2013. We used `r algorithm_summary %>% dplyr::filter(algorithm == "watershed") %>% pull(n)` parameter sets of the `watershed` algorithm implemented in `lidR`, which is a wrapper for a function in the `EBImage` package [@pau2010]. We used `r algorithm_summary %>% dplyr::filter(algorithm == "ptrees") %>% pull(n)` parameter sets of `ptrees` [@vega2014] implemented in `lidR` [@roussel2019] and `lidRplugins` [@roussel2019a] and which operates on the raw point cloud, without first normalizing it to height above ground level (i.e.. subtracting the ground elevation from the dense point cloud). We used the default parameter set of the `multichm` [@eysn2015] algorithm implmented in `lidR` [@roussel2019] and `lidRplugins` [@roussel2019a]. We used `r algorithm_summary %>% dplyr::filter(algorithm == "lmfx") %>% pull(n)` parameter sets of the experimental algorithm `lmfx` [@roussel2019a].
+We tested a total of `r nrow(algorithm_summary)` automatic tree detection algorithms and a total of `r sum(algorithm_summary$n)` parameter sets on the canopy height model or the dense point cloud to locate trees within each site (Table 2). We used `r algorithm_summary %>% dplyr::filter(algorithm == "vwf") %>% pull(n)` parameter sets of a variable window filter implmented in `ForestTools` [@plowright2018] including the default variable window filter function in `ForestTools` as well as the "pines" and "combined" functions from @popescu2004. We used `r algorithm_summary %>% dplyr::filter(algorithm == "localMaxima") %>% pull(n)` parameter sets of a local maximum filter implemented in `lidR`. We used `r algorithm_summary %>% dplyr::filter(algorithm == "li2012") %>% pull(n)` parameter sets of the algorithm from @li2012, which operates on the original point cloud. These parameter sets included those from @shin2018 and @jakubowski2013. We used `r algorithm_summary %>% dplyr::filter(algorithm == "watershed") %>% pull(n)` parameter sets of the `watershed` algorithm implemented in `lidR`, which is a wrapper for a function in the `EBImage` package [@pau2010]. We used `r algorithm_summary %>% dplyr::filter(algorithm == "ptrees") %>% pull(n)` parameter sets of `ptrees` [@vega2014] implemented in `lidR` [@roussel2019] and `lidRplugins` [@roussel2019a] and which operates on the raw point cloud, without first normalizing it to height above ground level (i.e.. subtracting the ground elevation from the dense point cloud). We used the default parameter set of the `multichm` [@eysn2015] algorithm implmented in `lidR` [@roussel2019] and `lidRplugins` [@roussel2019a]. We used `r algorithm_summary %>% dplyr::filter(algorithm == "lmfx") %>% pull(n)` parameter sets of the experimental algorithm `lmfx` [@roussel2019a].
+
+```{r algorithm_summary_print, echo = FALSE, include = TRUE}
+kable(algorithm_summary_print, format = "pandoc", caption = "Algorithm name, number of parameter sets tested for each algorithm, and references.")
+```
 
 ### Map ground data
 
@@ -232,15 +256,15 @@ For each algorithm and parameter set, we calculated its performance relative to 
 
 ### Segmentation of crowns
 
-We delineated individual tree crowns with a marker controlled watershed segmentation algorithm [@meyer1990] using the detected treetops as markers implemented in the `ForestTools` package [@plowright2018]. If the automatic segmentation algorithm failed to generate a crown segment for a detected tree (e.g., often snags with a very small crown footprint), a circular crown was generated with a radius of 0.5 meters. If the segmentation generated multiple polygons for a single detected tree, only the polygon containing the detected tree was retained. Image overlap decreases near the edges of the overall flight path, which reduces the quality of the SfM processing in those areas. Thus, we excluded segmented crowns within 35 meters of the edge of the survey area.
+We delineated individual tree crowns with a marker controlled watershed segmentation algorithm [@meyer1990] using the detected treetops as markers implemented in the `ForestTools` package [@plowright2018]. If the automatic segmentation algorithm failed to generate a crown segment for a detected tree (e.g., often snags with a very small crown footprint), a circular crown was generated with a radius of 0.5 meters. If the segmentation generated multiple polygons for a single detected tree, only the polygon containing the detected tree was retained. Image overlap decreases near the edges of the overall flight path, which reduces the quality of the SfM processing in those areas. Thus, we excluded segmented crowns within 35 meters of the edge of the survey area. Given the narrower field of view of the RedEdge multispectral camera versus the X3 RGB camera whose optical parameters were used to define the ~40 hectare survey area around each site, as well as the 35 meter additional buffering, the survey area at each site was approximately 30 hectares (Table 3).
 
 We used the `velox` package [@hunziker2017] to extract all the pixel values from the orthorectified reflectance map for each of the 5 narrow bands within each segmented crown polygon. Per pixel, we additionally calculated the normalized difference vegetation index (NDVI; @rouse1973), the normalized difference red edge (NDRE; @gitelson1994), the red-green index (RGI; @coops2006), the red edge chlorophyll index (CI[red edge]; @clevers2013), and the green chlorophyll index (CI[green]; @clevers2013). For each crown polygon, we calculated the mean value for each raw and derived reflectance band (5 raw; 5 derived).
 
 ### Classification of trees
 
-We overlaid the segmented crowns on the reflectance maps from 20 sites spanning the latitudinal and elevational gradient in the study. Using QGIS, we hand classified XXXX trees as live/dead and as one of 5 dominant species in the study area (*Pinus ponderosa*, *Pinus lambertiana*, *Abies concolor*, *Calocedrus decurrens*, or *Quercus kelloggi*) using the mapped ground data as a guide. 
+We overlaid the segmented crowns on the reflectance maps from `r length(unique(hand_classified_crowns$site))` sites spanning the latitudinal and elevational gradient in the study. Using QGIS, we hand classified `r nrow(hand_classified_crowns)` trees as live/dead and as one of 5 dominant species in the study area (*Pinus ponderosa*, *Pinus lambertiana*, *Abies concolor*, *Calocedrus decurrens*, or *Quercus kelloggi*) using the mapped ground data as a guide. 
 
-We used all 10 mean values of the reflectance bands for each tree crown polygon to predict whether the hand classified trees were alive or dead using a boosted logistic regression model implemented in the `caret` package [@kuhn2008]. For just the living trees, we similarly used all 10 reflectance values to predict the tree species using regularized discriminant analysis implemented in the `caret` package, which proved to have the highest accuracy for a training dataset (accuracy = XXXXX, kappa = XXXXX).
+We used all 10 mean values of the reflectance bands for each tree crown polygon to predict whether the hand classified trees were alive or dead using a boosted logistic regression model implemented in the `caret` package (accuracy of live/dead classification on a witheld test dataset: `r round(classifier_stats[classifier_stats$type == "live/dead", "accuracy"] %>% pull() * 100, 1)`%) [@kuhn2008]. For just the living trees, we similarly used all 10 reflectance values to predict the tree species using regularized discriminant analysis implemented in the `caret` package (accuracy of species classification on a witheld testing dataset: `r round(classifier_stats[classifier_stats$type == "species", "accuracy"] %>% pull() * 100, 1)`%; accuracy of WPB host/non-WPB-host (i.e., ponderosa pine versus other tree species) on a witheld testing dataset: `r round(classifier_stats[classifier_stats$type == "host/non-host", "accuracy"] %>% pull() * 100, 1)`%).
 
 Finally, we used these models to classify all tree crowns in the data set as alive or dead as well as the species of living trees.
 
@@ -250,15 +274,15 @@ We converted the height of each tree determined using the canopy height model to
 
 ### Note on assumptions about dead trees
 
-For the purposes of this study, we assumed that all dead trees were ponderosa pine and were thus host trees. This is a reasonably good assumption, given that @fettig2019 found that `r pipo_pct_of_all_dead`% of the dead trees in the coincident ground plots were ponderosa pine.
+For the purposes of this study, we assumed that all dead trees were ponderosa pine and were thus host trees for the western pine beetle. This is a reasonably good assumption, given that @fettig2019 found that `r pipo_pct_of_all_dead`% of the dead trees in the coincident ground plots were ponderosa pine. The species contributing to the next highest proportion of dead trees was incense cedar which represented `r cade_pct_of_all_dead`% of the dead trees in the ground plots. Incense cedar is not a potential host of the western pine beetle, and we expand on the limitations of this study given the assumption of dead trees being ponderosa pine in the Discussion.
 
 ### Rasterizing individual tree data
 
-Because the tree detection algorithms were validated against ground data at the plot level, we rasterized the classified trees at a spatial resolution similar to that of the ground plots (rasterized to 20m x 20m equalling 400 m^2^; circular ground plots with 11.35m radius equalling 404 m^2^). In each raster cell, we tallied: number of alive trees, number of dead trees, number of ponderosa pine trees, number of non-ponderosa pine trees, basal area of ponderosa pine trees, basal area of non-ponderosa pine trees.
+Because the tree detection algorithms were validated against ground data at the plot level, we rasterized the classified trees at a spatial resolution similar to that of the ground plots (rasterized to 20m x 20m equalling 400 m^2^; circular ground plots with 11.35m radius equalling 404 m^2^). In each raster cell, we calculated the: number of live trees, number of dead trees, number of ponderosa pine trees, total number of trees (of all species, including ponderosa pine), quadratic mean diameter (QMD) of ponderosa pine trees, and QMD of all trees of any species (overall QMD). We converted the count of ponderosa pine trees and the total tree count to a density measurement of trees per hectare (tpha) by multiplying the counts in each 20m x 20m cell by `r 10000/400` to create a "host density" and an "overall density" variable per cell.
 
 ### Environmental data
 
-We used climatic water deficit (CWD) [@stephenson1998] from the 1980-2010 mean value of the basin characterization model [@flint2013] as an integrated measure of temperature and moisture conditions for each cell. Higher values of CWD correspond to hotter, drier conditions and lower values correspond to cooler, wetter conditions CWD has been shown to correlate well with broad patterns of tree mortality in the Sierra Nevada [@young2017]. We resampled the climatic water deficit product using bilinear interpolation implemented in the `raster` package to match the 20m x 20m spatial scale of the other variables. We converted the CWD value for each cell into a z-score representing that cell's deviation from the mean CWD across the climatic range of Sierra Nevada ponderosa pine as determined from XXXXX herbarium records described in @baldwin2017a. Thus, a CWD z-score of one would indicate that the CWD at that cell is one standard deviation hotter/drier than the mean CWD across all geolocated herbarium records for ponderosa pine in the Sierra Nevada.
+We used climatic water deficit (CWD) [@stephenson1998] from the 1980-2010 mean value of the basin characterization model [@flint2013] as an integrated measure of temperature and moisture conditions for each cell. Higher values of CWD correspond to hotter, drier conditions and lower values correspond to cooler, wetter conditions CWD has been shown to correlate well with broad patterns of tree mortality in the Sierra Nevada [@young2017]. We resampled the climatic water deficit product using bilinear interpolation implemented in the `raster` package to match the 20m x 20m spatial scale of the other variables. We converted the CWD value for each cell into a z-score representing that cell's deviation from the mean CWD across the climatic range of Sierra Nevada ponderosa pine as determined from 179 herbarium records described in @baldwin2017a. Thus, a CWD z-score of one would indicate that the CWD at that cell is one standard deviation hotter/drier than the mean CWD across all geolocated herbarium records for ponderosa pine in the Sierra Nevada.
 
 ### Statistical model
 
@@ -320,7 +344,7 @@ kable(site_characteristics, digits = 2, format = "pandoc", caption = "Site chara
 
 ### Tree detection
 
-We found that the experimental `lmfx` algorithm with parameter values of `dist2d = `r algorithm_details[1, "var1_val"]`` and `ws = `r algorithm_details[1, "var2_val"]`` [@roussel2019] performed the best across 7 measures of forest structure as measured by Pearson's correlation with ground data (Table 2).
+We found that the experimental `lmfx` algorithm with parameter values of `dist2d = `r algorithm_details[1, "var1_val"]`` and `ws = `r algorithm_details[1, "var2_val"]`` [@roussel2019] performed the best across 7 measures of forest structure as measured by Pearson's correlation with ground data (Table 3).
 
 ```{r best_algorithm_deets_table, echo = FALSE, include = TRUE}
 best_algorithm_deets_print <-

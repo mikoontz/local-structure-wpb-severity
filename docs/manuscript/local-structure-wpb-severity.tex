@@ -373,10 +373,12 @@ et al. (2019).
 
 For each of the 36 sites (containing 5 plots each), we captured imagery
 over the surrounding \textasciitilde{}40 hectares of forested area using
-north-south aerial transects. For XXXXX sites, we surveyed less
+north-south aerial transects. For three sites, we surveyed less
 surrounding area in order to maintain visual and radio communication
-with the aircraft during flight (Table 2; as a supplement, I think;
-Columns: Site, forest, elevation, rep, CWD, surveyed area, survey date).
+with the aircraft during flight which can be obstructed by steep terrain
+or non-centrally available takeoff locations. (Table 3; as a supplement,
+I think; Columns: Site, forest, elevation, rep, CWD, surveyed area,
+survey date).
 
 We preprogrammed transect paths using Map Pilot for DJI on iOS
 (hereafter Map Pilot) (Easy 2018). All transects tracked the terrain and
@@ -434,16 +436,15 @@ model from the digital surface model created in Pix4Dmapper.
 
 We tested a total of 7 automatic tree detection algorithms and a total
 of 177 parameter sets on the canopy height model or the dense point
-cloud to locate trees within each site (Table XXXXX; algorithm, number
-of parameter sets, reference). We used 3 parameter sets of a variable
-window filter implmented in \texttt{ForestTools} (Plowright 2018)
-including the default variable window filter function in
-\texttt{ForestTools} as well as the ``pines'' and ``combined'' functions
-from Popescu and Wynne (2004). We used 6 parameter sets of a local
-maximum filter implemented in \texttt{lidR}. We used 131 parameter sets
-of the algorithm from Li et al. (2012), which operates on the original
-point cloud. These parameter sets included those from Shin et al. (2018)
-and Jakubowski et al. (2013). We used 3 parameter sets of the
+cloud to locate trees within each site (Table 2). We used 3 parameter
+sets of a variable window filter implmented in \texttt{ForestTools}
+(Plowright 2018) including the default variable window filter function
+in \texttt{ForestTools} as well as the ``pines'' and ``combined''
+functions from Popescu and Wynne (2004). We used 6 parameter sets of a
+local maximum filter implemented in \texttt{lidR}. We used 131 parameter
+sets of the algorithm from Li et al. (2012), which operates on the
+original point cloud. These parameter sets included those from Shin et
+al. (2018) and Jakubowski et al. (2013). We used 3 parameter sets of the
 \texttt{watershed} algorithm implemented in \texttt{lidR}, which is a
 wrapper for a function in the \texttt{EBImage} package (Pau et al.
 2010). We used 3 parameter sets of \texttt{ptrees} (Vega et al. 2014)
@@ -455,6 +456,28 @@ the default parameter set of the \texttt{multichm} (Eysn et al. 2015)
 algorithm implmented in \texttt{lidR} (Roussel et al. 2019) and
 \texttt{lidRplugins} (Roussel 2019). We used 30 parameter sets of the
 experimental algorithm \texttt{lmfx} (Roussel 2019).
+
+\begin{longtable}[]{@{}lrl@{}}
+\caption{Algorithm name, number of parameter sets tested for each
+algorithm, and references.}\tabularnewline
+\toprule
+Algorithm & Parameter sets tested & Reference(s)\tabularnewline
+\midrule
+\endfirsthead
+\toprule
+Algorithm & Parameter sets tested & Reference(s)\tabularnewline
+\midrule
+\endhead
+li2012 & 131 & Li et al. (2012); Jakubowski et al. (2013); Shin et al.
+(2018)\tabularnewline
+lmfx & 30 & Roussel (2019)\tabularnewline
+localMaxima & 6 & Roussel et al. (2019)\tabularnewline
+multichm & 1 & Eysn et al. (2015)\tabularnewline
+ptrees & 3 & Vega et al. (2014)\tabularnewline
+vwf & 3 & Plowright (2018)\tabularnewline
+watershed & 3 & Pau et al. (2010)\tabularnewline
+\bottomrule
+\end{longtable}
 
 \subsubsection{Map ground data}\label{map-ground-data}
 
@@ -507,7 +530,11 @@ for a single detected tree, only the polygon containing the detected
 tree was retained. Image overlap decreases near the edges of the overall
 flight path, which reduces the quality of the SfM processing in those
 areas. Thus, we excluded segmented crowns within 35 meters of the edge
-of the survey area.
+of the survey area. Given the narrower field of view of the RedEdge
+multispectral camera versus the X3 RGB camera whose optical parameters
+were used to define the \textasciitilde{}40 hectare survey area around
+each site, as well as the 35 meter additional buffering, the survey area
+at each site was approximately 30 hectares (Table 3).
 
 We used the \texttt{velox} package (Hunziker 2017) to extract all the
 pixel values from the orthorectified reflectance map for each of the 5
@@ -524,19 +551,22 @@ mean value for each raw and derived reflectance band (5 raw; 5 derived).
 
 We overlaid the segmented crowns on the reflectance maps from 20 sites
 spanning the latitudinal and elevational gradient in the study. Using
-QGIS, we hand classified XXXX trees as live/dead and as one of 5
-dominant species in the study area (\emph{Pinus ponderosa}, \emph{Pinus
+QGIS, we hand classified 564 trees as live/dead and as one of 5 dominant
+species in the study area (\emph{Pinus ponderosa}, \emph{Pinus
 lambertiana}, \emph{Abies concolor}, \emph{Calocedrus decurrens}, or
 \emph{Quercus kelloggi}) using the mapped ground data as a guide.
 
 We used all 10 mean values of the reflectance bands for each tree crown
 polygon to predict whether the hand classified trees were alive or dead
 using a boosted logistic regression model implemented in the
-\texttt{caret} package (Kuhn 2008). For just the living trees, we
+\texttt{caret} package (accuracy of live/dead classification on a
+witheld test dataset: 97.3\%) (Kuhn 2008). For just the living trees, we
 similarly used all 10 reflectance values to predict the tree species
 using regularized discriminant analysis implemented in the
-\texttt{caret} package, which proved to have the highest accuracy for a
-training dataset (accuracy = XXXXX, kappa = XXXXX).
+\texttt{caret} package (accuracy of species classification on a witheld
+testing dataset: 66.7\%; accuracy of WPB host/non-WPB-host (i.e.,
+ponderosa pine versus other tree species) on a witheld testing dataset:
+74.4\%).
 
 Finally, we used these models to classify all tree crowns in the data
 set as alive or dead as well as the species of living trees.
@@ -558,9 +588,15 @@ height.
 trees}\label{note-on-assumptions-about-dead-trees}
 
 For the purposes of this study, we assumed that all dead trees were
-ponderosa pine and were thus host trees. This is a reasonably good
-assumption, given that Fettig et al. (2019) found that 73.4\% of the
-dead trees in the coincident ground plots were ponderosa pine.
+ponderosa pine and were thus host trees for the western pine beetle.
+This is a reasonably good assumption, given that Fettig et al. (2019)
+found that 73.4\% of the dead trees in the coincident ground plots were
+ponderosa pine. The species contributing to the next highest proportion
+of dead trees was incense cedar which represented 18.72\% of the dead
+trees in the ground plots. Incense cedar is not a potential host of the
+western pine beetle, and we expand on the limitations of this study
+given the assumption of dead trees being ponderosa pine in the
+Discussion.
 
 \subsubsection{Rasterizing individual tree
 data}\label{rasterizing-individual-tree-data}
@@ -570,9 +606,14 @@ at the plot level, we rasterized the classified trees at a spatial
 resolution similar to that of the ground plots (rasterized to 20m x 20m
 equalling 400 m\textsuperscript{2}; circular ground plots with 11.35m
 radius equalling 404 m\textsuperscript{2}). In each raster cell, we
-tallied: number of alive trees, number of dead trees, number of
-ponderosa pine trees, number of non-ponderosa pine trees, basal area of
-ponderosa pine trees, basal area of non-ponderosa pine trees.
+calculated the: number of live trees, number of dead trees, number of
+ponderosa pine trees, total number of trees (of all species, including
+ponderosa pine), quadratic mean diameter (QMD) of ponderosa pine trees,
+and QMD of all trees of any species (overall QMD). We converted the
+count of ponderosa pine trees and the total tree count to a density
+measurement of trees per hectare (tpha) by multiplying the counts in
+each 20m x 20m cell by 25 to create a ``host density'' and an ``overall
+density'' variable per cell.
 
 \subsubsection{Environmental data}\label{environmental-data}
 
@@ -587,7 +628,7 @@ water deficit product using bilinear interpolation implemented in the
 \texttt{raster} package to match the 20m x 20m spatial scale of the
 other variables. We converted the CWD value for each cell into a z-score
 representing that cell's deviation from the mean CWD across the climatic
-range of Sierra Nevada ponderosa pine as determined from XXXXX herbarium
+range of Sierra Nevada ponderosa pine as determined from 179 herbarium
 records described in Baldwin et al. (2017). Thus, a CWD z-score of one
 would indicate that the CWD at that cell is one standard deviation
 hotter/drier than the mean CWD across all geolocated herbarium records
@@ -887,7 +928,7 @@ ponderosa pine 0.7 standard deviations below the mean.}
 We found that the experimental \texttt{lmfx} algorithm with parameter
 values of \texttt{dist2d\ =\ 1} and \texttt{ws\ =\ 2.5} (Roussel et al.
 2019) performed the best across 7 measures of forest structure as
-measured by Pearson's correlation with ground data (Table 2).
+measured by Pearson's correlation with ground data (Table 3).
 
 \begin{longtable}[]{@{}lcccc@{}}
 \caption{Correlation and differences between the best performing tree
