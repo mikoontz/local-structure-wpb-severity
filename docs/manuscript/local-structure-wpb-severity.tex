@@ -81,21 +81,6 @@
     \date{}
     \predate{}\postdate{}
   
-\usepackage{booktabs}
-\usepackage{longtable}
-\usepackage{array}
-\usepackage{multirow}
-\usepackage{wrapfig}
-\usepackage{float}
-\usepackage{colortbl}
-\usepackage{pdflscape}
-\usepackage{tabu}
-\usepackage{threeparttable}
-\usepackage{threeparttablex}
-\usepackage[normalem]{ulem}
-\usepackage{makecell}
-\usepackage{xcolor}
-
 \usepackage[left]{lineno}
 \linenumbers
 \usepackage{setspace}
@@ -122,10 +107,9 @@ Station, Placerville, CA, USA\\
 \textsuperscript{4}USDA Forest Service, Pacific Southwest Research
 Station, Davis, CA, USA
 
-\textsuperscript{*}Correspondence:
-\texttt{michael.koontz@colorado.edu\ date\_generated:\ !r\ format(Sys.Date(),\ "\%B\ \%d,\ \%Y")}
+\textsuperscript{*}Correspondence: \texttt{michael.koontz@colorado.edu}
 
-Date report generated:
+Date report generated: April 07, 2019
 
 \subsection{Abstract}\label{abstract}
 
@@ -340,25 +324,107 @@ capture at each site, we calibrated the RedEdge3 camera by taking an
 image of a calibration panel on the ground in full sun with known
 reflectance values for each of the 5 narrow bands.
 
-\begin{longtable}[]{@{}rlrrlr@{}}
+\begin{longtable}[]{@{}cccccc@{}}
 \caption{Reflectance sensitivity of the Micasense Rededge3 camera. The
 calibration panel value represents the reflectance of the calibration
 panel for the given wavelength.}\tabularnewline
 \toprule
-Band number & Band name & Center wavelength & Band width & Wavelength
-range & Panel reflectance\tabularnewline
+\begin{minipage}[b]{0.10\columnwidth}\centering\strut
+Band number\strut
+\end{minipage} & \begin{minipage}[b]{0.23\columnwidth}\centering\strut
+Band name\strut
+\end{minipage} & \begin{minipage}[b]{0.14\columnwidth}\centering\strut
+Center wavelength\strut
+\end{minipage} & \begin{minipage}[b]{0.09\columnwidth}\centering\strut
+Band width\strut
+\end{minipage} & \begin{minipage}[b]{0.14\columnwidth}\centering\strut
+Wavelength range\strut
+\end{minipage} & \begin{minipage}[b]{0.14\columnwidth}\centering\strut
+Panel reflectance\strut
+\end{minipage}\tabularnewline
 \midrule
 \endfirsthead
 \toprule
-Band number & Band name & Center wavelength & Band width & Wavelength
-range & Panel reflectance\tabularnewline
+\begin{minipage}[b]{0.10\columnwidth}\centering\strut
+Band number\strut
+\end{minipage} & \begin{minipage}[b]{0.23\columnwidth}\centering\strut
+Band name\strut
+\end{minipage} & \begin{minipage}[b]{0.14\columnwidth}\centering\strut
+Center wavelength\strut
+\end{minipage} & \begin{minipage}[b]{0.09\columnwidth}\centering\strut
+Band width\strut
+\end{minipage} & \begin{minipage}[b]{0.14\columnwidth}\centering\strut
+Wavelength range\strut
+\end{minipage} & \begin{minipage}[b]{0.14\columnwidth}\centering\strut
+Panel reflectance\strut
+\end{minipage}\tabularnewline
 \midrule
 \endhead
-1 & blue (b) & 475 & 20 & 465-485 & 0.64\tabularnewline
-2 & green (g) & 560 & 20 & 550-570 & 0.64\tabularnewline
-3 & red (r) & 668 & 10 & 663-673 & 0.64\tabularnewline
-4 & near infrared (nir) & 840 & 40 & 820-860 & 0.60\tabularnewline
-5 & red edge (re) & 717 & 10 & 712-722 & 0.63\tabularnewline
+\begin{minipage}[t]{0.10\columnwidth}\centering\strut
+1\strut
+\end{minipage} & \begin{minipage}[t]{0.23\columnwidth}\centering\strut
+blue (b)\strut
+\end{minipage} & \begin{minipage}[t]{0.14\columnwidth}\centering\strut
+475\strut
+\end{minipage} & \begin{minipage}[t]{0.09\columnwidth}\centering\strut
+20\strut
+\end{minipage} & \begin{minipage}[t]{0.14\columnwidth}\centering\strut
+465-485\strut
+\end{minipage} & \begin{minipage}[t]{0.14\columnwidth}\centering\strut
+0.64\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.10\columnwidth}\centering\strut
+2\strut
+\end{minipage} & \begin{minipage}[t]{0.23\columnwidth}\centering\strut
+green (g)\strut
+\end{minipage} & \begin{minipage}[t]{0.14\columnwidth}\centering\strut
+560\strut
+\end{minipage} & \begin{minipage}[t]{0.09\columnwidth}\centering\strut
+20\strut
+\end{minipage} & \begin{minipage}[t]{0.14\columnwidth}\centering\strut
+550-570\strut
+\end{minipage} & \begin{minipage}[t]{0.14\columnwidth}\centering\strut
+0.64\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.10\columnwidth}\centering\strut
+3\strut
+\end{minipage} & \begin{minipage}[t]{0.23\columnwidth}\centering\strut
+red (r)\strut
+\end{minipage} & \begin{minipage}[t]{0.14\columnwidth}\centering\strut
+668\strut
+\end{minipage} & \begin{minipage}[t]{0.09\columnwidth}\centering\strut
+10\strut
+\end{minipage} & \begin{minipage}[t]{0.14\columnwidth}\centering\strut
+663-673\strut
+\end{minipage} & \begin{minipage}[t]{0.14\columnwidth}\centering\strut
+0.64\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.10\columnwidth}\centering\strut
+4\strut
+\end{minipage} & \begin{minipage}[t]{0.23\columnwidth}\centering\strut
+near infrared (nir)\strut
+\end{minipage} & \begin{minipage}[t]{0.14\columnwidth}\centering\strut
+840\strut
+\end{minipage} & \begin{minipage}[t]{0.09\columnwidth}\centering\strut
+40\strut
+\end{minipage} & \begin{minipage}[t]{0.14\columnwidth}\centering\strut
+820-860\strut
+\end{minipage} & \begin{minipage}[t]{0.14\columnwidth}\centering\strut
+0.6\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.10\columnwidth}\centering\strut
+5\strut
+\end{minipage} & \begin{minipage}[t]{0.23\columnwidth}\centering\strut
+red edge (re)\strut
+\end{minipage} & \begin{minipage}[t]{0.14\columnwidth}\centering\strut
+717\strut
+\end{minipage} & \begin{minipage}[t]{0.09\columnwidth}\centering\strut
+10\strut
+\end{minipage} & \begin{minipage}[t]{0.14\columnwidth}\centering\strut
+712-722\strut
+\end{minipage} & \begin{minipage}[t]{0.14\columnwidth}\centering\strut
+0.63\strut
+\end{minipage}\tabularnewline
 \bottomrule
 \end{longtable}
 
@@ -457,25 +523,78 @@ algorithm implmented in \texttt{lidR} (Roussel et al. 2019) and
 \texttt{lidRplugins} (Roussel 2019). We used 30 parameter sets of the
 experimental algorithm \texttt{lmfx} (Roussel 2019).
 
-\begin{longtable}[]{@{}lrl@{}}
+\begin{longtable}[]{@{}ccc@{}}
 \caption{Algorithm name, number of parameter sets tested for each
 algorithm, and references.}\tabularnewline
 \toprule
-Algorithm & Parameter sets tested & Reference(s)\tabularnewline
+\begin{minipage}[b]{0.18\columnwidth}\centering\strut
+Algorithm\strut
+\end{minipage} & \begin{minipage}[b]{0.22\columnwidth}\centering\strut
+Parameter sets tested\strut
+\end{minipage} & \begin{minipage}[b]{0.34\columnwidth}\centering\strut
+Reference(s)\strut
+\end{minipage}\tabularnewline
 \midrule
 \endfirsthead
 \toprule
-Algorithm & Parameter sets tested & Reference(s)\tabularnewline
+\begin{minipage}[b]{0.18\columnwidth}\centering\strut
+Algorithm\strut
+\end{minipage} & \begin{minipage}[b]{0.22\columnwidth}\centering\strut
+Parameter sets tested\strut
+\end{minipage} & \begin{minipage}[b]{0.34\columnwidth}\centering\strut
+Reference(s)\strut
+\end{minipage}\tabularnewline
 \midrule
 \endhead
-li2012 & 131 & Li et al. (2012); Jakubowski et al. (2013); Shin et al.
-(2018)\tabularnewline
-lmfx & 30 & Roussel (2019)\tabularnewline
-localMaxima & 6 & Roussel et al. (2019)\tabularnewline
-multichm & 1 & Eysn et al. (2015)\tabularnewline
-ptrees & 3 & Vega et al. (2014)\tabularnewline
-vwf & 3 & Plowright (2018)\tabularnewline
-watershed & 3 & Pau et al. (2010)\tabularnewline
+\begin{minipage}[t]{0.18\columnwidth}\centering\strut
+li2012\strut
+\end{minipage} & \begin{minipage}[t]{0.22\columnwidth}\centering\strut
+131\strut
+\end{minipage} & \begin{minipage}[t]{0.34\columnwidth}\centering\strut
+Li et al. (2012); Jakubowski et al. (2013); Shin et al. (2018)\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.18\columnwidth}\centering\strut
+lmfx\strut
+\end{minipage} & \begin{minipage}[t]{0.22\columnwidth}\centering\strut
+30\strut
+\end{minipage} & \begin{minipage}[t]{0.34\columnwidth}\centering\strut
+Roussel (2019)\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.18\columnwidth}\centering\strut
+localMaxima\strut
+\end{minipage} & \begin{minipage}[t]{0.22\columnwidth}\centering\strut
+6\strut
+\end{minipage} & \begin{minipage}[t]{0.34\columnwidth}\centering\strut
+Roussel et al. (2019)\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.18\columnwidth}\centering\strut
+multichm\strut
+\end{minipage} & \begin{minipage}[t]{0.22\columnwidth}\centering\strut
+1\strut
+\end{minipage} & \begin{minipage}[t]{0.34\columnwidth}\centering\strut
+Eysn et al. (2015)\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.18\columnwidth}\centering\strut
+ptrees\strut
+\end{minipage} & \begin{minipage}[t]{0.22\columnwidth}\centering\strut
+3\strut
+\end{minipage} & \begin{minipage}[t]{0.34\columnwidth}\centering\strut
+Vega et al. (2014)\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.18\columnwidth}\centering\strut
+vwf\strut
+\end{minipage} & \begin{minipage}[t]{0.22\columnwidth}\centering\strut
+3\strut
+\end{minipage} & \begin{minipage}[t]{0.34\columnwidth}\centering\strut
+Plowright (2018)\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.18\columnwidth}\centering\strut
+watershed\strut
+\end{minipage} & \begin{minipage}[t]{0.22\columnwidth}\centering\strut
+3\strut
+\end{minipage} & \begin{minipage}[t]{0.34\columnwidth}\centering\strut
+Pau et al. (2010)\strut
+\end{minipage}\tabularnewline
 \bottomrule
 \end{longtable}
 
@@ -706,7 +825,7 @@ Core Team 2018).
 
 \subsection{Results}\label{results}
 
-\begin{longtable}[]{@{}lrrrll@{}}
+\begin{longtable}[]{@{}cccccc@{}}
 \caption{Site characteristics for each of the 32 sites. The site name
 consists of the forest name, elevation band, and rep separated by an
 underscore. The Eldorado National Forest is `eldo', the Stanislaus
@@ -719,79 +838,453 @@ site is presented along with the mortality and density calculated from
 the ground data (aerial / ground). The density is measured in trees per
 hectare (tpha).}\tabularnewline
 \toprule
-Site & CWD (mm) & CWD (z-score) & Survey area (ha) & Mortality
-(aerial/ground) & Density (tpha; aerial/ground)\tabularnewline
+\begin{minipage}[b]{0.12\columnwidth}\centering\strut
+Site\strut
+\end{minipage} & \begin{minipage}[b]{0.07\columnwidth}\centering\strut
+CWD (mm)\strut
+\end{minipage} & \begin{minipage}[b]{0.12\columnwidth}\centering\strut
+CWD (z-score)\strut
+\end{minipage} & \begin{minipage}[b]{0.14\columnwidth}\centering\strut
+Survey area (ha)\strut
+\end{minipage} & \begin{minipage}[b]{0.17\columnwidth}\centering\strut
+Mortality (aerial/ground)\strut
+\end{minipage} & \begin{minipage}[b]{0.22\columnwidth}\centering\strut
+Density (tpha; aerial/ground)\strut
+\end{minipage}\tabularnewline
 \midrule
 \endfirsthead
 \toprule
-Site & CWD (mm) & CWD (z-score) & Survey area (ha) & Mortality
-(aerial/ground) & Density (tpha; aerial/ground)\tabularnewline
+\begin{minipage}[b]{0.12\columnwidth}\centering\strut
+Site\strut
+\end{minipage} & \begin{minipage}[b]{0.07\columnwidth}\centering\strut
+CWD (mm)\strut
+\end{minipage} & \begin{minipage}[b]{0.12\columnwidth}\centering\strut
+CWD (z-score)\strut
+\end{minipage} & \begin{minipage}[b]{0.14\columnwidth}\centering\strut
+Survey area (ha)\strut
+\end{minipage} & \begin{minipage}[b]{0.17\columnwidth}\centering\strut
+Mortality (aerial/ground)\strut
+\end{minipage} & \begin{minipage}[b]{0.22\columnwidth}\centering\strut
+Density (tpha; aerial/ground)\strut
+\end{minipage}\tabularnewline
 \midrule
 \endhead
-eldo\_3k\_1 & 678.45 & 0.32 & 31.02 & 0.11/0.61 &
-630.01/410.19\tabularnewline
-eldo\_3k\_2 & 706.48 & 0.50 & 30.61 & 0.12/0.36 &
-444.26/647.42\tabularnewline
-eldo\_3k\_3 & 654.51 & 0.16 & 30.95 & 0.22/0.36 &
-492.63/410.19\tabularnewline
-eldo\_4k\_1 & 570.43 & -0.38 & 28.04 & 0.09/0.39 &
-632.82/588.11\tabularnewline
-eldo\_4k\_2 & 642.20 & 0.08 & 28.41 & 0.15/0.78 &
-338.20/271.82\tabularnewline
-eldo\_5k\_1 & 663.09 & 0.22 & 28.44 & 0.11/0.44 &
-661.80/543.63\tabularnewline
-eldo\_5k\_2 & 627.38 & -0.01 & 30.02 & 0.12/0.36 &
-584.89/968.65\tabularnewline
-eldo\_5k\_3 & 598.66 & -0.20 & 29.73 & 0.07/0.32 &
-488.66/622.71\tabularnewline
-stan\_3k\_1 & 638.49 & 0.06 & 31.04 & 0.10/0.52 &
-739.45/1037.84\tabularnewline
-stan\_3k\_2 & 739.23 & 0.71 & 18.78 & 0.40/0.78 &
-433.53/405.25\tabularnewline
-stan\_3k\_3 & 761.64 & 0.86 & 30.10 & 0.22/0.41 &
-558.43/326.18\tabularnewline
-stan\_4k\_1 & 540.16 & -0.58 & 29.62 & 0.29/0.63 &
-507.61/711.66\tabularnewline
-stan\_4k\_2 & 528.07 & -0.66 & 30.54 & 0.18/0.56 &
-481.85/256.99\tabularnewline
-stan\_5k\_1 & 523.51 & -0.69 & 30.94 & 0.19/0.54 &
-388.89/336.06\tabularnewline
-stan\_5k\_2 & 523.95 & -0.68 & 29.94 & 0.21/0.44 &
-399.33/622.71\tabularnewline
-sier\_3k\_1 & 763.54 & 0.87 & 30.42 & 0.19/0.48 &
-651.46/850.04\tabularnewline
-sier\_3k\_2 & 767.64 & 0.90 & 30.05 & 0.20/0.77 &
-438.84/153.21\tabularnewline
-sier\_3k\_3 & 772.98 & 0.93 & 29.77 & 0.32/0.77 &
-511.26/459.62\tabularnewline
-sier\_4k\_1 & 841.25 & 1.38 & 30.43 & 0.54/0.51 &
-576.15/538.69\tabularnewline
-sier\_4k\_2 & 764.38 & 0.88 & 29.30 & 0.33/0.57 &
-499.43/854.98\tabularnewline
-sier\_4k\_3 & 688.34 & 0.38 & 26.39 & 0.48/0.59 &
-454.23/499.15\tabularnewline
-sier\_5k\_1 & 721.59 & 0.60 & 14.59 & 0.41/0.43 &
-631.30/716.60\tabularnewline
-sier\_5k\_2 & 709.96 & 0.52 & 27.53 & 0.53/0.74 &
-477.29/454.67\tabularnewline
-sier\_5k\_3 & 778.53 & 0.97 & 28.93 & 0.33/0.43 &
-569.44/484.33\tabularnewline
-sequ\_4k\_1 & 766.61 & 0.89 & 29.59 & 0.50/0.56 &
-365.81/607.88\tabularnewline
-sequ\_4k\_3 & 815.60 & 1.21 & 29.69 & 0.35/0.71 &
-433.35/306.41\tabularnewline
-sequ\_5k\_1 & 718.24 & 0.58 & 27.12 & 0.35/0.52 &
-364.01/444.79\tabularnewline
-sequ\_5k\_2 & 587.26 & -0.27 & 29.10 & 0.45/0.43 &
-478.31/499.15\tabularnewline
-sequ\_5k\_3 & 611.33 & -0.12 & 31.34 & 0.42/0.48 &
-348.68/494.21\tabularnewline
-sequ\_6k\_1 & 730.52 & 0.66 & 27.78 & 0.30/0.70 &
-433.43/360.77\tabularnewline
-sequ\_6k\_2 & 689.51 & 0.39 & 11.83 & 0.26/0.43 &
-699.04/934.06\tabularnewline
-sequ\_6k\_3 & 602.65 & -0.17 & 26.51 & 0.36/0.32 &
-535.54/691.89\tabularnewline
+\begin{minipage}[t]{0.12\columnwidth}\centering\strut
+eldo\_3k\_1\strut
+\end{minipage} & \begin{minipage}[t]{0.07\columnwidth}\centering\strut
+678\strut
+\end{minipage} & \begin{minipage}[t]{0.12\columnwidth}\centering\strut
+0.319\strut
+\end{minipage} & \begin{minipage}[t]{0.14\columnwidth}\centering\strut
+31.02\strut
+\end{minipage} & \begin{minipage}[t]{0.17\columnwidth}\centering\strut
+0.11/0.61\strut
+\end{minipage} & \begin{minipage}[t]{0.22\columnwidth}\centering\strut
+630.01/410.19\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.12\columnwidth}\centering\strut
+eldo\_3k\_2\strut
+\end{minipage} & \begin{minipage}[t]{0.07\columnwidth}\centering\strut
+706\strut
+\end{minipage} & \begin{minipage}[t]{0.12\columnwidth}\centering\strut
+0.501\strut
+\end{minipage} & \begin{minipage}[t]{0.14\columnwidth}\centering\strut
+30.61\strut
+\end{minipage} & \begin{minipage}[t]{0.17\columnwidth}\centering\strut
+0.12/0.36\strut
+\end{minipage} & \begin{minipage}[t]{0.22\columnwidth}\centering\strut
+444.26/647.42\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.12\columnwidth}\centering\strut
+eldo\_3k\_3\strut
+\end{minipage} & \begin{minipage}[t]{0.07\columnwidth}\centering\strut
+655\strut
+\end{minipage} & \begin{minipage}[t]{0.12\columnwidth}\centering\strut
+0.163\strut
+\end{minipage} & \begin{minipage}[t]{0.14\columnwidth}\centering\strut
+30.95\strut
+\end{minipage} & \begin{minipage}[t]{0.17\columnwidth}\centering\strut
+0.22/0.36\strut
+\end{minipage} & \begin{minipage}[t]{0.22\columnwidth}\centering\strut
+492.63/410.19\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.12\columnwidth}\centering\strut
+eldo\_4k\_1\strut
+\end{minipage} & \begin{minipage}[t]{0.07\columnwidth}\centering\strut
+570\strut
+\end{minipage} & \begin{minipage}[t]{0.12\columnwidth}\centering\strut
+-0.383\strut
+\end{minipage} & \begin{minipage}[t]{0.14\columnwidth}\centering\strut
+28.04\strut
+\end{minipage} & \begin{minipage}[t]{0.17\columnwidth}\centering\strut
+0.09/0.39\strut
+\end{minipage} & \begin{minipage}[t]{0.22\columnwidth}\centering\strut
+632.82/588.11\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.12\columnwidth}\centering\strut
+eldo\_4k\_2\strut
+\end{minipage} & \begin{minipage}[t]{0.07\columnwidth}\centering\strut
+642\strut
+\end{minipage} & \begin{minipage}[t]{0.12\columnwidth}\centering\strut
+0.0831\strut
+\end{minipage} & \begin{minipage}[t]{0.14\columnwidth}\centering\strut
+28.41\strut
+\end{minipage} & \begin{minipage}[t]{0.17\columnwidth}\centering\strut
+0.15/0.78\strut
+\end{minipage} & \begin{minipage}[t]{0.22\columnwidth}\centering\strut
+338.20/271.82\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.12\columnwidth}\centering\strut
+eldo\_5k\_1\strut
+\end{minipage} & \begin{minipage}[t]{0.07\columnwidth}\centering\strut
+663\strut
+\end{minipage} & \begin{minipage}[t]{0.12\columnwidth}\centering\strut
+0.219\strut
+\end{minipage} & \begin{minipage}[t]{0.14\columnwidth}\centering\strut
+28.44\strut
+\end{minipage} & \begin{minipage}[t]{0.17\columnwidth}\centering\strut
+0.11/0.44\strut
+\end{minipage} & \begin{minipage}[t]{0.22\columnwidth}\centering\strut
+661.80/543.63\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.12\columnwidth}\centering\strut
+eldo\_5k\_2\strut
+\end{minipage} & \begin{minipage}[t]{0.07\columnwidth}\centering\strut
+627\strut
+\end{minipage} & \begin{minipage}[t]{0.12\columnwidth}\centering\strut
+-0.0132\strut
+\end{minipage} & \begin{minipage}[t]{0.14\columnwidth}\centering\strut
+30.02\strut
+\end{minipage} & \begin{minipage}[t]{0.17\columnwidth}\centering\strut
+0.12/0.36\strut
+\end{minipage} & \begin{minipage}[t]{0.22\columnwidth}\centering\strut
+584.89/968.65\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.12\columnwidth}\centering\strut
+eldo\_5k\_3\strut
+\end{minipage} & \begin{minipage}[t]{0.07\columnwidth}\centering\strut
+599\strut
+\end{minipage} & \begin{minipage}[t]{0.12\columnwidth}\centering\strut
+-0.2\strut
+\end{minipage} & \begin{minipage}[t]{0.14\columnwidth}\centering\strut
+29.73\strut
+\end{minipage} & \begin{minipage}[t]{0.17\columnwidth}\centering\strut
+0.07/0.32\strut
+\end{minipage} & \begin{minipage}[t]{0.22\columnwidth}\centering\strut
+488.66/622.71\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.12\columnwidth}\centering\strut
+stan\_3k\_1\strut
+\end{minipage} & \begin{minipage}[t]{0.07\columnwidth}\centering\strut
+638\strut
+\end{minipage} & \begin{minipage}[t]{0.12\columnwidth}\centering\strut
+0.059\strut
+\end{minipage} & \begin{minipage}[t]{0.14\columnwidth}\centering\strut
+31.04\strut
+\end{minipage} & \begin{minipage}[t]{0.17\columnwidth}\centering\strut
+0.10/0.52\strut
+\end{minipage} & \begin{minipage}[t]{0.22\columnwidth}\centering\strut
+739.45/1037.84\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.12\columnwidth}\centering\strut
+stan\_3k\_2\strut
+\end{minipage} & \begin{minipage}[t]{0.07\columnwidth}\centering\strut
+739\strut
+\end{minipage} & \begin{minipage}[t]{0.12\columnwidth}\centering\strut
+0.713\strut
+\end{minipage} & \begin{minipage}[t]{0.14\columnwidth}\centering\strut
+18.78\strut
+\end{minipage} & \begin{minipage}[t]{0.17\columnwidth}\centering\strut
+0.40/0.78\strut
+\end{minipage} & \begin{minipage}[t]{0.22\columnwidth}\centering\strut
+433.53/405.25\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.12\columnwidth}\centering\strut
+stan\_3k\_3\strut
+\end{minipage} & \begin{minipage}[t]{0.07\columnwidth}\centering\strut
+762\strut
+\end{minipage} & \begin{minipage}[t]{0.12\columnwidth}\centering\strut
+0.859\strut
+\end{minipage} & \begin{minipage}[t]{0.14\columnwidth}\centering\strut
+30.1\strut
+\end{minipage} & \begin{minipage}[t]{0.17\columnwidth}\centering\strut
+0.22/0.41\strut
+\end{minipage} & \begin{minipage}[t]{0.22\columnwidth}\centering\strut
+558.43/326.18\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.12\columnwidth}\centering\strut
+stan\_4k\_1\strut
+\end{minipage} & \begin{minipage}[t]{0.07\columnwidth}\centering\strut
+540\strut
+\end{minipage} & \begin{minipage}[t]{0.12\columnwidth}\centering\strut
+-0.58\strut
+\end{minipage} & \begin{minipage}[t]{0.14\columnwidth}\centering\strut
+29.62\strut
+\end{minipage} & \begin{minipage}[t]{0.17\columnwidth}\centering\strut
+0.29/0.63\strut
+\end{minipage} & \begin{minipage}[t]{0.22\columnwidth}\centering\strut
+507.61/711.66\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.12\columnwidth}\centering\strut
+stan\_4k\_2\strut
+\end{minipage} & \begin{minipage}[t]{0.07\columnwidth}\centering\strut
+528\strut
+\end{minipage} & \begin{minipage}[t]{0.12\columnwidth}\centering\strut
+-0.658\strut
+\end{minipage} & \begin{minipage}[t]{0.14\columnwidth}\centering\strut
+30.54\strut
+\end{minipage} & \begin{minipage}[t]{0.17\columnwidth}\centering\strut
+0.18/0.56\strut
+\end{minipage} & \begin{minipage}[t]{0.22\columnwidth}\centering\strut
+481.85/256.99\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.12\columnwidth}\centering\strut
+stan\_5k\_1\strut
+\end{minipage} & \begin{minipage}[t]{0.07\columnwidth}\centering\strut
+524\strut
+\end{minipage} & \begin{minipage}[t]{0.12\columnwidth}\centering\strut
+-0.688\strut
+\end{minipage} & \begin{minipage}[t]{0.14\columnwidth}\centering\strut
+30.94\strut
+\end{minipage} & \begin{minipage}[t]{0.17\columnwidth}\centering\strut
+0.19/0.54\strut
+\end{minipage} & \begin{minipage}[t]{0.22\columnwidth}\centering\strut
+388.89/336.06\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.12\columnwidth}\centering\strut
+stan\_5k\_2\strut
+\end{minipage} & \begin{minipage}[t]{0.07\columnwidth}\centering\strut
+524\strut
+\end{minipage} & \begin{minipage}[t]{0.12\columnwidth}\centering\strut
+-0.685\strut
+\end{minipage} & \begin{minipage}[t]{0.14\columnwidth}\centering\strut
+29.94\strut
+\end{minipage} & \begin{minipage}[t]{0.17\columnwidth}\centering\strut
+0.21/0.44\strut
+\end{minipage} & \begin{minipage}[t]{0.22\columnwidth}\centering\strut
+399.33/622.71\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.12\columnwidth}\centering\strut
+sier\_3k\_1\strut
+\end{minipage} & \begin{minipage}[t]{0.07\columnwidth}\centering\strut
+764\strut
+\end{minipage} & \begin{minipage}[t]{0.12\columnwidth}\centering\strut
+0.871\strut
+\end{minipage} & \begin{minipage}[t]{0.14\columnwidth}\centering\strut
+30.42\strut
+\end{minipage} & \begin{minipage}[t]{0.17\columnwidth}\centering\strut
+0.19/0.48\strut
+\end{minipage} & \begin{minipage}[t]{0.22\columnwidth}\centering\strut
+651.46/850.04\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.12\columnwidth}\centering\strut
+sier\_3k\_2\strut
+\end{minipage} & \begin{minipage}[t]{0.07\columnwidth}\centering\strut
+768\strut
+\end{minipage} & \begin{minipage}[t]{0.12\columnwidth}\centering\strut
+0.898\strut
+\end{minipage} & \begin{minipage}[t]{0.14\columnwidth}\centering\strut
+30.05\strut
+\end{minipage} & \begin{minipage}[t]{0.17\columnwidth}\centering\strut
+0.20/0.77\strut
+\end{minipage} & \begin{minipage}[t]{0.22\columnwidth}\centering\strut
+438.84/153.21\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.12\columnwidth}\centering\strut
+sier\_3k\_3\strut
+\end{minipage} & \begin{minipage}[t]{0.07\columnwidth}\centering\strut
+773\strut
+\end{minipage} & \begin{minipage}[t]{0.12\columnwidth}\centering\strut
+0.932\strut
+\end{minipage} & \begin{minipage}[t]{0.14\columnwidth}\centering\strut
+29.77\strut
+\end{minipage} & \begin{minipage}[t]{0.17\columnwidth}\centering\strut
+0.32/0.77\strut
+\end{minipage} & \begin{minipage}[t]{0.22\columnwidth}\centering\strut
+511.26/459.62\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.12\columnwidth}\centering\strut
+sier\_4k\_1\strut
+\end{minipage} & \begin{minipage}[t]{0.07\columnwidth}\centering\strut
+841\strut
+\end{minipage} & \begin{minipage}[t]{0.12\columnwidth}\centering\strut
+1.38\strut
+\end{minipage} & \begin{minipage}[t]{0.14\columnwidth}\centering\strut
+30.43\strut
+\end{minipage} & \begin{minipage}[t]{0.17\columnwidth}\centering\strut
+0.54/0.51\strut
+\end{minipage} & \begin{minipage}[t]{0.22\columnwidth}\centering\strut
+576.15/538.69\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.12\columnwidth}\centering\strut
+sier\_4k\_2\strut
+\end{minipage} & \begin{minipage}[t]{0.07\columnwidth}\centering\strut
+764\strut
+\end{minipage} & \begin{minipage}[t]{0.12\columnwidth}\centering\strut
+0.877\strut
+\end{minipage} & \begin{minipage}[t]{0.14\columnwidth}\centering\strut
+29.3\strut
+\end{minipage} & \begin{minipage}[t]{0.17\columnwidth}\centering\strut
+0.33/0.57\strut
+\end{minipage} & \begin{minipage}[t]{0.22\columnwidth}\centering\strut
+499.43/854.98\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.12\columnwidth}\centering\strut
+sier\_4k\_3\strut
+\end{minipage} & \begin{minipage}[t]{0.07\columnwidth}\centering\strut
+688\strut
+\end{minipage} & \begin{minipage}[t]{0.12\columnwidth}\centering\strut
+0.383\strut
+\end{minipage} & \begin{minipage}[t]{0.14\columnwidth}\centering\strut
+26.39\strut
+\end{minipage} & \begin{minipage}[t]{0.17\columnwidth}\centering\strut
+0.48/0.59\strut
+\end{minipage} & \begin{minipage}[t]{0.22\columnwidth}\centering\strut
+454.23/499.15\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.12\columnwidth}\centering\strut
+sier\_5k\_1\strut
+\end{minipage} & \begin{minipage}[t]{0.07\columnwidth}\centering\strut
+722\strut
+\end{minipage} & \begin{minipage}[t]{0.12\columnwidth}\centering\strut
+0.599\strut
+\end{minipage} & \begin{minipage}[t]{0.14\columnwidth}\centering\strut
+14.59\strut
+\end{minipage} & \begin{minipage}[t]{0.17\columnwidth}\centering\strut
+0.41/0.43\strut
+\end{minipage} & \begin{minipage}[t]{0.22\columnwidth}\centering\strut
+631.30/716.60\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.12\columnwidth}\centering\strut
+sier\_5k\_2\strut
+\end{minipage} & \begin{minipage}[t]{0.07\columnwidth}\centering\strut
+710\strut
+\end{minipage} & \begin{minipage}[t]{0.12\columnwidth}\centering\strut
+0.523\strut
+\end{minipage} & \begin{minipage}[t]{0.14\columnwidth}\centering\strut
+27.53\strut
+\end{minipage} & \begin{minipage}[t]{0.17\columnwidth}\centering\strut
+0.53/0.74\strut
+\end{minipage} & \begin{minipage}[t]{0.22\columnwidth}\centering\strut
+477.29/454.67\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.12\columnwidth}\centering\strut
+sier\_5k\_3\strut
+\end{minipage} & \begin{minipage}[t]{0.07\columnwidth}\centering\strut
+779\strut
+\end{minipage} & \begin{minipage}[t]{0.12\columnwidth}\centering\strut
+0.968\strut
+\end{minipage} & \begin{minipage}[t]{0.14\columnwidth}\centering\strut
+28.93\strut
+\end{minipage} & \begin{minipage}[t]{0.17\columnwidth}\centering\strut
+0.33/0.43\strut
+\end{minipage} & \begin{minipage}[t]{0.22\columnwidth}\centering\strut
+569.44/484.33\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.12\columnwidth}\centering\strut
+sequ\_4k\_1\strut
+\end{minipage} & \begin{minipage}[t]{0.07\columnwidth}\centering\strut
+767\strut
+\end{minipage} & \begin{minipage}[t]{0.12\columnwidth}\centering\strut
+0.891\strut
+\end{minipage} & \begin{minipage}[t]{0.14\columnwidth}\centering\strut
+29.59\strut
+\end{minipage} & \begin{minipage}[t]{0.17\columnwidth}\centering\strut
+0.50/0.56\strut
+\end{minipage} & \begin{minipage}[t]{0.22\columnwidth}\centering\strut
+365.81/607.88\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.12\columnwidth}\centering\strut
+sequ\_4k\_3\strut
+\end{minipage} & \begin{minipage}[t]{0.07\columnwidth}\centering\strut
+816\strut
+\end{minipage} & \begin{minipage}[t]{0.12\columnwidth}\centering\strut
+1.21\strut
+\end{minipage} & \begin{minipage}[t]{0.14\columnwidth}\centering\strut
+29.69\strut
+\end{minipage} & \begin{minipage}[t]{0.17\columnwidth}\centering\strut
+0.35/0.71\strut
+\end{minipage} & \begin{minipage}[t]{0.22\columnwidth}\centering\strut
+433.35/306.41\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.12\columnwidth}\centering\strut
+sequ\_5k\_1\strut
+\end{minipage} & \begin{minipage}[t]{0.07\columnwidth}\centering\strut
+718\strut
+\end{minipage} & \begin{minipage}[t]{0.12\columnwidth}\centering\strut
+0.577\strut
+\end{minipage} & \begin{minipage}[t]{0.14\columnwidth}\centering\strut
+27.12\strut
+\end{minipage} & \begin{minipage}[t]{0.17\columnwidth}\centering\strut
+0.35/0.52\strut
+\end{minipage} & \begin{minipage}[t]{0.22\columnwidth}\centering\strut
+364.01/444.79\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.12\columnwidth}\centering\strut
+sequ\_5k\_2\strut
+\end{minipage} & \begin{minipage}[t]{0.07\columnwidth}\centering\strut
+587\strut
+\end{minipage} & \begin{minipage}[t]{0.12\columnwidth}\centering\strut
+-0.274\strut
+\end{minipage} & \begin{minipage}[t]{0.14\columnwidth}\centering\strut
+29.1\strut
+\end{minipage} & \begin{minipage}[t]{0.17\columnwidth}\centering\strut
+0.45/0.43\strut
+\end{minipage} & \begin{minipage}[t]{0.22\columnwidth}\centering\strut
+478.31/499.15\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.12\columnwidth}\centering\strut
+sequ\_5k\_3\strut
+\end{minipage} & \begin{minipage}[t]{0.07\columnwidth}\centering\strut
+611\strut
+\end{minipage} & \begin{minipage}[t]{0.12\columnwidth}\centering\strut
+-0.117\strut
+\end{minipage} & \begin{minipage}[t]{0.14\columnwidth}\centering\strut
+31.34\strut
+\end{minipage} & \begin{minipage}[t]{0.17\columnwidth}\centering\strut
+0.42/0.48\strut
+\end{minipage} & \begin{minipage}[t]{0.22\columnwidth}\centering\strut
+348.68/494.21\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.12\columnwidth}\centering\strut
+sequ\_6k\_1\strut
+\end{minipage} & \begin{minipage}[t]{0.07\columnwidth}\centering\strut
+731\strut
+\end{minipage} & \begin{minipage}[t]{0.12\columnwidth}\centering\strut
+0.657\strut
+\end{minipage} & \begin{minipage}[t]{0.14\columnwidth}\centering\strut
+27.78\strut
+\end{minipage} & \begin{minipage}[t]{0.17\columnwidth}\centering\strut
+0.30/0.70\strut
+\end{minipage} & \begin{minipage}[t]{0.22\columnwidth}\centering\strut
+433.43/360.77\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.12\columnwidth}\centering\strut
+sequ\_6k\_2\strut
+\end{minipage} & \begin{minipage}[t]{0.07\columnwidth}\centering\strut
+690\strut
+\end{minipage} & \begin{minipage}[t]{0.12\columnwidth}\centering\strut
+0.39\strut
+\end{minipage} & \begin{minipage}[t]{0.14\columnwidth}\centering\strut
+11.83\strut
+\end{minipage} & \begin{minipage}[t]{0.17\columnwidth}\centering\strut
+0.26/0.43\strut
+\end{minipage} & \begin{minipage}[t]{0.22\columnwidth}\centering\strut
+699.04/934.06\strut
+\end{minipage}\tabularnewline
+\begin{minipage}[t]{0.12\columnwidth}\centering\strut
+sequ\_6k\_3\strut
+\end{minipage} & \begin{minipage}[t]{0.07\columnwidth}\centering\strut
+603\strut
+\end{minipage} & \begin{minipage}[t]{0.12\columnwidth}\centering\strut
+-0.174\strut
+\end{minipage} & \begin{minipage}[t]{0.14\columnwidth}\centering\strut
+26.51\strut
+\end{minipage} & \begin{minipage}[t]{0.17\columnwidth}\centering\strut
+0.36/0.32\strut
+\end{minipage} & \begin{minipage}[t]{0.22\columnwidth}\centering\strut
+535.54/691.89\strut
+\end{minipage}\tabularnewline
 \bottomrule
 \end{longtable}
 
@@ -930,41 +1423,30 @@ values of \texttt{dist2d\ =\ 1} and \texttt{ws\ =\ 2.5} (Roussel et al.
 2019) performed the best across 7 measures of forest structure as
 measured by Pearson's correlation with ground data (Table 3).
 
-\begin{longtable}[]{@{}lcccc@{}}
-\caption{Correlation and differences between the best performing tree
-detection algorithm (lmfx with dist2d = 1 and ws = 2.5) and the ground
-data. An asterisk next to the correlation or RMSE indicates that this
-value was within 5\% of the value of the best-performing
-algorithm/parameter set. Ground mean represents the mean value of the
-forest metric across the 110 ground plots that were visible from the
-sUAS-derived imagery. The median error is calculated as the median of
-the differences between the air and ground values for the 110 visible
-plots. Thus, a positive number indicates an overestimate by the sUAS
-workflow and a negative number indicates an
-underestimate.}\tabularnewline
-\toprule
-Forest structure metric & Ground mean & Correlation with ground & RMSE &
-Median error\tabularnewline
-\midrule
-\endfirsthead
-\toprule
-Forest structure metric & Ground mean & Correlation with ground & RMSE &
-Median error\tabularnewline
-\midrule
-\endhead
-total tree count & 18.52 & 0.67* & 8.68* & 2.00\tabularnewline
-count of trees \textgreater{} 15m & 9.89 & 0.43 & 7.38 &
-0.00\tabularnewline
-dist to 1st nearest neighbor (m) & 2.82 & 0.55* & 1.16* &
-0.26\tabularnewline
-dist to 2nd nearest neighbor (m) & 4.30 & 0.61* & 1.70* &
-0.12\tabularnewline
-height (m); 25th percentile & 12.42 & 0.16 & 8.46 & -1.16\tabularnewline
-height (m); mean & 18.49 & 0.29 & 7.81* & -2.29\tabularnewline
-height (m); 75th percentile & 24.55 & 0.35 & 10.33* &
--3.98\tabularnewline
-\bottomrule
-\end{longtable}
+\begin{verbatim}
+## 
+## ----------------------------------------------------------------------------------------------
+##    Forest structure metric      Ground mean   Correlation with ground    RMSE    Median error 
+## ------------------------------ ------------- ------------------------- -------- --------------
+##        total tree count             19                 0.67*            8.68*         2       
+## 
+##      count of trees > 15m           9.9                0.43              7.38         0       
+## 
+##  dist to 1st nearest neighbor       2.8                0.55*            1.16*        0.26     
+##              (m)                                                                              
+## 
+##  dist to 2nd nearest neighbor       4.3                0.61*            1.70*        0.12     
+##              (m)                                                                              
+## 
+##  height (m); 25th percentile        12                 0.16              8.46        -1.2     
+## 
+##        height (m); mean             18                 0.29             7.81*        -2.3     
+## 
+##  height (m); 75th percentile        25                 0.35             10.33*        -4      
+## ----------------------------------------------------------------------------------------------
+## 
+## Table: Correlation and differences between the best performing tree detection algorithm (lmfx with dist2d = 1 and ws = 2.5) and the ground data. An asterisk next to the correlation or RMSE indicates that this value was within 5% of the value of the best-performing algorithm/parameter set. Ground mean represents the mean value of the forest metric across the 110 ground plots that were visible from the sUAS-derived imagery. The median error is calculated as the median of the differences between the air and ground values for the 110 visible plots. Thus, a positive number indicates an overestimate by the sUAS workflow and a negative number indicates an underestimate.
+\end{verbatim}
 
 \subsubsection{Effect of local structure and regional climate on western
 pine beetle

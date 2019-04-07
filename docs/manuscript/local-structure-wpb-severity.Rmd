@@ -16,7 +16,7 @@ params:
     ^4^USDA Forest Service, Pacific Southwest Research Station, Davis, CA, USA
   correspondence: |
     michael.koontz@colorado.edu
-    date_generated: !r format(Sys.Date(), "%B %d, %Y")
+  date_generated: !r format(Sys.Date(), "%B %d, %Y")
 geometry: margin=1in
 header-includes:
   - \usepackage[left]{lineno}
@@ -33,24 +33,19 @@ knitr::opts_chunk$set(echo = FALSE, include = FALSE)
 
 ```{r libraries}
 library(tidyverse)
-library(kableExtra)
+# library(kableExtra)
+library(pander)
 ```
 
-
-```{r algorithm_deets}
+```{r source_necessary_scripts}
 source(here::here("analyses/evaluate-ground-correspondence-ttops.R"))
 # Object to get information about extent of algorithm/paramter set coverage
 # is called `algorithm_summary`
-algorithm_summary_print <-
-  algorithm_summary %>% 
-  dplyr::rename(`Parameter sets tested` = n,
-                Algorithm = algorithm) %>%
-  dplyr::mutate(`Reference(s)` = c("@li2012; @jakubowski2013; @shin2018", "@roussel2019a", "@roussel2019", "@eysn2015", "@vega2014", "@plowright2018", "@pau2010"))
-
+source(here::here("data/data_carpentry/format-ground-data.R"))
+# Object with ground data is called `d`
 ```
 
 ```{r ground_data_deets}
-source(here::here("data/data_carpentry/format-ground-data.R"))
 pipo_pct_of_all_dead <-
   d %>%
   dplyr::filter(is.na(year_fall), !is.na(year_dead)) %>%
@@ -70,25 +65,6 @@ cade_pct_of_all_dead <-
             print_prop = round(prop_of_all_dead * 100, digits = 2)) %>%
   dplyr::filter(species == "CADE") %>%
   pull(print_prop)
-```
-
-```{r site_characteristics_get_data}
-site_characteristics <- 
-  read_csv(here::here("analyses/analyses_output/summarized-non-spatial-site-data.csv")) %>% 
-  tidyr::separate(site, into = c("Forest", "Elevation band", "Rep"), remove = FALSE) %>% 
-  dplyr::mutate(`Mortality (aerial/ground)` = paste(sprintf("%0.2f", prop_mortality), sprintf("%0.2f", ground_mortality), sep = "/"),
-                `Density (tpha; aerial/ground)` = paste(sprintf("%0.2f", air_tpha), sprintf("%0.2f", ground_tpha), sep = "/")) %>% 
-  dplyr::rename(`CWD (mm)` = site_cwd,
-                `CWD (z-score)` = site_cwd_zscore,
-                `Survey area (ha)` = buffered_survey_area,
-                Site = site) %>% 
-  dplyr::mutate(Forest = case_when(Forest == "eldo" ~ "Eldorado",
-                                   Forest == "stan" ~ "Stanislaus",
-                                   Forest == "sier" ~ "Sierra",
-                                   Forest == "sequ" ~ "Sequoia")) %>% 
-  dplyr::mutate(Forest = factor(Forest, levels = c("Eldorado", "Stanislaus", "Sierra", "Sequoia"))) %>% dplyr::arrange(Forest, `Elevation band`, Rep) %>% 
-  dplyr::select(Site, `CWD (mm)`, `CWD (z-score)`, `Survey area (ha)`, `Mortality (aerial/ground)`, `Density (tpha; aerial/ground)`)
-# Need to say it's air/ground measurements for mortality and density
 ```
 
 ```{r ground_tree_summary}
@@ -189,32 +165,20 @@ We built our study on 180 vegetation/forest insect monitoring plots at 36 sites 
 
 Imagery was captured using a DJI Zenmuse X3 RGB camera [@dji2015] and a Micasense RedEdge3 5-band multispectral camera [@micasense2015]. We mounted both of these instruments simultaneously on a DJI Matrice 100 aircraft [@dji2015a] using the DJI 3-axis stabilized gimbal for the Zenmuse X3 camera and a Micasense angled fixed mount for the RedEdge3 camera. The gimbal and the angled fixed mount ensured both instruments were nadir-facing during image capture. Just prior or after image capture at each site, we calibrated the RedEdge3 camera by taking an image of a calibration panel on the ground in full sun with known reflectance values for each of the 5 narrow bands.
 
-```{r rededge_deets, echo = FALSE, include = TRUE}
+```{r rededge_deets, echo = FALSE, include = TRUE, results = 'asis'}
 rededge_print <- 
-  tibble(`Band number` = 1:5,
-         `Band name` = c("blue (b)", "green (g)", "red (r)", "near infrared (nir)", "red edge (re)"),
-         `Center wavelength` = c(475, 560, 668, 840, 717),
-         `Band width` = c(20, 20, 10, 40, 10),
-         `Wavelength range` = c("465-485", "550-570", "663-673", "820-860", "712-722"),
-         `Panel reflectance` = c(0.64, 0.64, 0.64, 0.60, 0.63))
+  tibble(`Band\nnumber` = 1:5,
+         `Band\nname` = c("blue (b)", "green (g)", "red (r)", "near infrared (nir)", "red edge (re)"),
+         `Center\nwavelength` = c(475, 560, 668, 840, 717),
+         `Band\nwidth` = c(20, 20, 10, 40, 10),
+         `Wavelength\nrange` = c("465-485", "550-570", "663-673", "820-860", "712-722"),
+         `Panel\nreflectance` = c(0.64, 0.64, 0.64, 0.60, 0.63))
 
-kable(rededge_print, format = "pandoc", caption = "Reflectance sensitivity of the Micasense Rededge3 camera. The calibration panel value represents the reflectance of the calibration panel for the given wavelength.")
+pandoc.table(rededge_print, 
+             split.tables = Inf,
+             caption = "Reflectance sensitivity of the Micasense Rededge3 camera. The calibration panel value represents the reflectance of the calibration panel for the given wavelength.",
+             keep.line.breaks = TRUE)
 ```
-
-<!-- +------------+--------------+------------------+------------------+----------+-----------------+---------------+ -->
-<!-- | Band\      | Band\        | Band\            | Center\          | Band\    |  Wavelength\    | Calibration\  | -->
-<!-- | number     | name         | abbreviation     | wavelength       | width    |  range          | panel value   | -->
-<!-- +============+==============+==================+==================+==========+=================+===============+ -->
-<!-- | 1          |blue          |b                 |  475             | 20       |  465-485        |  0.64         | -->
-<!-- +------------+--------------+------------------+------------------+----------+-----------------+---------------+ -->
-<!-- | 2          |green         |g                 |  560             | 20       |  550-570        |  0.64         | -->
-<!-- +------------+--------------+------------------+------------------+----------+-----------------+---------------+ -->
-<!-- | 3          |red           |r                 |  668             | 10       |  663-673        |  0.64         | -->
-<!-- +------------+--------------+------------------+------------------+----------+-----------------+---------------+ -->
-<!-- | 4          |near infrared |nir               |  840             | 40       |  820-860        |  0.60         | -->
-<!-- +------------+--------------+------------------+------------------+----------+-----------------+---------------+ -->
-<!-- | 5          |red edge      |re                |  717             | 10       |  712-722        |  0.63         | -->
-<!-- +------------+--------------+------------------+------------------+----------+-----------------+---------------+ -->
 
 ### Flight protocol
 
@@ -238,8 +202,17 @@ We classified each survey area's dense point cloud into "ground" and "non-ground
 
 We tested a total of `r nrow(algorithm_summary)` automatic tree detection algorithms and a total of `r sum(algorithm_summary$n)` parameter sets on the canopy height model or the dense point cloud to locate trees within each site (Table 2). We used `r algorithm_summary %>% dplyr::filter(algorithm == "vwf") %>% pull(n)` parameter sets of a variable window filter implmented in `ForestTools` [@plowright2018] including the default variable window filter function in `ForestTools` as well as the "pines" and "combined" functions from @popescu2004. We used `r algorithm_summary %>% dplyr::filter(algorithm == "localMaxima") %>% pull(n)` parameter sets of a local maximum filter implemented in `lidR`. We used `r algorithm_summary %>% dplyr::filter(algorithm == "li2012") %>% pull(n)` parameter sets of the algorithm from @li2012, which operates on the original point cloud. These parameter sets included those from @shin2018 and @jakubowski2013. We used `r algorithm_summary %>% dplyr::filter(algorithm == "watershed") %>% pull(n)` parameter sets of the `watershed` algorithm implemented in `lidR`, which is a wrapper for a function in the `EBImage` package [@pau2010]. We used `r algorithm_summary %>% dplyr::filter(algorithm == "ptrees") %>% pull(n)` parameter sets of `ptrees` [@vega2014] implemented in `lidR` [@roussel2019] and `lidRplugins` [@roussel2019a] and which operates on the raw point cloud, without first normalizing it to height above ground level (i.e.. subtracting the ground elevation from the dense point cloud). We used the default parameter set of the `multichm` [@eysn2015] algorithm implmented in `lidR` [@roussel2019] and `lidRplugins` [@roussel2019a]. We used `r algorithm_summary %>% dplyr::filter(algorithm == "lmfx") %>% pull(n)` parameter sets of the experimental algorithm `lmfx` [@roussel2019a].
 
-```{r algorithm_summary_print, echo = FALSE, include = TRUE}
-kable(algorithm_summary_print, format = "pandoc", caption = "Algorithm name, number of parameter sets tested for each algorithm, and references.")
+```{r algorithm_summary_print, echo = FALSE, include = TRUE, results = 'asis'}
+algorithm_summary_print <-
+  algorithm_summary %>% 
+  dplyr::rename(`Parameter sets\ntested` = n,
+                Algorithm = algorithm) %>%
+  dplyr::mutate(`Reference(s)` = c("@li2012; @jakubowski2013; @shin2018", "@roussel2019a", "@roussel2019", "@eysn2015", "@vega2014", "@plowright2018", "@pau2010"))
+
+pandoc.table(algorithm_summary_print, 
+             split.tables = Inf,
+             caption = "Algorithm name, number of parameter sets tested for each algorithm, and references.",
+             keep.line.breaks = TRUE)
 ```
 
 ### Map ground data
@@ -314,8 +287,32 @@ All data are available via the Open Science Framework. Statistical analyses were
 
 ## Results
 
-```{r site_characteristics, echo = FALSE, include = TRUE}
-kable(site_characteristics, digits = 2, format = "pandoc", caption = "Site characteristics for each of the 32 sites. The site name consists of the forest name, elevation band, and rep separated by an underscore. The Eldorado National Forest is 'eldo', the Stanislaus National Forest is 'stan', the Sierra National Forest is 'sier', and the Sequoia National Forest is 'sequ'. The elevation band represents the lower bounds of the 305 meter (1000 foot) elevation bands in feet. Thus '3k' implies that site was located between 3,000 and 4,000 feet (914-1219 meters). Aerially detected mortality and density of the whole site is presented along with the mortality and density calculated from the ground data (aerial / ground). The density is measured in trees per hectare (tpha).")
+```{r site_characteristics_read_file}
+site_characteristics <- read_csv(here::here("analyses/analyses_output/summarized-non-spatial-site-data.csv"))
+```
+
+```{r site_characteristics, echo = FALSE, include = TRUE, results = 'asis'}
+site_characteristics <- 
+   site_characteristics %>% 
+  tidyr::separate(site, into = c("Forest", "Elevation band", "Rep"), remove = FALSE) %>% 
+  dplyr::mutate(`Mortality\n(aerial/ground)` = paste(sprintf("%0.2f", prop_mortality), sprintf("%0.2f", ground_mortality), sep = "/"),
+                `Density\n(tpha; aerial/ground)` = paste(sprintf("%0.2f", air_tpha), sprintf("%0.2f", ground_tpha), sep = "/")) %>% 
+  dplyr::rename(`CWD\n(mm)` = site_cwd,
+                `CWD\n(z-score)` = site_cwd_zscore,
+                `Survey area\n(ha)` = buffered_survey_area,
+                Site = site) %>% 
+  dplyr::mutate(Forest = case_when(Forest == "eldo" ~ "Eldorado",
+                                   Forest == "stan" ~ "Stanislaus",
+                                   Forest == "sier" ~ "Sierra",
+                                   Forest == "sequ" ~ "Sequoia")) %>% 
+  dplyr::mutate(Forest = factor(Forest, levels = c("Eldorado", "Stanislaus", "Sierra", "Sequoia"))) %>% dplyr::arrange(Forest, `Elevation band`, Rep) %>% 
+  dplyr::select(Site, `CWD\n(mm)`, `CWD\n(z-score)`, `Survey area\n(ha)`, `Mortality\n(aerial/ground)`, `Density\n(tpha; aerial/ground)`)
+
+pandoc.table(site_characteristics, 
+             digits = c(10, 3, 3, 4, 10, 10), 
+             split.tables = Inf,
+             caption = "Site characteristics for each of the 32 sites. The site name consists of the forest name, elevation band, and rep separated by an underscore. The Eldorado National Forest is 'eldo', the Stanislaus National Forest is 'stan', the Sierra National Forest is 'sier', and the Sequoia National Forest is 'sequ'. The elevation band represents the lower bounds of the 305 meter (1000 foot) elevation bands in feet. Thus '3k' implies that site was located between 3,000 and 4,000 feet (914-1219 meters). Aerially detected mortality and density of the whole site is presented along with the mortality and density calculated from the ground data (aerial / ground). The density is measured in trees per hectare (tpha).",
+             keep.line.breaks = TRUE)
 ```
 
 ![A dense point cloud representing ~40 hectares of forest is generated using Structure from Motion (SfM) processing of ~1900 images. The dense point cloud z- position represents the ground elevation plus the vegetation height.](../../figures/eldo_3k_3_point_cloud.png)
@@ -385,7 +382,11 @@ best_algorithm_deets_print <-
                      "total tree count",
                     "count of trees > 15m"))
 
-knitr::kable(best_algorithm_deets_print, digits = 2, align = c("l", "c", "c", "c", "c"), format = "pandoc", caption = paste0("Correlation and differences between the best performing tree detection algorithm (lmfx with dist2d = ", algorithm_details[1, "var1_val"], " and ws = ", algorithm_details[1, "var2_val"], ") and the ground data. An asterisk next to the correlation or RMSE indicates that this value was within 5% of the value of the best-performing algorithm/parameter set. Ground mean represents the mean value of the forest metric across the 110 ground plots that were visible from the sUAS-derived imagery. The median error is calculated as the median of the differences between the air and ground values for the 110 visible plots. Thus, a positive number indicates an overestimate by the sUAS workflow and a negative number indicates an underestimate."))
+pandoc.table(best_algorithm_deets_print, 
+             digits = 2, 
+             split.tables = Inf,
+             caption = paste0("Correlation and differences between the best performing tree detection algorithm (lmfx with dist2d = ", algorithm_details[1, "var1_val"], " and ws = ", algorithm_details[1, "var2_val"], ") and the ground data. An asterisk next to the correlation or RMSE indicates that this value was within 5% of the value of the best-performing algorithm/parameter set. Ground mean represents the mean value of the forest metric across the 110 ground plots that were visible from the sUAS-derived imagery. The median error is calculated as the median of the differences between the air and ground values for the 110 visible plots. Thus, a positive number indicates an overestimate by the sUAS workflow and a negative number indicates an underestimate."),
+             keep.line.breaks = TRUE)
 ```
 
 ### Effect of local structure and regional climate on western pine beetle severity
