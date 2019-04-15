@@ -1,0 +1,55 @@
+---
+title: "Future directions"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+### Future spatial directions (will cut this; here for now so I can write it down elsewhere)
+
+Perhaps could also compare relative effect of individual tree spacing (Voronoi polygon area) with the length scale parameter at a certain site to get at a similar question. A big voronoi polygon area effect and a short covariance kernel tells us that it's a water stress effect-- a crowded tree gets attacked regardless of whether nearby trees were attacked. A small voronoi polygon area effect and a long covariance kernel tells us that the mortality is patterned more based on there being spillover from nearby attacked neighbors instead of how crowded any given tree is. I expect we might see different relative magnitudes of voronoi polygon area and covariance kerenel effects depending on CWD.
+
+### Spatial effects (results)
+
+We were able to calculate the length scale of the spatial autocorrelation in the probability of ponderosa pine mortality at each site, accounting for forest structure and environmental factors. By fitting a separate approximate Gaussian process for each site on the interacting variables of the x- and y- position, we measured the spatial covariance inherent in the data, accounting for other factors. 
+
+### Spatial effects (discussion)
+
+The western pine beetle is known to exhibit strong aggregation and anti-aggregation behavior arising from its pheromone communication, and thus it is likely that the measured spatial covariance in this study is attributable in part to the magnitude of this effect at each site. 
+
+Some studies have suggested that "outbreak" conditions are distinguishable by clustered tree mortality, but this is perhaps challenging to tease apart [@raffa2008]. Our modeling framework allows for a joint estimation of the effects of forest structure, environmental condition, and the spatial effect. This framework would be enhanced with confidence in individual tree level data, and a lot of it, along with a strong gradient of environmental conditions and forest structure.
+
+We won't interpret this measure of contagion, because the uncertainties in this particular study are too great (tree detection, species classification, dead trees all assumed to be WPB hosts, didn't account for topographic effects which could also manifest as part of this spatial covariance process). We do suggest that this could be a meaningful and quantifiable means of assessing bark beetle "stage of outbreak".
+
+### Implications of forest structure/regional climate interactions
+
+We found that the probability of ponderosa pine mortality generally increased with local host availability (host density), but also interacted with both host size and regional climate. A smaller average tree size led to a lower probability of ponderosa mortality in cool/wet sites and a larger average tree size led to a greater probability of ponderosa mortality in hot/dry sites. These mortality patterns highlight a possible distinction in behavior between the recent western bark beetle activity across the gradient of climatic water deficit. Even in the most highly impacted forest stands (because our study sites were selected conditional on there being high levels of western pine beetle activity), there is still a detectable effect of tree size such that the smaller (presumably weaker) trees are getting killed in cooler/wetter sites, and the larger (presumably more well-defended) trees are getting killed more in the hotter/drier sites. So while mortality is high everywhere, there does appear to be a difference in the beetle choosiness across the climatic water deficit gradient.
+
+### Broader context around field plots
+
+We surveyed 9 square kilometers of forest representing ~450,000 trees along a broad environmental gradient of climatic water deficit. Site selection and small plot size can influence inference. For instance, @fettig2019 reported statistically undetectable differences in overall mortality in their plot network across 4 national forests. By expanding the hectarage surveyed by a factor of 200, we detected dramatic differences in overall mortality.
+
+This is about more than sample size (though that helps). This is also about capturing the local disturbance phenomenon.
+
+### Implications for future forest structure
+
+We have demonstrated that forest structure (local host density and size) affected the cumulative severity of the western pine beetle in the Sierra Nevada in the 2012 to 2015 drought and its aftermath. Clearly, this forest insect disturbance has reciprocally impacted the forest structure, with uncertain consequences for long-term forest dynamics. 
+
+Small trees are getting killed in cooler/wetter sites, larger trees getting killed in hotter/drier sites. Perhaps the cooler/wetter sites are resisting even this massive disturbance event?
+
+We aren't measuring water stress at the individual tree level, which can vary substantially across space [@stephenson2019]. It may be possible to measure individual tree-level water stress using remote sensing, but perhaps at a much higher cost [@asner2016].
+
+### Room for improvement
+
+- Better geometry by using higher overlap, more spatially resolved images.
+- Better image classification and scalability by using instrumentation having spectral overlap with more widely deployed instrumentation (e.g., Landsat).
+- Better tree detection using machine learning approaches
+- Our live/dead classifier works pretty well. 
+- Our species classifier could improve. Perhaps also using machine learning approaches.
+
+## Abstract alternatives
+
+Host availability for aggressive bark beetles appears to have played the dominant role in increasing the probability of ponderosa pine mortality in the most hard-hit forest stands during the cumulative mortality event of 2012 to 2018. Host size played a role in its interaction with environmental condition-- climatic water deficit-- such that numerous and smaller host trees increased the probability of ponderosa mortality at cool/wet sites, while numerous and larger host trees increased the probability of ponderosa mortality at hot/dry sites.
+
