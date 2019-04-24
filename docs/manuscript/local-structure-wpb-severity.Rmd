@@ -2,7 +2,7 @@
 bibliography: ../docs_carpentry/local-structure-wpb-severity.bib
 csl: ../docs_carpentry/ecological-applications.csl
 params:
-  title: Differential response of a tree-killing bark beetle to host tree size across a gradient of climatic water deficit
+  title: Differential response of a tree-killing bark beetle to forest structure across a gradient of climatic water deficit
   author: |
     Michael J. Koontz^1,2,\*^,
     Andrew M. Latimer^1,2^,
