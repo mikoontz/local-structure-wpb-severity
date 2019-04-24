@@ -115,3 +115,9 @@ algorithm_summary <-
   dplyr::group_by(algorithm) %>% 
   tally()
 
+algorithm_stats <-
+  list(best_algorithm_deets = best_algorithm_deets,
+       algorithm_details = algorithm_details,
+       algorithm_summary = algorithm_summary)
+
+write_rds(algorithm_stats, here::here("analyses/analyses_output/algorithm_stats.rds"))

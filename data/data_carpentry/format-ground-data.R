@@ -60,3 +60,5 @@ d <-
   tidyr::unite(col = plot, site, plot_id, remove = FALSE) %>% 
   tidyr::unite(col = tree, plot, tree_id, remove = FALSE)
   
+
+write_csv(d, here::here("data/data_output/formatted-ground-data.csv"))
