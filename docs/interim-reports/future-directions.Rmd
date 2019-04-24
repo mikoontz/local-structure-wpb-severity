@@ -53,3 +53,10 @@ We aren't measuring water stress at the individual tree level, which can vary su
 
 Host availability for aggressive bark beetles appears to have played the dominant role in increasing the probability of ponderosa pine mortality in the most hard-hit forest stands during the cumulative mortality event of 2012 to 2018. Host size played a role in its interaction with environmental condition-- climatic water deficit-- such that numerous and smaller host trees increased the probability of ponderosa mortality at cool/wet sites, while numerous and larger host trees increased the probability of ponderosa mortality at hot/dry sites.
 
+## Discussion
+
+### Strenth of study
+We used a small, unhumanned aerial system to measure components of complex forest structure across a broad environmental gradient of climatic water deficit in yellow pine/mixed-conifer forests of the Sierra Nevada, California heavily disturbed by the western pine beetle. By collecting individual tree-level data for ~30 hectares at each of 32 sites along the environmental gradient, we were able to simultaneously consider how local-scale forest structure (tree size, tree host/non-host composition, and tree density) interacted with broad-scale climate conditions to drive the probability of host tree (ponderosa pine) mortality, while also accounting for spatial aggregation of mortality arising from bark beetle host selection behavior.
+
+### Strength of support for different "density increases mortality" hypotheses
+We modeled the effect of overall (i.e., all tree species included) tree size and density as well as host (i.e. ponderosa pine) tree size and density on the probability of host tree mortality in order to gain insights about the relative influence of different facets of complex forest structure.
