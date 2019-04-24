@@ -18,7 +18,7 @@ ortho_rgb_gg <-
   labs(x = "Longitude",
        y = "Latitude")
 
-ggsave(plot = ortho_rgb_gg, filename = "figures/eldo_3k_3_2_ortho-rgb.png")
+ggsave(plot = ortho_rgb_gg, filename = "figures/eldo_3k_3_2_ortho-rgb.png", width = 6, units = "in")
 # tm_shape(ortho_rgb) +
   # tm_rgb()
 

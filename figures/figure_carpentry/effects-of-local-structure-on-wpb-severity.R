@@ -9,6 +9,7 @@ library(brms)
 library(tidybayes)
 
 fm1 <- readRDS("analyses/analyses_output/fitted-model_zibinomial_site-cwdZscore_pipo-tpha-qmd_overall-tpha-qmd_exact-gp-per-site_200-samples.rds")
+samps <- posterior_samples(fm1)[, 1:14]
 
 newdata <- read_csv("analyses/analyses_output/newdata-for-model-predictions.csv")
 fitted_compact <- read_csv("analyses/analyses_output/model-predictions.csv")
@@ -62,7 +63,7 @@ pipo_tpha_qmd_cwd_interaction_gg <-
        y = "Pr(ponderosa mortality)",
        color = "Quadratic\nmean diameter")
 
-ggsave(plot = pipo_tpha_qmd_cwd_interaction_gg, filename = "figures/pipo_tpha_qmd_cwd_interaction.png")
+ggsave(plot = pipo_tpha_qmd_cwd_interaction_gg, filename = "figures/pipo_tpha_qmd_cwd_interaction.png", width = 6, height = 3.5, units = "in")
 
 ggsave(plot = pipo_tpha_qmd_cwd_interaction_gg_raster, filename = "figures/pipo_tpha_qmd_cwd_interaction_raster.png")
 
@@ -95,8 +96,8 @@ long_samps <-
 effect_sizes_halfeye <-
   ggplot(long_samps, aes(x = samps, y = variable)) +
   geom_halfeyeh() +
-  theme_bw() +
+  theme_bw(base_size = 10) +
   geom_vline(xintercept = 0, lty = 2) +
-  labs(x = "Effect size\nLog odds change in Pr(Ponderosa mortality)\nfor a 1 standard deviation increase in covariate", y = "Coefficient")
+  labs(x = "Effect size\nLog odds change in Pr(Ponderosa mortality)\nfor a 1 standard deviation increase in covariate", y = NULL)
 
-ggsave(plot = effect_sizes_halfeye, filename = "figures/effect-sizes-halfeye.png")
+ggsave(plot = effect_sizes_halfeye, filename = "figures/effect-sizes-halfeye.png", width = 6, height = 3.5, units = "in")

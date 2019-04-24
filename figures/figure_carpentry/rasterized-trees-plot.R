@@ -68,7 +68,7 @@ prop_dead_gg <-
   scale_fill_viridis_c() +
   labs(x = "Longitude",
        y = "Latitude",
-       fill = "Fraction dead (%)")
+       fill = "Fraction\ndead (%)")
 
 ggsave(plot = live_and_dead_gg, filename = "figures/live-and-dead-count-rasterized.png")
-ggsave(plot = prop_dead_gg, filename = "figures/proportion-dead-rasterized.png")
+ggsave(plot = prop_dead_gg, filename = "figures/proportion-dead-rasterized.png", width = 6, height = 4.5, units = "in")
