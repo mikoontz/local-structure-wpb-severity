@@ -107,6 +107,11 @@ hand_classified_crowns <- read_csv(here::here("data/data_output/classified/hand-
   dplyr::mutate(site = substr(treeID, start = 1, stop = 9))
 ```
 
+```{r site_characteristics_read_file}
+site_characteristics <- read_csv(here::here("analyses/analyses_output/summarized-non-spatial-site-data.csv"))
+```
+
+
 ```{r feet_to_meters}
 # 3000 = 914.4
 # 4000 = 1219.2
@@ -364,10 +369,6 @@ We used 4 chains with 2000 iterations each (1000 warmup, 1000 samples), and conf
 All data are available via the Open Science Framework. Statistical analyses were performed using the `brms` packages. With the exception of the SfM software (Pix4Dmapper Cloud) and the GIS software QGIS, all data carpentry and analyses were performed using `R` [@rcoreteam2018].
 
 ## Results
-
-```{r site_characteristics_read_file}
-site_characteristics <- read_csv(here::here("analyses/analyses_output/summarized-non-spatial-site-data.csv"))
-```
 
 ```{r}
 table_nums(name = "table-site-deets", "Site characteristics for each of the 32 sites. The site name consists of the forest name, elevation band, and rep separated by an underscore. The Eldorado National Forest is 'eldo', the Stanislaus National Forest is 'stan', the Sierra National Forest is 'sier', and the Sequoia National Forest is 'sequ'. The elevation band represents the lower bounds of the 305 meter (1000 foot) elevation bands in feet. Thus '3k' implies that site was located between 3,000 and 4,000 feet (914-1219 meters). Aerially detected mortality and density of the whole site is presented along with the mortality and density calculated from the ground data (aerial / ground). The density is measured in trees per hectare (tpha).")
