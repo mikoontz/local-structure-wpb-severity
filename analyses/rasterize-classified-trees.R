@@ -97,11 +97,7 @@ results_list <- vector(mode = "list", length = length(sites_to_process))
 for(i in seq_along(sites_to_process)) {
   
   current_site <- sites_to_process[i]
-  
-  current_trees <- 
-    classified_trees %>%
-    dplyr::filter(site == current_site)
-  
+
   # Build the template raster using the site bounds as an outer border
   # One site has additional restrictions on its flight bounds in order to avoid any chance of visible private property in the processed imagery.
   if(current_site == "stan_3k_2") {
@@ -116,6 +112,23 @@ for(i in seq_along(sites_to_process)) {
     st_buffer(-35) # buffer in a little further than the trees were to reduce edge effects (-40 worked)
   
   raster_template <- raster::raster(buffered_bounds, res = 20)
+  
+  # Get the classified trees for this particular site
+  # Calculate the voronoi polygons around each tree (and the voronoi polygon area)
+  current_trees <- 
+    classified_trees %>%
+    dplyr::filter(site == current_site) %>% 
+    st_geometry() %>% 
+    st_union() %>% 
+    st_voronoi() %>% 
+    st_cast() %>% 
+    st_intersection(st_geometry(buffered_bounds)) %>% 
+    data.frame(geometry = .) %>% 
+    st_sf() %>% 
+    dplyr::mutate(voronoi_area = st_area(.)) %>% 
+    dplyr::mutate(voronoi_poly = geometry) %>% 
+    st_join(current_trees, .) %>% 
+    st_set_geometry(value = "geometry")
   
   current_cwd <- raster::resample(cwd, raster_template, method = "bilinear")
   current_cwd_zscore <- (current_cwd - mean_cwd_sn_pipo) / sd_cwd_sn_pipo
@@ -177,8 +190,9 @@ for(i in seq_along(sites_to_process)) {
   # r2 <- pipo_count + non_pipo_count
   # compareRaster(r2, live_count, values = TRUE)
   # 
-  
-  
+ 
+    plot(forest[sample(nrow(forest), 100), ]$voronoi_poly)    
+    plot(st_transform(site_bounds, 3310), add = TRUE)
   # convert counts to trees per hectare -------------------------------------
   
   live_tpha <- perCell_to_perHa(live_count)  
