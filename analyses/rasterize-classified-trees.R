@@ -8,11 +8,12 @@ library(here)
 library(tictoc)
 library(lubridate)
 
-tpa <- function(r) {
+# Converts a per-cell value (usually 20m x 20m) to a per acre value
+perCell_to_perAc <- function(r) {
   r / (prod(res(r)) / 4046.856)
 } # returns trees per acre when r represents a raster with counts of trees per cell and raster has units of meters
 
-tpha <- function(r) {
+perCell_to_perHa <- function(r) {
   r / (prod(res(r)) / 10000)
 } # returns trees per hectare when r represents a raster with counts of trees per cell
 
@@ -180,12 +181,12 @@ for(i in seq_along(sites_to_process)) {
   
   # convert counts to trees per hectare -------------------------------------
   
-  live_tpha <- tpha(live_count)  
-  dead_tpha <- tpha(dead_count)
-  pipo_tpha <- tpha(pipo_count)
-  non_pipo_tpha <- tpha(non_pipo_count)
-  pipo_and_dead_tpha <- tpha(pipo_and_dead_count)
-  overall_tpha <- tpha(total_count)
+  live_tpha <- perCell_to_perHa(live_count)  
+  dead_tpha <- perCell_to_perHa(dead_count)
+  pipo_tpha <- perCell_to_perHa(pipo_count)
+  non_pipo_tpha <- perCell_to_perHa(non_pipo_count)
+  pipo_and_dead_tpha <- perCell_to_perHa(pipo_and_dead_count)
+  overall_tpha <- perCell_to_perHa(total_count)
   
   # total basal area per cell -----------------------------------------------
   
@@ -233,12 +234,12 @@ for(i in seq_along(sites_to_process)) {
 
 # We can actually use the same equations as for trees per hectare
   
-  live_bapha <- tpha(live_basal_area)  
-  dead_bapha <- tpha(dead_basal_area)
-  pipo_bapha <- tpha(pipo_basal_area)
-  non_pipo_bapha <- tpha(non_pipo_basal_area)
-  pipo_and_dead_bapha <- tpha(pipo_and_dead_basal_area)
-  overall_bapha <- tpha(total_basal_area)
+  live_bapha <- perCell_to_perHa(live_basal_area)  
+  dead_bapha <- perCell_to_perHa(dead_basal_area)
+  pipo_bapha <- perCell_to_perHa(pipo_basal_area)
+  non_pipo_bapha <- perCell_to_perHa(non_pipo_basal_area)
+  pipo_and_dead_bapha <- perCell_to_perHa(pipo_and_dead_basal_area)
+  overall_bapha <- perCell_to_perHa(total_basal_area)
   
   # mean basal area per tree ------------------------------------------------
   
@@ -327,23 +328,23 @@ for(i in seq_along(sites_to_process)) {
   # (if qmd is in centimeters)
   # sdi = tpa * ( qmd / 25.4)^1.77
   
-  live_sdi_ha <- tpha(live_count) * (live_qmd / 25.4)^1.77
-  live_sdi_ac <- tpa(live_count) * (live_qmd / 25.4)^1.77
+  live_sdi_ha <- perCell_to_perHa(live_count) * (live_qmd / 25.4)^1.77
+  live_sdi_ac <- perCell_to_perAc(live_count) * (live_qmd / 25.4)^1.77
   
-  dead_sdi_ha <- tpha(dead_count) * (dead_qmd / 25.4)^1.77
-  dead_sdi_ac <- tpa(dead_count) * (dead_qmd / 25.4)^1.77
+  dead_sdi_ha <- perCell_to_perHa(dead_count) * (dead_qmd / 25.4)^1.77
+  dead_sdi_ac <- perCell_to_perAc(dead_count) * (dead_qmd / 25.4)^1.77
   
-  pipo_sdi_ha <- tpha(pipo_count) * (pipo_qmd / 25.4)^1.77
-  pipo_sdi_ac <- tpa(pipo_count) * (pipo_qmd / 25.4)^1.77
+  pipo_sdi_ha <- perCell_to_perHa(pipo_count) * (pipo_qmd / 25.4)^1.77
+  pipo_sdi_ac <- perCell_to_perAc(pipo_count) * (pipo_qmd / 25.4)^1.77
   
-  non_pipo_sdi_ha <- tpha(non_pipo_count) * (non_pipo_qmd / 25.4)^1.77
-  non_pipo_sdi_ac <- tpa(non_pipo_count) * (non_pipo_qmd / 25.4)^1.77
+  non_pipo_sdi_ha <- perCell_to_perHa(non_pipo_count) * (non_pipo_qmd / 25.4)^1.77
+  non_pipo_sdi_ac <- perCell_to_perAc(non_pipo_count) * (non_pipo_qmd / 25.4)^1.77
   
-  pipo_and_dead_sdi_ha <- tpha(pipo_and_dead_count) * (pipo_and_dead_qmd / 25.4)^1.77
-  pipo_and_dead_sdi_ac <- tpa(pipo_and_dead_count) * (pipo_and_dead_qmd / 25.4)^1.77
+  pipo_and_dead_sdi_ha <- perCell_to_perHa(pipo_and_dead_count) * (pipo_and_dead_qmd / 25.4)^1.77
+  pipo_and_dead_sdi_ac <- perCell_to_perAc(pipo_and_dead_count) * (pipo_and_dead_qmd / 25.4)^1.77
   
-  overall_sdi_ha <- tpha(total_count) * (overall_qmd / 25.4)^1.77
-  overall_sdi_ac <- tpa(total_count) * (overall_qmd / 25.4)^1.77
+  overall_sdi_ha <- perCell_to_perHa(total_count) * (overall_qmd / 25.4)^1.77
+  overall_sdi_ac <- perCell_to_perAc(total_count) * (overall_qmd / 25.4)^1.77
   
   results_raster <- raster::stack(live_count, dead_count, pipo_count, non_pipo_count, pipo_and_dead_count, total_count, 
                                   live_tpha, dead_tpha, pipo_tpha, non_pipo_tpha, pipo_and_dead_tpha, overall_tpha, 
