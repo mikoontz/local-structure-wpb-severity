@@ -7,6 +7,7 @@ library(velox)
 library(here)
 library(tictoc)
 library(lubridate)
+library(nngeo)
 
 # Converts a per-cell value (usually 20m x 20m) to a per acre value
 perCell_to_perAc <- function(r) {
@@ -97,7 +98,7 @@ results_list <- vector(mode = "list", length = length(sites_to_process))
 for(i in seq_along(sites_to_process)) {
   
   current_site <- sites_to_process[i]
-
+  
   # Build the template raster using the site bounds as an outer border
   # One site has additional restrictions on its flight bounds in order to avoid any chance of visible private property in the processed imagery.
   if(current_site == "stan_3k_2") {
@@ -117,7 +118,10 @@ for(i in seq_along(sites_to_process)) {
   # Calculate the voronoi polygons around each tree (and the voronoi polygon area)
   current_trees <- 
     classified_trees %>%
-    dplyr::filter(site == current_site) %>% 
+    dplyr::filter(site == current_site)
+  
+  current_trees <-
+    current_trees %>% 
     st_geometry() %>% 
     st_union() %>% 
     st_voronoi() %>% 
@@ -128,7 +132,10 @@ for(i in seq_along(sites_to_process)) {
     dplyr::mutate(voronoi_area = st_area(.)) %>% 
     dplyr::mutate(voronoi_poly = geometry) %>% 
     st_join(current_trees, .) %>% 
-    st_set_geometry(value = "geometry")
+    st_set_geometry(value = "geometry") %>% 
+    dplyr::mutate(nn1 = st_nn(., ., k = 4, returnDist = TRUE, sparse = FALSE, progress = FALSE)$dist[, 2],
+                  nn2 = st_nn(., ., k = 4, returnDist = TRUE, sparse = FALSE, progress = FALSE)$dist[, 3],
+                  nn3 = st_nn(., ., k = 4, returnDist = TRUE, sparse = FALSE, progress = FALSE)$dist[, 4])
   
   current_cwd <- raster::resample(cwd, raster_template, method = "bilinear")
   current_cwd_zscore <- (current_cwd - mean_cwd_sn_pipo) / sd_cwd_sn_pipo
@@ -190,9 +197,7 @@ for(i in seq_along(sites_to_process)) {
   # r2 <- pipo_count + non_pipo_count
   # compareRaster(r2, live_count, values = TRUE)
   # 
- 
-    plot(forest[sample(nrow(forest), 100), ]$voronoi_poly)    
-    plot(st_transform(site_bounds, 3310), add = TRUE)
+  
   # convert counts to trees per hectare -------------------------------------
   
   live_tpha <- perCell_to_perHa(live_count)  
@@ -203,7 +208,6 @@ for(i in seq_along(sites_to_process)) {
   overall_tpha <- perCell_to_perHa(total_count)
   
   # total basal area per cell -----------------------------------------------
-  
   
   live_basal_area <- raster::rasterize(x = current_trees %>% dplyr::filter((live == 1)), 
                                        y = raster_template, 
@@ -243,10 +247,9 @@ for(i in seq_along(sites_to_process)) {
   # r4 <- pipo_basal_area + non_pipo_basal_area
   # compareRaster(r4, live_basal_area, values = TRUE)
   
-
-# convert to basal area per hectare ---------------------------------------
-
-# We can actually use the same equations as for trees per hectare
+  # convert to basal area per hectare ---------------------------------------
+  
+  # We can actually use the same equations as for trees per hectare
   
   live_bapha <- perCell_to_perHa(live_basal_area)  
   dead_bapha <- perCell_to_perHa(dead_basal_area)
@@ -293,6 +296,45 @@ for(i in seq_along(sites_to_process)) {
                                        field = "estimated_ba", 
                                        background = 0, 
                                        fun = mean)
+  
+
+# mean diameter -----------------------------------------------------------
+
+  live_mean_dbh <- raster::rasterize(x = current_trees %>% dplyr::filter((live == 1)), 
+                                    y = raster_template, 
+                                    field = "estimated_dbh", 
+                                    background = 0, 
+                                    fun = mean)
+  
+  dead_mean_dbh <- raster::rasterize(x = current_trees %>% dplyr::filter((live == 0)), 
+                                    y = raster_template, 
+                                    field = "estimated_dbh", 
+                                    background = 0, 
+                                    fun = mean)
+  
+  pipo_mean_dbh <- raster::rasterize(x = current_trees %>% dplyr::filter((species == "pipo")), 
+                                    y = raster_template, 
+                                    field = "estimated_dbh", 
+                                    background = 0, 
+                                    fun = mean)
+  
+  non_pipo_mean_dbh <- raster::rasterize(x = current_trees %>% dplyr::filter((species != "pipo")), 
+                                        y = raster_template, 
+                                        field = "estimated_dbh", 
+                                        background = 0, 
+                                        fun = mean)
+  
+  pipo_and_dead_mean_dbh <- raster::rasterize(x = current_trees %>% dplyr::filter((species == "pipo") | (live == 0)), 
+                                             y = raster_template, 
+                                             field = "estimated_dbh", 
+                                             background = 0, 
+                                             fun = mean)
+  
+  overall_mean_dbh <- raster::rasterize(x = current_trees, 
+                                       y = raster_template, 
+                                       field = "estimated_dbh", 
+                                       background = 0, 
+                                       fun = mean)  
   
   # quadratic mean diameter -------------------------------------------------
   
@@ -360,14 +402,288 @@ for(i in seq_along(sites_to_process)) {
   overall_sdi_ha <- perCell_to_perHa(total_count) * (overall_qmd / 25.4)^1.77
   overall_sdi_ac <- perCell_to_perAc(total_count) * (overall_qmd / 25.4)^1.77
   
+
+# mean voronoi areas -----------------------------------------------------------
+
+  live_mean_voronoi <- raster::rasterize(x = current_trees %>% dplyr::filter((live == 1)), 
+                                     y = raster_template, 
+                                     field = "voronoi_area", 
+                                     background = 0, 
+                                     fun = mean)
+  
+  dead_mean_voronoi <- raster::rasterize(x = current_trees %>% dplyr::filter((live == 0)), 
+                                     y = raster_template, 
+                                     field = "voronoi_area", 
+                                     background = 0, 
+                                     fun = mean)
+  
+  pipo_mean_voronoi <- raster::rasterize(x = current_trees %>% dplyr::filter((species == "pipo")), 
+                                     y = raster_template, 
+                                     field = "voronoi_area", 
+                                     background = 0, 
+                                     fun = mean)
+  
+  non_pipo_mean_voronoi <- raster::rasterize(x = current_trees %>% dplyr::filter((species != "pipo")), 
+                                         y = raster_template, 
+                                         field = "voronoi_area", 
+                                         background = 0, 
+                                         fun = mean)
+  
+  pipo_and_dead_mean_voronoi <- raster::rasterize(x = current_trees %>% dplyr::filter((species == "pipo") | (live == 0)), 
+                                              y = raster_template, 
+                                              field = "voronoi_area", 
+                                              background = 0, 
+                                              fun = mean)
+  
+  overall_mean_voronoi <- raster::rasterize(x = current_trees, 
+                                        y = raster_template, 
+                                        field = "voronoi_area", 
+                                        background = 0, 
+                                        fun = mean)  
+  
+
+# mean distance to first nearest neighbor --------------------------------------------------
+
+  live_mean_nn1 <- raster::rasterize(x = current_trees %>% dplyr::filter((live == 1)), 
+                                         y = raster_template, 
+                                         field = "nn1", 
+                                         background = 0, 
+                                         fun = mean)
+  
+  dead_mean_nn1 <- raster::rasterize(x = current_trees %>% dplyr::filter((live == 0)), 
+                                         y = raster_template, 
+                                         field = "nn1", 
+                                         background = 0, 
+                                         fun = mean)
+  
+  pipo_mean_nn1 <- raster::rasterize(x = current_trees %>% dplyr::filter((species == "pipo")), 
+                                         y = raster_template, 
+                                         field = "nn1", 
+                                         background = 0, 
+                                         fun = mean)
+  
+  non_pipo_mean_nn1 <- raster::rasterize(x = current_trees %>% dplyr::filter((species != "pipo")), 
+                                             y = raster_template, 
+                                             field = "nn1", 
+                                             background = 0, 
+                                             fun = mean)
+  
+  pipo_and_dead_mean_nn1 <- raster::rasterize(x = current_trees %>% dplyr::filter((species == "pipo") | (live == 0)), 
+                                                  y = raster_template, 
+                                                  field = "nn1", 
+                                                  background = 0, 
+                                                  fun = mean)
+  
+  overall_mean_nn1 <- raster::rasterize(x = current_trees, 
+                                            y = raster_template, 
+                                            field = "nn1", 
+                                            background = 0, 
+                                            fun = mean)    
+  
+  # mean distance to second nearest neighbor --------------------------------------------------
+  
+  live_mean_nn2 <- raster::rasterize(x = current_trees %>% dplyr::filter((live == 1)), 
+                                     y = raster_template, 
+                                     field = "nn2", 
+                                     background = 0, 
+                                     fun = mean)
+  
+  dead_mean_nn2 <- raster::rasterize(x = current_trees %>% dplyr::filter((live == 0)), 
+                                     y = raster_template, 
+                                     field = "nn2", 
+                                     background = 0, 
+                                     fun = mean)
+  
+  pipo_mean_nn2 <- raster::rasterize(x = current_trees %>% dplyr::filter((species == "pipo")), 
+                                     y = raster_template, 
+                                     field = "nn2", 
+                                     background = 0, 
+                                     fun = mean)
+  
+  non_pipo_mean_nn2 <- raster::rasterize(x = current_trees %>% dplyr::filter((species != "pipo")), 
+                                         y = raster_template, 
+                                         field = "nn2", 
+                                         background = 0, 
+                                         fun = mean)
+  
+  pipo_and_dead_mean_nn2 <- raster::rasterize(x = current_trees %>% dplyr::filter((species == "pipo") | (live == 0)), 
+                                              y = raster_template, 
+                                              field = "nn2", 
+                                              background = 0, 
+                                              fun = mean)
+  
+  overall_mean_nn2 <- raster::rasterize(x = current_trees, 
+                                        y = raster_template, 
+                                        field = "nn2", 
+                                        background = 0, 
+                                        fun = mean)     
+  
+  # mean distance to third nearest neighbor --------------------------------------------------
+  
+  live_mean_nn3 <- raster::rasterize(x = current_trees %>% dplyr::filter((live == 1)), 
+                                     y = raster_template, 
+                                     field = "nn3", 
+                                     background = 0, 
+                                     fun = mean)
+  
+  dead_mean_nn3 <- raster::rasterize(x = current_trees %>% dplyr::filter((live == 0)), 
+                                     y = raster_template, 
+                                     field = "nn3", 
+                                     background = 0, 
+                                     fun = mean)
+  
+  pipo_mean_nn3 <- raster::rasterize(x = current_trees %>% dplyr::filter((species == "pipo")), 
+                                     y = raster_template, 
+                                     field = "nn3", 
+                                     background = 0, 
+                                     fun = mean)
+  
+  non_pipo_mean_nn3 <- raster::rasterize(x = current_trees %>% dplyr::filter((species != "pipo")), 
+                                         y = raster_template, 
+                                         field = "nn3", 
+                                         background = 0, 
+                                         fun = mean)
+  
+  pipo_and_dead_mean_nn3 <- raster::rasterize(x = current_trees %>% dplyr::filter((species == "pipo") | (live == 0)), 
+                                              y = raster_template, 
+                                              field = "nn3", 
+                                              background = 0, 
+                                              fun = mean)
+  
+  overall_mean_nn3 <- raster::rasterize(x = current_trees, 
+                                        y = raster_template, 
+                                        field = "nn3", 
+                                        background = 0, 
+                                        fun = mean)    
+  
+  
+  # standard deviation distance to first nearest neighbor --------------------------------------------------
+  
+  live_sd_nn1 <- raster::rasterize(x = current_trees %>% dplyr::filter((live == 1)), 
+                                     y = raster_template, 
+                                     field = "nn1", 
+                                     background = 0, 
+                                     fun = sd)
+  
+  dead_sd_nn1 <- raster::rasterize(x = current_trees %>% dplyr::filter((live == 0)), 
+                                     y = raster_template, 
+                                     field = "nn1", 
+                                     background = 0, 
+                                     fun = sd)
+  
+  pipo_sd_nn1 <- raster::rasterize(x = current_trees %>% dplyr::filter((species == "pipo")), 
+                                     y = raster_template, 
+                                     field = "nn1", 
+                                     background = 0, 
+                                     fun = sd)
+  
+  non_pipo_sd_nn1 <- raster::rasterize(x = current_trees %>% dplyr::filter((species != "pipo")), 
+                                         y = raster_template, 
+                                         field = "nn1", 
+                                         background = 0, 
+                                         fun = sd)
+  
+  pipo_and_dead_sd_nn1 <- raster::rasterize(x = current_trees %>% dplyr::filter((species == "pipo") | (live == 0)), 
+                                              y = raster_template, 
+                                              field = "nn1", 
+                                              background = 0, 
+                                              fun = sd)
+  
+  overall_sd_nn1 <- raster::rasterize(x = current_trees, 
+                                        y = raster_template, 
+                                        field = "nn1", 
+                                        background = 0, 
+                                        fun = sd)    
+  
+ # coefficient of variation distance to first nearest neighbor --------------------------------------------------
+  
+  live_cov_nn1 <- live_sd_nn1 / live_mean_nn1
+    
+  dead_cov_nn1 <- dead_sd_nn1 / dead_mean_nn1
+  
+  pipo_cov_nn1 <- pipo_sd_nn1 / pipo_mean_nn1
+  
+  non_pipo_cov_nn1 <- non_pipo_sd_nn1 / non_pipo_mean_nn1
+  
+  pipo_and_dead_cov_nn1 <- pipo_and_dead_sd_nn1 / pipo_and_dead_mean_nn1
+  
+  overall_cov_nn1 <- overall_sd_nn1 / overall_mean_nn1  
+  
+  
+
+# standard deviation of voronoi polygon areas -----------------------------
+
+  live_sd_voronoi <- raster::rasterize(x = current_trees %>% dplyr::filter((live == 1)), 
+                                         y = raster_template, 
+                                         field = "voronoi_area", 
+                                         background = 0, 
+                                         fun = sd)
+  
+  dead_sd_voronoi <- raster::rasterize(x = current_trees %>% dplyr::filter((live == 0)), 
+                                         y = raster_template, 
+                                         field = "voronoi_area", 
+                                         background = 0, 
+                                         fun = sd)
+  
+  pipo_sd_voronoi <- raster::rasterize(x = current_trees %>% dplyr::filter((species == "pipo")), 
+                                         y = raster_template, 
+                                         field = "voronoi_area", 
+                                         background = 0, 
+                                         fun = sd)
+  
+  non_pipo_sd_voronoi <- raster::rasterize(x = current_trees %>% dplyr::filter((species != "pipo")), 
+                                             y = raster_template, 
+                                             field = "voronoi_area", 
+                                             background = 0, 
+                                             fun = sd)
+  
+  pipo_and_dead_sd_voronoi <- raster::rasterize(x = current_trees %>% dplyr::filter((species == "pipo") | (live == 0)), 
+                                                  y = raster_template, 
+                                                  field = "voronoi_area", 
+                                                  background = 0, 
+                                                  fun = sd)
+  
+  overall_sd_voronoi <- raster::rasterize(x = current_trees, 
+                                            y = raster_template, 
+                                            field = "voronoi_area", 
+                                            background = 0, 
+                                            fun = sd)    
+  
+
+# coefficient of variation voronoi area -----------------------------------
+  
+  live_cov_voronoi <- live_sd_voronoi / live_mean_voronoi
+  
+  dead_cov_voronoi <- dead_sd_voronoi / dead_mean_voronoi
+  
+  pipo_cov_voronoi <- pipo_sd_voronoi / pipo_mean_voronoi
+  
+  non_pipo_cov_voronoi <- non_pipo_sd_voronoi / non_pipo_mean_voronoi
+  
+  pipo_and_dead_cov_voronoi <- pipo_and_dead_sd_voronoi / pipo_and_dead_mean_voronoi
+  
+  overall_cov_voronoi <- overall_sd_voronoi / overall_mean_voronoi 
+  
+# stack results together --------------------------------------------------
+
+  
   results_raster <- raster::stack(live_count, dead_count, pipo_count, non_pipo_count, pipo_and_dead_count, total_count, 
                                   live_tpha, dead_tpha, pipo_tpha, non_pipo_tpha, pipo_and_dead_tpha, overall_tpha, 
                                   live_basal_area, dead_basal_area, pipo_basal_area, non_pipo_basal_area, pipo_and_dead_basal_area, total_basal_area,
                                   live_bapha, dead_bapha, pipo_bapha, non_pipo_bapha, pipo_and_dead_bapha, overall_bapha,
                                   live_mean_ba, dead_mean_ba, pipo_mean_ba, non_pipo_mean_ba, pipo_and_dead_mean_ba, overall_mean_ba,
+                                  live_mean_dbh, dead_mean_dbh, pipo_mean_dbh, non_pipo_mean_dbh, pipo_and_dead_mean_dbh, overall_mean_dbh,
                                   live_qmd, dead_qmd, pipo_qmd, non_pipo_qmd, pipo_and_dead_qmd, overall_qmd,
                                   live_sdi_ha, dead_sdi_ha, pipo_sdi_ha, non_pipo_sdi_ha, pipo_and_dead_sdi_ha, overall_sdi_ha,
                                   live_sdi_ac, dead_sdi_ac, pipo_sdi_ac, non_pipo_sdi_ac, pipo_and_dead_sdi_ac, overall_sdi_ac,
+                                  live_mean_voronoi, dead_mean_voronoi, pipo_mean_voronoi, non_pipo_mean_voronoi, pipo_and_dead_mean_voronoi, overall_mean_voronoi,
+                                  live_mean_nn1, dead_mean_nn1, pipo_mean_nn1, non_pipo_mean_nn1, pipo_and_dead_mean_nn1, overall_mean_nn1,
+                                  live_mean_nn2, dead_mean_nn2, pipo_mean_nn2, non_pipo_mean_nn2, pipo_and_dead_mean_nn2, overall_mean_nn2,
+                                  live_mean_nn3, dead_mean_nn3, pipo_mean_nn3, non_pipo_mean_nn3, pipo_and_dead_mean_nn3, overall_mean_nn3,
+                                  live_sd_nn1, dead_sd_nn1, pipo_sd_nn1, non_pipo_sd_nn1, pipo_and_dead_sd_nn1, overall_sd_nn1,
+                                  live_cov_nn1, dead_cov_nn1, pipo_cov_nn1, non_pipo_cov_nn1, pipo_and_dead_cov_nn1, overall_cov_nn1,
+                                  live_sd_voronoi, dead_sd_voronoi, pipo_sd_voronoi, non_pipo_sd_voronoi, pipo_and_dead_sd_voronoi, overall_sd_voronoi,
+                                  live_cov_voronoi, dead_cov_voronoi, pipo_cov_voronoi, non_pipo_cov_voronoi, pipo_and_dead_cov_voronoi, overall_cov_voronoi,
                                   current_cwd, current_cwd_zscore)
   
   names(results_raster) <- c("live_count", "dead_count", "pipo_count", "non_pipo_count", "pipo_and_dead_count", "total_count", 
@@ -375,9 +691,18 @@ for(i in seq_along(sites_to_process)) {
                              "live_ba", "dead_ba", "pipo_ba", "non_pipo_ba", "pipo_and_dead_ba", "total_ba",
                              "live_bapha", "dead_bapha", "pipo_bapha", "non_pipo_bapha", "pipo_and_dead_bapha", "overall_bapha",
                              "live_mean_ba", "dead_mean_ba", "pipo_mean_ba", "non_pipo_mean_ba", "pipo_and_dead_mean_ba", "overall_mean_ba",
+                             "live_mean_dbh", "dead_mean_dbh", "pipo_mean_dbh", "non_pipo_mean_dbh", "pipo_and_dead_mean_dbh", "overall_mean_dbh",
                              "live_qmd", "dead_qmd", "pipo_qmd", "non_pipo_qmd", "pipo_and_dead_qmd", "overall_qmd",
                              "live_sdi_ha", "dead_sdi_ha", "pipo_sdi_ha", "non_pipo_sdi_ha", "pipo_and_dead_sdi_ha", "overall_sdi_ha",
                              "live_sdi_ac", "dead_sdi_ac", "pipo_sdi_ac", "non_pipo_sdi_ac", "pipo_and_dead_sdi_ac", "overall_sdi_ac",
+                             "live_mean_voronoi", "dead_mean_voronoi", "pipo_mean_voronoi", "non_pipo_mean_voronoi", "pipo_and_dead_mean_voronoi", "overall_mean_voronoi",
+                             "live_mean_nn1", "dead_mean_nn1", "pipo_mean_nn1", "non_pipo_mean_nn1", "pipo_and_dead_mean_nn1", "overall_mean_nn1",
+                             "live_mean_nn2", "dead_mean_nn2", "pipo_mean_nn2", "non_pipo_mean_nn2", "pipo_and_dead_mean_nn2", "overall_mean_nn2",
+                             "live_mean_nn3", "dead_mean_nn3", "pipo_mean_nn3", "non_pipo_mean_nn3", "pipo_and_dead_mean_nn3", "overall_mean_nn3",
+                             "live_sd_nn1", "dead_sd_nn1", "pipo_sd_nn1", "non_pipo_sd_nn1", "pipo_and_dead_sd_nn1", "overall_sd_nn1",
+                             "live_cov_nn1", "dead_cov_nn1", "pipo_cov_nn1", "non_pipo_cov_nn1", "pipo_and_dead_cov_nn1", "overall_cov_nn1",
+                             "live_sd_voronoi", "dead_sd_voronoi", "pipo_sd_voronoi", "non_pipo_sd_voronoi", "pipo_and_dead_sd_voronoi", "overall_sd_voronoi",
+                             "live_cov_voronoi", "dead_cov_voronoi", "pipo_cov_voronoi", "non_pipo_cov_voronoi", "pipo_and_dead_cov_voronoi", "overall_cov_voronoi",
                              "local_cwd", "local_cwd_zscore")
   
   writeRaster(x = results_raster, filename = here::here(paste0("analyses/analyses_output/rasterized-trees/", current_site, "_rasterized-trees.tif")), overwrite = TRUE)
