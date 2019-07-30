@@ -50,6 +50,8 @@ data/features/jepcodes-v7.kml
 analyses/analyses_output/fitted-model*.rds
 analyses/analyses_output/model-predictions.csv
 analyses/analyses_output/newdata-for-model-predictions.csv
+analyses/analyses_output/model-predictions_2.csv
+analyses/analyses_output/newdata-for-model-predictions_2.csv
 data/features/S_USA.AdministrativeForest/*
 *~$*.docx
 *.Rapp.history
