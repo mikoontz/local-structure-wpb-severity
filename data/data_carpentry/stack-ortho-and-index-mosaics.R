@@ -20,7 +20,8 @@ unusable_sites <- c("eldo_4k_3", # too many blocks
 
 # These sites were processed with their X3 and RedEdge imagery combined so some of their
 # output products will be in a slightly different place in the project directory
-merged_sites <- c("eldo_3k_2",
+merged_sites <- c("eldo_3k_1",
+                  "eldo_3k_2",
                   "eldo_3k_3",
                   "eldo_4k_2")
 
@@ -38,7 +39,7 @@ merged_sites <- c("eldo_3k_2",
 # This is where I can put in sites that need their processing redone. An empty 
 # string means that no already-processed site output will be overwritten
 # (but sites that have yet to be processed will still have their processing done)
-sites_to_overwrite <- ""
+sites_to_overwrite <- "eldo_3k_1"
 sites_checklist$overwrite <- FALSE
 
 sites_checklist[sites_checklist$site %in% sites_to_overwrite, "overwrite"] <- TRUE
@@ -101,8 +102,12 @@ for (i in seq_along(sites_to_process)) {
     index <- raster::brick(index_blue, index_green, index_red, index_re, index_nir, index_ndvi)
   }
   
-  raster::writeRaster(x = ortho, filename = here::here(paste0("data/data_output/site_data/", current_site, "/", current_site, "_ortho.tif")))
-  raster::writeRaster(x = index, filename = here::here(paste0("data/data_output/site_data/", current_site, "/", current_site, "_index.tif")))
+  raster::writeRaster(x = ortho, 
+                      filename = here::here(paste0("data/data_output/site_data/", current_site, "/", current_site, "_ortho.tif")), 
+                      overwrite = sites_checklist[sites_checklist$site == current_site, "overwrite"])
+  raster::writeRaster(x = index, 
+                      filename = here::here(paste0("data/data_output/site_data/", current_site, "/", current_site, "_index.tif")), 
+                      overwrite = sites_checklist[sites_checklist$site == current_site, "overwrite"])
   
   print(paste0("...", current_site, " complete..."))
 }  
