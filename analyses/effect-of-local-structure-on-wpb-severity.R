@@ -28,20 +28,13 @@ cwd_data <- readr::read_csv(here::here("data/data_output/cwd-data.csv"))
 center_param <- TRUE
 scale_param <- TRUE
 
+# Center and scale predictors
 analysis_df <-
   data_from_rasterized_trees %>% 
   dplyr::left_join(cwd_data, by = "site") %>% 
   as_tibble() %>% 
-  dplyr::mutate(pipo_and_dead_tpha_s = scale(pipo_and_dead_tpha, center = center_param, scale = scale_param),
-                overall_tpha_s = scale(overall_tpha, center = center_param, scale = scale_param),
-                pipo_and_dead_bapha_s = scale(pipo_and_dead_bapha, center = center_param, scale = scale_param),
-                overall_bapha_s = scale(overall_bapha, center = center_param, scale = scale_param),
-                pipo_and_dead_qmd_s = scale(pipo_and_dead_qmd, center = center_param, scale = scale_param),
-                overall_qmd_s = scale(overall_qmd, center = center_param, scale = scale_param),
-                live_sdi_ac_s = scale(live_sdi_ac, center = center_param, scale = scale_param),
-                pipo_and_dead_sdi_ac_s = scale(pipo_and_dead_sdi_ac, center = center_param, scale = scale_param),
-                overall_sdi_ac_s = scale(overall_sdi_ac, center = center_param, scale = scale_param))
-
+  dplyr::mutate_at(.vars = vars(-x, -y, -local_cwd, -local_cwd_zscore, -site, -forest, -elev, -rep, -crs, -site_cwd, -site_cwd_zscore), .funs = list(s = function(x) {scale(x, center = center_param, scale = scale_param)[, 1]}))
+                     
 set.seed(0314) # Only meaningful for when randomly subsetting data
 adf <-
   analysis_df %>% 
@@ -132,3 +125,57 @@ for (i in seq_along(unique(adf$site))) {
   # plot(spatial_autocor)
   
 }
+
+
+# Implement a zero-inflated binomial 
+# approx GP 200 samples ----------------------------------------------------
+# XXX hours
+set.seed(0314) # Only meaningful for when randomly subsetting data
+adf <-
+  analysis_df %>% 
+  dplyr::filter(pipo_and_dead_count != 0) %>% 
+  dplyr::mutate(site = as.factor(site)) %>% 
+  dplyr::group_by(site) %>%
+  dplyr::sample_n(50)
+
+(start <- Sys.time())
+fm1_brms <- brm(dead_count | trials(pipo_and_dead_count) ~ 
+                   site_cwd_zscore*pipo_and_dead_tpha_s*pipo_and_dead_mean_dbh_s +
+                   site_cwd_zscore*non_pipo_tpha_s*overall_mean_voronoi_s +
+                   gp(x, y, by = site, scale = FALSE),
+                 data = adf,
+                 family = zero_inflated_binomial(),
+                 chains = 4,
+                 cores = 4,
+                 control = list(adapt_delta = 0.95))
+summary(fm1_brms)
+(elapsed <- Sys.time() - start)
+pp_check(fm1_brms, nsamples = 50)
+
+host_nonhost <-
+  adf %>% 
+  group_by(site_cwd_zscore) %>% 
+  dplyr::summarize(pipo_count = sum(pipo_count),
+                   pipo_and_dead_count = sum(pipo_and_dead_count),
+                   live_count = sum(live_count),
+                   total_count = sum(total_count)) %>% 
+  dplyr::mutate(prop_pipo_live = pipo_count / live_count,
+                prop_pipo_all = pipo_and_dead_count / total_count) %>% 
+  dplyr::mutate(type = "air")
+
+ggplot(host_nonhost, aes(x = site_cwd_zscore, y = prop_pipo_live)) + geom_point() + geom_smooth(method = "lm")  
+ggplot(host_nonhost, aes(x = site_cwd_zscore, y = prop_pipo_all)) + geom_point() + geom_smooth(method = "lm")  
+
+ground_trees <- read_csv("data/data_output/ground-data-for-modeling-summarized-by-site.csv")
+
+ground_air <-
+  ground_trees %>% 
+  dplyr::select(site_cwd_zscore, pipo_count, pipo_and_dead_count, live_count, total_count) %>% 
+  dplyr::mutate(prop_pipo_live = pipo_count / live_count,
+                prop_pipo_all = pipo_and_dead_count / total_count) %>% 
+  dplyr::mutate(type = "ground") %>% 
+  bind_rows(host_nonhost)
+
+
+ggplot(ground_air, aes(x = site_cwd_zscore, y = prop_pipo_live, color = type)) + geom_point() + geom_smooth(method = "lm")  
+ggplot(ground_air, aes(x = site_cwd_zscore, y = prop_pipo_all, color = type)) + geom_point() + geom_smooth(method = "lm")  
