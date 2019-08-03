@@ -28,6 +28,8 @@ library(png)
 library(magick)
 library(cowplot)
 library(here)
+library(tmap)
+library(tictoc)
 
 source("data/data_carpentry/make-processing-checklist.R")
 
@@ -106,8 +108,27 @@ ttops <-
 
 crowns <- sf::st_read(paste0("data/data_output/site_data/", example_site, "/", example_site, "_crowns/", example_site, "_crowns.shp"))
 
+crop_poly <- 
+  matrix(c(715200, 4270500,
+           715400, 4270500,
+           715400, 4270700,
+           715200, 4270700,
+           715200, 4270500),
+         ncol = 2, byrow = TRUE) %>% 
+  list() %>% 
+  st_polygon()
+
+plot(crop_poly, col = "red", add = TRUE)
+
 ttops_gg <-
   ggplot(ttops, aes(x = x, y = y)) +
+  geom_point(cex = 0.2) +
+  coord_equal() +
+  labs(x = "Longitude", y = "Latitude") +
+  theme_bw()
+
+ttops_crop_gg <-
+  ggplot(ttops[crop_poly, ], aes(x = x, y = y)) +
   geom_point(cex = 0.2) +
   coord_equal() +
   labs(x = "Longitude", y = "Latitude") +
@@ -119,6 +140,56 @@ crowns_gg <-
   coord_sf() +
   labs(x = "Longitude", y = "Latitude") +
   theme_bw()
+
+crowns_crop_gg <-
+  ggplot(crowns[crop_poly, ]) +
+  geom_sf() +
+  coord_sf() +
+  labs(x = "Longitude", y = "Latitude") +
+  theme_bw()
+
+png("figures/eldo_3k_3_ttops.png", width = 6, height = 6, units = "in", res = 2400)
+plot(st_geometry(ttops), axes = TRUE, xlab = "Longitude (m)", ylab = "Latitude (m)", pch = 19, cex = 0.2)
+dev.off()
+
+png("figures/eldo_3k_3_ttops_with_crop_poly.png", width = 6, height = 6, units = "in", res = 2400)
+plot(st_geometry(ttops), axes = TRUE, xlab = "Longitude (m)", ylab = "Latitude (m)", pch = 19, cex = 0.2)
+plot(crop_poly, col = adjustcolor("red", alpha.f = 0.2), border = "red", lwd = 3, add = TRUE)
+dev.off()
+
+png("figures/eldo_3k_3_ttops_cropped.png", width = 6, height = 6, units = "in", res = 2400)
+plot(st_geometry(ttops[crop_poly, ]), axes = TRUE, xlab = "Longitude (m)", ylab = "Latitude (m)", pch = 19, cex = 0.2)
+dev.off()
+
+png("figures/eldo_3k_3_crowns.png", width = 6, height = 6, units = "in", res = 2400)
+plot(st_geometry(crowns), axes = TRUE, xlab = "Longitude (m)", ylab = "Latitude (m)")
+dev.off()
+
+png("figures/eldo_3k_3_crowns_with_crop_poly.png", width = 6, height = 6, units = "in", res = 2400)
+plot(st_geometry(crowns), axes = TRUE, xlab = "Longitude (m)", ylab = "Latitude (m)")
+plot(crop_poly, col = adjustcolor("red", alpha.f = 0.2), border = "red", lwd = 3, add = TRUE)
+dev.off()
+
+png("figures/eldo_3k_3_crowns_cropped.png", width = 6, height = 6, units = "in", res = 2400)
+plot(st_geometry(crowns[crop_poly, ]), axes = TRUE, xlab = "Longitude (m)", ylab = "Latitude (m)")
+dev.off()
+
+index <- raster::brick(paste0("data/data_output/site_data/", example_site, "/", example_site, "_index.tif"))
+index_rgb <- r[[7:9]]
+crop_rgb <- raster::crop(index_rgb, y = as(crop_poly, "Spatial"))
+
+png("figures/eldo_3k_3_ortho_rgb.png", width = 6, height = 5.5, units = "in", res = 2400)
+plotRGB(index_rgb)
+dev.off()
+
+png("figures/eldo_3k_3_ortho_rgb_with_crop_poly.png", width = 6, height = 5.5, units = "in", res = 2400)
+plotRGB(index_rgb)
+plot(crop_poly, col = adjustcolor("black", alpha.f = 0.2), lwd = 3, add = TRUE)
+dev.off()
+
+png("figures/eldo_3k_3_ortho_rgb_cropped.png", width = 6, height = 5.5, units = "in", res = 2400)
+plotRGB(crop_rgb)
+dev.off()
 
 if (!file.exists(here::here(paste0("data/data_output/site_data/", example_site, "/", example_site, "_classified-crowns.gpkg")))) {
   
@@ -139,19 +210,21 @@ if (!file.exists(here::here(paste0("data/data_output/site_data/", example_site, 
 site_cc <- sf::st_read(dsn = here::here(paste0("data/data_output/site_data/", example_site, "/", example_site, "_classified-crowns.gpkg")))
 
 live_dead_gg <-
-  ggplot(site_cc, aes(x = local_x, y = local_y, color = live)) +
-  geom_point(cex = 0.75) +
-  coord_sf() +
-  labs(x = "Longitude", y = "Latitude", color = "Status") +
+  ggplot(site_cc, aes(x = local_x, y = local_y, color = factor(live, levels = c("live", "dead")))) +
+  geom_point(cex = 0.55) +
+  labs(x = "Longitude (m)", y = "Latitude (m)", color = "Status") +
   theme_bw() +
+  coord_equal() +
+  scale_x_continuous(limits = c(714800, 715400)) +
   scale_color_viridis_d()
 
 host_gg <-
-  ggplot(site_cc, aes(x = local_x, y = local_y, color = host)) +
-  geom_point() +
-  coord_sf() +
-  labs(x = "Longitude", y = "Latitude", color = "Species") +
+  ggplot(site_cc, aes(x = local_x, y = local_y, color = factor(host, levels = c("non-host", "host")))) +
+  geom_point(cex = 0.55) +
+  labs(x = "Longitude (m)", y = "Latitude (m)", color = "Species") +
   theme_bw() +
+  coord_equal() +
+  scale_x_continuous(limits = c(714800, 715400)) +
   scale_color_viridis_d()
 
 
@@ -160,9 +233,10 @@ ggsave(plot = dtm_gg, filename = "figures/eldo_3k_3_dtm.png", width = 6, units =
 ggsave(plot = chm_gg, filename = "figures/eldo_3k_3_chm.png", width = 6, units = "in")
 ggsave(plot = ttops_gg, filename = "figures/eldo_3k_3_ttops.png", width = 6, units = "in")
 ggsave(plot = crowns_gg, filename = "figures/eldo_3k_3_crowns.png", width = 6, units = "in")
-ggsave(plot = live_dead_gg, filename = "figures/eldo_3k_3_live_dead.png", width = 6, units = "in")
-ggsave(plot = host_gg, filename = "figures/eldo_3k_3_host_nonhost.png", width = 6, units = "in")
+ggsave(plot = live_dead_gg, filename = "figures/eldo_3k_3_live_dead.png", width = 6, height = 5.5, units = "in")
+ggsave(plot = host_gg, filename = "figures/eldo_3k_3_host_nonhost.png", width = 6, height = 5.5, units = "in")
 
+raw_photo <- ggdraw() + draw_image("figures/eldo_3k_3_raw_x3_100MEDIA_DJI_0705.JPG")
 # point_cloud_png <- ggdraw() + draw_image("figures/eldo_3k_3_point_cloud.png")
 # dsm_png <- ggdraw() + draw_image("figures/eldo_3k_3_dsm.png")
 # dtm_png <- ggdraw() + draw_image("figures/eldo_3k_3_dtm.png")
