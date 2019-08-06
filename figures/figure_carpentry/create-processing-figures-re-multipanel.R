@@ -103,10 +103,12 @@ chm_gg <-
 
 ttops <- 
   sf::st_read(paste0("data/data_output/site_data/", example_site, "/", example_site, "_ttops/", example_site, "_ttops.shp")) %>% 
+  sf::st_transform(3310) %>% 
   dplyr::mutate(x = st_coordinates(.)[,1],
                 y = st_coordinates(.)[,2])
 
-crowns <- sf::st_read(paste0("data/data_output/site_data/", example_site, "/", example_site, "_crowns/", example_site, "_crowns.shp"))
+crowns <- sf::st_read(paste0("data/data_output/site_data/", example_site, "/", example_site, "_crowns/", example_site, "_crowns.shp")) %>% 
+  sf::st_transform(3310)
 
 crop_poly <- 
   matrix(c(715200, 4270500,
@@ -116,37 +118,39 @@ crop_poly <-
            715200, 4270500),
          ncol = 2, byrow = TRUE) %>% 
   list() %>% 
-  st_polygon()
+  st_polygon() %>% 
+  st_sfc(crs = 32610) %>% 
+  st_transform(3310)
 
 plot(crop_poly, col = "red", add = TRUE)
 
-ttops_gg <-
-  ggplot(ttops, aes(x = x, y = y)) +
-  geom_point(cex = 0.2) +
-  coord_equal() +
-  labs(x = "Longitude", y = "Latitude") +
-  theme_bw()
-
-ttops_crop_gg <-
-  ggplot(ttops[crop_poly, ], aes(x = x, y = y)) +
-  geom_point(cex = 0.2) +
-  coord_equal() +
-  labs(x = "Longitude", y = "Latitude") +
-  theme_bw()
-
-crowns_gg <-
-  ggplot(crowns) +
-  geom_sf() +
-  coord_sf() +
-  labs(x = "Longitude", y = "Latitude") +
-  theme_bw()
-
-crowns_crop_gg <-
-  ggplot(crowns[crop_poly, ]) +
-  geom_sf() +
-  coord_sf() +
-  labs(x = "Longitude", y = "Latitude") +
-  theme_bw()
+# ttops_gg <-
+#   ggplot(ttops, aes(x = x, y = y)) +
+#   geom_point(cex = 0.2) +
+#   coord_equal() +
+#   labs(x = "Longitude", y = "Latitude") +
+#   theme_bw()
+# 
+# ttops_crop_gg <-
+#   ggplot(ttops[crop_poly, ], aes(x = x, y = y)) +
+#   geom_point(cex = 0.2) +
+#   coord_equal() +
+#   labs(x = "Longitude", y = "Latitude") +
+#   theme_bw()
+# 
+# crowns_gg <-
+#   ggplot(crowns) +
+#   geom_sf() +
+#   coord_sf() +
+#   labs(x = "Longitude", y = "Latitude") +
+#   theme_bw()
+# 
+# crowns_crop_gg <-
+#   ggplot(crowns[crop_poly, ]) +
+#   geom_sf() +
+#   coord_sf() +
+#   labs(x = "Longitude", y = "Latitude") +
+#   theme_bw()
 
 png("figures/eldo_3k_3_ttops.png", width = 6, height = 6, units = "in", res = 2400)
 plot(st_geometry(ttops), axes = TRUE, xlab = "Longitude (m)", ylab = "Latitude (m)", pch = 19, cex = 0.2)
@@ -184,7 +188,7 @@ dev.off()
 
 png("figures/eldo_3k_3_ortho_rgb_with_crop_poly.png", width = 6, height = 5.5, units = "in", res = 2400)
 plotRGB(index_rgb)
-plot(crop_poly, col = adjustcolor("black", alpha.f = 0.2), lwd = 3, add = TRUE)
+plot(crop_poly, col = adjustcolor("red", alpha.f = 0.2), border = "red", lwd = 3, add = TRUE)
 dev.off()
 
 png("figures/eldo_3k_3_ortho_rgb_cropped.png", width = 6, height = 5.5, units = "in", res = 2400)
@@ -207,26 +211,53 @@ if (!file.exists(here::here(paste0("data/data_output/site_data/", example_site, 
   sf::st_write(obj = site_cc, dsn = here::here(paste0("data/data_output/site_data/", example_site, "/", example_site, "_classified-crowns.gpkg")))
 }
 
-site_cc <- sf::st_read(dsn = here::here(paste0("data/data_output/site_data/", example_site, "/", example_site, "_classified-crowns.gpkg")))
+site_cc <- 
+  sf::st_read(dsn = here::here(paste0("data/data_output/site_data/", example_site, "/", example_site, "_classified-crowns.gpkg"))) %>% 
+  dplyr::mutate(x = st_coordinates(.)[,1],
+                y = st_coordinates(.)[,2])
 
-live_dead_gg <-
-  ggplot(site_cc, aes(x = local_x, y = local_y, color = factor(live, levels = c("live", "dead")))) +
-  geom_point(cex = 0.55) +
-  labs(x = "Longitude (m)", y = "Latitude (m)", color = "Status") +
-  theme_bw() +
-  coord_equal() +
-  scale_x_continuous(limits = c(714800, 715400)) +
-  scale_color_viridis_d()
 
-host_gg <-
-  ggplot(site_cc, aes(x = local_x, y = local_y, color = factor(host, levels = c("non-host", "host")))) +
-  geom_point(cex = 0.55) +
-  labs(x = "Longitude (m)", y = "Latitude (m)", color = "Species") +
-  theme_bw() +
-  coord_equal() +
-  scale_x_continuous(limits = c(714800, 715400)) +
-  scale_color_viridis_d()
+# live_dead_gg <-
+#   ggplot(site_cc, aes(x = local_x, y = local_y, color = factor(live, levels = c("live", "dead")))) +
+#   geom_point(cex = 0.55) +
+#   labs(x = "Longitude (m)", y = "Latitude (m)", color = "Status") +
+#   theme_bw() +
+#   coord_equal() +
+#   scale_x_continuous(limits = c(714800, 715400)) +
+#   scale_color_viridis_d()
 
+png(filename = "figures/eldo_3k_3_live_dead.png", width = 6, height = 6, units = "in", res = 2400)
+par(mar = c(5.1, 4.1, 2.1, 2.1))
+plot(x = site_cc$x, y = site_cc$y, 
+     col = viridis(2)[factor(site_cc$live, levels = c("live", "dead"))], 
+     pch = 19, cex = 0.35, asp = 1, bty = "L",
+     xaxt = "n", yaxt = "n",
+     xlab = "Longitude (m)", ylab = "Latitude (m)")
+legend(x = -46275, y = 60450, xpd = NA, legend = c("live", "dead"), xjust = 0.5, pch = 19, col = viridis(2), horiz = TRUE, bty = "n")
+axis(side = 1, at = seq(-46500, -46050, length.out = 3))
+axis(side = 2, at = seq(59850, 60350, length.out = 3))
+dev.off()
+
+# host_gg <-
+#   ggplot(site_cc, aes(x = local_x, y = local_y, color = factor(host, levels = c("non-host", "host")))) +
+#   geom_point(cex = 0.55) +
+#   labs(x = "Longitude (m)", y = "Latitude (m)", color = "Species") +
+#   theme_bw() +
+#   coord_equal() +
+#   scale_x_continuous(limits = c(714800, 715400)) +
+#   scale_color_viridis_d()
+
+png(filename = "figures/eldo_3k_3_host_nonhost.png", width = 6, height = 6, units = "in", res = 2400)
+par(mar = c(5.1, 4.1, 2.1, 2.1))
+plot(x = site_cc$x, y = site_cc$y, 
+     col = viridis(2)[factor(site_cc$host, levels = c("non-host", "host"))], 
+     pch = 19, cex = 0.35, asp = 1, bty = "L",
+     xaxt = "n", yaxt = "n",
+     xlab = "Longitude (m)", ylab = "Latitude (m)")
+legend(x = -46275, y = 60450, xpd = NA, legend = c("non-host", "host"), xjust = 0.5, pch = 19, col = viridis(2), horiz = TRUE, bty = "n")
+axis(side = 1, at = seq(-46500, -46050, length.out = 3))
+axis(side = 2, at = seq(59850, 60350, length.out = 3))
+dev.off()
 
 ggsave(plot = dsm_gg, filename = "figures/eldo_3k_3_dsm.png", width = 6, units = "in")
 ggsave(plot = dtm_gg, filename = "figures/eldo_3k_3_dtm.png", width = 6, units = "in")
