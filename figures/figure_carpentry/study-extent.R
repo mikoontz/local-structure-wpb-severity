@@ -11,20 +11,23 @@ library(tmaptools)
 sn <- 
   st_read("data/data_output/sierra-nevada-jepson/sierra-nevada-jepson.shp") %>% 
   st_transform(3310)
+
 usfs <- 
   st_read("data/features/S_USA.AdministrativeForest/S_USA.AdministrativeForest.shp") %>% 
   st_transform(3310)
+
 veg_plots <- 
   st_read("data/features/plot-centers_ground-gps-measured.kml") %>% 
+  tidyr::separate(col = Name, into = c("forest", "elevation_band", "site", "nickname", "rep"), sep = "_") %>% 
   st_transform(3310) %>% 
   group_by(forest, elevation_band, site) %>% 
   summarize() %>% 
   st_centroid() %>% 
   dplyr::mutate(elev = case_when(elevation_band == 3000 ~ "914-1219",
                                  elevation_band == 4000 ~ "1219-1524",
-                                 elevation_band == 5000 ~ "1524-1828",
-                                 elevation_band == 6000 ~ "1828-2133")) %>% 
-  dplyr::mutate(elev = factor(elev, levels = c("914-1219", "1219-1524", "1524-1828", "1828-2133")))
+                                 elevation_band == 5000 ~ "1524-1829",
+                                 elevation_band == 6000 ~ "1829-2134")) %>% 
+  dplyr::mutate(elev = factor(elev, levels = c("914-1219", "1219-1524", "1524-1829", "1829-2134")))
 
 western_states <- 
   us_states %>% 
