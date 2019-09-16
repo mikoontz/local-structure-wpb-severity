@@ -33,7 +33,7 @@ header-includes:
   - \captionsetup[figure]{labelformat=empty}
   - \captionsetup[table]{labelformat=empty}
 
-output: pdf_document
+output: word_document
 ---
 
 ```{r setup, include = FALSE, echo = FALSE}
@@ -135,20 +135,24 @@ site_characteristics <- read_csv(here::here("analyses/analyses_output/summarized
 *Keywords:* `r params$keywords`
 
 *Abstract word count:* 427  
-*Main text word count:* 6582 (Intro: 1162; Methods: 3277 (519+420+115+331+332+278+468+504+310); Results: 246 (41+205); Discussion: 1897)  
+*Overall .docx word count:* 10925
+*Main text word count:* 6493 (Intro: 1249; Methods: 3006 (550+644+1502+310); Results: 341 (41+95+205); Discussion: 1897)  
 *Text boxes word count:* 0  
 
 Date report generated: `r params$date_generated`
 
 ## Abstract 
 
-The Californian hot drought of 2012 to 2015 created favorable conditions for unprecedented ponderosa pine (*Pinus ponderosa*) mortality in the Sierra Nevada mountain range, largely caused by the western pine beetle (*Dendroctonus brevicomis*). 
+The Californian hot drought of 2012 to 2015 created favorable conditions for unprecedented ponderosa pine (*Pinus ponderosa*) mortality in the Sierra Nevada mountain range, largely caused by the western pine beetle (WPB; *Dendroctonus brevicomis*). 
+
 Climate conditions related to tree water stress as well as forest structure and composition can influence the severity of forest insect disturbance, but it remains challenging to consider how these variables may interact to produce patterns of tree mortality. 
+
 Previous studies have shown an interaction between climate conditions and forest density in their effect on tree mortality, but density is a coarse gauge of forest structure that can affect western pine beetle behavior in a number of ways. 
-Measuring broad-scale climate conditions simultaneously with complex forest structure-- including tree species, tree size, and local density-- will refine our understanding of how these variables interact, but is generally expensive and/or labor-intensive. 
-We overcame these hurdles using aerial drone surveys over an established network of 160 forest plots along a 350km and 1000m elevation gradient in western slope Sierra ponderosa pine/mixed-conifer forests. 
-Using Structure from Motion (SfM) processing on over 450,000 images and field measurements from the coincident ground plots, we determined tree size, location, and species for individual trees over 9km^2^ of forest that experienced ponderosa pine mortality as a result of western pine beetle colonization. 
-We modeled the probability of ponderosa pine mortality as a linear combination of forest structure variables and site-level climatic water deficit, and used a Gaussian process to estimate the spatial covariance in the response. 
+Measuring broad-scale climate conditions simultaneously with local forest composition and structure-- tree size and location-- will refine our understanding of how these variables interact, but is generally expensive and/or labor-intensive. 
+
+We use drone surveys over a network of 160 field plots along a 350km and 1000m elevation gradient in western slope Sierra ponderosa pine/mixed-conifer forests and Structure from Motion processing to segment and classify over 450,000 trees over 9km^2^ of forest with WPB-induced tree mortality.
+
+We modeled the probability of ponderosa pine mortality as a function of forest structure and composition variables and their interaction with site-level climatic water deficit, accounting for spatial covariance using exact Gaussian processes.
 
 We found that greater host density strongly increased the probability of host mortality, and greater host size generally decreased the probability of host mortality. 
 There was also a strong three-way interaction between host density, host size, and climatic water deficit such that host density and host size tended to synergistically increase the probability of host mortality at hot/dry sites, but denser, smaller trees tended to drive mortality in cool/wet sites.  
@@ -212,14 +216,10 @@ Plots were stratified by three elevation bands in each forest, with the plots in
 
 ![`r fig_nums("fig-geographic-extent")`](../../figures/study-geographic-extent-inset.png){ height=7in }
 
+We built this study coincident with 160 vegetation/forest insect monitoring plots at 32 sites established between 2016 and 2017 by @fettig2019 (`r fig_nums(name = "fig-geographic-extent", display = "cite")`).
 The study sites were chosen to reflect typical west-side Sierra Nevada yellow pine/mixed-conifer forests and were dominated by ponderosa pine trees, *Pinus ponderosa* [@fettig2019].
-In the typical life cycle of western pine beetles, pioneer beetles disperse to a new host tree, determine the host's susceptibility to attack, and use pheromone signals to attract other WPBs.
-The attracted WPBs mass attack the tree by boring into its inner bark, laying eggs, and dying, leaving their offspring to develop inside the doomed tree before themselves dispersing to a new potential host [@raffa2008].
-In California, the WPB can have 2-3 generations in a single year and can often out-compete its congener, the mountain pine beetle, *Dendroctonus ponderosa* (MPB), for the ponderosa pine host [@fettig2019].
-
-We built our study on 180 vegetation/forest insect monitoring plots at 36 sites established between 2016 and 2017 by @fettig2019 (`r fig_nums(name = "fig-geographic-extent", display = "cite")`).
-These established plots were located in WPB-attacked, yellow pine/mixed-conifer forests across the Eldorado, Stanislaus, Sierra and Sequoia National Forests and were stratified by elevation (914-1219 meters [3000-4000 feet], 1219-1524 meters [4000-5000 feet], 1524-1828 meters [5000-6000 feet] above sea level).
-In the Sequoia National Forest, the southernmost National Forest in our study, plots were stratified with the lowest elevation band between 1219 and 1524 meters (4000-5000 feet) and extended to an upper elevation band of 1828-2133 meters (6000-7000 feet) to capture a more similar forest community composition as at the more northern National Forests.
+These established plots were located in WPB-attacked, yellow pine/mixed-conifer forests across the Eldorado, Stanislaus, Sierra and Sequoia National Forests and were stratified by elevation (914-1219 meters [3000-4000 feet], 1219-1524 meters [4000-5000 feet], 1524-1829 meters [5000-6000 feet] above sea level).
+In the Sequoia National Forest, the southernmost National Forest in our study, plots were stratified with the lowest elevation band between 1219 and 1524 meters (4000-5000 feet) and extended to an upper elevation band of 1829-2134 meters (6000-7000 feet) to capture a more similar forest community composition as at the more northern National Forests.
 The sites have variable forest structure and plot locations were selected in areas with >40% ponderosa pine basal area and >10% ponderosa pine mortality.
 At each site, five 0.04 ha circular plots were installed along transects with between 80 and 200m between each plot.
 In the field, @fettig2019 mapped all stem locations relative to the center of each plot using azimuth/distance measurements.
@@ -228,138 +228,89 @@ Year of mortality was estimated based on needle color and retention, if it wasn'
 A small section of bark was removed from dead trees to confirm insect activity.
 During the spring and early summer of 2018, all field plots were revisited to assess whether dead trees had fallen [@fettig2019].
 
-### Instrumentation
+In the typical life cycle of western pine beetles, pioneer beetles disperse to a new host tree, determine the host's susceptibility to attack, and use pheromone signals to attract other WPBs.
+The attracted WPBs mass attack the tree by boring into its inner bark, laying eggs, and dying, leaving their offspring to develop inside the doomed tree before themselves dispersing to a new potential host [@raffa2008].
+In California, the WPB can have 2-3 generations in a single year and can often out-compete its congener, the mountain pine beetle, *Dendroctonus ponderosa* (MPB), for the ponderosa pine host [@fettig2019].
 
-Imagery was captured using a DJI Zenmuse X3 RGB camera [@dji2015] and a Micasense RedEdge3 5-band multispectral camera [@micasense2015].
-We mounted both of these instruments simultaneously on a DJI Matrice 100 aircraft [@dji2015a] using the DJI 3-axis stabilized gimbal for the Zenmuse X3 camera and a Micasense angled fixed mount for the RedEdge3 camera.
-The gimbal and the angled fixed mount ensured both instruments were nadir-facing during image capture.
-Just prior to or after image capture at each site, we calibrated the RedEdge3 camera by taking an image of a calibration panel on the ground in full sun with known reflectance values for each of the 5 narrow bands (`r table_nums(name = "table-rededge-specs", display = "cite")`).
+### Aerial data collection and processing
 
-```{r}
-table_nums(name = "table-rededge-specs", "Reflectance sensitivity of the Micasense Rededge3 camera.
-The calibration panel value represents the reflectance of the calibration panel for the given wavelength.")
-```
-
-```{r rededge_deets, echo = FALSE, include = TRUE, results = 'asis'}
-rededge_print <- 
-  tibble(`Band\nnumber` = 1:5,
-         `Band\nname` = c("blue (b)", "green (g)", "red (r)", "near infrared (nir)", "red edge (re)"),
-         `Center\nwavelength` = c(475, 560, 668, 840, 717),
-         `Band\nwidth` = c(20, 20, 10, 40, 10),
-         `Wavelength\nrange` = c("465-485", "550-570", "663-673", "820-860", "712-722"),
-         `Panel\nreflectance` = c(0.64, 0.64, 0.64, 0.60, 0.63))
-
-pandoc.table(rededge_print, 
-             split.tables = Inf,
-             caption = table_nums(name = "table-rededge-specs"),
-             keep.line.breaks = TRUE)
-```
-
-
+Nadir-facing imagery was captured using a gimbal-stabilized DJI Zenmuse X3 broad-band red/green/blue (RGB) camera [@dji2015] and a fixed-mounted Micasense Rededge3 multispectral camera with five narrow bands [@micasense2015] on a DJI Matrice 100 aircraft [@dji2015a]. 
+Imagery was captured from both cameras along preprogrammed aerial transects over ~40 hectares surrounding each of the 36 sites (each of these containing five field plots) and was processed in a series of steps to yield local forest structure and composition data suitable for our statistical analysis. 
+Following the call by @wyngaard2019, we establish "data product levels" to reflect the image processing pipeline from raw imagery (Level 0) to calibrated, fine-scale forest structure and composition information on regular grids (Level 4), with each new data level derived from levels below it.
+Here, we outline the steps in the processing and calibration pipeline visualized in `r fig_nums("fig-drone-data-levels", display = "cite")`, and include additional details in the Supplemental Methods.
 
 ```{r}
-fig_nums(name = "fig-geographic-extent", "The network of field plots spanned a 350 km latitudinal gradient from the Eldorado National Forest in the north to the Sequoia National Forest in the south.
-Plots were stratified by three elevation bands in each forest, with the plots in the Sequoia National Forest (the southern-most National Forest) occupying elevation bands 305m above the three bands in the other National Forests in order to capture a similar community composition.")
+fig_nums(name = "fig-drone-data-levels")
 ```
 
-![`r fig_nums("fig-geographic-extent")`](../../figures/study-geographic-extent-inset.png){ height=7in }
+![](../../figures/drone-data-levels.png){ height=9in }
 
-### Flight protocol
+<!-- \begin{flushleft}\setstretch{1.0} -->
+`r paste0(fig_nums("fig-drone-data-levels", display = "cite"), ".")` Schematic of the data processing workflow for a single site with each new data product level derived from data at lower levels. 
 
-Image capture was conducted as close to solar noon as possible to minimize shadow effects (varying primarily due to site accessibility; always within 4 hours, usually within 2 hours).
-Prior to the aerial survey, two strips of bright orange drop cloth (~100cm x 15cm) were positioned as an "X" over the permanent monuments marking the center of the 5 field plots from @fettig2019.
+Level 0 represents raw data from the sensors. 
+From left to right: example broad-band RGB photo from DJI Zenmuse X3 camera, example blue photo from Rededge3 (centered on 475nm), example green photo from Rededge3 (centered on 560nm), example red photo from Rededge3 (centered on 668nm), example near infrared photo from Rededge3 (centered on 840nm), and example red edge photo from Rededge3 (centered on 717nm). 
 
-For each of the 36 sites (containing 5 plots each), we captured imagery over the surrounding ~40 hectares of forested area using north-south aerial transects.
-For three sites, we surveyed less surrounding area in order to maintain visual and radio communication with the aircraft during flight which can be obstructed by rolling terrain or non-centrally available takeoff locations.
+Level 1 represents basic outputs from the photogrammetric workflow, in this case implemented with Pix4Dmapper. 
+From left to right: a dense point cloud visualized in CloudCompare (https://www.danielgm.net/cc/), an orthophoto generated from the RGB camera, and a digital surface model representing the altitude above sea level (ground height + vegetation height) for every cell.
 
-We preprogrammed aerial transects using Map Pilot for DJI on iOS flight software (hereafter Map Pilot) [@dronesmadeeasy2018].
-Using the Map Pilot software, we included an altitude adjustment along each aerial transect using a 1-arc-second digital elevation model [@farr2007] such that the aircraft's altitude remained approximately constant at 120 meters above ground level in order to maintain consistent ground sampling distance (centimeters on the ground per pixel) in the imagery.
-Ground sampling distance was approximately 5 cm/px for the Zenmuse X3 RGB camera and approximately 8 cm/px for the RedEdge3 multispectral camera.
-For this analysis, we dropped 4 sites whose imagery was of insufficient quality to process.
+Level 2 represents outputs from photogrammetric processing that have been corrected radiometrically or geometrically. 
+From left to right: a radiometrically-corrected surface reflectance map of the red narrow band from the Rededge3 camera, a radiometrically-corrected surface reflectance map of the near infrared narrow band from the Rededge3 camera, a rasterized version of the digital terrain model derived by a geometric correction of the dense point cloud, and a canopy height model derived by subtracting the terrain height from the digital surface model.
 
-Structure from motion (SfM) processing requires highly overlapping images, especially in densely vegetated areas [@frey2018].
-We planned transects with 90% forward overlap and 90% side overlap at 100 meters below the lens.
-Thus, with flights being at 120 meters above ground level, we achieved slightly higher than 90/90% overlap for objects under 20 meters tall (91.6/91.6% overlap at the ground).
-Overlap values were based on focal length (3.6mm), sensor width (6.2mm), and image dimension (4000x3000 pixels) parameters of the Zenmuse X3 camera.
-Images were captured at a constant rate of 1 image every 2 seconds for both cameras.
-A forward overlap of 90% at 100 meters translates to a flight speed of approximately 6.45 m/s and a side overlap of 90% at 100 meters translates to transects approximately 17.2 meters apart.
-The RedEdge3 camera has a different focal length (5.4mm), sensor width (4.8mm), and image dimension (1280x960 pixels), which translates to image overlap of 80.7/80.7 % at 100m below the lens and 83.9/83.9 % at ground level.
-Approximately 1900 photos were captured over each 40 hectare survey area for each camera.
+Level 3 represents domain-specific information extraction from Level 2 products and is divided into two sub-levels.
+Level 3a products are derived using only spectral or only geometric data.
+From left to right: a reflectance map of Normalized Difference Vegetation Index (NDVI; @rouse1973) derived using the red and near infrared Level 2 reflectance products, a map of points representing detected trees from the canopy height model with a red polygon highlighting the area presented in more detail for the next two images, a close-up of points representing detected trees, and a close-up of polygons representing segmented tree crowns.
+Level 3b products are derived using both spectral and geometric data.
+From left to right: a map of the point locations of detected trees that have been classified as alive or dead based on the pixel values within each segmented tree crown and a map of the point locations of detected trees classified to WPB host/non-host using the same spectral information.
+Note that our study relies on the generation of Level 3a products in order to combine them and create Level 3b products, but this need not be the case.
+For instance, deep learning/neural net methods may be able to use both the spectral and geometric information from Level 2 simultaneously to locate and classify trees in a scene and directly generate Level 3b products without a need to first generate the Level 3a products shown in this schematic.
 
-```{r}
-fig_nums(name = "fig-drone-data-levels", "Schematic of the data processing workflow progressing from 'Level 0' raw data from the instruments to 'Level 4' aggregations of classified, geolocated trees to regular grid cells.
-Each data product is derived from lower data levels.")
-```
+Level 4 represents aggregations of Level 3 products to regular grids which might better reflect the grain size of the data for which we have the best calibration and thus the most confidence or which might provide new information not possible at an individual-tree level (e.g., average distance between trees in a small neighborhood)
+From left to right: aggregation of live/dead classified trees as fraction of dead trees in a 20m x 20m cell and aggregation of host/non-host classified trees as fraction of hosts in a 20m x 20m cell.
+In our case, the 20m x 20m aggregation produces a grid cell with an area of 400m\textsuperscript{2}, which most closely matches the 404m\textsuperscript{2} area of the ground-based vegetation plots whose data we used in an aggregated form to calibrate our derivation of Level 3 products.
+<!-- \par \end{flushleft} -->
 
-![`r fig_nums("fig-drone-data-levels")`](../../figures/drone-data-levels.png){ height=8in }
+### Level 0: Raw data from sensors
 
-### Structure from Motion (SfM) processing
+Raw data comprised approximately 1900 images per camera lens (one broad-band RGB lens and five narrow-band multispectral lenses) for each of the 32 sites (`r fig_nums("fig-drone-data-levels", display = "cite")`; Level 0).
+Prior to the aerial survey, two strips of bright orange drop cloth (~100cm x 15cm) were positioned as an "X" over the permanent monuments marking the center of the 5 field plots from @fettig2019 (see Supplemental Methods).
 
-We used structure from motion (SfM) to generate dense point clouds (`r fig_nums(name = "fig-dense-point-cloud", display = "cite")`), digital surface models (`r fig_nums(name = "fig-dsm", display = "cite")`), and orthorectified reflectance maps (`r fig_nums(name = "fig-ortho", display = "cite")`) for each field site [@frey2018].
-We used Pix4Dmapper Cloud to process imagery using parameters ideal for images of a densely vegetated area taken by a multispectral camera.
-For 29 sites, we processed the RedEdge3 multispectral imagery alone.
-For three sites, we processed the RGB and the multispectral imagery in the same project to enhance the point density of the resulting point cloud.
+We preprogrammed north-south aerial transects using Map Pilot for DJI on iOS flight software [@dronesmadeeasy2018] at an altitude of 120m above ground level (with "ground" defined using a 1-arc-second digital elevation model [@farr2007]).
+The resulting ground sampling distance was approximately 5 cm/px for the Zenmuse X3 RGB camera and approximately 8 cm/px for the Rededge3 multispectral camera.
+We used 91.6% image overlap (both forward and side) at the ground for the Zenmuse X3 RGB camera and 83.9% overlap (forward and side) for the Rededge3 multispectral camera.
+
+### Level 1: Basic outputs from photogrammetric processing
+
+We used structure from motion (SfM) photogrammetry implemented in Pix4Dmapper Cloud (www.pix4d.com) to generate dense point clouds (`r fig_nums("fig-drone-data-levels", display = "cite")`; Level 1, left), orthophotos (`r fig_nums("fig-drone-data-levels", display = "cite")`; Level 1, center), and digital surface models (`r fig_nums("fig-drone-data-levels", display = "cite")`; Level 1, right) for each field site [@frey2018].
+For 29 sites, we processed the Rededge3 multispectral imagery alone to generate these products.
+For three sites, we processed the RGB and the multispectral imagery together to enhance the point density of the dense point cloud.
 All SfM projects resulted in a single processing "block," indicating that all images in the project were optimized and processed together.
+The dense point cloud represents x, y, and z coordinates as well as the color of millions of points per site.
+The orthophoto represents a radiometrically uncalibrated, top-down view of the survey site that preserves the relative x/y positions of objects in the scene.
+The digital surface model is a rasterized version of the dense point cloud that shows the altitude above sea level for each pixel in the scene at the ground sampling distance of the camera that generated the Level 0 data.
 
+### Level 2: Corrected outputs from photogrammetric processing
 
-```{r}
-fig_nums(name = "fig-dense-point-cloud", "A dense point cloud representing ~40 hectares of forest is generated using Structure from Motion (SfM) processing of ~1900 images.
-The dense point cloud z- position represents the ground elevation plus the vegetation height.")
-```
+#### Radiometric corrections
 
-![`r fig_nums(name = "fig-dense-point-cloud")`](../../figures/L1_eldo_3k_3_point-cloud_rgb-cloudcompare.png)
+A radiometrically-corrected reflectance map (`r fig_nums("fig-drone-data-levels", display = "cite")`; Level 2, left two figures; i.e., a corrected version of the Level 1 orthophoto) was generated using the Pix4D software by incorporating incoming light conditions for each narrow band of the Rededge3 camera (captured simultaneously with the Rededge3 camera using an integrated downwelling light sensor) as well as a pre-flight image of a calibration panel of known reflectance (see Supplemental Methods for camera and calibration panel details).
 
-```{r}
-fig_nums(name = "fig-dsm", "The digital surface model (DSM) is a 2-dimensional representation of the dense point cloud generated using structure from motion (SfM) processing.
-The DSM represents the ground elevation plus the vegetation height.")
-```
+#### Geometric corrections
 
-![`r fig_nums(name = "fig-dsm")`](../../figures/L1_eldo_3k_3_dsm.png)
+We implemented a geometric correction to the Level 1 dense point cloud and digital surface model by normalizing these data for the terrain underneath the vegetation. 
+We generated the digital terrain model representing the ground underneath the vegetation at 1 meter resolution (`r fig_nums("fig-drone-data-levels", display = "cite")`; Level 2, third image) by classifying each survey area's dense point cloud into "ground" and "non-ground" points using a cloth simulation filter algorithm [@zhang2016] implemented in the `lidR` [@roussel2019] package and rasterizing the ground points using the `raster` package [@hijmans2019].
+We generated a canopy height model (`r fig_nums("fig-drone-data-levels", display = "cite")`; Level 2, fourth image) by subtracting the digital terrain model from the digital surface model.
 
+### Level 3: Domain-specific information extraction
 
-```{r}
-fig_nums(name = "fig-ortho", "The orthomosaic for each of the 32 sites is generated with the Structure from Motion (SfM) processing, showing a top-down view of the whole survey area such that distances between objects in the scene are preserved and can be measured.
-Depicted is an example red-green-blue orthomosaic for one of the 32 sites covering approximately 40 hectares.
-The resolution of the original orthophoto is approximately 8cm per pixel, and has been considerably coarsened in this depiction.")
-```
+#### Level 3a: Data derived from spectral OR geometric Level 2 product
 
-![`r fig_nums(name = "fig-ortho")`](../../figures/L1_eldo_3k_3_ortho_rgb.png)
-
-### Creating canopy height models
-
-```{r}
-fig_nums(name = "fig-dtm", "The digital terrain model (DTM) is generated by processing the dense point cloud using the cloth simulation filter algorithm [@zhang2016], which classifies points as 'ground' or 'not-ground' and then interpolates the 'ground' elevation using Delaunay triangulation for the rest of the dense point cloud footprint.
-The DTM represents the ground elevation without any vegetation.")
-```
-
-![`r fig_nums(name = "fig-dtm")`](../../figures/L2_eldo_3k_3_dtm.png)
-
-```{r}
-fig_nums(name = "fig-chm", "The canopy height model (CHM) is generated by subtracting the digital terrain model from the digital surface model.
-The CHM represents the height of all of the elevation above ground level.")
-```
-
-![`r fig_nums(name = "fig-chm")`](../../figures/L2_eldo_3k_3_chm.png)
-
-We classified each survey area's dense point cloud into "ground" and "non-ground" points using a cloth simulation filter algorithm [@zhang2016] implemented in the `lidR` [@roussel2019] package.
-We rasterized the ground points using the `raster` package [@hijmans2019] to create a digital terrain model (`r fig_nums(name = "fig-dtm", display = "cite")`) representing the ground underneath the vegetation at 1 meter resolution.
-We created a canopy height model (`r fig_nums(name = "fig-chm", display = "cite")`) by subtracting the digital terrain model from the digital surface model created in Pix4Dmapper.
-
-### Tree detection
-
-We tested a total of `r nrow(algorithm_summary)` automatic tree detection algorithms and a total of `r sum(algorithm_summary$n)` parameter sets on the canopy height model or the dense point cloud to locate trees within each site (`r table_nums(name = "table-algorithm-deets", display = "cite")`).
-We used `r algorithm_summary %>% dplyr::filter(algorithm == "vwf") %>% pull(n)` parameter sets of a variable window filter using the `vwf()` function in the `ForestTools` [@plowright2018] `R` package, including the default `winFun` parameter for the `vwf()` function as well as the "pines" and "combined" functions from @popescu2004 as the `winFun` parameter.
-We used `r algorithm_summary %>% dplyr::filter(algorithm == "localMaxima") %>% pull(n)` parameter sets of a local maximum filter implemented in `lidR`.
-We used `r algorithm_summary %>% dplyr::filter(algorithm == "li2012") %>% pull(n)` parameter sets of the algorithm from @li2012, which operates on the original point cloud.
-These parameter sets included those from @shin2018 and @jakubowski2013.
-We used `r algorithm_summary %>% dplyr::filter(algorithm == "watershed") %>% pull(n)` parameter sets of the `watershed` algorithm implemented in `lidR`, which is a wrapper for a function in the `EBImage` package [@pau2010].
-We used `r algorithm_summary %>% dplyr::filter(algorithm == "ptrees") %>% pull(n)` parameter sets of `ptrees` [@vega2014] implemented in `lidR` [@roussel2019] and `lidRplugins` [@roussel2019a] and which operates on the raw point cloud, without first normalizing it to height above ground level (i.e., subtracting the ground elevation from the dense point cloud).
-We used the default parameter set of the `multichm` [@eysn2015] algorithm implemented in `lidR` [@roussel2019] and `lidRplugins` [@roussel2019a].
-Finally, we used `r algorithm_summary %>% dplyr::filter(algorithm == "lmfx") %>% pull(n)` parameter sets of the experimental algorithm `lmfx` [@roussel2019a].
+Using just the spectral information from the radiometrically-corrected reflectance maps, we calculated several vegetation indices including the normalized difference vegetation index (NDVI; @rouse1973; `r fig_nums("fig-drone-data-levels", display = "cite")`; Level 3a, first image), the normalized difference red edge (NDRE; @gitelson1994), the red-green index (RGI; @coops2006), the red edge chlorophyll index (CI~red~ ~edge~; @clevers2013), and the green chlorophyll index (CI~green~; @clevers2013).
 
 ```{r}
 table_nums(name = "table-algorithm-deets", "Algorithm name, number of parameter sets tested for each algorithm, and references.")
 ```
+
 
 ```{r algorithm_summary_print, echo = FALSE, include = TRUE, results = 'asis'}
 algorithm_summary_print <-
@@ -374,101 +325,51 @@ pandoc.table(algorithm_summary_print,
              keep.line.breaks = TRUE)
 ```
 
-### Map ground data
-
-Each orthorectified reflectance map was inspected to locate the 5 orange "X"s marking the center of the field plots (`r fig_nums(name = "fig-ortho", display = "cite")`), though some plot centers were obscured due to dense interlocking tree crowns or because a plot center was located directly under a single tree crown.
-We were able to locate 110 out of 180 field plots and were then able to use these plots for validation of automated tree detection algorithms.
-We used the `sf` package [@pebesma2019] to convert distance-from-center and azimuth measurements of each tree in the ground plots to an x-y position on the SfM-derived reflectance map using the x-y position of the orange X visible in the reflectance map as the center.
-
-### Correspondence of automatic tree detection with ground data
-
-We calculated 7 forest structure metrics for each field plot using the ground data collected by @fettig2019: total number of trees, number of trees greater than 15 meters, mean height of trees, 25^th^ percentile tree height, 75^th^ percentile tree height, mean distance to nearest tree neighbor, mean distance to 2^nd^ nearest neighbor.
-
+Using just the geometric information from the canopy height model or terrain-normalized dense point cloud, we generated maps of detected trees (`r fig_nums("fig-drone-data-levels", display = "cite")`; Level 3a, second and third images) by testing a total of `r nrow(algorithm_summary)` automatic tree detection algorithms and a total of `r sum(algorithm_summary$n)` parameter sets (`r table_nums(name = "table-algorithm-deets", display = "cite")`).
+We used the field plot data to assess each tree detection algorithm/parameter set by converting the distance-from-center and azimuth measurements of the trees in the field plots to x-y positions relative to the field plot centers distinguishable in the Level 2 reflectance maps as the orange fabric X's that we laid out prior to each flight.
+In the reflectance maps, we located 110 out of 160 field plot centers while some plot centers were obscured due to dense interlocking tree crowns or because a plot center was located directly under a single tree crown.
+For each of the 110 field plots with identifiable plot centers-- the "validation field plots", we calculated 7 forest structure metrics using the ground data collected by @fettig2019: total number of trees, number of trees greater than 15 meters, mean height of trees, 25^th^ percentile tree height, 75^th^ percentile tree height, mean distance to nearest tree neighbor, mean distance to 2^nd^ nearest neighbor.
 For each tree detection algorithm and parameter set described above, we calculated the same set of 7 structure metrics within the footprint of the validation field plots.
 We calculated the Pearson's correlation and root mean square error (RMSE) between the ground data and the aerial data for each of the 7 structure metrics for each of the `r sum(algorithm_summary$n)` automatic tree detection algorithms/parameter sets.
-
 For each algorithm and parameter set, we calculated its performance relative to other algorithms as whether its Pearson's correlation was within 5% of the highest Pearson's correlation as well as whether its RMSE was within 5% of the lowest RMSE.
-For each algorithm/parameter set, we summed the number of forest structure metrics for which it reached these 5% thresholds.
-For automatically detecting trees across the whole study, we selected the algorithm/parameter set that performed well across the most number of forest metrics (`r fig_nums(name = "fig-tree-locations", display = "cite")`).
-
-```{r}
-fig_nums(name = "fig-tree-locations", "Tree locations are detected using the `lmfx` [@roussel2019] treetop detection algorithm on the dense point cloud.")
-```
-
-![`r fig_nums(name = "fig-tree-locations")`](../../figures/L3a_eldo_3k_3_ttops_cropped.png)
-
-
-### Segmentation of crowns
-
-```{r}
-fig_nums(name = "fig-crown-segmentation", "Individual crowns are delineated using a marker controlled watershed segmentation algorithm [@meyer1990; @plowright2018] on the canopy height model (CHM) using the detected tree locations as a priority map.
-If the algorithm failed to delineate a crown for a tree that was identified in the tree detection step, a circular crown with a 0.5m buffer centered on point location of the detected tree was added as a crown.")
-```
-
-![`r fig_nums(name = "fig-crown-segmentation")`](../../figures/L3a_eldo_3k_3_crowns_cropped.png)
+We summed the number of forest structure metrics for which it reached these 5% thresholds for each algorithm/parameter set.
+For automatically detecting trees across the whole study, we selected the algorithm/parameter set that performed well across the most number of forest metrics (see Results).
 
 We delineated individual tree crowns with a marker controlled watershed segmentation algorithm [@meyer1990] using the detected treetops as markers implemented in the `ForestTools` package [@plowright2018].
 If the automatic segmentation algorithm failed to generate a crown segment for a detected tree (e.g., often snags with a very small crown footprint), a circular crown was generated with a radius of 0.5 meters.
-If the segmentation generated multiple polygons for a single detected tree, only the polygon containing the detected tree was retained (`r fig_nums(name = "fig-crown-segmentation", display = "cite")`).
-Image overlap decreases near the edges of the overall flight path, which reduces the quality of the SfM processing in those areas.
-Thus, we excluded segmented crowns within 35 meters of the edge of the survey area.
-Given the narrower field of view of the RedEdge3 multispectral camera versus the X3 RGB camera whose optical parameters were used to define the ~40 hectare survey area around each site, as well as the 35 meter additional buffering, the survey area at each site was approximately 30 hectares (`r table_nums(name = "table-site-deets", display = "cite")`).
-
-We used the `velox` package [@hunziker2017] to extract all the pixel values from the orthorectified reflectance map for each of the 5 narrow bands within each segmented crown polygon.
-Per pixel, we additionally calculated the normalized difference vegetation index (NDVI; @rouse1973), the normalized difference red edge (NDRE; @gitelson1994), the red-green index (RGI; @coops2006), the red edge chlorophyll index (CI~red~ ~edge~; @clevers2013), and the green chlorophyll index (CI~green~; @clevers2013).
-For each crown polygon, we calculated the mean value for each raw and derived reflectance band (5 raw; 5 derived).
-
-### Classification of trees
-
-```{r}
-fig_nums(name = "fig-live-dead-classification", "Each tree is classified as live or dead by extracting the pixel values from the 5 narrow bands of the Rededge3 camera (and 5 derived bands-- see methods) in the orthomosaic within each segmented tree crown of the detected trees, taking their mean value, and using those means to predict live/dead status with a boosted logistic regression previously trained on a hand-classified set of segmented crowns from across the study area.")
-```
-
-![`r fig_nums(name = "fig-live-dead-classification")`](../../figures/L3b_eldo_3k_3_live_dead.png)
-
-```{r}
-fig_nums(name = "fig-host-non-host", "For each live tree, we classified its species using the same means of extracted pixel values across the 5 Rededge3 narrow bands (and 5 derived bands) as predictors in a regularized discriminant analysis previously trained on a hand-classified set of segmented crowns from across the study area.")
-```
-
-![`r fig_nums(name = "fig-host-non-host")`](../../figures/L3b_eldo_3k_3_host_nonhost.png)
-
-We overlaid the segmented crowns on the reflectance maps from `r length(unique(hand_classified_crowns$site))` sites spanning the latitudinal and elevation gradient in the study.
-Using QGIS, we hand classified `r nrow(hand_classified_crowns)` trees as live/dead (`r fig_nums(name = "fig-live-dead-classification", display = "cite")`) and as one of 5 dominant species in the study area (*Pinus ponderosa*, *Pinus lambertiana*, *Abies concolor*, *Calocedrus decurrens*, or *Quercus kelloggi*) using the mapped ground data as a guide.
-We treated all trees classified as ponderosa pine as a "host" tree and all other species as "non-host" trees (`r fig_nums(name = "fig-host-non-host", display = "cite")`).
-
-We used all 10 mean values of the reflectance bands for each tree crown polygon to predict whether the hand classified trees were alive or dead using a boosted logistic regression model implemented in the `caret` package (accuracy of live/dead classification on a withheld test dataset: `r round(classifier_stats[classifier_stats$type == "live/dead", "accuracy"] %>% pull() * 100, 1)`%) [@kuhn2008].
-For just the living trees, we similarly used all 10 reflectance values to predict the tree species using regularized discriminant analysis implemented in the `caret` package (accuracy of species classification on a withheld testing dataset: `r round(classifier_stats[classifier_stats$type == "species", "accuracy"] %>% pull() * 100, 1)`%; accuracy of WPB host/non-WPB-host (i.e., ponderosa pine versus other tree species) on a withheld testing dataset: `r round(classifier_stats[classifier_stats$type == "host/non-host", "accuracy"] %>% pull() * 100, 1)`%).
-
-Finally, we used these models to classify all tree crowns in the data set as alive or dead as well as the species of living trees.
-
-### Allometric scaling of height to quadratic mean diameter
+If the segmentation generated multiple polygons for a single detected tree, only the polygon containing the detected tree was retained.
+Because image overlap decreases near the edges of the overall flight path and reduces the quality of the SfM processing in those areas, we excluded segmented crowns within 35 meters of the edge of the survey area.
+Given the narrower field of view of the Rededge3 multispectral camera versus the X3 RGB camera whose optical parameters were used to define the ~40 hectare survey area around each site, as well as the 35 meter additional buffering, the survey area at each site was approximately 30 hectares (see Supplemental Methods).
 
 We converted the height of each tree determined using the canopy height model to its diameter at breast height, 1.37m (DBH).
 Using the tree height and DBH ground data from @fettig2019, we fit a simple linear regression to predict DBH from height for each of the 5 dominant species.
 Using the model-classified tree species of each segmented tree, we used the corresponding linear relationship for that species to estimate the DBH given the tree's height.
-We then calculated the quadratic mean diameter for each 20m x 20m cell as the square root of the average squared diameter of trees within the cell.
+
+#### Level 3b: Data derived from spectral AND geometric information
+
+We overlaid the segmented crowns on the reflectance maps from `r length(unique(hand_classified_crowns$site))` sites spanning the latitudinal and elevation gradient in the study.
+Using QGIS (https://qgis.org/en/site/), we hand classified `r nrow(hand_classified_crowns)` trees as live/dead (`r fig_nums(name = "fig-live-dead-classification", display = "cite")`) and as one of 5 dominant species in the study area (*Pinus ponderosa*, *Pinus lambertiana*, *Abies concolor*, *Calocedrus decurrens*, or *Quercus kelloggi*) using the mapped ground data as a guide.
+Each tree was further classified as "host" for ponderosa pine or "non-host" for all other species.
+We extracted all the pixel values within each segmented crown polygon from the five, Level 2 orthorectified reflectance maps (one per narrow band on the Rededge3 camera) as well as from the five, Level 3a vegetation index maps using the `velox` package [@hunziker2017].
+For each crown polygon, we calculated the mean value of the extracted Level 2 and Level 3a pixels and used them as ten independent variables in a five-fold cross validated boosted logistic regression model to predict whether the hand classified trees were alive or dead.
+For just the living trees, we similarly used all 10 mean reflectance values per crown polygon to predict tree species using a five-fold cross validated regularized discriminant analysis.
+Finally, we used these models to classify all tree crowns in the data set as alive or dead as well as the species of living trees.
+The boosted logistic regression and regularized discriminant analysis were implemented using the `caret` package in R [@kuhn2008].
+
+### Level 4: Aggregations to regular grids
+
+We rasterized the classified trees at a spatial resolution similar to that of the field plots to better match the grain size at which we validated the automatic tree detection algorithms.
+In each raster cell, we calculated: number of live trees, number of dead trees, number of ponderosa pine trees, total number of trees (of all species, including ponderosa pine).
+We converted the count of ponderosa pine trees and the total tree count to a density measurement of trees per hectare (tpha) by multiplying the counts in each 20m x 20m cell by `r 10000/400` to create a "host density" and an "overall density" variable per cell.
+Finally, we then calculated a separate quadratic mean diameter (QMD) for ponderosa pine and all trees of any species for each 20m x 20m cell as the square root of the average squared diameter of trees (ponderosa or all) within the cell.
 
 ### Note on assumptions about dead trees
 
-For the purposes of this study, we assumed that all dead trees were ponderosa pine and were thus host trees for the western pine beetle.
-This is a reasonably good assumption for our study area, given that @fettig2019 found that `r pipo_pct_of_all_dead`% of the dead trees in the coincident ground plots were ponderosa pine.
-The species contributing to the next highest proportion of dead trees was incense cedar which represented `r cade_pct_of_all_dead`% of the dead trees in the ground plots.
+For the purposes of this study, we assumed that all dead trees were ponderosa pine attacked and killed by western pine beetle.
+This is a reasonably good assumption for our study area, given that @fettig2019 found that `r pipo_pct_of_all_dead`% of the dead trees in the coincident field plots were ponderosa pine.
+The species contributing to the next highest proportion of dead trees was incense cedar which represented `r cade_pct_of_all_dead`% of the dead trees in the field plots.
 Incense cedar is not a potential host of the western pine beetle, and different forest structure/environment conditions can dictate the dynamic between forest insects and their host tree species [@stephenson2019].
 While the detected mortality is most likely to be ponderosa pine, it is critical to interpret our results with this known limitation in mind.
-
-### Rasterizing individual tree data
-
-```{r}
-fig_nums(name = "fig-rasterized-prop-dead", "We rasterized the individual tree data by aggregating values to 20m x 20m cells.
-This example shows the proportion of dead trees per cell for the same example site as in the previous figures.")
-```
-
-![`r fig_nums(name = "fig-rasterized-prop-dead")`](../../figures/L4_eldo_3k_3_prop-dead-rasterized.png)
-
-Because the tree detection algorithms were validated against ground data at the plot level, we rasterized the classified trees at a spatial resolution similar to that of the ground plots (`r fig_nums(name = "fig-rasterized-prop-dead", display = "cite")`).
-That is, we rasterized the individual tree data to 20m x 20m pixels equaling 400 m^2^, and the circular ground plots with 11.35m radius covered 404 m^2^.
-In each raster cell, we calculated the: number of live trees, number of dead trees, number of ponderosa pine trees, total number of trees (of all species, including ponderosa pine), quadratic mean diameter (QMD) of ponderosa pine trees, and QMD of all trees of any species (overall QMD).
-We converted the count of ponderosa pine trees and the total tree count to a density measurement of trees per hectare (tpha) by multiplying the counts in each 20m x 20m cell by `r 10000/400` to create a "host density" and an "overall density" variable per cell.
 
 ### Environmental data
 
@@ -483,7 +384,7 @@ Thus, a CWD z-score of one would indicate that the CWD at that site is one stand
 We used a generalized linear model with a zero-inflated binomial response and a logit link to predict the probability of ponderosa pine mortality within each 20m x 20m cell as a function of the crossed effects of ponderosa pine quadratic mean diameter and density added to the crossed effect of quadratic mean diameter and density of trees of all species in each cell (hereafter "overall quadratic mean diameter" and "overall density"), as well as the interaction of each summand with climatic water deficit at each site.
 
 To measure and account for spatial autocorrelation of the bark beetle behavioral processes underlying ponderosa pine mortality, we subsampled the data at each site to a random selection of 200, 20m x 20m cells representing approximately 27.5% of the surveyed area.
-With these subsampled data, we included a separate exact Gaussian process term per site of the interaction between the x- and y-position of each cell using the `gp()` function in the `brms` package [@burkner2017].
+Additionally with these subsampled data, we included a separate exact Gaussian process term per site of the interaction between the x- and y-position of each cell using the `gp()` function in the `brms` package [@burkner2017].
 The Gaussian process estimates the spatial covariance in the response variable (log-odds of ponderosa pine mortality) jointly with the effects of the other covariates.
 
 $$
@@ -514,48 +415,14 @@ With the exception of the SfM software (Pix4Dmapper Cloud) and the GIS software 
 
 ## Results
 
-```{r}
-table_nums(name = "table-site-deets", "Site characteristics for each of the 32 sites.
-The site name consists of the forest name, elevation band, and rep separated by an underscore.
-The Eldorado National Forest is 'eldo', the Stanislaus National Forest is 'stan', the Sierra National Forest is 'sier', and the Sequoia National Forest is 'sequ'.
-The elevation band represents the lower bounds of the 305 meter (1000 foot) elevation bands in feet.
-Thus '3k' implies that site was located between 3,000 and 4,000 feet (914-1219 meters).
-Aerially detected mortality and density of the whole site is presented along with the mortality and density calculated from the ground data (aerial / ground).
-The density is measured in trees per hectare (tpha).")
-```
+### Tree detection algorithm performance
 
-```{r site_characteristics, echo = FALSE, include = TRUE, results = 'asis'}
-site_characteristics <- 
-   site_characteristics %>% 
-  tidyr::separate(site, into = c("Forest", "Elevation band", "Rep"), remove = FALSE) %>% 
-  dplyr::mutate(`% tree mortality\n(aerial/ground)` = paste(sprintf("%0.0f", prop_mortality * 100), sprintf("%0.0f", ground_mortality * 100), sep = "/"),
-                `Density\n(tpha; aerial/ground)` = paste(sprintf("%0.0f", air_tpha), sprintf("%0.0f", ground_tpha), sep = "/")) %>% 
-  dplyr::rename(`CWD\n(mm)` = site_cwd,
-                `CWD\n(z-score)` = site_cwd_zscore,
-                `Survey area\n(ha)` = buffered_survey_area,
-                Site = site) %>% 
-  dplyr::mutate(Forest = case_when(Forest == "eldo" ~ "Eldorado",
-                                   Forest == "stan" ~ "Stanislaus",
-                                   Forest == "sier" ~ "Sierra",
-                                   Forest == "sequ" ~ "Sequoia")) %>% 
-  dplyr::mutate(Forest = factor(Forest, levels = c("Eldorado", "Stanislaus", "Sierra", "Sequoia"))) %>% dplyr::arrange(Forest, `Elevation band`, Rep) %>% 
-  dplyr::select(Site, `CWD\n(mm)`, `CWD\n(z-score)`, `Survey area\n(ha)`, `% tree mortality\n(aerial/ground)`, `Density\n(tpha; aerial/ground)`)
-
-pandoc.table(site_characteristics, 
-             digits = c(10, 3, 3, 4, 10, 10), 
-             split.tables = Inf,
-             caption = table_nums(name = "table-site-deets"),
-             keep.line.breaks = TRUE)
-```
-
-### Tree detection
-
-We found that the experimental `lmfx` algorithm with parameter values of `dist2d = `r algorithm_details[1, "var1_val"]`` and `ws = `r algorithm_details[1, "var2_val"]`` [@roussel2019] performed the best across 7 measures of forest structure as measured by Pearson's correlation with ground data (`r table_nums(name = "table-best-algorithm-deets", display = "cite")`).
+We found that the experimental `lmfx` algorithm with parameter values of `dist2d = `r algorithm_details[1, "var1_val"]`` and `ws = `r algorithm_details[1, "var2_val"]`` [@roussel2019] performed the best across 7 measures of forest structure as measured by Pearson's correlation with ground data (`r table_nums(name = "table-best-algorithm-deets", display = "cite")`). 
 
 ```{r}
 table_nums(name = "table-best-algorithm-deets", paste0("Correlation and differences between the best performing tree detection algorithm (lmfx with dist2d = ", algorithm_details[1, "var1_val"], " and ws = ", algorithm_details[1, "var2_val"], ") and the ground data.
 An asterisk next to the correlation or RMSE indicates that this value was within 5% of the value of the best-performing algorithm/parameter set.
-Ground mean represents the mean value of the forest metric across the 110 ground plots that were visible from the sUAS-derived imagery.
+Ground mean represents the mean value of the forest metric across the 110 field plots that were visible from the sUAS-derived imagery.
 The median error is calculated as the median of the differences between the air and ground values for the 110 visible plots.
 Thus, a positive number indicates an overestimate by the sUAS workflow and a negative number indicates an underestimate."))
 ```
@@ -605,6 +472,16 @@ pandoc.table(best_algorithm_deets_print,
              caption = table_nums(name = "table-best-algorithm-deets"),
              keep.line.breaks = TRUE)
 ```
+
+### Classification accuracy for live/dead and host/non-host
+
+The accuracy of live/dead classification on a withheld test dataset was `r round(classifier_stats[classifier_stats$type == "live/dead", "accuracy"] %>% pull() * 100, 1)`%.
+The accuracy of species classification on a withheld testing dataset was `r round(classifier_stats[classifier_stats$type == "species", "accuracy"] %>% pull() * 100, 1)`%.
+The accuracy of WPB host/non-WPB-host (i.e., ponderosa pine versus other tree species) on a withheld testing dataset was `r round(classifier_stats[classifier_stats$type == "host/non-host", "accuracy"] %>% pull() * 100, 1)`%.
+
+### Site summary based on best tree detection algorithm and classification
+
+Across our study site, we detected, segmented, and classified `r site_characteristics %>% mutate(ntrees = air_tpha * buffered_survey_area) %>% summarize(ntrees = sum(ntrees)) %>% pull(ntrees) %>% formatC(format="f", big.mark=",", digits=0)` trees (see Supplemental Table for site summarys). Estimated tree mortality at a site ranged from `r site_characteristics %>% summarize(minMortality = min(prop_mortality)) %>% pull(minMortality) %>% round(3) * 100`% to `r site_characteristics %>% summarize(maxMortality = max(prop_mortality)) %>% pull(maxMortality) %>% round(3) * 100`%.
 
 ### Effect of local structure and regional climate on western pine beetle severity
 
@@ -659,10 +536,9 @@ Counter to our expectations, we found an overall negative effect of host tree me
 Generally, smaller trees are easier for western pine beetles to overwhelm in a mass attack and are prime targets under normal levels of tree water stress.
 However, larger trees are more nutritious and are therefore ideal targets if local bark beetle density is high enough to successfully initiate mass attack as can occur when many trees are under severe water stress [@bentz2010].
 In the recent hot drought, we expected that most trees would be under severe water stress, setting the stage for increasing beetle density, successful mass attacks, and targeting of larger trees.
-Larger average tree size in this case would therefore lead to greater ponderosa pine mortality, as was found in coincident ground plots [@fettig2019] and other studies [@pile2019; @stephenson2019].
+Larger average tree size in this case would therefore lead to greater ponderosa pine mortality, as was found in coincident field plots [@fettig2019] and other studies [@pile2019; @stephenson2019].
 One possible explanation for our finding is that our observations represent the cumulative mortality of trees during a multi-year drought event and its aftermath.
 Lower host tree mean size led to a greater probability of host mortality earlier in the drought [@pile2019] and that signal might have persisted even as mortality continued to accumulate driven by other factors.
-
 
 We did find a clear host tree size effect in its interaction with the climatic water deficit.
 In hot, dry sites, larger average host size increased the probability of host mortality while smaller host sizes increased the probability of host mortality in cool, wet sites.
@@ -672,11 +548,10 @@ For instance, @stephenson2019 found that ponderosa pine mortality was largely dr
 In contrast, @stephenson2019 found that white fir mortality occurred predominantly in the slower growing, smaller, stressed trees.
 In our study, we found that, even within a single pairing of forest insect species and its host, the host tree size affected host mortality differently depending on the site-level climatic water deficit.
 
-
-For aggressive bark beetles, massive tree mortality as observed from the 2012-2015 drought and its aftermath does not necessarily distinguish "endemic" from "outbreak" phases of bark beetle disturbance, which is instead distinguished by the underlying driver of bark beetle host selection behavior [@logan1998].
+For primary bark beetles, massive tree mortality as observed from the 2012-2015 drought and its aftermath does not necessarily distinguish "endemic" from "outbreak" phases of bark beetle disturbance, which is instead distinguished by the underlying driver of bark beetle host selection behavior [@logan1998].
 "Endemic" phases are distinguished by environmental determinism, when beetles select hosts based on whether they are weakened in some way, often by environmental conditions.
 "Outbreak" phases are distinguished by dynamic determinism, when population dynamics reign-- when local beetle density is high enough that intraspecific pheromone communication dominates host selection, successful mass attacks are likely, and even large healthy trees can be killed [@white1997; @logan1998].
-Despite high local levels of tree mortality across our study area [@fettig2019], our results from surveying the broader context surrounding coincident ground plots reveals different effects of host tree size depending on the climatic water deficit, and perhaps different stages of bark beetle disturbance across the environmental gradient.
+Despite high local levels of tree mortality across our study area [@fettig2019], our results from surveying the broader context surrounding coincident field plots reveals different effects of host tree size depending on the climatic water deficit, and perhaps different stages of bark beetle disturbance across the environmental gradient.
 This may help explain the especially high host mortality in high host density, low host size cells that we observed in cool/wet sites (`r fig_nums(name = "fig-three-way-interaction", display = "cite")`).
 The smaller trees would presumably be nutritionally sub-optimal, and thus unexpected targets if the western pine beetle were indeed in an "outbreak" phase at these sites and able to attack even large, healthy trees.
 While trees were likely water stressed across the whole study due to the extreme drought, we expected generally less water stress in the cool/wet sites, and generally higher water stress in the hot/dry sites [@asner2016; @young2017].
@@ -689,7 +564,7 @@ However, some limitations remain but could perhaps be overcome with further refi
 Most of these limitations arise from tree detection and classification uncertainty, and thus it was imperative to work with field data for calibration and uncertainty reporting.
 
 The greatest limitation in our study arising from classification uncertainty is in the assumption that all dead trees were ponderosa pine.
-We estimate from coincident ground plots that this is true approximately `r pipo_pct_of_all_dead`% of the time.
+We estimate from coincident field plots that this is true approximately `r pipo_pct_of_all_dead`% of the time.
 Because tree mortality response to forest insects is species-specific, even with sympatric tree species during the same hot drought [@stephenson2019], we cannot entirely rule out that some of the mortality responses to complex forest structure that we observed arose from these species-specific responses.
 The overall community composition across our study area was not very different [@fettig2019], so we remain confident that the patterns we observed were driven primarily by the dynamic between the western pine beetle and ponderosa pine.
 

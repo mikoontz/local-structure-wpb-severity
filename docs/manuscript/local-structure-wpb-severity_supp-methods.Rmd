@@ -336,3 +336,37 @@ Because the tree detection algorithms were validated against ground data at the 
 That is, we rasterized the individual tree data to 20m x 20m pixels equaling 400 m^2^, and the circular ground plots with 11.35m radius covered 404 m^2^.
 In each raster cell, we calculated the: number of live trees, number of dead trees, number of ponderosa pine trees, total number of trees (of all species, including ponderosa pine), quadratic mean diameter (QMD) of ponderosa pine trees, and QMD of all trees of any species (overall QMD).
 We converted the count of ponderosa pine trees and the total tree count to a density measurement of trees per hectare (tpha) by multiplying the counts in each 20m x 20m cell by `r 10000/400` to create a "host density" and an "overall density" variable per cell.
+
+```{r}
+table_nums(name = "table-site-deets", "Site characteristics for each of the 32 sites.
+The site name consists of the forest name, elevation band, and rep separated by an underscore.
+The Eldorado National Forest is 'eldo', the Stanislaus National Forest is 'stan', the Sierra National Forest is 'sier', and the Sequoia National Forest is 'sequ'.
+The elevation band represents the lower bounds of the 305 meter (1000 foot) elevation bands in feet.
+Thus '3k' implies that site was located between 3,000 and 4,000 feet (914-1219 meters).
+Aerially detected mortality and density of the whole site is presented along with the mortality and density calculated from the ground data (aerial / ground).
+The density is measured in trees per hectare (tpha).")
+```
+
+```{r site_characteristics, echo = FALSE, include = TRUE, results = 'asis'}
+site_characteristics <- 
+   site_characteristics %>% 
+  tidyr::separate(site, into = c("Forest", "Elevation band", "Rep"), remove = FALSE) %>% 
+  dplyr::mutate(`% tree mortality\n(aerial/ground)` = paste(sprintf("%0.0f", prop_mortality * 100), sprintf("%0.0f", ground_mortality * 100), sep = "/"),
+                `Density\n(tpha; aerial/ground)` = paste(sprintf("%0.0f", air_tpha), sprintf("%0.0f", ground_tpha), sep = "/")) %>% 
+  dplyr::rename(`CWD\n(mm)` = site_cwd,
+                `CWD\n(z-score)` = site_cwd_zscore,
+                `Survey area\n(ha)` = buffered_survey_area,
+                Site = site) %>% 
+  dplyr::mutate(Forest = case_when(Forest == "eldo" ~ "Eldorado",
+                                   Forest == "stan" ~ "Stanislaus",
+                                   Forest == "sier" ~ "Sierra",
+                                   Forest == "sequ" ~ "Sequoia")) %>% 
+  dplyr::mutate(Forest = factor(Forest, levels = c("Eldorado", "Stanislaus", "Sierra", "Sequoia"))) %>% dplyr::arrange(Forest, `Elevation band`, Rep) %>% 
+  dplyr::select(Site, `CWD\n(mm)`, `CWD\n(z-score)`, `Survey area\n(ha)`, `% tree mortality\n(aerial/ground)`, `Density\n(tpha; aerial/ground)`)
+
+pandoc.table(site_characteristics, 
+             digits = c(10, 3, 3, 4, 10, 10), 
+             split.tables = Inf,
+             caption = table_nums(name = "table-site-deets"),
+             keep.line.breaks = TRUE)
+```
