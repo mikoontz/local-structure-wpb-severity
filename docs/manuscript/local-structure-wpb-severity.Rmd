@@ -482,7 +482,7 @@ The accuracy of WPB host/non-WPB-host (i.e., ponderosa pine versus other tree sp
 
 ### Site summary based on best tree detection algorithm and classification
 
-Across our study site, we detected, segmented, and classified `r site_characteristics %>% mutate(ntrees = air_tpha * buffered_survey_area) %>% summarize(ntrees = sum(ntrees)) %>% pull(ntrees) %>% formatC(format="f", big.mark=",", digits=0)` trees (see Supplemental Table for site summarys). Estimated tree mortality at a site ranged from `r site_characteristics %>% summarize(minMortality = min(prop_mortality)) %>% pull(minMortality) %>% round(3) * 100`% to `r site_characteristics %>% summarize(maxMortality = max(prop_mortality)) %>% pull(maxMortality) %>% round(3) * 100`%.
+Across our study site, we detected, segmented, and classified `r site_characteristics %>% mutate(ntrees = air_tpha * buffered_survey_area) %>% summarize(ntrees = sum(ntrees)) %>% pull(ntrees) %>% formatC(format="f", big.mark=",", digits=0)` trees (see Supplemental Table for site summaries). Estimated tree mortality at a site ranged from `r site_characteristics %>% summarize(minMortality = min(air_prop_mortality)) %>% pull(minMortality) %>% round(3) * 100`% to `r site_characteristics %>% summarize(maxMortality = max(air_prop_mortality)) %>% pull(maxMortality) %>% round(3) * 100`%.
 
 ### Effect of local structure and regional climate on tree mortality attributed to western pine beetle
 

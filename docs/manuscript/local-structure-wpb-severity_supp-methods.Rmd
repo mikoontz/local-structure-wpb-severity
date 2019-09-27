@@ -351,8 +351,8 @@ The density is measured in trees per hectare (tpha).")
 site_characteristics <- 
    site_characteristics %>% 
   tidyr::separate(site, into = c("Forest", "Elevation band", "Rep"), remove = FALSE) %>% 
-  dplyr::mutate(`% tree mortality\n(aerial/ground)` = paste(sprintf("%0.0f", prop_mortality * 100), sprintf("%0.0f", ground_mortality * 100), sep = "/"),
-                `Density\n(tpha; aerial/ground)` = paste(sprintf("%0.0f", air_tpha), sprintf("%0.0f", ground_tpha), sep = "/")) %>% 
+  dplyr::mutate(`% tree mortality\n(aerial/ground)` = paste(sprintf("%0.0f", air_prop_mortality * 100), sprintf("%0.0f", ground_prop_mortality * 100), sep = "/"),
+                `Density\n(tpha; aerial/ground)` = paste(sprintf("%0.0f", air_tpha_total), sprintf("%0.0f", ground_tpha_total), sep = "/")) %>% 
   dplyr::rename(`CWD\n(mm)` = site_cwd,
                 `CWD\n(z-score)` = site_cwd_zscore,
                 `Survey area\n(ha)` = buffered_survey_area,
