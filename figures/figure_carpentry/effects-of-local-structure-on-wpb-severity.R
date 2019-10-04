@@ -45,7 +45,8 @@ pipo_tpha_qmd_cwd_interaction_df <-
   dplyr::filter(site_cwd_zscore %in% c(-1, 0, 1)) %>% 
   dplyr::filter(overall_tpha_s == 0) %>% 
   dplyr::filter(overall_qmd_s == 0) %>% 
-  dplyr::filter(abs(abs(pipo_and_dead_qmd_s) - 0.7) < 0.05) %>% 
+  dplyr::mutate(pipo_and_dead_qmd_s = round(pipo_and_dead_qmd_s, 1)) %>% 
+  dplyr::filter(pipo_and_dead_qmd_s %in% c(-0.7, 0.7)) %>% 
   dplyr::mutate(pipo_and_dead_qmd = ifelse(pipo_and_dead_qmd_s == -0.7, yes = "Smaller trees", no = "Larger trees")) %>% 
   dplyr::mutate(cwd = case_when(site_cwd_zscore == -1 ~ "cool/wet site",
                                 site_cwd_zscore == 0 ~ "average site",
@@ -140,7 +141,8 @@ pipo_tpha_qmd_cwd_interaction_df <-
   dplyr::filter(site_cwd_zscore %in% c(-1, 0, 1)) %>% 
   dplyr::filter(non_pipo_tpha_s == 0) %>% 
   dplyr::filter(overall_bapha_s == 0) %>% 
-  dplyr::filter(abs(abs(pipo_and_dead_qmd_s) - 0.7) < 0.05) %>% 
+  dplyr::mutate(pipo_and_dead_qmd_s = round(pipo_and_dead_qmd_s, 1)) %>% 
+  dplyr::filter(pipo_and_dead_qmd_s %in% c(-0.7, 0.7)) %>% 
   dplyr::mutate(pipo_and_dead_qmd = ifelse(pipo_and_dead_qmd_s == -0.7, yes = "Smaller trees", no = "Larger trees")) %>% 
   dplyr::mutate(cwd = case_when(site_cwd_zscore == -1 ~ "cool/wet site",
                                 site_cwd_zscore == 0 ~ "average site",
