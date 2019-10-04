@@ -3,8 +3,6 @@
 library(sf)
 library(tidyverse)
 
-cwd <- read_csv("data/data_output/cwd-data.csv")
-
 surveyed_area <- 
   sf::st_read("data/data_output/surveyed-area-3310.gpkg", stringsAsFactors = FALSE)
 
@@ -41,6 +39,9 @@ summary_table_by_site_ground <-
                 ground_tpha_pipo_live = pipo_count / 0.202343,
                 ground_tpha_pipo_and_dead = pipo_and_dead_count / 0.202343,
                 ground_prop_mortality = dead_count / ground_n_total,
+                ground_prop_mortality_pipo = pipo_count_dead / ground_n_total,
+                ground_prop_mortality_nonhost = nonhost_count_dead / ground_n_total,
+                ground_prop_mortality_abco = abco_count_dead / ground_n_total,
                 ground_prop_pipo_live = pipo_count / ground_n_total,
                 ground_prop_pipo_and_dead = pipo_and_dead_count / ground_n_total,
                 ground_prop_abco = abco_count / ground_n_total,
@@ -49,14 +50,18 @@ summary_table_by_site_ground <-
                 ground_prop_nonhost_all = 1 - ground_prop_pipo_and_dead) %>% 
   dplyr::rename(ground_qmd_pipo = pipo_qmd,
                 ground_qmd_pipo_and_dead = pipo_and_dead_qmd,
-                ground_qmd_overall = overall_qmd) %>% 
-  dplyr::select(site, ground_n_total, ground_tpha_total, ground_tpha_abco, ground_tpha_cade, ground_tpha_pipo_live, ground_tpha_pipo_and_dead, ground_prop_mortality, ground_prop_pipo_live, ground_prop_pipo_and_dead, ground_prop_abco, ground_prop_cade, ground_prop_nonhost_live, ground_prop_nonhost_all, ground_qmd_pipo, ground_qmd_pipo_and_dead, ground_qmd_overall)
-  
+                ground_qmd_overall = overall_qmd,
+                ground_qmd_dead = dead_qmd,
+                ground_qmd_dead_pipo = pipo_dead_qmd,
+                ground_qmd_live = live_qmd) 
+
 summary_table_by_site <-
   trees_3310 %>%
   st_drop_geometry() %>%
   group_by(site) %>%
   summarize(air_n_total = n(),
+            air_n_live = length(which(live == 1)),
+            air_n_dead = length(which(live == 0)),
             air_prop_mortality = 1 - mean(live),
             air_n_pipo_live = length(which(species == "pipo" & live == 1)),
             air_n_pipo_and_dead = length(which(live == 0 | (species == "pipo" & live == 1))),
@@ -68,15 +73,16 @@ summary_table_by_site <-
             air_prop_cade = air_n_cade / air_n_total,
             air_prop_nonhost_live = 1 - air_prop_pipo_live,
             air_prop_nonhost_all = 1 - air_prop_pipo_and_dead,
-            air_qmd_pipo = sqrt(sum(estimated_dbh[species == "PIPO" & live == 1]^2) / air_n_pipo_live),
-            air_qmd_pipo_and_dead = sqrt(sum(estimated_dbh[live == 0 | (species == "PIPO" & live == 1)]^2) / air_n_pipo_and_dead),
-            air_qmd_overall = sqrt(sum(estimated_dbh^2) / air_n_total))
+            air_qmd_pipo = sqrt(sum(estimated_dbh[species == "pipo" & live == 1]^2) / air_n_pipo_live),
+            air_qmd_pipo_and_dead = sqrt(sum(estimated_dbh[live == 0 | (species == "pipo" & live == 1)]^2) / air_n_pipo_and_dead),
+            air_qmd_overall = sqrt(sum(estimated_dbh^2) / air_n_total),
+            air_qmd_live = sqrt(sum(estimated_dbh[live == 1]^2) / air_n_live),
+            air_qmd_dead = sqrt(sum(estimated_dbh[live == 0]^2) / air_n_dead))
 
 summary_print_table <-
   summary_table_by_site %>% 
   dplyr::left_join(summary_table_by_site_ground, by = "site") %>% 
   dplyr::left_join(surveyed_area %>% st_drop_geometry(), by = "site") %>% 
-  dplyr::left_join(cwd, by = "site") %>% 
   dplyr::mutate(air_tpha_total = air_n_total / buffered_survey_area,
                 air_tpha_abco = air_n_abco / buffered_survey_area,
                 air_tpha_cade = air_n_cade / buffered_survey_area,

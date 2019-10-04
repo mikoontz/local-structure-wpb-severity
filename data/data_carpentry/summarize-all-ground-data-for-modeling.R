@@ -3,6 +3,7 @@
 library(sf)
 library(tidyverse)
 library(lubridate)
+library(raster)
 library(here)
 
 source(here::here("data/data_carpentry/format-ground-data.R"))
@@ -70,8 +71,13 @@ dd_plot <-
   summarize(live_count = length(which(live == 1)),
             dead_count = length(which(live == 0)),
             pipo_count = length(which(species == "PIPO" & live == 1)),
-            abco_count = length(which(species == "ABCO")),
-            cade_count = length(which(species == "CADE")),
+            abco_count = length(which(species == "ABCO" & live == 1)),
+            cade_count = length(which(species == "CADE" & live == 1)),
+            pipo_count_dead = length(which(species == "PIPO" & live == 0)),
+            abco_count_dead = length(which(species == "ABCO" & live == 0)),
+            cade_count_dead = length(which(species == "CADE" & live == 0)),
+            nonhost_count_live = length(which(species != "PIPO" & live == 1)),
+            nonhost_count_dead = length(which(species != "PIPO" & live == 0)),
             pipo_and_dead_count = pipo_count + dead_count,
             total_count = n(),
             live_tpha = live_count / 0.0404686, # there are 0.0404686 hectares in 0.1 acres (the total surveyed area per plot)
@@ -79,6 +85,11 @@ dd_plot <-
             pipo_tpha = pipo_count / 0.0404686,
             abco_tpha = abco_count / 0.0404686,
             cade_tpha = cade_count / 0.0404686,
+            pipo_dead_tpha = pipo_count_dead / 0.0404686,
+            abco_dead_tpha = abco_count_dead / 0.0404686,
+            cade_dead_tpha = cade_count_dead / 0.0404686,
+            nonhost_live_tpha = nonhost_count_live / 0.0404686,
+            nonhost_dead_tpha = nonhost_count_dead / 0.0404686,
             pipo_and_dead_tpha = pipo_and_dead_count / 0.0404686,
             overall_tpha = total_count / 0.0404686,
             live_ba = sum(ba[live == 1]),
@@ -94,6 +105,7 @@ dd_plot <-
             live_qmd = sqrt(sum(dbh[live == 1]^2) / live_count),
             dead_qmd = sqrt(sum(dbh[live == 0]^2) / dead_count),
             pipo_qmd = sqrt(sum(dbh[species == "PIPO" & live == 1]^2) / pipo_count),
+            pipo_dead_qmd = sqrt(sum(dbh[live == 0 & species == "PIPO"]^2) / pipo_count_dead),
             pipo_and_dead_qmd = sqrt(sum(dbh[live == 0 | (species == "PIPO" & live == 1)]^2) / pipo_and_dead_count),
             overall_qmd = sqrt(sum(dbh^2) / total_count),
             live_sdi_ac = live_count * 10 * (live_qmd / 25.4)^1.77, # multiply counts by 10 to get trees per acre
@@ -135,6 +147,11 @@ dd_site <-
             pipo_count = length(which(species == "PIPO" & live == 1)),
             abco_count = length(which(species == "ABCO")),
             cade_count = length(which(species == "CADE")),
+            pipo_count_dead = length(which(species == "PIPO" & live == 0)),
+            abco_count_dead = length(which(species == "ABCO" & live == 0)),
+            cade_count_dead = length(which(species == "CADE" & live == 0)),
+            nonhost_count_live = length(which(species != "PIPO" & live == 1)),
+            nonhost_count_dead = length(which(species != "PIPO" & live == 0)),
             pipo_and_dead_count = pipo_count + dead_count,
             total_count = n(),
             live_tpha = live_count / 0.202343, # there are 0.202343 hectares in 0.5 acres (the total surveyed area per site)
@@ -142,6 +159,11 @@ dd_site <-
             pipo_tpha = pipo_count / 0.202343,
             abco_tpha = abco_count / 0.202343,
             cade_tpha = cade_count / 0.202343,
+            pipo_dead_tpha = pipo_count_dead / 0.0404686,
+            abco_dead_tpha = abco_count_dead / 0.0404686,
+            cade_dead_tpha = cade_count_dead / 0.0404686,
+            nonhost_live_tpha = nonhost_count_live / 0.0404686,
+            nonhost_dead_tpha = nonhost_count_dead / 0.0404686,
             pipo_and_dead_tpha = pipo_and_dead_count / 0.202343,
             overall_tpha = total_count / 0.202343,
             live_ba = sum(ba[live == 1]),
@@ -157,6 +179,7 @@ dd_site <-
             live_qmd = sqrt(sum(dbh[live == 1]^2) / live_count),
             dead_qmd = sqrt(sum(dbh[live == 0]^2) / dead_count),
             pipo_qmd = sqrt(sum(dbh[species == "PIPO" & live == 1]^2) / pipo_count),
+            pipo_dead_qmd = sqrt(sum(dbh[live == 0 & species == "PIPO"]^2) / pipo_count_dead),
             pipo_and_dead_qmd = sqrt(sum(dbh[live == 0 | (species == "PIPO" & live == 1)]^2) / pipo_and_dead_count),
             overall_qmd = sqrt(sum(dbh^2) / total_count),
             live_sdi_ac = live_count * 2 * (live_qmd / 25.4)^1.77, # Multiply live count by 2 because that is equivalent to trees per acre (because 0.5 acres surveyed at each site)
