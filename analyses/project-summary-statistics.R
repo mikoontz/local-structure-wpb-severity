@@ -49,6 +49,7 @@ summary_table_by_site_ground <-
                 ground_prop_nonhost_live = 1 - ground_prop_pipo_live,
                 ground_prop_nonhost_all = 1 - ground_prop_pipo_and_dead) %>% 
   dplyr::rename(ground_qmd_pipo = pipo_qmd,
+                ground_qmd_pipo_live_and_dead = pipo_live_and_dead_qmd,
                 ground_qmd_pipo_and_dead = pipo_and_dead_qmd,
                 ground_qmd_overall = overall_qmd,
                 ground_qmd_dead = dead_qmd,
