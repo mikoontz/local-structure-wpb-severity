@@ -9,7 +9,7 @@ library(tictoc)
 library(lubridate)
 library(nngeo)
 
-# Converts a per-cell value (usually 20m x 20m) to a per acre value
+# Converts a per-cell value (20 x 20m) to a per acre value
 perCell_to_perAc <- function(r) {
   r / (prod(res(r)) / 4046.856)
 } # returns trees per acre when r represents a raster with counts of trees per cell and raster has units of meters
@@ -207,30 +207,69 @@ for(i in seq_along(sites_to_process)) {
   pipo_and_dead_tpha <- perCell_to_perHa(pipo_and_dead_count)
   overall_tpha <- perCell_to_perHa(total_count)
   
+
+  # mean heights of trees per cell ------------------------------------------
+
+  live_mean_height <- raster::rasterize(x = current_trees %>% dplyr::filter((live == 1)), 
+                                                           y = raster_template, 
+                                                           field = "height", 
+                                                           background = NA, 
+                                                           fun = mean)
+  
+  dead_mean_height <- raster::rasterize(x = current_trees %>% dplyr::filter((live == 0)), 
+                                       y = raster_template, 
+                                       field = "height", 
+                                       background = NA, 
+                                       fun = mean)
+  
+  pipo_mean_height <- raster::rasterize(x = current_trees %>% dplyr::filter((species == "pipo")), 
+                                       y = raster_template, 
+                                       field = "height", 
+                                       background = NA, 
+                                       fun = mean)
+  
+  non_pipo_mean_height <- raster::rasterize(x = current_trees %>% dplyr::filter((species != "pipo")), 
+                                           y = raster_template, 
+                                           field = "height", 
+                                           background = NA, 
+                                           fun = mean)
+  
+  pipo_and_dead_mean_height <- raster::rasterize(x = current_trees %>% dplyr::filter((live == 0) | (species == "pipo")), 
+                                                 y = raster_template, 
+                                                 field = "height", 
+                                                 background = NA, 
+                                                 fun = mean)
+  
+  overall_mean_height <- raster::rasterize(x = current_trees, 
+                                        y = raster_template, 
+                                        field = "height", 
+                                        background = NA, 
+                                        fun = mean)
+  
   # total basal area per cell -----------------------------------------------
   
   live_basal_area <- raster::rasterize(x = current_trees %>% dplyr::filter((live == 1)), 
                                        y = raster_template, 
                                        field = "estimated_ba", 
-                                       background = 0, 
+                                       background = NA, 
                                        fun = sum)
   
   dead_basal_area <- raster::rasterize(x = current_trees %>% dplyr::filter((live == 0)), 
                                        y = raster_template, 
                                        field = "estimated_ba", 
-                                       background = 0, 
+                                       background = NA, 
                                        fun = sum)
   
   pipo_basal_area <- raster::rasterize(x = current_trees %>% dplyr::filter((species == "pipo")), 
                                        y = raster_template, 
                                        field = "estimated_ba", 
-                                       background = 0, 
+                                       background = NA, 
                                        fun = sum)
   
   non_pipo_basal_area <- raster::rasterize(x = current_trees %>% dplyr::filter((species != "pipo")), 
                                            y = raster_template, 
                                            field = "estimated_ba", 
-                                           background = 0, 
+                                           background = NA, 
                                            fun = sum)
   
   pipo_and_dead_basal_area <- dead_basal_area + pipo_basal_area
@@ -238,7 +277,7 @@ for(i in seq_along(sites_to_process)) {
   total_basal_area <- raster::rasterize(x = current_trees, 
                                         y = raster_template, 
                                         field = "estimated_ba", 
-                                        background = 0, 
+                                        background = NA, 
                                         fun = sum)
   
   # r3 <- live_basal_area + dead_basal_area
@@ -264,37 +303,37 @@ for(i in seq_along(sites_to_process)) {
   live_mean_ba <- raster::rasterize(x = current_trees %>% dplyr::filter((live == 1)), 
                                     y = raster_template, 
                                     field = "estimated_ba", 
-                                    background = 0, 
+                                    background = NA, 
                                     fun = mean)
   
   dead_mean_ba <- raster::rasterize(x = current_trees %>% dplyr::filter((live == 0)), 
                                     y = raster_template, 
                                     field = "estimated_ba", 
-                                    background = 0, 
+                                    background = NA, 
                                     fun = mean)
   
   pipo_mean_ba <- raster::rasterize(x = current_trees %>% dplyr::filter((species == "pipo")), 
                                     y = raster_template, 
                                     field = "estimated_ba", 
-                                    background = 0, 
+                                    background = NA, 
                                     fun = mean)
   
   non_pipo_mean_ba <- raster::rasterize(x = current_trees %>% dplyr::filter((species != "pipo")), 
                                         y = raster_template, 
                                         field = "estimated_ba", 
-                                        background = 0, 
+                                        background = NA, 
                                         fun = mean)
   
   pipo_and_dead_mean_ba <- raster::rasterize(x = current_trees %>% dplyr::filter((species == "pipo") | (live == 0)), 
                                              y = raster_template, 
                                              field = "estimated_ba", 
-                                             background = 0, 
+                                             background = NA, 
                                              fun = mean)
   
   overall_mean_ba <- raster::rasterize(x = current_trees, 
                                        y = raster_template, 
                                        field = "estimated_ba", 
-                                       background = 0, 
+                                       background = NA, 
                                        fun = mean)
   
 
@@ -303,37 +342,37 @@ for(i in seq_along(sites_to_process)) {
   live_mean_dbh <- raster::rasterize(x = current_trees %>% dplyr::filter((live == 1)), 
                                     y = raster_template, 
                                     field = "estimated_dbh", 
-                                    background = 0, 
+                                    background = NA, 
                                     fun = mean)
   
   dead_mean_dbh <- raster::rasterize(x = current_trees %>% dplyr::filter((live == 0)), 
                                     y = raster_template, 
                                     field = "estimated_dbh", 
-                                    background = 0, 
+                                    background = NA, 
                                     fun = mean)
   
   pipo_mean_dbh <- raster::rasterize(x = current_trees %>% dplyr::filter((species == "pipo")), 
                                     y = raster_template, 
                                     field = "estimated_dbh", 
-                                    background = 0, 
+                                    background = NA, 
                                     fun = mean)
   
   non_pipo_mean_dbh <- raster::rasterize(x = current_trees %>% dplyr::filter((species != "pipo")), 
                                         y = raster_template, 
                                         field = "estimated_dbh", 
-                                        background = 0, 
+                                        background = NA, 
                                         fun = mean)
   
   pipo_and_dead_mean_dbh <- raster::rasterize(x = current_trees %>% dplyr::filter((species == "pipo") | (live == 0)), 
                                              y = raster_template, 
                                              field = "estimated_dbh", 
-                                             background = 0, 
+                                             background = NA, 
                                              fun = mean)
   
   overall_mean_dbh <- raster::rasterize(x = current_trees, 
                                        y = raster_template, 
                                        field = "estimated_dbh", 
-                                       background = 0, 
+                                       background = NA, 
                                        fun = mean)  
   
   # quadratic mean diameter -------------------------------------------------
@@ -341,37 +380,37 @@ for(i in seq_along(sites_to_process)) {
   live_qmd <- raster::rasterize(x = current_trees %>% dplyr::filter((live == 1)), 
                                 y = raster_template, 
                                 field = "estimated_dbh", 
-                                background = 0, 
+                                background = NA, 
                                 fun = function(x, ...) {sqrt(sum(x^2) / length(x))})
   
   dead_qmd <- raster::rasterize(x = current_trees %>% dplyr::filter((live == 0)), 
                                 y = raster_template, 
                                 field = "estimated_dbh", 
-                                background = 0, 
+                                background = NA, 
                                 fun = function(x, ...) {sqrt(sum(x^2) / length(x))})
   
   pipo_qmd <- raster::rasterize(x = current_trees %>% dplyr::filter((species == "pipo")), 
                                 y = raster_template, 
                                 field = "estimated_dbh", 
-                                background = 0, 
+                                background = NA, 
                                 fun = function(x, ...) {sqrt(sum(x^2) / length(x))})
   
   non_pipo_qmd <- raster::rasterize(x = current_trees %>% dplyr::filter((species != "pipo")), 
                                     y = raster_template, 
                                     field = "estimated_dbh", 
-                                    background = 0, 
+                                    background = NA, 
                                     fun = function(x, ...) {sqrt(sum(x^2) / length(x))})
   
   pipo_and_dead_qmd <- raster::rasterize(x = current_trees %>% dplyr::filter((species == "pipo") | (live == 0)), 
                                          y = raster_template, 
                                          field = "estimated_dbh", 
-                                         background = 0, 
+                                         background = NA, 
                                          fun = function(x, ...) {sqrt(sum(x^2) / length(x))})
   
   overall_qmd <- raster::rasterize(x = current_trees, 
                                    y = raster_template, 
                                    field = "estimated_dbh", 
-                                   background = 0, 
+                                   background = NA, 
                                    fun = function(x, ...) {sqrt(sum(x^2) / length(x))})  
   
   
@@ -408,37 +447,37 @@ for(i in seq_along(sites_to_process)) {
   live_mean_voronoi <- raster::rasterize(x = current_trees %>% dplyr::filter((live == 1)), 
                                      y = raster_template, 
                                      field = "voronoi_area", 
-                                     background = 0, 
+                                     background = NA, 
                                      fun = mean)
   
   dead_mean_voronoi <- raster::rasterize(x = current_trees %>% dplyr::filter((live == 0)), 
                                      y = raster_template, 
                                      field = "voronoi_area", 
-                                     background = 0, 
+                                     background = NA, 
                                      fun = mean)
   
   pipo_mean_voronoi <- raster::rasterize(x = current_trees %>% dplyr::filter((species == "pipo")), 
                                      y = raster_template, 
                                      field = "voronoi_area", 
-                                     background = 0, 
+                                     background = NA, 
                                      fun = mean)
   
   non_pipo_mean_voronoi <- raster::rasterize(x = current_trees %>% dplyr::filter((species != "pipo")), 
                                          y = raster_template, 
                                          field = "voronoi_area", 
-                                         background = 0, 
+                                         background = NA, 
                                          fun = mean)
   
   pipo_and_dead_mean_voronoi <- raster::rasterize(x = current_trees %>% dplyr::filter((species == "pipo") | (live == 0)), 
                                               y = raster_template, 
                                               field = "voronoi_area", 
-                                              background = 0, 
+                                              background = NA, 
                                               fun = mean)
   
   overall_mean_voronoi <- raster::rasterize(x = current_trees, 
                                         y = raster_template, 
                                         field = "voronoi_area", 
-                                        background = 0, 
+                                        background = NA, 
                                         fun = mean)  
   
 
@@ -447,37 +486,37 @@ for(i in seq_along(sites_to_process)) {
   live_mean_nn1 <- raster::rasterize(x = current_trees %>% dplyr::filter((live == 1)), 
                                          y = raster_template, 
                                          field = "nn1", 
-                                         background = 0, 
+                                         background = NA, 
                                          fun = mean)
   
   dead_mean_nn1 <- raster::rasterize(x = current_trees %>% dplyr::filter((live == 0)), 
                                          y = raster_template, 
                                          field = "nn1", 
-                                         background = 0, 
+                                         background = NA, 
                                          fun = mean)
   
   pipo_mean_nn1 <- raster::rasterize(x = current_trees %>% dplyr::filter((species == "pipo")), 
                                          y = raster_template, 
                                          field = "nn1", 
-                                         background = 0, 
+                                         background = NA, 
                                          fun = mean)
   
   non_pipo_mean_nn1 <- raster::rasterize(x = current_trees %>% dplyr::filter((species != "pipo")), 
                                              y = raster_template, 
                                              field = "nn1", 
-                                             background = 0, 
+                                             background = NA, 
                                              fun = mean)
   
   pipo_and_dead_mean_nn1 <- raster::rasterize(x = current_trees %>% dplyr::filter((species == "pipo") | (live == 0)), 
                                                   y = raster_template, 
                                                   field = "nn1", 
-                                                  background = 0, 
+                                                  background = NA, 
                                                   fun = mean)
   
   overall_mean_nn1 <- raster::rasterize(x = current_trees, 
                                             y = raster_template, 
                                             field = "nn1", 
-                                            background = 0, 
+                                            background = NA, 
                                             fun = mean)    
   
   # mean distance to second nearest neighbor --------------------------------------------------
@@ -485,37 +524,37 @@ for(i in seq_along(sites_to_process)) {
   live_mean_nn2 <- raster::rasterize(x = current_trees %>% dplyr::filter((live == 1)), 
                                      y = raster_template, 
                                      field = "nn2", 
-                                     background = 0, 
+                                     background = NA, 
                                      fun = mean)
   
   dead_mean_nn2 <- raster::rasterize(x = current_trees %>% dplyr::filter((live == 0)), 
                                      y = raster_template, 
                                      field = "nn2", 
-                                     background = 0, 
+                                     background = NA, 
                                      fun = mean)
   
   pipo_mean_nn2 <- raster::rasterize(x = current_trees %>% dplyr::filter((species == "pipo")), 
                                      y = raster_template, 
                                      field = "nn2", 
-                                     background = 0, 
+                                     background = NA, 
                                      fun = mean)
   
   non_pipo_mean_nn2 <- raster::rasterize(x = current_trees %>% dplyr::filter((species != "pipo")), 
                                          y = raster_template, 
                                          field = "nn2", 
-                                         background = 0, 
+                                         background = NA, 
                                          fun = mean)
   
   pipo_and_dead_mean_nn2 <- raster::rasterize(x = current_trees %>% dplyr::filter((species == "pipo") | (live == 0)), 
                                               y = raster_template, 
                                               field = "nn2", 
-                                              background = 0, 
+                                              background = NA, 
                                               fun = mean)
   
   overall_mean_nn2 <- raster::rasterize(x = current_trees, 
                                         y = raster_template, 
                                         field = "nn2", 
-                                        background = 0, 
+                                        background = NA, 
                                         fun = mean)     
   
   # mean distance to third nearest neighbor --------------------------------------------------
@@ -523,37 +562,37 @@ for(i in seq_along(sites_to_process)) {
   live_mean_nn3 <- raster::rasterize(x = current_trees %>% dplyr::filter((live == 1)), 
                                      y = raster_template, 
                                      field = "nn3", 
-                                     background = 0, 
+                                     background = NA, 
                                      fun = mean)
   
   dead_mean_nn3 <- raster::rasterize(x = current_trees %>% dplyr::filter((live == 0)), 
                                      y = raster_template, 
                                      field = "nn3", 
-                                     background = 0, 
+                                     background = NA, 
                                      fun = mean)
   
   pipo_mean_nn3 <- raster::rasterize(x = current_trees %>% dplyr::filter((species == "pipo")), 
                                      y = raster_template, 
                                      field = "nn3", 
-                                     background = 0, 
+                                     background = NA, 
                                      fun = mean)
   
   non_pipo_mean_nn3 <- raster::rasterize(x = current_trees %>% dplyr::filter((species != "pipo")), 
                                          y = raster_template, 
                                          field = "nn3", 
-                                         background = 0, 
+                                         background = NA, 
                                          fun = mean)
   
   pipo_and_dead_mean_nn3 <- raster::rasterize(x = current_trees %>% dplyr::filter((species == "pipo") | (live == 0)), 
                                               y = raster_template, 
                                               field = "nn3", 
-                                              background = 0, 
+                                              background = NA, 
                                               fun = mean)
   
   overall_mean_nn3 <- raster::rasterize(x = current_trees, 
                                         y = raster_template, 
                                         field = "nn3", 
-                                        background = 0, 
+                                        background = NA, 
                                         fun = mean)    
   
   
@@ -562,37 +601,37 @@ for(i in seq_along(sites_to_process)) {
   live_sd_nn1 <- raster::rasterize(x = current_trees %>% dplyr::filter((live == 1)), 
                                      y = raster_template, 
                                      field = "nn1", 
-                                     background = 0, 
+                                     background = NA, 
                                      fun = sd)
   
   dead_sd_nn1 <- raster::rasterize(x = current_trees %>% dplyr::filter((live == 0)), 
                                      y = raster_template, 
                                      field = "nn1", 
-                                     background = 0, 
+                                     background = NA, 
                                      fun = sd)
   
   pipo_sd_nn1 <- raster::rasterize(x = current_trees %>% dplyr::filter((species == "pipo")), 
                                      y = raster_template, 
                                      field = "nn1", 
-                                     background = 0, 
+                                     background = NA, 
                                      fun = sd)
   
   non_pipo_sd_nn1 <- raster::rasterize(x = current_trees %>% dplyr::filter((species != "pipo")), 
                                          y = raster_template, 
                                          field = "nn1", 
-                                         background = 0, 
+                                         background = NA, 
                                          fun = sd)
   
   pipo_and_dead_sd_nn1 <- raster::rasterize(x = current_trees %>% dplyr::filter((species == "pipo") | (live == 0)), 
                                               y = raster_template, 
                                               field = "nn1", 
-                                              background = 0, 
+                                              background = NA, 
                                               fun = sd)
   
   overall_sd_nn1 <- raster::rasterize(x = current_trees, 
                                         y = raster_template, 
                                         field = "nn1", 
-                                        background = 0, 
+                                        background = NA, 
                                         fun = sd)    
   
  # coefficient of variation distance to first nearest neighbor --------------------------------------------------
@@ -616,37 +655,37 @@ for(i in seq_along(sites_to_process)) {
   live_sd_voronoi <- raster::rasterize(x = current_trees %>% dplyr::filter((live == 1)), 
                                          y = raster_template, 
                                          field = "voronoi_area", 
-                                         background = 0, 
+                                         background = NA, 
                                          fun = sd)
   
   dead_sd_voronoi <- raster::rasterize(x = current_trees %>% dplyr::filter((live == 0)), 
                                          y = raster_template, 
                                          field = "voronoi_area", 
-                                         background = 0, 
+                                         background = NA, 
                                          fun = sd)
   
   pipo_sd_voronoi <- raster::rasterize(x = current_trees %>% dplyr::filter((species == "pipo")), 
                                          y = raster_template, 
                                          field = "voronoi_area", 
-                                         background = 0, 
+                                         background = NA, 
                                          fun = sd)
   
   non_pipo_sd_voronoi <- raster::rasterize(x = current_trees %>% dplyr::filter((species != "pipo")), 
                                              y = raster_template, 
                                              field = "voronoi_area", 
-                                             background = 0, 
+                                             background = NA, 
                                              fun = sd)
   
   pipo_and_dead_sd_voronoi <- raster::rasterize(x = current_trees %>% dplyr::filter((species == "pipo") | (live == 0)), 
                                                   y = raster_template, 
                                                   field = "voronoi_area", 
-                                                  background = 0, 
+                                                  background = NA, 
                                                   fun = sd)
   
   overall_sd_voronoi <- raster::rasterize(x = current_trees, 
                                             y = raster_template, 
                                             field = "voronoi_area", 
-                                            background = 0, 
+                                            background = NA, 
                                             fun = sd)    
   
 
@@ -669,6 +708,7 @@ for(i in seq_along(sites_to_process)) {
   
   results_raster <- raster::stack(live_count, dead_count, pipo_count, non_pipo_count, pipo_and_dead_count, total_count, 
                                   live_tpha, dead_tpha, pipo_tpha, non_pipo_tpha, pipo_and_dead_tpha, overall_tpha, 
+                                  live_mean_height, dead_mean_height, pipo_mean_height, non_pipo_mean_height, pipo_and_dead_mean_height, overall_mean_height,
                                   live_basal_area, dead_basal_area, pipo_basal_area, non_pipo_basal_area, pipo_and_dead_basal_area, total_basal_area,
                                   live_bapha, dead_bapha, pipo_bapha, non_pipo_bapha, pipo_and_dead_bapha, overall_bapha,
                                   live_mean_ba, dead_mean_ba, pipo_mean_ba, non_pipo_mean_ba, pipo_and_dead_mean_ba, overall_mean_ba,
@@ -688,6 +728,7 @@ for(i in seq_along(sites_to_process)) {
   
   names(results_raster) <- c("live_count", "dead_count", "pipo_count", "non_pipo_count", "pipo_and_dead_count", "total_count", 
                              "live_tpha", "dead_tpha", "pipo_tpha", "non_pipo_tpha", "pipo_and_dead_tpha", "overall_tpha",
+                             "live_mean_height", "dead_mean_height", "pipo_mean_height", "non_pipo_mean_height", "pipo_and_dead_mean_height", "overall_mean_height",
                              "live_ba", "dead_ba", "pipo_ba", "non_pipo_ba", "pipo_and_dead_ba", "total_ba",
                              "live_bapha", "dead_bapha", "pipo_bapha", "non_pipo_bapha", "pipo_and_dead_bapha", "overall_bapha",
                              "live_mean_ba", "dead_mean_ba", "pipo_mean_ba", "non_pipo_mean_ba", "pipo_and_dead_mean_ba", "overall_mean_ba",
