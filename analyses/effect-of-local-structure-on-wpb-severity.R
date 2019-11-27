@@ -126,6 +126,38 @@ for (i in seq_along(unique(adf$site))) {
   
 }
 
+# Implement a zero-inflated binomial
+# exact GP 200 samples ----------------------------------------------------
+#  hours
+# Use height as a predictor instead of DBH, which requires incorporating
+# more error into the estimate (because we translate height to DBH using
+# data-derived allometric relationships that have plenty of variability both
+# in using the species-specific equations, in using the live-only equation
+# for PIPO, and then in the allometric relationship itself)
+
+set.seed(0314) # Only meaningful for when randomly subsetting data
+adf <-
+  analysis_df %>% 
+  dplyr::filter(pipo_and_dead_count != 0) %>% 
+  dplyr::mutate(site = as.factor(site)) %>% 
+  dplyr::group_by(site) %>%
+  dplyr::sample_n(200)
+
+(start <- Sys.time())
+fm17_brms <- brm(dead_count | trials(pipo_and_dead_count) ~ 
+                   site_cwd_zscore*pipo_and_dead_tpha_s*pipo_and_dead_mean_height_s +
+                   site_cwd_zscore*overall_tpha_s*overall_mean_height_s +
+                   gp(x, y, by = site, scale = FALSE),
+                 data = adf,
+                 family = zero_inflated_binomial(),
+                 chains = 4,
+                 cores = 4,
+                 control = list(adapt_delta = 0.95))
+summary(fm17_brms)
+(elapsed <- Sys.time() - start)
+pp_check(fm17_brms, nsamples = 50)
+
+
 
 # Implement a zero-inflated binomial 
 # approx GP 200 samples ----------------------------------------------------
