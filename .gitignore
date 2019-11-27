@@ -1,3 +1,4 @@
+incubator/*
 data/features/srtm_30m.tif
 data/features/cwd1981_2010_ave_HST_1550861123/*
 data/data_output/*/*/1_initial/params/*
