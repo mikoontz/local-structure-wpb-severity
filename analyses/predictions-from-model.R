@@ -10,59 +10,89 @@ fm1 <- readRDS("analyses/analyses_output/fitted-model_zibinomial_site-cwdZscore_
 
 step_size <- 0.1
 
-newdata <- 
-  expand.grid(Intercept = 1,
-              site_cwd_zscore = -1:1,
-              pipo_and_dead_tpha_s = seq(-1, 1, by = step_size),
-              pipo_and_dead_qmd_s = seq(-1, 1, by = step_size),
-              overall_tpha_s = seq(-1, 1, by = step_size),
-              overall_qmd_s = seq(-1, 1, by = step_size)) %>% 
+covariates <- rownames(fixef(fm1))
+interaction_idx <- grep(pattern = ":", x = covariates)
+main_effect_covariates <- covariates[-interaction_idx]
+
+interaction_covariates <- 
+  tibble(interaction_names = covariates[interaction_idx],
+         interaction_maths = str_replace_all(interaction_names, pattern = ":", replacement = "*"))
+
+lapply(main_effect_covariates, FUN = function(x) assign(x, seq(-1, 1, by = step_size), pos = 1))
+
+Intercept <- 1
+site_cwd_zscore <- -1:1
+
+newdata  <-
+  expand.grid(lapply(main_effect_covariates, FUN = get)) %>% 
   as_tibble() %>% 
-  dplyr::mutate(`site_cwd_zscore:pipo_and_dead_tpha_s` = site_cwd_zscore * pipo_and_dead_tpha_s,
-                `site_cwd_zscore:pipo_and_dead_qmd_s` = site_cwd_zscore * pipo_and_dead_qmd_s,
-                `pipo_and_dead_tpha_s:pipo_and_dead_qmd_s` = pipo_and_dead_tpha_s * pipo_and_dead_qmd_s,
-                `site_cwd_zscore:overall_tpha_s` = site_cwd_zscore * overall_tpha_s,
-                `site_cwd_zscore:overall_qmd_s` = site_cwd_zscore * overall_qmd_s,
-                `overall_tpha_s:overall_qmd_s` = overall_tpha_s * overall_qmd_s,
-                `site_cwd_zscore:pipo_and_dead_tpha_s:pipo_and_dead_qmd_s` = site_cwd_zscore * pipo_and_dead_tpha_s * pipo_and_dead_qmd_s,
-                `site_cwd_zscore:overall_tpha_s:overall_qmd_s` = site_cwd_zscore * overall_tpha_s * overall_qmd_s) %>% 
-  dplyr::select(Intercept,
-                site_cwd_zscore,
-                pipo_and_dead_tpha_s,
-                pipo_and_dead_qmd_s,
-                overall_tpha_s,
-                overall_qmd_s,
-                `site_cwd_zscore:pipo_and_dead_tpha_s`,
-                `site_cwd_zscore:pipo_and_dead_qmd_s`,
-                `pipo_and_dead_tpha_s:pipo_and_dead_qmd_s`,
-                `site_cwd_zscore:overall_tpha_s`,
-                `site_cwd_zscore:overall_qmd_s`,
-                `overall_tpha_s:overall_qmd_s`,
-                `site_cwd_zscore:pipo_and_dead_tpha_s:pipo_and_dead_qmd_s`,
-                `site_cwd_zscore:overall_tpha_s:overall_qmd_s`)
+  setNames(nm = main_effect_covariates)
 
-write_csv(newdata, path = "analyses/analyses_output/newdata-for-model-predictions.csv")
+for (i in seq_along(1:nrow(interaction_covariates))) {
+ 
+  interaction_name <- (interaction_covariates[i, "interaction_names"] %>% pull())
+  interaction_math <- (interaction_covariates[i, "interaction_maths"] %>% pull())
+  
+  newdata <-
+    newdata %>% 
+    dplyr::mutate(!!interaction_name := !!str2lang(interaction_math))
+   
+}
 
+# newdata <- 
+#   expand.grid(Intercept = 1,
+#               site_cwd_zscore = -1:1,
+#               pipo_and_dead_tpha_s = seq(-1, 1, by = step_size),
+#               pipo_and_dead_qmd_s = seq(-1, 1, by = step_size),
+#               overall_tpha_s = seq(-1, 1, by = step_size),
+#               overall_qmd_s = seq(-1, 1, by = step_size)) %>% 
+#   as_tibble() %>% 
+#   dplyr::mutate(`site_cwd_zscore:pipo_and_dead_tpha_s` = site_cwd_zscore * pipo_and_dead_tpha_s,
+#                 `site_cwd_zscore:pipo_and_dead_qmd_s` = site_cwd_zscore * pipo_and_dead_qmd_s,
+#                 `pipo_and_dead_tpha_s:pipo_and_dead_qmd_s` = pipo_and_dead_tpha_s * pipo_and_dead_qmd_s,
+#                 `site_cwd_zscore:overall_tpha_s` = site_cwd_zscore * overall_tpha_s,
+#                 `site_cwd_zscore:overall_qmd_s` = site_cwd_zscore * overall_qmd_s,
+#                 `overall_tpha_s:overall_qmd_s` = overall_tpha_s * overall_qmd_s,
+#                 `site_cwd_zscore:pipo_and_dead_tpha_s:pipo_and_dead_qmd_s` = site_cwd_zscore * pipo_and_dead_tpha_s * pipo_and_dead_qmd_s,
+#                 `site_cwd_zscore:overall_tpha_s:overall_qmd_s` = site_cwd_zscore * overall_tpha_s * overall_qmd_s) %>% 
+#   dplyr::select(Intercept,
+#                 site_cwd_zscore,
+#                 pipo_and_dead_tpha_s,
+#                 pipo_and_dead_qmd_s,
+#                 overall_tpha_s,
+#                 overall_qmd_s,
+#                 `site_cwd_zscore:pipo_and_dead_tpha_s`,
+#                 `site_cwd_zscore:pipo_and_dead_qmd_s`,
+#                 `pipo_and_dead_tpha_s:pipo_and_dead_qmd_s`,
+#                 `site_cwd_zscore:overall_tpha_s`,
+#                 `site_cwd_zscore:overall_qmd_s`,
+#                 `overall_tpha_s:overall_qmd_s`,
+#                 `site_cwd_zscore:pipo_and_dead_tpha_s:pipo_and_dead_qmd_s`,
+#                 `site_cwd_zscore:overall_tpha_s:overall_qmd_s`)
+# 
+# write_csv(newdata, path = "analyses/analyses_output/newdata-for-model-predictions.csv")
 
+samps <- 
+  posterior_samples(fm1) %>% 
+  dplyr::select(one_of(paste0("b_", covariates)))
 
-
-samps <- posterior_samples(fm1)[, 1:14]
+# samps <- posterior_samples(fm1)[, 1:14]
 
 (start <- Sys.time())
 lwr <- purrr::map_dbl(1:nrow(newdata), .f = function(row) {quantile(plogis(as.matrix(samps) %*% t(newdata[row, ])), prob = 0.025)})
 (Sys.time() - start)
 
-(start <- Sys.time())
-est_med <- purrr::map_dbl(1:nrow(newdata), .f = function(row) {median(plogis(as.matrix(samps) %*% t(newdata[row, ])))})
-(Sys.time() - start)
+# (start <- Sys.time())
+# est_med <- purrr::map_dbl(1:nrow(newdata), .f = function(row) {median(plogis(as.matrix(samps) %*% t(newdata[row, ])))})
+# (Sys.time() - start)
 
 (start <- Sys.time())
 est_mn <- purrr::map_dbl(1:nrow(newdata), .f = function(row) {mean(plogis(as.matrix(samps) %*% t(newdata[row, ])))})
 (Sys.time() - start)
 
-(start <- Sys.time())
-est_sd <- purrr::map_dbl(1:nrow(newdata), .f = function(row) {sd(plogis(as.matrix(samps) %*% t(newdata[row, ])))})
-(Sys.time() - start)
+# (start <- Sys.time())
+# est_sd <- purrr::map_dbl(1:nrow(newdata), .f = function(row) {sd(plogis(as.matrix(samps) %*% t(newdata[row, ])))})
+# (Sys.time() - start)
 
 (start <- Sys.time())
 upr <- purrr::map_dbl(1:nrow(newdata), .f = function(row) {quantile(plogis(as.matrix(samps) %*% t(newdata[row, ])), prob = 0.975)})
@@ -70,22 +100,26 @@ upr <- purrr::map_dbl(1:nrow(newdata), .f = function(row) {quantile(plogis(as.ma
 
 fitted <- newdata
 fitted$lwr <- lwr
-fitted$est_med <- est_med
+# fitted$est_med <- est_med
 fitted$est_mn <- est_mn
 fitted$upr <- upr
-fitted$est_sd <- est_sd
+# fitted$est_sd <- est_sd
 
 object.size(fitted)
 head(fitted)
 
-fitted_compact <- 
+fitted_compact <-
   fitted %>% 
-  dplyr::select(site_cwd_zscore,
-                pipo_and_dead_tpha_s,
-                pipo_and_dead_qmd_s,
-                overall_tpha_s,
-                overall_qmd_s,
-                lwr, est_med, est_mn, upr, est_sd)
+  dplyr::select(one_of(main_effect_covariates), 
+                lwr, est_mn, upr)
+# fitted_compact <- 
+#   fitted %>% 
+#   dplyr::select(site_cwd_zscore,
+#                 pipo_and_dead_tpha_s,
+#                 pipo_and_dead_qmd_s,
+#                 overall_tpha_s,
+#                 overall_qmd_s,
+#                 lwr, est_med, est_mn, upr, est_sd)
 
 object.size(fitted_compact)
 write_csv(fitted_compact, path = "analyses/analyses_output/model-predictions.csv")
