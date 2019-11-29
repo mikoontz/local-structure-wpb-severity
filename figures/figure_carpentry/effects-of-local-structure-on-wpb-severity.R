@@ -9,67 +9,98 @@ library(brms)
 library(tidybayes)
 
 fm1  <- readRDS("analyses/analyses_output/fitted-model_zibinomial_site-cwdZscore_pipo-tpha-qmd_overall-tpha-qmd_exact-gp-per-site_200-samples.rds")
-samps <- posterior_samples(fm1)[, 1:14]
+# samps <- posterior_samples(fm1)[, 1:14]
 
 newdata <- read_csv("analyses/analyses_output/newdata-for-model-predictions.csv")
 fitted_compact <- read_csv("analyses/analyses_output/model-predictions.csv")
-newdata <- read.csv("analyses/analyses_output/newdata-for-model-predictions_2.csv", stringsAsFactors = FALSE)
-fitted_compact <- read.csv("analyses/analyses_output/model-predictions_2.csv", stringsAsFactors = FALSE)
+# newdata <- read.csv("analyses/analyses_output/newdata-for-model-predictions_2.csv", stringsAsFactors = FALSE)
+# fitted_compact <- read.csv("analyses/analyses_output/model-predictions_2.csv", stringsAsFactors = FALSE)
 
 step_size <- 0.1
 
-fitted_just_estimates <- newdata
-fitted_just_estimates$prob_pipo_mortality <- plogis(as.matrix(newdata) %*% fixef(fm1)[, "Estimate"])
+# fitted_just_estimates <- newdata
+# fitted_just_estimates$prob_pipo_mortality <- plogis(as.matrix(newdata) %*% fixef(fm1)[, "Estimate"])
+# 
+# fitted_subset <-
+#   fitted_just_estimates %>% 
+#   dplyr::filter(overall_tpha_s == 0,
+#                 overall_qmd_s == 0) %>% 
+#   dplyr::mutate(cwd = case_when(site_cwd_zscore == -1 ~ "cool/wet site",
+#                                 site_cwd_zscore == 0 ~ "average site",
+#                                 site_cwd_zscore == 1 ~ "hot/dry site")) %>% 
+#   dplyr::mutate(cwd = factor(cwd, levels = c("cool/wet site", "average site", "hot/dry site")))
+# 
+# pipo_tpha_qmd_cwd_interaction_gg_raster <-
+#   ggplot(fitted_subset, aes(x = pipo_and_dead_tpha_s, y = pipo_and_dead_qmd_s, fill = prob_pipo_mortality)) +
+#   geom_raster() +
+#   scale_fill_viridis_c() +
+#   facet_grid(~ cwd) +
+#   theme_bw() +
+#   labs(x = "Ponderosa pine density\n(trees per hectare; scaled)",
+#        y = "Ponderosa pine quadratic mean diameter\n(cm; scaled)",
+#        fill = "Probability of mortality\nof ponderosa pine")
+# 
+# pipo_tpha_qmd_cwd_interaction_df <-
+#   fitted_compact %>% 
+#   dplyr::filter(site_cwd_zscore %in% c(-1, 0, 1)) %>% 
+#   dplyr::filter(overall_tpha_s == 0) %>% 
+#   dplyr::filter(overall_qmd_s == 0) %>% 
+#   dplyr::mutate(pipo_and_dead_qmd_s = round(pipo_and_dead_qmd_s, 1)) %>% 
+#   dplyr::filter(pipo_and_dead_qmd_s %in% c(-0.7, 0.7)) %>% 
+#   dplyr::mutate(pipo_and_dead_qmd = ifelse(pipo_and_dead_qmd_s == -0.7, yes = "Smaller trees", no = "Larger trees")) %>% 
+#   dplyr::mutate(cwd = case_when(site_cwd_zscore == -1 ~ "cool/wet site",
+#                                 site_cwd_zscore == 0 ~ "average site",
+#                                 site_cwd_zscore == 1 ~ "hot/dry site")) %>% 
+#   dplyr::mutate(cwd = factor(cwd, levels = c("cool/wet site", "average site", "hot/dry site")))
+# 
+# 
+# 
+# pipo_tpha_qmd_cwd_interaction_gg <-
+#   ggplot(pipo_tpha_qmd_cwd_interaction_df, 
+#          aes(x = pipo_and_dead_tpha_s, 
+#              y = est_mn, 
+#              color = pipo_and_dead_qmd)) +
+#   geom_ribbon(aes(ymin = lwr, ymax = upr, group = as.factor(pipo_and_dead_qmd_s)), fill = "lightgray", color = NA) +
+#   geom_line() +
+#   facet_grid(~ cwd) +
+#   theme_bw() +
+#   labs(x = "Ponderosa pine density\n(trees per hectare; scaled)",
+#        y = "Pr(ponderosa mortality)",
+#        color = "Quadratic\nmean diameter")
+# 
+# ggsave(plot = pipo_tpha_qmd_cwd_interaction_gg, filename = "figures/pipo_tpha_qmd_cwd_interaction.png", width = 6, height = 3.5, units = "in")
+# 
+# ggsave(plot = pipo_tpha_qmd_cwd_interaction_gg_raster, filename = "figures/pipo_tpha_qmd_cwd_interaction_raster.png")
 
-fitted_subset <-
-  fitted_just_estimates %>% 
-  dplyr::filter(overall_tpha_s == 0,
-                overall_qmd_s == 0) %>% 
-  dplyr::mutate(cwd = case_when(site_cwd_zscore == -1 ~ "cool/wet site",
-                                site_cwd_zscore == 0 ~ "average site",
-                                site_cwd_zscore == 1 ~ "hot/dry site")) %>% 
-  dplyr::mutate(cwd = factor(cwd, levels = c("cool/wet site", "average site", "hot/dry site")))
 
-pipo_tpha_qmd_cwd_interaction_gg_raster <-
-  ggplot(fitted_subset, aes(x = pipo_and_dead_tpha_s, y = pipo_and_dead_qmd_s, fill = prob_pipo_mortality)) +
-  geom_raster() +
-  scale_fill_viridis_c() +
-  facet_grid(~ cwd) +
-  theme_bw() +
-  labs(x = "Ponderosa pine density\n(trees per hectare; scaled)",
-       y = "Ponderosa pine quadratic mean diameter\n(cm; scaled)",
-       fill = "Probability of mortality\nof ponderosa pine")
+# height models
 
-pipo_tpha_qmd_cwd_interaction_df <-
+prop_host_height_cwd_interaction_df <-
   fitted_compact %>% 
-  dplyr::filter(site_cwd_zscore %in% c(-1, 0, 1)) %>% 
-  dplyr::filter(overall_tpha_s == 0) %>% 
-  dplyr::filter(overall_qmd_s == 0) %>% 
-  dplyr::mutate(pipo_and_dead_qmd_s = round(pipo_and_dead_qmd_s, 1)) %>% 
-  dplyr::filter(pipo_and_dead_qmd_s %in% c(-0.7, 0.7)) %>% 
-  dplyr::mutate(pipo_and_dead_qmd = ifelse(pipo_and_dead_qmd_s == -0.7, yes = "Smaller trees", no = "Larger trees")) %>% 
-  dplyr::mutate(cwd = case_when(site_cwd_zscore == -1 ~ "cool/wet site",
-                                site_cwd_zscore == 0 ~ "average site",
-                                site_cwd_zscore == 1 ~ "hot/dry site")) %>% 
+  dplyr::filter(overall_tpha_s == 1) %>% 
+  dplyr::mutate(pipo_and_dead_mean_height_s = round(pipo_and_dead_mean_height_s, 1)) %>% 
+  dplyr::filter(pipo_and_dead_mean_height_s %in% c(-0.7, 0.7)) %>% 
+  dplyr::mutate(pipo_and_dead_mean_height = ifelse(pipo_and_dead_mean_height_s == -0.7, yes = "Smaller trees", no = "Larger trees")) %>% 
+  dplyr::mutate(cwd = case_when(site_cwd_zscore == min(site_cwd_zscore) ~ "cool/wet site",
+                                site_cwd_zscore == max(site_cwd_zscore) ~ "hot/dry site",
+                                TRUE ~ "average site")) %>% 
   dplyr::mutate(cwd = factor(cwd, levels = c("cool/wet site", "average site", "hot/dry site")))
 
-pipo_tpha_qmd_cwd_interaction_gg <-
-  ggplot(pipo_tpha_qmd_cwd_interaction_df, 
-         aes(x = pipo_and_dead_tpha_s, 
+prop_host_height_cwd_interaction_gg <-
+  ggplot(prop_host_height_cwd_interaction_df, 
+         aes(x = prop_host_s, 
              y = est_mn, 
-             color = pipo_and_dead_qmd)) +
-  geom_ribbon(aes(ymin = lwr, ymax = upr, group = as.factor(pipo_and_dead_qmd_s)), fill = "lightgray", color = NA) +
+             color = pipo_and_dead_mean_height)) +
+  geom_ribbon(aes(ymin = lwr, ymax = upr, group = pipo_and_dead_mean_height), fill = "lightgray", color = NA) +
   geom_line() +
   facet_grid(~ cwd) +
   theme_bw() +
-  labs(x = "Ponderosa pine density\n(trees per hectare; scaled)",
+  labs(x = "Proportion host trees (Ponderosa pine); scaled",
        y = "Pr(ponderosa mortality)",
-       color = "Quadratic\nmean diameter")
+       color = "Mean height") +
+  scale_y_continuous(limits = c(0, 1))
 
-ggsave(plot = pipo_tpha_qmd_cwd_interaction_gg, filename = "figures/pipo_tpha_qmd_cwd_interaction.png", width = 6, height = 3.5, units = "in")
-
-ggsave(plot = pipo_tpha_qmd_cwd_interaction_gg_raster, filename = "figures/pipo_tpha_qmd_cwd_interaction_raster.png")
-
+prop_host_height_cwd_interaction_gg
 
 # halfeye plots of model coefficients -------------------------------------
 original_names <- colnames(samps)

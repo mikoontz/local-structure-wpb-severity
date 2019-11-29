@@ -6,6 +6,8 @@
 library(tidyverse)
 library(brms)
 
+cwd_data <- read_csv("data/data_output/cwd-data.csv")
+
 fm1 <- readRDS("analyses/analyses_output/fitted-model_zibinomial_site-cwdZscore_pipo-tpha-qmd_overall-tpha-qmd_exact-gp-per-site_200-samples.rds")
 
 step_size <- 0.1
@@ -21,7 +23,9 @@ interaction_covariates <-
 lapply(main_effect_covariates, FUN = function(x) assign(x, seq(-1, 1, by = step_size), pos = 1))
 
 Intercept <- 1
-site_cwd_zscore <- -1:1
+site_cwd_zscore <- c(min(cwd_data$site_cwd_zscore), 
+                     mean(cwd_data$site_cwd_zscore), 
+                     max(cwd_data$site_cwd_zscore))
 
 newdata  <-
   expand.grid(lapply(main_effect_covariates, FUN = get)) %>% 
