@@ -306,6 +306,7 @@ dev.off()
 r_eldo_3k_3 <- raster::brick(here::here("analyses/analyses_output/rasterized-trees/eldo_3k_3_rasterized-trees.tif"))
 names(r_eldo_3k_3) <- c("live_count", "dead_count", "pipo_count", "non_pipo_count", "pipo_and_dead_count", "total_count", 
                         "live_tpha", "dead_tpha", "pipo_tpha", "non_pipo_tpha", "pipo_and_dead_tpha", "overall_tpha",
+                        "live_mean_height", "dead_mean_height", "pipo_mean_height", "non_pipo_mean_height", "pipo_and_dead_mean_height", "overall_mean_height",
                         "live_ba", "dead_ba", "pipo_ba", "non_pipo_ba", "pipo_and_dead_ba", "total_ba",
                         "live_bapha", "dead_bapha", "pipo_bapha", "non_pipo_bapha", "pipo_and_dead_bapha", "overall_bapha",
                         "live_mean_ba", "dead_mean_ba", "pipo_mean_ba", "non_pipo_mean_ba", "pipo_and_dead_mean_ba", "overall_mean_ba",
@@ -325,6 +326,8 @@ names(r_eldo_3k_3) <- c("live_count", "dead_count", "pipo_count", "non_pipo_coun
 
 live <- r_eldo_3k_3[["live_count"]]
 dead <- r_eldo_3k_3[["dead_count"]]
+pipo_height <- r_eldo_3k_3[["pipo_and_dead_mean_height"]]
+
 prop_dead <- dead / (live + dead) * 100
 
 prop_dead_df <-
@@ -338,7 +341,11 @@ prop_dead_gg <-
   scale_fill_viridis_c() +
   labs(x = "Longitude (m)",
        y = "Latitude (m)",
-       fill = "Fraction\ndead (%)")
+       fill = "Fraction\ndead (%)") +
+  theme_classic() +
+  theme(text = element_text(size = 15), 
+        axis.title.x = element_text(margin = margin(t = 5, r = 0, b = 0, l = 0)),
+        axis.title.y = element_text(margin = margin(t = 0, r = 5, b = 0, l = 0)))
 
 ggsave(plot = prop_dead_gg, filename = "figures/L4_eldo_3k_3_prop-dead-rasterized.png", width = 6, height = 5, units = "in")
 
@@ -357,10 +364,33 @@ prop_host_gg <-
   scale_fill_viridis_c() +
   labs(x = "Longitude (m)",
        y = "Latitude (m)",
-       fill = "Fraction\nhost (%)")
-
+       fill = "Fraction\nhost (%)") +
+  theme_classic() +
+  theme(text = element_text(size = 15), 
+        axis.title.x = element_text(margin = margin(t = 5, r = 0, b = 0, l = 0)),
+        axis.title.y = element_text(margin = margin(t = 0, r = 5, b = 0, l = 0)))
 
 ggsave(plot = prop_host_gg, filename = "figures/L4_eldo_3k_3_prop-host-rasterized.png", width = 6, height = 5, units = "in")
+
+pipo_height_df <-
+  pipo_height %>% 
+  as.data.frame(xy = TRUE)
+
+pipo_height_gg <-
+  ggplot(pipo_height_df, aes(x, y, fill = pipo_and_dead_mean_height)) +
+  geom_raster() +
+  coord_equal() +
+  scale_fill_viridis_c() +
+  labs(x = "Longitude (m)",
+       y = "Latitude (m)",
+       fill = "Mean\ntree\nheight (m)") +
+  theme_classic() +
+  theme(text = element_text(size = 15), 
+        axis.title.x = element_text(margin = margin(t = 5, r = 0, b = 0, l = 0)),
+        axis.title.y = element_text(margin = margin(t = 0, r = 5, b = 0, l = 0)))
+
+ggsave(plot = pipo_height_gg, filename = "figures/L4_eldo_3k_3_pipo-height-rasterized.png", width = 6, height = 5, units = "in")
+
 
 # PDF versions
 ggsave(plot = prop_dead_gg, filename = "figures/L4_eldo_3k_3_prop-dead-rasterized.pdf", width = 6, height = 5, units = "in")
