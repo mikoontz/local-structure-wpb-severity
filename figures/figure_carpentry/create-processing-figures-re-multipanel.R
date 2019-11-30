@@ -56,15 +56,6 @@ png("figures/L1_eldo_3k_3_ortho_rgb.png", width = 6, height = 6, units = "in", r
 plotRGB(index_rgb)
 dev.off()
 
-# PDF versions to try to preserve more detail after export from PowerPoint
-
-ggsave(plot = dsm_gg, filename = "figures/L1_eldo_3k_3_dsm.pdf", width = 6, height = 4.5, units = "in")
-
-pdf("figures/L1_eldo_3k_3_ortho_rgb.pdf", width = 6, height = 6)
-plotRGB(index_rgb)
-dev.off()
-
-
 ####
 # Level 2: radiometric and/or geometric corrected photogrammetric outputs
 ####
@@ -128,12 +119,6 @@ ggsave(plot = dtm_gg, filename = "figures/L2_eldo_3k_3_dtm.png", width = 6, heig
 ggsave(plot = chm_gg, filename = "figures/L2_eldo_3k_3_chm.png", width = 6, height = 4.5, units = "in")
 ggsave(filename = "figures/L2_eldo_3k_3_ortho_r.png", plot = r_gg, width = 6, height = 4.5, units = "in")
 ggsave(filename = "figures/L2_eldo_3k_3_ortho_nir.png", plot = nir_gg, width = 6, height = 4.5, units = "in")
-
-# PDF versions
-ggsave(plot = dtm_gg, filename = "figures/L2_eldo_3k_3_dtm.pdf", width = 6, height = 4.5, units = "in")
-ggsave(plot = chm_gg, filename = "figures/L2_eldo_3k_3_chm.pdf", width = 6, height = 4.5, units = "in")
-ggsave(filename = "figures/L2_eldo_3k_3_ortho_r.pdf", plot = r_gg, width = 6, height = 4.5, units = "in")
-ggsave(filename = "figures/L2_eldo_3k_3_ortho_nir.pdf", plot = nir_gg, width = 6, height = 4.5, units = "in")
 
 ####
 # Level 3: domain specific information extraction
@@ -200,25 +185,6 @@ par(mar = c(5.1, 4.1, 1.6, 1.6))
 plot(st_geometry(crowns[crop_poly, ]), axes = TRUE, xlab = "Longitude (m)", ylab = "Latitude (m)")
 dev.off()
 
-# PDF versions
-
-pdf("figures/L3a_eldo_3k_3_ttops_with_crop_poly.pdf", width = 6, height = 6)
-par(mar = c(5.1, 4.1, 1.6, 1.6))
-plot(st_geometry(ttops), axes = TRUE, xlab = "Longitude (m)", ylab = "Latitude (m)", pch = 19, cex = 0.2)
-plot(crop_poly, col = adjustcolor("red", alpha.f = 0.2), border = "red", lwd = 3, add = TRUE)
-dev.off()
-
-pdf("figures/L3a_eldo_3k_3_ttops_cropped.pdf", width = 6, height = 6)
-par(mar = c(5.1, 4.1, 1.6, 1.6))
-plot(st_geometry(ttops[crop_poly, ]), axes = TRUE, xlab = "Longitude (m)", ylab = "Latitude (m)", pch = 19, cex = 0.2)
-dev.off()
-
-pdf("figures/L3a_eldo_3k_3_crowns_cropped.pdf", width = 6, height = 6)
-par(mar = c(5.1, 4.1, 1.6, 1.6))
-plot(st_geometry(crowns[crop_poly, ]), axes = TRUE, xlab = "Longitude (m)", ylab = "Latitude (m)")
-dev.off()
-
-
 # Level 3b: spectral AND geometric information
 # live/dead classified tree tops, host/non-host classified tree tops
 
@@ -269,33 +235,6 @@ axis(side = 1, at = seq(-46500, -46050, length.out = 3))
 axis(side = 2, at = seq(59850, 60350, length.out = 3))
 dev.off()
 
-# PDF Versions
-
-pdf(file = "figures/L3b_eldo_3k_3_live_dead.pdf", width = 6, height = 6)
-par(mar = c(5.1, 4.1, 2.1, 2.1))
-plot(x = site_cc$x, y = site_cc$y, 
-     col = viridis(2)[factor(site_cc$live, levels = c("live", "dead"))], 
-     pch = 19, cex = 0.35, asp = 1, bty = "L",
-     xaxt = "n", yaxt = "n",
-     xlab = "Longitude (m)", ylab = "Latitude (m)")
-legend(x = -46275, y = 60450, xpd = NA, legend = c("live", "dead"), xjust = 0.5, pch = 19, col = viridis(2), horiz = TRUE, bty = "n")
-axis(side = 1, at = seq(-46500, -46050, length.out = 3))
-axis(side = 2, at = seq(59850, 60350, length.out = 3))
-dev.off()
-
-
-pdf(file = "figures/L3b_eldo_3k_3_host_nonhost.pdf", width = 6, height = 6)
-par(mar = c(5.1, 4.1, 2.1, 2.1))
-plot(x = site_cc$x, y = site_cc$y, 
-     col = viridis(2)[factor(site_cc$host, levels = c("non-host", "host"))], 
-     pch = 19, cex = 0.35, asp = 1, bty = "L",
-     xaxt = "n", yaxt = "n",
-     xlab = "Longitude (m)", ylab = "Latitude (m)")
-legend(x = -46275, y = 60450, xpd = NA, legend = c("non-host", "host"), xjust = 0.5, pch = 19, col = viridis(2), horiz = TRUE, bty = "n")
-axis(side = 1, at = seq(-46500, -46050, length.out = 3))
-axis(side = 2, at = seq(59850, 60350, length.out = 3))
-dev.off()
-
 ####
 # Level 4: aggregated to regular grids
 ####
@@ -306,6 +245,7 @@ dev.off()
 r_eldo_3k_3 <- raster::brick(here::here("analyses/analyses_output/rasterized-trees/eldo_3k_3_rasterized-trees.tif"))
 names(r_eldo_3k_3) <- c("live_count", "dead_count", "pipo_count", "non_pipo_count", "pipo_and_dead_count", "total_count", 
                         "live_tpha", "dead_tpha", "pipo_tpha", "non_pipo_tpha", "pipo_and_dead_tpha", "overall_tpha",
+                        "live_mean_height", "dead_mean_height", "pipo_mean_height", "non_pipo_mean_height", "pipo_and_dead_mean_height", "overall_mean_height",
                         "live_ba", "dead_ba", "pipo_ba", "non_pipo_ba", "pipo_and_dead_ba", "total_ba",
                         "live_bapha", "dead_bapha", "pipo_bapha", "non_pipo_bapha", "pipo_and_dead_bapha", "overall_bapha",
                         "live_mean_ba", "dead_mean_ba", "pipo_mean_ba", "non_pipo_mean_ba", "pipo_and_dead_mean_ba", "overall_mean_ba",
@@ -325,6 +265,9 @@ names(r_eldo_3k_3) <- c("live_count", "dead_count", "pipo_count", "non_pipo_coun
 
 live <- r_eldo_3k_3[["live_count"]]
 dead <- r_eldo_3k_3[["dead_count"]]
+pipo_height <- r_eldo_3k_3[["pipo_and_dead_mean_height"]]
+total_count <- r_eldo_3k_3[["total_count"]]
+
 prop_dead <- dead / (live + dead) * 100
 
 prop_dead_df <-
@@ -338,9 +281,11 @@ prop_dead_gg <-
   scale_fill_viridis_c() +
   labs(x = "Longitude (m)",
        y = "Latitude (m)",
-       fill = "Fraction\ndead (%)")
-
-ggsave(plot = prop_dead_gg, filename = "figures/L4_eldo_3k_3_prop-dead-rasterized.png", width = 6, height = 5, units = "in")
+       fill = "Fraction\ndead (%)") +
+  theme_classic() +
+  theme(text = element_text(size = 15), 
+        axis.title.x = element_text(margin = margin(t = 5, r = 0, b = 0, l = 0)),
+        axis.title.y = element_text(margin = margin(t = 0, r = 5, b = 0, l = 0)))
 
 nonhost <- r_eldo_3k_3[["non_pipo_count"]]
 host <- r_eldo_3k_3[["pipo_and_dead_count"]]
@@ -357,12 +302,50 @@ prop_host_gg <-
   scale_fill_viridis_c() +
   labs(x = "Longitude (m)",
        y = "Latitude (m)",
-       fill = "Fraction\nhost (%)")
+       fill = "Fraction\nhost (%)") +
+  theme_classic() +
+  theme(text = element_text(size = 15), 
+        axis.title.x = element_text(margin = margin(t = 5, r = 0, b = 0, l = 0)),
+        axis.title.y = element_text(margin = margin(t = 0, r = 5, b = 0, l = 0)))
 
+pipo_height_df <-
+  pipo_height %>% 
+  as.data.frame(xy = TRUE)
+
+pipo_height_gg <-
+  ggplot(pipo_height_df, aes(x, y, fill = pipo_and_dead_mean_height)) +
+  geom_raster() +
+  coord_equal() +
+  scale_fill_viridis_c() +
+  labs(x = "Longitude (m)",
+       y = "Latitude (m)",
+       fill = "Mean\ntree\nheight (m)") +
+  theme_classic() +
+  theme(text = element_text(size = 15), 
+        axis.title.x = element_text(margin = margin(t = 5, r = 0, b = 0, l = 0)),
+        axis.title.y = element_text(margin = margin(t = 0, r = 5, b = 0, l = 0)))
+
+total_count_df <-
+  total_count %>% 
+  as.data.frame(xy = TRUE)
+
+total_count_gg <-
+  ggplot(total_count_df, aes(x, y, fill = total_count)) +
+  geom_raster() +
+  coord_equal() +
+  scale_fill_viridis_c() +
+  labs(x = "Longitude (m)",
+       y = "Latitude (m)",
+       fill = "Tree\ncount") +
+  theme_classic() +
+  theme(text = element_text(size = 15), 
+        axis.title.x = element_text(margin = margin(t = 5, r = 0, b = 0, l = 0)),
+        axis.title.y = element_text(margin = margin(t = 0, r = 5, b = 0, l = 0)))
+
+ggsave(plot = prop_dead_gg, filename = "figures/L4_eldo_3k_3_prop-dead-rasterized.png", width = 6, height = 5, units = "in")
 
 ggsave(plot = prop_host_gg, filename = "figures/L4_eldo_3k_3_prop-host-rasterized.png", width = 6, height = 5, units = "in")
 
-# PDF versions
-ggsave(plot = prop_dead_gg, filename = "figures/L4_eldo_3k_3_prop-dead-rasterized.pdf", width = 6, height = 5, units = "in")
-ggsave(plot = prop_host_gg, filename = "figures/L4_eldo_3k_3_prop-host-rasterized.pdf", width = 6, height = 5, units = "in")
+ggsave(plot = pipo_height_gg, filename = "figures/L4_eldo_3k_3_pipo-height-rasterized.png", width = 6, height = 5, units = "in")
 
+ggsave(plot = total_count_gg, filename = "figures/L4_eldo_3k_3_total-count-rasterized.png", width = 6, height = 5, units = "in")
