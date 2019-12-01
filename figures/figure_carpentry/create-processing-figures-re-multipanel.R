@@ -319,7 +319,7 @@ pipo_height_gg <-
   scale_fill_viridis_c() +
   labs(x = "Longitude (m)",
        y = "Latitude (m)",
-       fill = "Mean\ntree\nheight (m)") +
+       fill = "Mean\nhost\nheight\n(m)") +
   theme_classic() +
   theme(text = element_text(size = 15), 
         axis.title.x = element_text(margin = margin(t = 5, r = 0, b = 0, l = 0)),
