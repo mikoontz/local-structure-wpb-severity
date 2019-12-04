@@ -26,6 +26,8 @@ data/data_output/*/*/*_mtp.txt
 *.las
 data/data_output/*/*/*_crowns/*
 data/data_output/*/*/*_ttops/*
+data/data_output/site_data/eldo_3k_1/eldo_3k_1_index_re.tif
+data/data_output/site_data/eldo_3k_1/eldo_3k_1_ortho_re.tif
 *.xml
 data/data_output/classified/*
 data/CA Sierra-PIPO tree data Jan 2019 representing spring 18.xlsx
