@@ -3,7 +3,7 @@
 library(brms)
 library(tidyverse)
 
-fm1 <- readRDS("analyses/analyses_output/fitted-model_zibinomial_site-cwdZscore_pipo-tpha-qmd_overall-tpha-qmd_exact-gp-per-site_200-samples.rds")
+fm1 <- readRDS("analyses/analyses_output/fitted-model_zibinomial_site-cwdZscore_prop-host_pipo-height_overall-tpha_exact-gp-per-site_200-samples.rds")
 
 fm1
 summary(fm1)
