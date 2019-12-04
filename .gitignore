@@ -55,6 +55,8 @@ analyses/analyses_output/model-predictions_2.csv
 analyses/analyses_output/newdata-for-model-predictions_2.csv
 data/features/S_USA.AdministrativeForest/*
 *~$*.docx
+*.tex
+*.docx
 *.Rapp.history
 docs/manuscript/feedback/*
 figures/L0_eldo_3k_3_x3_100MEDIA_DJI_0705.JPG
