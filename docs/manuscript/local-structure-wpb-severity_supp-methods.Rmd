@@ -16,7 +16,7 @@ header-includes:
   - \captionsetup[figure]{labelformat=empty}
   - \captionsetup[table]{labelformat=empty}
 
-output: word_document
+output: pdf_document
 ---
 
 ```{r setup, include = FALSE, echo = FALSE}
@@ -92,10 +92,6 @@ classifier_stats <- read_csv(here::here("analyses/analyses_output/classification
 ```{r hand_classified_crowns}
 hand_classified_crowns <- read_csv(here::here("data/data_output/classified/hand-classified/hand-classified-crowns.csv")) %>% 
   dplyr::mutate(site = substr(treeID, start = 1, stop = 9))
-```
-
-```{r site_characteristics_read_file}
-site_characteristics <- read_csv(here::here("analyses/analyses_output/summarized-non-spatial-site-data.csv"))
 ```
 
 
@@ -347,26 +343,49 @@ Aerially detected mortality and density of the whole site is presented along wit
 The density is measured in trees per hectare (tpha).")
 ```
 
-```{r site_characteristics, echo = FALSE, include = TRUE, results = 'asis'}
+```{r site_characteristics_read_file}
+site_characteristics <- read_csv(here::here("analyses/analyses_output/summarized-non-spatial-site-data.csv"))
+
 site_characteristics <- 
-   site_characteristics %>% 
-  tidyr::separate(site, into = c("Forest", "Elevation band", "Rep"), remove = FALSE) %>% 
-  dplyr::mutate(`% tree mortality\n(aerial/ground)` = paste(sprintf("%0.0f", air_prop_mortality * 100), sprintf("%0.0f", ground_prop_mortality * 100), sep = "/"),
-                `Density\n(tpha; aerial/ground)` = paste(sprintf("%0.0f", air_tpha_total), sprintf("%0.0f", ground_tpha_total), sep = "/")) %>% 
+  site_characteristics %>% 
+  dplyr::mutate(ground_tpha_dead = ground_prop_mortality * ground_tpha_total,
+                air_tpha_dead = air_prop_mortality * air_tpha_total) %>% 
+  dplyr::mutate(`% tree mortality\n(aerial/ground)` = paste(sprintf("%0.0f", air_prop_mortality * 100), 
+                                                            sprintf("%0.0f", ground_prop_mortality * 100), sep = "/"),
+                `Mortality density\n(tpha; aerial/ground)` = paste(sprintf("%0.0f", air_tpha_dead), 
+                                                                   sprintf("%0.0f", ground_tpha_dead), sep = "/"),
+                `Overall density\n(tpha; aerial/ground)` = paste(sprintf("%0.0f", air_tpha_total), 
+                                                                 sprintf("%0.0f", ground_tpha_total), sep = "/")) %>% 
   dplyr::rename(`CWD\n(mm)` = site_cwd,
                 `CWD\n(z-score)` = site_cwd_zscore,
                 `Survey area\n(ha)` = buffered_survey_area,
                 Site = site) %>% 
+  tidyr::separate(Site, into = c("Forest", "Elevation band", "Rep"), remove = FALSE) %>% 
   dplyr::mutate(Forest = case_when(Forest == "eldo" ~ "Eldorado",
                                    Forest == "stan" ~ "Stanislaus",
                                    Forest == "sier" ~ "Sierra",
                                    Forest == "sequ" ~ "Sequoia")) %>% 
-  dplyr::mutate(Forest = factor(Forest, levels = c("Eldorado", "Stanislaus", "Sierra", "Sequoia"))) %>% dplyr::arrange(Forest, `Elevation band`, Rep) %>% 
-  dplyr::select(Site, `CWD\n(mm)`, `CWD\n(z-score)`, `Survey area\n(ha)`, `% tree mortality\n(aerial/ground)`, `Density\n(tpha; aerial/ground)`)
+  dplyr::mutate(Forest = factor(Forest, levels = c("Eldorado", "Stanislaus", "Sierra", "Sequoia"))) %>% 
+  dplyr::arrange(Forest, `Elevation band`, Rep)
 
-pandoc.table(site_characteristics, 
-             digits = c(10, 3, 3, 4, 10, 10), 
+```
+
+```{r site_characteristics_by_site, echo = FALSE, include = TRUE, results = 'asis'}
+ site_characteristics_by_site <-
+  site_characteristics %>% 
+  dplyr::select(Site, 
+                `CWD\n(mm)`, 
+                `CWD\n(z-score)`, 
+                `Survey area\n(ha)`, 
+                `Overall density\n(tpha; aerial/ground)`, 
+                `Mortality density\n(tpha; aerial/ground)`, 
+                `% tree mortality\n(aerial/ground)`)
+
+pandoc.table(site_characteristics_by_site, 
+             digits = c(10, 3, 3, 4, 10, 10, 10), 
              split.tables = Inf,
              caption = table_nums(name = "table-site-deets"),
              keep.line.breaks = TRUE)
 ```
+
+# References

@@ -33,7 +33,7 @@ header-includes:
   - \captionsetup[figure]{labelformat=empty}
   - \captionsetup[table]{labelformat=empty}
 
-output: pdf_document
+output: word_document
 ---
 
 ```{r setup, include = FALSE, echo = FALSE}
@@ -123,6 +123,12 @@ site_characteristics <- read_csv(here::here("analyses/analyses_output/summarized
 model_summary <- read_csv(here::here("analyses/analyses_output/final-model-summary.csv"))
 ```
 
+```{r identifiable-plot-centers}
+identifiable_plot_centers <- 
+  sf::st_read(here::here("data/data_output/plot-centers-identifiable-from-air_3310.gpkg")) %>% 
+  dplyr::filter(site %in% site_characteristics$Site)
+```
+
 ```{r feet_to_meters}
 # 3000 = 914
 # 4000 = 1219
@@ -150,24 +156,21 @@ Date report generated: `r params$date_generated`
 
 ## Abstract 
 
-1. The Californian hot drought of 2012 to 2015 created favorable conditions for unprecedented ponderosa pine (*Pinus ponderosa*) mortality in the Sierra Nevada mountain range, largely attributable to the western pine beetle (WPB; *Dendroctonus brevicomis*). 
+The Californian hot drought of 2012 to 2015 created favorable conditions for unprecedented ponderosa pine (*Pinus ponderosa*) mortality in the Sierra Nevada mountain range, largely attributable to the western pine beetle (WPB; *Dendroctonus brevicomis*). 
 Climate conditions and forest density may interact to affect tree mortality, but density is a coarse gauge of forest structure that can affect WPB behavior in a number of ways. 
 Measuring broad-scale climate conditions simultaneously with local forest composition and structure-- the spatial distribution and size of trees-- will refine our understanding of how these variables interact, but is generally expensive and/or labor-intensive. 
-
-1. We use drone surveys over a network of 160 field plots along a 350km and 1000m elevation gradient in western slope Sierra Nevada ponderosa pine/mixed-conifer forests and Structure from Motion processing to segment and classify more than 450,000 trees over 9km^2^ of forest with WPB-induced tree mortality.
+We use drone surveys over a network of 160 field plots along a 350km and 1000m elevation gradient in western slope Sierra Nevada ponderosa pine/mixed-conifer forests and Structure from Motion processing to segment and classify more than 450,000 trees over 9km^2^ of forest with WPB-induced tree mortality.
 We modeled the probability of ponderosa pine mortality as a function of forest structure and composition variables and their interaction with site-level climatic water deficit, accounting for spatial covariance using exact Gaussian processes.
-
-1. Greater host density strongly increased the probability of host mortality, while greater overall density decreased mortality. 
+A greater local proportion of host trees strongly increased the probability of host mortality, with a greater host density amplifying this effect.
 Further, we found a strong interaction between host size and climatic water deficit such that larger trees increased the probability of host mortality at hot/dry sites, but smaller trees tended to drive mortality in cool/wet sites.  
-
-1. Our results demonstrate a variable response of the WPB to local forest structure and composition across an environmental gradient during the same hot drought, which may indicate forest sites were in different stages of disturbance (from "endemic" to "outbreak") depending on their regional climate. 
-Management interventions that reduce host density may decrease the probability of tree mortality attributed to western pine beetles in the future, and our results suggest that focusing these treatments on areas that are most likely to exceed feedback thresholds (i.e., hot/dry sites with many available hosts) will have the best chance of increasing tree survivorship, specifically of larger trees.
+Our results demonstrate a variable response of the WPB to local forest structure and composition across an environmental gradient, which may help reconcile differences between observed ecosystem-wide tree mortality patterns during the hot drought and predictions from models based on coarser-scale forest structure data.
+Climate change adaptation strategies should consider that future disturbance outcomes may depend on interactions between local forest structure and broad-scale environmental gradients, with the potential for cross-scale interactions to challenge our current understanding of forest insect dynamics.
 
 ## Introduction
 
 Bark beetles dealt the final blow to many of the nearly 150 million trees killed in the California hot drought of 2012 to 2015 and its aftermath [@usdafs2019]. 
 A harbinger of climate change effects to come, record high temperatures exacerbated the drought [@griffin2014], which increased water stress on trees [@asner2016], making them more susceptible to colonization by bark beetles [@fettig2012b; @kolb2016]. 
-Further, a century of fire suppression policy has enabled forests to grow into dense stands, which also makes them more vulnerable to bark beetles [@fettig2012b]. 
+Further, a century of fire suppression policy has enabled forests to grow into dense stands, which can also makes them more vulnerable to bark beetles [@fettig2012b]. 
 This combination of environmental conditions and forest structural characteristics led to tree mortality events of unprecedented size in the driest, densest forests across the state [@young2017]. 
 The mechanisms underlying the link between tree susceptibility to colonization by insects and hot, dry conditions are often directly attributed to tree physiology [@bentz2010], while the link to forest density is multifaceted [@fettig2012b]. 
 Because forest density is a coarse metric of the forest features to which bark beetles respond [@raffa2008], our understanding of the connection between forest density and insect disturbance severity could be enhanced with more finely-resolved measures of forest structure as well as explicit consideration of species composition [@fettig2019; @stephenson2019]. 
@@ -221,7 +224,7 @@ Plots were stratified by three elevation bands in each forest, with the plots in
 We built our study coincident with 160 vegetation/forest insect monitoring plots at 32 sites established between 2016 and 2017 by @fettig2019 (`r fig_nums(name = "fig-geographic-extent", display = "cite")`).
 The study sites were chosen to reflect typical west-side Sierra Nevada yellow pine/mixed-conifer forests and were dominated by ponderosa pine trees, *Pinus ponderosa* [@fettig2019].
 These established plots were located in WPB-attacked, yellow pine/mixed-conifer forests across the Eldorado, Stanislaus, Sierra and Sequoia National Forests and were stratified by elevation (914-1219 m [3000-4000 ft], 1219-1524 m [4000-5000 ft], 1524-1829 m [5000-6000 ft] above sea level).
-In the Sequoia National Forest, the southernmost National Forest in our study, plots were stratified with the lowest elevation band between 1219 and 1524 m (4000-5000 ft) and extended to an upper elevation band of 1829-2134 m (6000-7000 ft) to capture a more similar forest community composition as at the more northern National Forests.
+In the Sequoia National Forest, the southernmost National Forest in our study, plots were stratified with the lowest elevation band between 1219 and 1524 m (4000-5000 ft) and extended to an upper elevation band of 1829-2134 m (6000-7000 ft) to capture a more similar forest community composition as at the more northern National Foxrests.
 The sites have variable forest structure and plot locations were selected in areas with >35% ponderosa pine basal area and >10% ponderosa pine mortality.
 At each site, five 0.041 ha circular plots were installed along transects with 80 to 200m between plots.
 In the field, @fettig2019 mapped all stem locations relative to the center of each plot using azimuth/distance measurements.
@@ -326,10 +329,9 @@ pandoc.table(algorithm_summary_print,
 ```
 
 Using just the geometric information from the canopy height model or terrain-normalized dense point cloud, we generated maps of detected trees (`r fig_nums("fig-drone-data-levels", display = "cite")`; Level 3a, second and third images) by testing a total of `r nrow(algorithm_summary)` automatic tree detection algorithms and a total of `r sum(algorithm_summary$n)` parameter sets (`r table_nums(name = "table-algorithm-deets", display = "cite")`).
-We converted the height of each tree determined using the Level 2 canopy height model to its diameter at breast height, 1.37m (DBH).
 We used the field plot data to assess each tree detection algorithm/parameter set by converting the distance-from-center and azimuth measurements of the trees in the field plots to x-y positions relative to the field plot centers distinguishable in the Level 2 reflectance maps as the orange fabric X's that we laid out prior to each flight.
-In the reflectance maps, we located 110 out of 160 field plot centers while some plot centers were obscured due to dense interlocking tree crowns or because a plot center was located directly under a single tree crown.
-For each of the 110 field plots with identifiable plot centers-- the "validation field plots", we calculated 7 forest structure metrics using the ground data collected by @fettig2019: total number of trees, number of trees greater than 15 meters, mean height of trees, 25^th^ percentile tree height, 75^th^ percentile tree height, mean distance to nearest tree neighbor, and mean distance to second nearest neighbor.
+In the reflectance maps, we located `r nrow(identifiable_plot_centers)` out of 160 field plot centers while some plot centers were obscured due to dense interlocking tree crowns or because a plot center was located directly under a single tree crown.
+For each of the `r nrow(identifiable_plot_centers)` field plots with identifiable plot centers-- the "validation field plots", we calculated 7 forest structure metrics using the ground data collected by @fettig2019: total number of trees, number of trees greater than 15 meters, mean height of trees, 25^th^ percentile tree height, 75^th^ percentile tree height, mean distance to nearest tree neighbor, and mean distance to second nearest neighbor.
 For each tree detection algorithm and parameter set described above, we calculated the same set of 7 structure metrics within the footprint of the validation field plots.
 We calculated the Pearson's correlation and root mean square error (RMSE) between the ground data and the aerial data for each of the 7 structure metrics for each of the `r sum(algorithm_summary$n)` automatic tree detection algorithms/parameter sets.
 For each algorithm and parameter set, we calculated its performance relative to other algorithms as whether its Pearson's correlation was within 5% of the highest Pearson's correlation as well as whether its RMSE was within 5% of the lowest RMSE.
@@ -353,16 +355,12 @@ For just the living trees, we similarly used all 10 mean reflectance values per 
 The boosted logistic regression and regularized discriminant analysis were implemented using the `caret` package in R [@kuhn2008].
 Finally, we used these models to classify all tree crowns in the data set as alive or dead (`r fig_nums("fig-drone-data-levels", display = "cite")`; Level 3b, first image) as well as the species of living trees (`r fig_nums("fig-drone-data-levels", display = "cite")`; Level 3b, second image).
 
-Using the tree height and DBH field data from @fettig2019, we fit a simple linear regression to predict DBH from height for each of the five dominant species in the study area.
-We used these species-specific allometric relationships between field-measured tree height and DBH to estimate the DBH of each model-classified tree given its species and height.
-
 ### Level 4: Aggregations to regular grids
 
 We rasterized the forest structure and composition data at a spatial resolution similar to that of the field plots to better match the grain size at which we validated the automatic tree detection algorithms.
-In each raster cell, we calculated: number of live trees, number of dead trees, number of ponderosa pine trees, total number of trees (of all species, including ponderosa pine).
-From these values, we calculated the fraction of dead trees per cell (`r fig_nums("fig-drone-data-levels", display = "cite")`; Level 4, first image) and the fraction of host trees per cell (`r fig_nums("fig-drone-data-levels", display = "cite")`; Level 4, second image).
-We converted the count of ponderosa pine trees and the total tree count to a density measurement of trees per hectare (tpha) by multiplying the counts in each 20 x 20-m cell by `r 10000/400` to create a "host density" and an "overall density" variable per cell.
-Finally, we then calculated a separate quadratic mean diameter (QMD) for ponderosa pine and all trees of any species for each 20 x 20-m cell as the square root of the average squared diameter of trees (ponderosa or all) within the cell.
+In each raster cell, we calculated: number of dead trees, number of ponderosa pine trees, total number of trees, and mean height of ponderosa pine trees.
+The values of these variables in each grid cell and derivatives from them were used for visualization and modeling.
+Here, we show the fraction of dead trees per cell (`r fig_nums("fig-drone-data-levels", display = "cite")`; Level 4, first image), the fraction of host trees per cell (`r fig_nums("fig-drone-data-levels", display = "cite")`; Level 4, second image), the mean height of ponderosa pine trees in each cell (`r fig_nums("fig-drone-data-levels", display = "cite")`; Level 4, third image), and the total count of trees per cell (`r fig_nums("fig-drone-data-levels", display = "cite")`; Level 4, fourth image).
 
 ### Note on assumptions about dead trees
 
@@ -382,9 +380,10 @@ Thus, a CWD z-score of 1 would indicate that the CWD at that site is one standar
 
 ### Statistical model
 
-We used a generalized linear model with a zero-inflated binomial response and a logit link to predict the probability of ponderosa pine mortality within each 20 x 20-m cell as a function of the crossed effects of ponderosa pine QMD and density added to the crossed effect of QMD and density of trees of all species in each cell (hereafter "overall QMD" and "overall density"), as well as the interaction of each summand with climatic water deficit at each site.
-
-To measure and account for spatial autocorrelation of the bark beetle behavioral processes underlying ponderosa pine mortality, we subsampled the data at each site to a random selection of 200, 20 x 20-m cells representing approximately 27.5% of the surveyed area.
+We used a generalized linear model with a zero-inflated binomial response and a logit link to predict the probability of ponderosa pine mortality within each 20 x 20-m cell using the total number of ponderosa pine trees in each cell as the number of trials, and the number of dead trees in each cell as the number of "successes".
+As covariates, we used the proportion of trees that are WPB hosts (i.e., ponderosa pine) in each cell, the mean height of ponderosa pine trees in each cell, the density of trees of all species (hereafter "overall density") in each cell, and the site-level climatic water deficit using Eq. 1.
+Note that the two-way interaction between the overall density and the proportion of trees that are hosts is equivalent to the number of ponderosa pine trees in the cell.
+To measure and account for spatial autocorrelation underlying ponderosa pine mortality, we subsampled the data at each site to a random selection of 200, 20 x 20-m cells representing approximately 27.5% of the surveyed area.
 Additionally with these subsampled data, we included a separate exact Gaussian process term per site of the interaction between the x- and y-position of each cell using the `gp()` function in the `brms` package [@burkner2017].
 The Gaussian process estimates the spatial covariance in the response variable (log-odds of ponderosa pine mortality) jointly with the effects of the other covariates.
 
@@ -395,16 +394,17 @@ y_{i,j} \sim &\ \begin{cases}
 Binom(n_i, \pi_i), & 1-p
 \end{cases} \\
 logit(\pi_i) = &\ \beta_0\ + \\
-& \beta_1X_{cwd, j}\ + \\
-& \beta_1X_{cwd, j}(\beta_2X_{pipoQMD, i} + \beta_3X_{pipoDensity, i} + \beta_4X_{pipoQMD, i}X_{pipoDensity, i})\ + \\ 
-& \beta_1X_{cwd, j}(\beta_5X_{overallQMD, i} + \beta_6X_{overallDensity, i} + \beta_7X_{overallQMD, i}X_{overallDensity, i})\ + \\
+& \beta_1X_{cwd, j}\ + \beta_2X_{propHost, i} + \beta_3X_{PIPOheight, i} + \beta_4X_{overallDensity, i} + \\
+& \beta_5X_{cwd, j}X_{PIPOheight, i} + \beta_6X_{cwd, j}X_{propHost, i} + \beta_7X_{cwd, j}X_{overallDensity, i} + \\
+& \beta_8X_{propHost, i}X_{PIPOheight, i} + \beta_9X_{propHost, i}X_{overallDensity, i} + \\ 
+& \beta_{10}X_{cwd, j}X_{propHost, i}X_{PIPOheight, i}\ + \\
 & \mathcal{GP}_j(x_i, y_i) \\
 \end{aligned}
 $$
 
-Where $y_i$ is the number of dead trees in cell $i$, $n_i$ is the sum of the dead trees (assumed to be ponderosa pine) and live ponderosa pine trees in cell $i$, $\pi_i$ is the probability of ponderosa pine tree mortality in cell $i$, $p$ is the probability of there being zero dead trees in a cell arising as a result of an unmodeled process, $X_{cwd, j}$ is the z-score of climatic water deficit for site $j$, $X_{pipoQMD, i}$ is the scaled quadratic mean diameter of ponderosa pine in cell $i$, $X_{pipoDensity, i}$ is the scaled density of ponderosa pine trees in cell $i$, $X_{overallQMD, i}$ is the scaled quadratic mean diameter of all trees in cell $i$, $X_{overallDensity, i}$ is the scaled density of all trees in cell $i$, $x_i$ and $y_i$ are the x- and y- coordinates of the centroid of the cell in an EPSG3310 coordinate reference system, and $\mathcal{GP}_j$ represents the exact Gaussian process describing the spatial covariance between cells at site $j$.
+Where $y_i$ is the number of dead trees in cell $i$, $n_i$ is the sum of the dead trees (assumed to be ponderosa pine) and live ponderosa pine trees in cell $i$, $\pi_i$ is the probability of ponderosa pine tree mortality in cell $i$, $p$ is the probability of there being zero dead trees in a cell arising as a result of an unmodeled process, $X_{cwd, j}$ is the z-score of climatic water deficit for site $j$, $X_{propHost, i}$ is the scaled proportion of trees that are ponderosa pine in cell $i$, $X_{PIPOheight, i}$ is the scaled mean height of ponderosa pine trees in cell $i$, $X_{overallDensity, i}$ is the scaled density of all trees in cell $i$, $x_i$ and $y_i$ are the x- and y- coordinates of the centroid of the cell in an EPSG3310 coordinate reference system, and $\mathcal{GP}_j$ represents the exact Gaussian process describing the spatial covariance between cells at site $j$.
 
-We used 4 chains with 2000 iterations each (1000 warmup, 1000 samples), and confirmed chain convergence by ensuring all `Rhat` values were less than 1.1 [@brooks1998].
+We used 4 chains with 4000 iterations each (2000 warmup, 2000 samples), and confirmed chain convergence by ensuring all `Rhat` values were less than 1.1 [@brooks1998] and that the bulk and tail effective sample sizes (ESS) for each estimated paramter were greater than 100 times the number of chains (i.e., greater than 400 in our case).
 We used posterior predictive checks to visually confirm model performance by overlaying the density curves of the predicted number of dead trees per cell over the observed number [@gabry2019].
 For the posterior predictive checks, we used 50 random samples from the model fit to generate 50 density curves and ensured curves were centered on the observed distribution, paying special attention to model performance at capturing counts of zero.
 
@@ -423,8 +423,8 @@ We found that the experimental `lmfx` algorithm with parameter values of `dist2d
 ```{r}
 table_nums(name = "table-best-algorithm-deets", paste0("Correlation and differences between the best performing tree detection algorithm (lmfx with dist2d = ", algorithm_details[1, "var1_val"], " and ws = ", algorithm_details[1, "var2_val"], ") and the ground data.
 An asterisk next to the correlation or RMSE indicates that this value was within 5% of the value of the best-performing algorithm/parameter set.
-Ground mean represents the mean value of the forest metric across the 110 field plots that were visible from the sUAS-derived imagery.
-The median error is calculated as the median of the differences between the air and ground values for the 110 visible plots.
+Ground mean represents the mean value of the forest metric across the `r nrow(identifiable_plot_centers)` field plots that were visible from the sUAS-derived imagery.
+The median error is calculated as the median of the differences between the air and ground values for the `r nrow(identifiable_plot_centers)` visible plots.
 Thus, a positive number indicates an overestimate by the sUAS workflow and a negative number indicates an underestimate."))
 ```
 
@@ -482,87 +482,83 @@ The accuracy of WPB host/non-WPB-host (i.e., ponderosa pine versus other tree sp
 
 ### Site summary based on best tree detection algorithm and classification
 
-Across our study site, we detected, segmented, and classified `r site_characteristics %>% mutate(ntrees = air_tpha * buffered_survey_area) %>% summarize(ntrees = sum(ntrees)) %>% pull(ntrees) %>% formatC(format="f", big.mark=",", digits=0)` trees (see Supplemental Table for site summaries). Estimated tree mortality at a site ranged from `r site_characteristics %>% summarize(minMortality = min(air_prop_mortality)) %>% pull(minMortality) %>% round(3) * 100`% to `r site_characteristics %>% summarize(maxMortality = max(air_prop_mortality)) %>% pull(maxMortality) %>% round(3) * 100`%.
+Across our study site, we detected, segmented, and classified `r sum(site_characteristics$air_n_total) %>% formatC(format="f", big.mark=",", digits=0)` trees (see Supplemental Table for site summaries). Of these trees, we classified `r sum(site_characteristics$air_n_dead) %>% formatC(format="f", big.mark=",", digits=0)` as dead (`r (sum(site_characteristics$air_n_dead) / sum(site_characteristics$air_n_total) * 100) %>% formatC(format="f", digits=1)`% mortality). Estimated tree mortality at a site ranged from `r (min(site_characteristics$air_n_dead / site_characteristics$air_n_total)) %>% round(3) * 100`% to `r (max(site_characteristics$air_n_dead / site_characteristics$air_n_total)) %>% round(3) * 100`%.
 
 ### Effect of local structure and regional climate on tree mortality attributed to western pine beetle
 
 ```{r}
-fig_nums(name = "fig-halfeye", "Posterior distributions of effect size from zero-inflated binomial model predicting the probability of ponderosa pine mortality in a 20 x 20-m cell given forest structure characteristics of host trees and all trees within the cell, as well as a site-level climatic water deficit.
+fig_nums(name = "fig-halfeye", "Posterior distributions of effect size from zero-inflated binomial model predicting the probability of ponderosa pine mortality in a 20 x 20-m cell given forest structure characteristics and site-level climatic water deficit.
 The gray density distribution for each model covariate represents the density of the posterior distribution, the point underneath each density curve represents the median of the estimate, the bold interval surrounding the point estimate represents the 66% credible interval, and the thin interval surrounding the point estimate represents the 95% credible interval.")
 ```
 
 ![`r fig_nums(name = "fig-halfeye")`](../../figures/effect-sizes-halfeye.png)
 
-We detected a small, generally positive main effect of climatic water deficit on the probability of ponderosa pine mortality within each 20 x 20-m cell (`r fig_nums(name = "fig-halfeye", display = "cite")`).
+We detected a positive main effect of climatic water deficit on the probability of ponderosa pine mortality within each 20 x 20-m cell (`r fig_nums(name = "fig-halfeye", display = "cite")`).
+We found a positive main effect of proportion of host trees per cell, with a greater proportion of host trees (i.e., ponderosa pine) in a cell increasing the probability of ponderosa pine mortality.
+Conversely, we found a negative effect of overall tree density (i.e., including both ponderosa pine and non-host species) such that greater tree density in a 20 x 20-m cell (for the same proportion of host trees) would decrease the probability of ponderosa pine mortality.
+We found a positive two-way interaction between the overall tree density per cell and the proportion of trees that were hosts, which is equivalent to a positive effect of the density of host trees (`r fig_nums(name = "fig-halfeye", display = "cite")`).
 
-We found a strongly positive main effect of ponderosa pine local density, with greater density increasing the probability of ponderosa pine mortality.
-Conversely, we found a strong negative effect of overall tree density (i.e., including both ponderosa pine and non-host species) such that additional non-host trees in a 20 x 20-m cell (for the same number of host trees) would decrease the probability of ponderosa pine mortality (`r fig_nums(name = "fig-halfeye", display = "cite")`).
+We found a negative effect of mean height of ponderosa pine on the probability of ponderosa mortality, suggesting that the western pine beetle attacked smaller trees, on average.
+However, there was a positive interaction between the climatic water deficit and ponderosa pine mean height, such that larger trees were more likely to increase the probability of ponderosa mortality in hotter, drier sites (`r fig_nums(name = "fig-three-way-interaction", display = "cite")`).
 
-We found a generally negative effect of quadratic mean diameter (QMD) of ponderosa pine on the probability of ponderosa mortality, suggesting that the western pine beetle attacked smaller trees, on average.
-There was a strong positive interaction between the climatic water deficit and ponderosa pine QMD, such that larger trees were more likely to increase the probability of ponderosa mortality in hotter, drier sites (`r fig_nums(name = "fig-three-way-interaction", display = "cite")`).
-
-There was a positive interaction between overall tree density and overall QMD, such that denser stands with larger trees led to greater ponderosa pine mortality, though the main effects of each of these variables were weakly negative (`r fig_nums(name = "fig-halfeye", display = "cite")`).
-
+We found weakly negative effects of the site-level CWD interactions with both the proportion of host trees and overall tree density (`r fig_nums(name = "fig-halfeye", display = "cite")`).
 
 ```{r}
 fig_nums(name = "fig-three-way-interaction", "Line version of model results with 95% credible intervals showing primary influence of ponderosa pine structure on the probability of ponderosa pine mortality, and the interaction across climatic water deficit.
-The 'larger trees' line represents the quadratic mean diameter of ponderosa pine 0.7 standard deviations above the mean, and the 'smaller trees' line represents the quadratic mean diameter of ponderosa pine 0.7 standard deviations below the mean.")
+The 'larger trees' line represents the mean height of ponderosa pine 0.7 standard deviations above the mean (approximately 12.1m), and the 'smaller trees' line represents the mean height of ponderosa pine 0.7 standard deviations below the mean (approximately 24.1m).")
 ```
 
-![`r fig_nums(name = "fig-three-way-interaction")`](../../figures/pipo_tpha_qmd_cwd_interaction.png)
+![`r fig_nums(name = "fig-three-way-interaction")`](../../figures/prop-host_pipo-height_cwd_interaction.png)
 
 ## Discussion
 
 This study represents a novel use of drones to further our understanding of the simultaneous effects of local forest structure and composition with broad-scale environmental gradients on tree mortality attributed to WPB. 
-We found strong positive effects (effect sizes >0.5) of both host tree density and the interaction between site climatic water deficit (CWD) and host tree mean size (QMD) on the probability of ponderosa pine mortality. 
-Conversely, we found a strong negative effect (effect size <-0.5) of overall tree density. 
-Surprisingly, site CWD exerted only a weakly positive main effect on the probability of ponderosa mortality (effect size: `r model_summary %>% dplyr::filter(beta == "site_cwd_zscore") %>% pull(Estimate) %>% sprintf("%.2f", .)`; 95% CI: `r paste0("[", model_summary %>% dplyr::filter(beta == "site_cwd_zscore") %>% pull(lwr0_025) %>% sprintf("%.2f", .), ", ", model_summary %>% dplyr::filter(beta == "site_cwd_zscore") %>% pull(upr0_975) %>% sprintf("%.2f", .), "]")`).
-To that end, we did not measure tree water stress at an individual tree level as in other recent work [@stephenson2019], and instead treated CWD as a general indicator of tree stress following results of coarser-scale studies [@asner2016; @young2017]. 
-This may have contributed to our failure to detect a stronger CWD effect.
+We found strong positive effects (effect sizes >0.4) of both the proportion of host trees and the interaction between site climatic water deficit (CWD) and host tree mean size (height) on the probability of ponderosa pine mortality. 
+Conversely, we found a strong negative effect (effect size <-0.4) of mean height of ponderosa pine.
+Site-level CWD exerted a positive, but relatively weak, main effect on the probability of ponderosa mortality (effect size: `r model_summary %>% dplyr::filter(beta == "site_cwd_zscore") %>% pull(Estimate) %>% sprintf("%.2f", .)`; 95% CI: `r paste0("[", model_summary %>% dplyr::filter(beta == "site_cwd_zscore") %>% pull(lwr0_025) %>% sprintf("%.2f", .), ", ", model_summary %>% dplyr::filter(beta == "site_cwd_zscore") %>% pull(upr0_975) %>% sprintf("%.2f", .), "]")`).
+To that end, we did not measure tree water stress at an individual tree level as in other recent work [@stephenson2019], and instead treated CWD as a general indicator of tree stress following results of coarser-scale studies [@asner2016; @young2017], which may have contributed to our failure to detect a stronger CWD effect.
 Also, our entire study area experienced the same extreme hot drought between 2012 and 2015 and the variation of mortality explained by a main effect of climatic water deficit may be dampened when most trees are experiencing a high degree of water stress [@floyd2009; @fettig2019].
 
 ### Positive effect of host density and a negative effect of overall density
 
-The strongest effect on the probability of ponderosa pine mortality was the positive effect of local host density within each 20 x 20-m cell (effect size: `r model_summary %>% dplyr::filter(beta == "pipo_and_dead_tpha_s") %>% pull(Estimate) %>% sprintf("%.2f", .)`; 95% CI: `r paste0("[", model_summary %>% dplyr::filter(beta == "pipo_and_dead_tpha_s") %>% pull(lwr0_025) %>% sprintf("%.2f", .), ", ", model_summary %>% dplyr::filter(beta == "pipo_and_dead_tpha_s") %>% pull(upr0_975) %>% sprintf("%.2f", .), "]")`).
+The strongest effect on the probability of ponderosa pine mortality was the positive effect of the proportion of trees in each 20 x 20-m cell that were ponderosa pine-- the host of the WPB (effect size: `r model_summary %>% dplyr::filter(beta == "prop_host_s") %>% pull(Estimate) %>% sprintf("%.2f", .)`; 95% CI: `r paste0("[", model_summary %>% dplyr::filter(beta == "prop_host_s") %>% pull(lwr0_025) %>% sprintf("%.2f", .), ", ", model_summary %>% dplyr::filter(beta == "prop_host_s") %>% pull(upr0_975) %>% sprintf("%.2f", .), "]")`).
+
+A number of mechanisms associated with the relative abundance of species in a local area might underlie this relationship.
+Frequency-dependent herbivory--whereby mixed-species forests experience less herbivory compared to monocultures-- is common, especially for oligophagous insect species [@jactel2007].
+Furthermore, it has been demonstrated that nonhost volatiles reduce attraction of several species of bark beetles to their aggregation pheromones [@seybold2018], including WPB [@fettig2005]. To that end, combinations of nonhost volatiles and an antiaggregation pheromone have been used successfully to reduce levels of tree mortality attributed to WPB (e.g., @fettig2012c]).
+In general, @hayes2009 and @fettig2019 found that measures of host availability explained less variation in mortality than measures of overall tree density, but those conclusions were based on a response variable of "total number of dead host trees," rather than the number of dead host trees conditional on the total number of host trees as in our study (i.e., a binomial response).
+
+The negative relationship between overall tree density, a potential correlate of the local competitive environment, and the probability of ponderosa pine mortality is counter-intuitive but corroborates findings of coincident ground plots [@fettig2019] and other work during the same hot drought [@restaino2019]. The forest structure is itself a product of climate and, with increasing importance at finer spatial scales, topographic conditions [@fricker2019]. Thus, the denser forest patches in our study may reflect locally favorable conditions for tree growth and survivorship which could enable increased resistance to insect attack [@restaino2019]. The negative two-way interaction between site CWD and overall density that amplifies the negative overall density effect in hotter, drier sites (effect size: `r model_summary %>% dplyr::filter(beta == "site_cwd_zscore:overall_tpha_s") %>% pull(Estimate) %>% sprintf("%.2f", .)`; 95% CI: `r paste0("[", model_summary %>% dplyr::filter(beta == "site_cwd_zscore:overall_tpha_s") %>% pull(lwr0_025) %>% sprintf("%.2f", .), ", ", model_summary %>% dplyr::filter(beta == "site_cwd_zscore:overall_tpha_s") %>% pull(upr0_975) %>% sprintf("%.2f", .), "]")`) supports this explanation if greater local tree density implies especially favorable growing conditions (and locally resistant trees) when denser patches are found in hot, dry sites.
+
+We found a positive two-way interaction between overall tree density (host and non-host) within each cell and proportion of host trees, which is equivalent to a positive effect of host density (effect size: `r model_summary %>% dplyr::filter(beta == "prop_host_s:overall_tpha_s") %>% pull(Estimate) %>% sprintf("%.2f", .)`; 95% CI: `r paste0("[", model_summary %>% dplyr::filter(beta == "prop_host_s:overall_tpha_s") %>% pull(lwr0_025) %>% sprintf("%.2f", .), ", ", model_summary %>% dplyr::filter(beta == "prop_host_s:overall_tpha_s") %>% pull(upr0_975) %>% sprintf("%.2f", .), "]")`),
 The relationship between host density and susceptibility to colonization by bark beetles has been so well-documented at the experimental plot level (e.g., @raffa1987, @oliver1995) that lowering stand densities through selective harvest of hosts is commonly recommended for reducing future levels of tree mortality attributed to bark beetles [@fettig2015], including WPB [@fettig2016].
 Greater host density shortens the flight distance required for WPB to disperse to new host, which likely facilitates bark beetle spread, but we calibrated our aerial tree detection to ~400 m^2^ areas rather than to individual tree locations so don't have the data precision to address this hypothesis directly.
 Increased density of ponderosa pine, specifically, may disproportionately increase the competitive environment for these WPB host trees (and thus increase their susceptibility to WPB colonization) if intraspecific competition amongst ponderosa pine trees is stronger than interspecfic competition as would be predicted with coexistence theory [@chesson2000]. 
 Finally, greater host density likely increases the frequency that WPB land on their preferred host and avoid expending energy flying to non-hosts. 
 
-Because we also found a strong negative effect of overall tree density (host and non-host) within each cell while accounting for host density (effect size: `r model_summary %>% dplyr::filter(beta == "overall_tpha_s") %>% pull(Estimate) %>% sprintf("%.2f", .)`; 95% CI: `r paste0("[", model_summary %>% dplyr::filter(beta == "overall_tpha_s") %>% pull(lwr0_025) %>% sprintf("%.2f", .), ", ", model_summary %>% dplyr::filter(beta == "overall_tpha_s") %>% pull(upr0_975) %>% sprintf("%.2f", .), "]")`), we suspect that the positive association between host density and host mortality is at least partially driven by mechanisms associated with the relative abundance of species in a local area.
-That is, increasing overall tree density while keeping host tree density constant (as would be the scenario to interpret the marginal negative effect of overall tree density) implies an increasing proportion of non-host trees.
-Frequency-dependent herbivory--whereby mixed-species forests experience less herbivory compared to monocultures-- is common, especially for oligophagous insect species [@jactel2007].
-Furthermore, it has been demonstrated that nonhost volatiles reduce attraction of several species of bark beetles to their aggregation pheromones [@seybold2018], including WPB [@fettig2005]. To that end, combinations of nonhost volatiles and an antiaggregation pheromone have been used successfully to reduce levels of tree mortality attributed to WPB (e.g., @fettig2012c]).
-The negative relationship that we detected between overall tree density and host mortality corroborates findings from @fettig2019, though @fettig2019 didn't simultaneously model the effect of host density.
-In general however, @hayes2009 and @fettig2019 found that measures of host availability explained less variation in mortality than measures of overall tree density, but those conclusions were based on a response variable of "total number of dead host trees," rather than the number of dead host trees conditional on the total number of host trees as in our study (i.e., a binomial response).
-
 ### Negative main effect of host tree mean size, but strong postive interaction with site CWD
 
-Counter to our expectations, we found an overall negative effect of host tree mean size on the probability of host mortality (effect size: `r model_summary %>% dplyr::filter(beta == "pipo_and_dead_qmd_s") %>% pull(Estimate) %>% sprintf("%.2f", .)`; 95% CI: `r paste0("[", model_summary %>% dplyr::filter(beta == "pipo_and_dead_qmd_s") %>% pull(lwr0_025) %>% sprintf("%.2f", .), ", ", model_summary %>% dplyr::filter(beta == "pipo_and_dead_qmd_s") %>% pull(upr0_975) %>% sprintf("%.2f", .), "]")`).
-WPB exhibit a preference for trees 50.8 to 76.2 cm in diameter at breast height [@person1928; @person1931], and a positive relationship between host tree size and levels of tree mortality attributed to WPB was reported by @fettig2019 in the coincident field plots as well as in other recent studies [@pile2019; @stephenson2019].
-Indeed, @fettig2019 reported no mortality in ponderosa pine trees < 10.0 cm dbh.
+Counter to our expectations, we found an overall negative effect of host tree mean size on the probability of host mortality (effect size: `r model_summary %>% dplyr::filter(beta == "pipo_and_dead_mean_height_s") %>% pull(Estimate) %>% sprintf("%.2f", .)`; 95% CI: `r paste0("[", model_summary %>% dplyr::filter(beta == "pipo_and_dead_mean_height_s") %>% pull(lwr0_025) %>% sprintf("%.2f", .), ", ", model_summary %>% dplyr::filter(beta == "pipo_and_dead_mean_height_s") %>% pull(upr0_975) %>% sprintf("%.2f", .), "]")`).
+WPB exhibit a preference for trees 50.8 to 76.2 cm in diameter at breast height [@person1928; @person1931], and a positive relationship between host tree size and levels of tree mortality attributed to WPB was reported by @fettig2019 in the coincident field plots as well as in other recent studies [@restaino2019; @pile2019; @stephenson2019].
+Indeed, @fettig2019 reported no mortality in ponderosa pine trees < 10.0 cm dbh and found no relationship between tree size and tree mortality for incense cedar or white fir in the coincident field plots. 
+These species represent `r cade_plus_abco_pct_of_all_dead`% of the total tree mortality observed in their study, yet in our study all dead trees were classified as ponderosa pine (see Methods) which could dampen positive effect of tree size on mortality.
 Larger trees are more nutritious and are therefore ideal targets if local bark beetle density is high enough to successfully initiate mass attack as can occur when many trees are under severe water stress [@bentz2010].
 In the recent hot drought, we expected that most trees would be under severe water stress, setting the stage for increasing beetle density, successful mass attacks, and targeting of larger trees.
-One possible explanation for our finding is that our observations represent the cumulative mortality of trees during a multi-year drought event and its aftermath.
-Lower host tree mean size led to a greater probability of host mortality earlier in the drought [@pile2019] and that signal might have persisted even as mortality continued to accumulate driven by other factors.
-Furthermore, @fettig2019 found no relationship between tree size and tree mortality for incense cedar or white fir in the coincident field plots. These species represent `r cade_plus_abco_pct_of_all_dead`% of the total tree mortality observed in their study, yet in our study all dead trees were classified as ponderosa pine (see Methods).
+A possible explanation for our finding counter to this expectation is that our observations represent the cumulative mortality of trees during a multi-year drought event and its aftermath.
+Lower host tree mean size led to a greater probability of host mortality earlier in this drought [@pile2019; @stovall2019] and that signal might have persisted even as mortality continued to accumulate driven by other factors.
+Finally, tree growth rates may be a better predictor of susceptibility to WPB colonization than tree size per se, with slower-growing trees being most vulnerable [@miller1960].
+While slow-growing trees are often also the largest trees, this may not be the case for our study sites especially given the legacy of fire exclusion in the Sierra Nevada and its effect of perturbing forest structure far outside its natural range of variation [@safford2017].
 
-We did observe a strong host tree size effect in its interaction with site CWD (effect size: `r model_summary %>% dplyr::filter(beta == "site_cwd_zscore:pipo_and_dead_qmd_s") %>% pull(Estimate) %>% sprintf("%.2f", .)`; 95% CI: `r paste0("[", model_summary %>% dplyr::filter(beta == "site_cwd_zscore:pipo_and_dead_qmd_s") %>% pull(lwr0_025) %>% sprintf("%.2f", .), ", ", model_summary %>% dplyr::filter(beta == "site_cwd_zscore:pipo_and_dead_qmd_s") %>% pull(upr0_975) %>% sprintf("%.2f", .), "]")`).
-In hot, dry sites, larger average host size increased the probability of host mortality while smaller host sizes increased the probability of host mortality in cool, wet sites.
-This suggests that the same bark beetle species was cueing into different aspects of forest structure across the environmental gradient.
-This represents an intraspecific version of the results of @stephenson2019, who found that insect-induced tree mortality in the same region during the same hot drought were driven by different factors for different tree species.
-For instance, @stephenson2019 found that ponderosa pine mortality was largely driven by host selection behavior of forest insects, where larger more nutritious trees were specifically targeted regardless of whether they exhibited signs of stress.
-In contrast, @stephenson2019 found that white fir mortality occurred predominantly in the slower growing, smaller, stressed trees.
-In our study, we found that, even within a single pairing of forest insect species and its host, the host tree size affected host mortality differently depending on the site-level climatic water deficit.
+We did observe a strong host tree size effect in its interaction with site CWD (effect size: `r model_summary %>% dplyr::filter(beta == "site_cwd_zscore:pipo_and_dead_mean_height_s") %>% pull(Estimate) %>% sprintf("%.2f", .)`; 95% CI: `r paste0("[", model_summary %>% dplyr::filter(beta == "site_cwd_zscore:pipo_and_dead_mean_height_s") %>% pull(lwr0_025) %>% sprintf("%.2f", .), ", ", model_summary %>% dplyr::filter(beta == "site_cwd_zscore:pipo_and_dead_mean_height_s") %>% pull(upr0_975) %>% sprintf("%.2f", .), "]")`).
+In hot, dry sites, larger average host size increased the probability of host mortality while smaller host sizes increased the probability of host mortality in cooler, wetter sites.
+Notably, a similar pattern was shown by @stovall2019 with a strong positive tree height/mortality relationship in areas with the greatest vapor pressure deficit and no tree height/mortality relationship in areas with the lowest vapor pressure deficit.
+@stovall2019 did not observe that this environmental dependence extended to a negative tree height/mortality relationship (as we did) even at the lowest extremes of their VPD gradient, perhaps because their entire study took place in the southern Sierra Nevada which represents a hotter, drier portion of the more spatially extensive results we present here.
+Our work suggests that the WPB was cueing into different aspects of forest structure across an environmental gradient in a spatial context in a parallel manner to the temporal context noted by @stovall2019 and @pile2019, who observed that mortality was increasingly driven by larger trees as the hot drought proceeded and became more severe.
 
-Despite high local levels of tree mortality across our study area [@fettig2019], our results from surveying the broader context surrounding coincident field plots reveals different effects of host tree size depending on CWD, and perhaps different stages of bark beetle disturbance across the environmental gradient.
-For primary bark beetles, massive tree mortality as observed from the 2012-2015 drought and its aftermath does not necessarily distinguish "endemic" from "outbreak" phases of bark beetle disturbance, which is instead distinguished by the underlying driver of bark beetle host selection behavior [@logan1998].
-"Endemic" phases are distinguished by environmental determinism, when beetles select hosts based on whether they are weakened in some way, often by environmental conditions.
-"Outbreak" phases are distinguished by dynamic determinism, when population dynamics reign-- when local beetle density is high enough that intraspecific pheromone communication dominates host selection, successful mass attacks are likely, and even large healthy trees can be killed [@white1997; @logan1998].
-Different outbreak cycle phases may help explain the especially high host mortality in high host density, low host size cells that we observed in cool/wet sites (`r fig_nums(name = "fig-three-way-interaction", display = "cite")`).
-The smaller trees would presumably be nutritionally sub-optimal, and thus unexpected targets if the WPB were indeed in an "outbreak" phase at these sites and able to attack even large, healthy trees.
-While trees were likely water stressed across the whole study due to the extreme drought, we expected generally less water stress in the cool/wet sites, and generally higher water stress in the hot/dry sites [@asner2016; @young2017].
-Thus, it is possible that the observed mortality patterns across the Sierra Nevada during the 2012-2015 hot drought arose as synergistic alignment of environmental conditions and complex forest structure enabled the WPB to cross thresholds of "outbreak" behavior in the hottest, driest sites but such an alignment was not present in the cooler, wetter sites [@raffa2008].
+All of our sites were considered in an "epidemic" population phase for WPB (>5 trees killed per hectare; see supplemental information; @miller1960, @hayes2009), but our results challenge the notion that outbreak behavior by the WPB and subsequent tree mortality is always driven by greater tree size.
+Despite a strong tree size/mortality relationship in coincident ground plots across our study area [@fettig2019], our results from surveying the broader context surrounding those ground plots reveals different effects of host tree size depending on CWD.
+Thus, it is possible that massive mortality in hotter/drier Sierra Nevada forests (lower latitudes and elevations) [@asner2016; @young2017] during the 2012-2015 hot drought arose as a synergistic alignment of environmental conditions and local forest structure allowed WPB to successfully colonize large trees, rapidly increase in population size, and expand.
+Conversely, our results may suggest that the unexpectedly low mortality in cooler/wetter Sierra Nevada forests compared to model predictions based on coarser-scale forest structure data [@young2017] could be explained by a different WPB response to local forest structure due to a lack of an alignment with favorable climate conditions.
 
 ## Limitations and future directions
 
@@ -571,16 +567,17 @@ Some limitations remain but can be overcome with further refinements in the use 
 Most of these limitations arise from tree detection and classification uncertainty, and thus it was imperative to work with field data for calibration and uncertainty reporting.
 
 The greatest limitation in our study arising from classification uncertainty is in the assumption that all dead trees were ponderosa pine.
-While spectral information of foliage could help classify living trees to species, standing dead trees did not reflect differently for different species.
 We estimate from coincident field plots that this is true approximately `r pipo_pct_of_all_dead`% of the time.
+While spectral information of foliage could help classify living trees to species, standing dead trees did not reflect differently for different species.
 Because tree mortality response to forest insects is species-specific, even with sympatric tree species during the same hot drought [@stephenson2019], we cannot entirely rule out that some of the mortality responses to complex forest structure that we observed arose from these species-specific responses.
 The overall community composition across our study area was not very different [@fettig2019], so we remain confident that the patterns we observed were driven primarily by the dynamic between the western pine beetle and ponderosa pine.
 This challenge of classifying standing dead trees to species implies that a conifer forest system with less bark beetle and tree host diversity, such as mountain pine beetle-induced mortality in monocultures of lodgepole pine, should be particularly amenable to the methods presented here even with minimal further refinement because a dead tree will almost certainly belong to a single species and have succumbed due to bark beetle colonization. 
 
 Some uncertainty surrounded our ability to detect trees using the geometry of the dense point clouds derived with SfM.
 The horizontal accuracy of the tree detection was better than the vertical accuracy, which may result from a more significant error contribution by the field-based calculations of tree height compared to tree position relative to plot center (`r table_nums(name = "table-best-algorithm-deets", display = "cite")`).
-Both the horizontal and vertical accuracy would likely improve with better SfM point clouds, which requires imagery with more overlap.
-@frey2018 recently found that 95% overlap was preferable for generating dense point clouds, and we only achieved 91.6% overlap with the X3 RGB camera and 83.9% overlap with the multispectral camera.
+Both the horizontal and vertical accuracy would likely improve with better SfM point clouds, which can be enhanced with greater overlap between images [@frey2018] or with oblique (i.e., off-nadir) imagery [@james2014].
+@frey2018 found that 95% overlap was preferable for generating dense point clouds in forested areas, and @james2014 reduced dense point cloud errors using imagery taken at 30 degrees off-nadir.
+We only achieved 91.6% overlap with the X3 RGB camera and 83.9% overlap with the multispectral camera, and all imagery was nadir-facing.
 While our live/dead classification was fairly accurate (`r round(classifier_stats[classifier_stats$type == "live/dead", "accuracy"] %>% pull() * 100, 1)`% on a withheld dataset), our species classifier would likely benefit from better crown segmentation because the pixel-level reflectance values within each crown are averaged to characterize the "spectral signature" of each tree.
 With better delineation of each tree crown, the mean value of pixels within each tree crown will likely be more representative of that tree's spectral signature.
 Better crown segmentation would most readily be achieved through greater overlap in imagery.
@@ -588,11 +585,10 @@ Finally, we anticipate that computer vision and deep learning will prove helpful
 
 ## Conclusions
 
-Climate change adaptation strategies emphasize reducing tree densities to restore forest resilience [@north2015; @young2017], but understanding the optimal complex forest structure that can enable dry western U.S. forests to persist through disturbances such as insect attack will be vital for predicting how California forests may respond to these interventions.
-We've shown that drones can be a valuable tool for investigating how this complexity in forest structure combines with environmental conditions to shape forest insect disturbance.
-
-Our results support conclusions of other researchers that management interventions to reduce the severity of bark beetle disturbance will benefit from generally reducing host density [@young2017].
-In addition however, our study suggests that outcomes will depend on whether the disturbance dynamic has crossed endemic to outbreak feedback thresholds [@raffa2008], which may be predicted by recent advances in disturbance forecasting [@preisler2017].
+Climate change adaptation strategies emphasize management action that considers whole-ecosystem responses to inevitable change [@millar2007], which requires a macroecological understanding of how phenomena at multiple scales can interact.
+We've shown that drones can be a valuable tool for investigating multi-scalar phenomena, such as how local forest structure combines with environmental conditions to shape forest insect disturbance.
+Understanding the conditions that drive dry western U.S. forest responses to disturbances such as insect attack will be vital for predicting outcomes of increasing disturbance frequency and intensity.
+Our study suggests that outcomes will depend on interactions between local forest structure and broad-scale environmental gradients, with the potential for cross-scale interactions to challenge our current understanding of forest insect dynamics.
 
 ## Acknowledgements
 
