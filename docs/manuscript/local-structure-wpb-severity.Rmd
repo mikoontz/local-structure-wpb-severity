@@ -126,7 +126,7 @@ model_summary <- read_csv(here::here("analyses/analyses_output/final-model-summa
 ```{r identifiable-plot-centers}
 identifiable_plot_centers <- 
   sf::st_read(here::here("data/data_output/plot-centers-identifiable-from-air_3310.gpkg")) %>% 
-  dplyr::filter(site %in% site_characteristics$Site)
+  dplyr::filter(site %in% site_characteristics$site)
 ```
 
 ```{r feet_to_meters}
@@ -423,8 +423,8 @@ We found that the experimental `lmfx` algorithm with parameter values of `dist2d
 ```{r}
 table_nums(name = "table-best-algorithm-deets", paste0("Correlation and differences between the best performing tree detection algorithm (lmfx with dist2d = ", algorithm_details[1, "var1_val"], " and ws = ", algorithm_details[1, "var2_val"], ") and the ground data.
 An asterisk next to the correlation or RMSE indicates that this value was within 5% of the value of the best-performing algorithm/parameter set.
-Ground mean represents the mean value of the forest metric across the `r nrow(identifiable_plot_centers)` field plots that were visible from the sUAS-derived imagery.
-The median error is calculated as the median of the differences between the air and ground values for the `r nrow(identifiable_plot_centers)` visible plots.
+Ground mean represents the mean value of the forest metric across the ", nrow(identifiable_plot_centers), " field plots that were visible from the sUAS-derived imagery.
+The median error is calculated as the median of the differences between the air and ground values for the ", nrow(identifiable_plot_centers), " visible plots.
 Thus, a positive number indicates an overestimate by the sUAS workflow and a negative number indicates an underestimate."))
 ```
 
