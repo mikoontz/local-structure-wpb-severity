@@ -139,7 +139,7 @@ pandoc.table(rededge_print,
 Image capture was conducted as close to solar noon as possible to minimize shadow effects (varying primarily due to site accessibility; always within 4 hours, usually within 2 hours).
 Prior to the aerial survey, two strips of bright orange drop cloth (~100cm x 15cm) were positioned as an "X" over the permanent monuments marking the center of the 5 field plots from @fettig2019.
 
-For each of the 36 sites (containing 5 plots each), we captured imagery over the surrounding ~40 hectares of forested area using north-south aerial transects.
+For each of the 32 sites (containing 5 plots each), we captured imagery over the surrounding ~40 hectares of forested area using north-south aerial transects.
 For three sites, we surveyed less surrounding area in order to maintain visual and radio communication with the aircraft during flight which can be obstructed by rolling terrain or non-centrally available takeoff locations.
 
 We preprogrammed aerial transects using Map Pilot for DJI on iOS flight software (hereafter Map Pilot) [@dronesmadeeasy2018].
@@ -334,6 +334,12 @@ In each raster cell, we calculated the: number of live trees, number of dead tre
 We converted the count of ponderosa pine trees and the total tree count to a density measurement of trees per hectare (tpha) by multiplying the counts in each 20m x 20m cell by `r 10000/400` to create a "host density" and an "overall density" variable per cell.
 
 ```{r}
+fig_nums(name = "fig-height-mortality-by-data-source", "The relationship between mean host height and the proportion of host mortality based on the data source. Field plot data come from @fettig2019, drone data over field plots comes from this study, but with trees subsetted to only those identified within the ground footprints of the field plots of @fettig2019, and drone data randomly selected at each site come from this study but are randomly selected 20 x 20 m cells (5 from each site) from the Level 4 product. The tree height/mortality relationship appears similar for trees in the coincident field plots (both field-derived and drone-derived tree measurements), while the drone data representing the broader context around the coincident field plots show a dramatically different relationship.")
+```
+
+![`r fig_nums(name = "fig-height-mortality-by-data-source")`](../../figures/supplemental-figure_height-mortality-relationship-depends-on-data-source.png)
+
+```{r}
 table_nums(name = "table-site-deets", "Site characteristics for each of the 32 sites.
 The site name consists of the forest name, elevation band, and rep separated by an underscore.
 The Eldorado National Forest is 'eldo', the Stanislaus National Forest is 'stan', the Sierra National Forest is 'sier', and the Sequoia National Forest is 'sequ'.
@@ -387,5 +393,7 @@ pandoc.table(site_characteristics_by_site,
              caption = table_nums(name = "table-site-deets"),
              keep.line.breaks = TRUE)
 ```
+
+
 
 # References
