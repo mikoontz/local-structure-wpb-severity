@@ -188,6 +188,15 @@ The resolution of the original orthophoto is approximately 8cm per pixel, and ha
 
 ![`r fig_nums(name = "fig-ortho")`](../../figures/L1_eldo_3k_3_ortho_rgb.png)
 
+
+```{r}
+fig_nums(name = "fig-ortho-orange-x", "A zoomed-in version of the Level 1 orthomosaic depicting a plot center marked with an orange X made out of two strips of drop cloths (approximately 100 x 15 cm per strip). The fabric was laid over the rebar monuments marking each of the 5 plot centers at each of the 32 sites.")
+```
+
+![`r fig_nums(name = "fig-ortho-orange-x")`](../../figures/L1_eldo_3k_3_2_ortho-rgb_orange-x-plot-center.png)
+
+
+
 ### Creating canopy height models
 
 ```{r}
@@ -239,7 +248,7 @@ pandoc.table(algorithm_summary_print,
 
 ### Map ground data
 
-Each orthorectified reflectance map was inspected to locate the 5 orange "X"s marking the center of the field plots (`r fig_nums(name = "fig-ortho", display = "cite")`), though some plot centers were obscured due to dense interlocking tree crowns or because a plot center was located directly under a single tree crown.
+Each orthorectified reflectance map was inspected to locate the 5 orange "X"s marking the center of the field plots (`r fig_nums(name = "fig-ortho-orange-x", display = "cite")`), though some plot centers were obscured due to dense interlocking tree crowns or because a plot center was located directly under a single tree crown.
 We were able to locate 110 out of 180 field plots and were then able to use these plots for validation of automated tree detection algorithms.
 We used the `sf` package [@pebesma2019] to convert distance-from-center and azimuth measurements of each tree in the ground plots to an x-y position on the SfM-derived reflectance map using the x-y position of the orange X visible in the reflectance map as the center.
 
@@ -303,13 +312,6 @@ We used all 10 mean values of the reflectance bands for each tree crown polygon 
 For just the living trees, we similarly used all 10 reflectance values to predict the tree species using regularized discriminant analysis implemented in the `caret` package (accuracy of species classification on a withheld testing dataset: `r round(classifier_stats[classifier_stats$type == "species", "accuracy"] %>% pull() * 100, 1)`%; accuracy of WPB host/non-WPB-host (i.e., ponderosa pine versus other tree species) on a withheld testing dataset: `r round(classifier_stats[classifier_stats$type == "host/non-host", "accuracy"] %>% pull() * 100, 1)`%).
 
 Finally, we used these models to classify all tree crowns in the data set as alive or dead as well as the species of living trees.
-
-### Allometric scaling of height to quadratic mean diameter
-
-We converted the height of each tree determined using the canopy height model to its diameter at breast height, 1.37m (DBH).
-Using the tree height and DBH ground data from @fettig2019, we fit a simple linear regression to predict DBH from height for each of the 5 dominant species.
-Using the model-classified tree species of each segmented tree, we used the corresponding linear relationship for that species to estimate the DBH given the tree's height.
-We then calculated the quadratic mean diameter for each 20m x 20m cell as the square root of the average squared diameter of trees within the cell.
 
 ### Note on assumptions about dead trees
 

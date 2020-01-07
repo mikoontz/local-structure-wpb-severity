@@ -2,7 +2,7 @@
 bibliography: ../docs_carpentry/local-structure-wpb-severity.bib
 csl: ../docs_carpentry/ecological-applications.csl
 params:
-  title: Differential response of a tree-killing bark beetle to forest structure and composition across a gradient of climatic water deficit
+  title: Cross-scale interaction of host tree size and climate governs bark beetle-induced tree mortality
   author: |
     Michael J. Koontz^1,2,3\*^,
     Andrew M. Latimer^1,2^,
@@ -19,7 +19,7 @@ params:
   correspondence: |
     michael.koontz@colorado.edu
   keywords: |
-    *Dendroctonus brevicomis*, disturbance, drones, *Pinus ponderosa*, Sierra Nevada, structure from motion, forest structure
+    *Dendroctonus brevicomis*, disturbance, drones, *Pinus ponderosa*, Sierra Nevada, structure from motion, forest structure, climate change-type drought, macroecology  
   date_generated: !r format(Sys.Date(), "%B %d, %Y")
   
 geometry: margin=1in
@@ -147,9 +147,10 @@ identifiable_plot_centers <-
 
 *Keywords:* `r params$keywords`
 
-*Abstract word count:* 336  
-*Overall .docx word count:* 11096
-*Main text word count:* 6967 (Intro: 1249; Methods: 3176 (679+647+1540+310); Results: 344 (41+102+201); Discussion: 2198)  
+*Abstract word count:* 310  
+*Overall .docx word count:* 11499  
+*Main text word count:* 4034 (Intro: 1264 Results: 368 (41+110+217); Discussion: 2402)  
+*Methods word count:* 3093 (661+642+1463+327)  
 *Text boxes word count:* 0  
 
 Date report generated: `r params$date_generated`
@@ -283,7 +284,7 @@ In our case, the 20 x 20-m aggregation produces a grid cell with an area of 400 
 ### Level 0: Raw data from sensors
 
 Raw data comprised approximately 1900 images per camera lens (one broad-band RGB lens and five narrow-band multispectral lenses) for each of the 32 sites (`r fig_nums("fig-drone-data-levels", display = "cite")`; Level 0).
-Prior to the aerial survey, two strips of bright orange drop cloth (~100 cm x 15 cm) were positioned as an "X" over the permanent monuments marking the center of the 5 field plots from @fettig2019 (see Supplemental Information).
+Prior to the aerial survey, two strips of bright orange drop cloth (~100 x 15 cm) were positioned as an "X" over the permanent monuments marking the center of the 5 field plots from @fettig2019 (see Supplemental Information).
 
 We preprogrammed north-south aerial transects using Map Pilot for DJI on iOS flight software [@dronesmadeeasy2018] at an altitude of 120 m above ground level (with "ground" defined using a 1-arc-second digital elevation model [@farr2007]).
 The resulting ground sampling distance was approximately 5 cm/px for the Zenmuse X3 RGB camera and approximately 8 cm/px for the Rededge3 multispectral camera.
@@ -600,8 +601,8 @@ We've shown that drones can be a valuable tool for investigating multi-scalar ph
 Understanding the conditions that drive dry western U.S. forest responses to disturbances such as bark beetle outbreaks will be vital for predicting outcomes from increasing disturbance frequency and intensity exacerbated by climate change.
 Our study suggests that outcomes will depend on interactions between local forest structure and broad-scale environmental gradients, with the potential for cross-scale interactions to challenge our current understanding of forest insect dynamics.
 
-## Acknowledgements
+<!-- ## Acknowledgements -->
 
-We gratefully acknowledge funding from the USDA Forest Service Western Wildlands Environmental Threat Assessment Center (WWETAC) and the Pacific Southwest Research Station Climate Change Competitive Grant Program. We thank Connie Millar for comments and guidance during the development of this project and Victoria Scholl for helpful discussions regarding remotely sensed data product levels.
+<!-- We gratefully acknowledge funding from the USDA Forest Service Western Wildlands Environmental Threat Assessment Center (WWETAC) and the Pacific Southwest Research Station Climate Change Competitive Grant Program. We thank Connie Millar for comments and guidance during the development of this project and Victoria Scholl for helpful discussions regarding remotely sensed data product levels. -->
 
 ## References
