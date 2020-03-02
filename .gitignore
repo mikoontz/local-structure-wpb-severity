@@ -1,6 +1,13 @@
+.DS_Store
+
 incubator/*
-data/features/srtm_30m.tif
-data/features/cwd1981_2010_ave_HST_1550861123/*
+data/data_raw/*
+
+data/_extra-project-files
+*report.pdf
+
+data/data_output/site_data/*
+
 data/data_output/*/*/1_initial/params/*
 data/data_output/*/*/1_initial/project_data/*
 data/data_output/*/*/1_initial/report/html/*
