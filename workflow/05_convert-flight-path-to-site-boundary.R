@@ -31,7 +31,7 @@ sites_to_process <-
 # I downloaded the whole thing from Google Earth Engine and subset it using
 # this code
 
-dem <- raster::raster("data/features/srtm_30m.tif")
+dem <- raster::raster("data/data_raw/srtm_30m.tif")
 
 # Iterate through all the available sites
 # For loop is much more inuitive to use here (IMO)

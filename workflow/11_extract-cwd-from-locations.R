@@ -8,7 +8,7 @@ library(tidyverse)
 library(here)
 library(lubridate)
 
-cwd <- raster::raster(here::here("data/features/cwd1981_2010_ave_HST_1550861123/cwd1981_2010_ave_HST_1550861123.tif"))
+cwd <- raster::raster(here::here("data/data_raw/cwd1981_2010_ave_HST_1550861123/cwd1981_2010_ave_HST_1550861123.tif"))
 
 # The .prj file doesn't seem to be reading in properly with the .tif, but we can look at it in a text editor and see that it is EPSG3310
 

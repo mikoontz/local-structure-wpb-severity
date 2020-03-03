@@ -18,7 +18,7 @@ unusable_sites <- c("eldo_4k_3", # too many blocks
                     "stan_5k_3", # too many blocks
                     "sequ_4k_2") # middle section flown on a separate day and the stitch looks terrible
 
-# These sites were processed with their X3 and RedEdge imagery combined so some of their
+G# These sites were processed with their X3 and RedEdge imagery combined so some of their
 # output products will be in a slightly different place in the project directory
 merged_sites <- c("eldo_3k_2",
                   "eldo_3k_3",
