@@ -55,8 +55,8 @@ The tree top locations and the Canopy Height Model are then used to determine th
 
 The classification of all trees in the study (whether they were alive or dead) based on the extracted pixel values from the orthomosaic for each crown segment generates a "forest stem map" for each site.
 
-![A stem map showing the prediction of which trees are alive and which ones are dead based on extracted pixel values for each tree crown and the boosted logistic regression model.](figures/L3b_eldo_3k_3_live-dead.png)
+![A stem map showing the prediction of which trees are alive and which ones are dead based on extracted pixel values for each tree crown and the boosted logistic regression model.](figures/L3b_eldo_3k_3_live_dead.png)
 
 We can use a different model to classify the live trees to species.
 
-![A stem map showing the species of each tree based on extracted pixel values for each tree crown and a regularized discriminant analysis model. Ponderosa pine trees are the host to the western pine beetle, and all other species are non-hosts.](figures/L3b_eldo_3k_3_host-nonhost.png)
+![A stem map showing the species of each tree based on extracted pixel values for each tree crown and a regularized discriminant analysis model. Ponderosa pine trees are the host to the western pine beetle, and all other species are non-hosts.](figures/L3b_eldo_3k_3_host_nonhost.png)
