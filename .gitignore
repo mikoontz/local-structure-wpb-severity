@@ -4,6 +4,7 @@
 *.tex
 *.docx
 *.Rapp.history
+.Rhistory
 
 incubator/*
 data/data_raw/*
