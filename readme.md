@@ -21,50 +21,42 @@ Some photos of the processing:
 
 This is one of the data products from the Pix4D processing of the 2D aerial imagery. Here, the point cloud is visualized using the CloudCompare software.
 
-![Original point cloud of a forested site, generated using Pix4D](figures/eldo_3k_1_point-cloud_full.png)
+![Original point cloud of a forested site, generated using Pix4D](figures/L1_eldo_3k_3_point-cloud_rgb-cloudcompare.png)
 
 This is a portion of one of the other primary data products of the Pix4D processing-- an orthomosaic showing the top-down view of all objects in the scene with the spatial relationships amongst them preserved. This image is suitable for making measurments between the trees.
 
-![An orthomosaic (a top-down view of all objects) of a forested site, generated using Pix4D](figures/eldo_3k_1_ortho-without-crown-segmentation.PNG)
-
-This is another view of a Pix4D generated point cloud from a different forest site, visualized in CloudCompare.
-
-![Profile view of point cloud representation of a forested site](figures/eldo_4k_2_point-cloud_full.png)
+![An orthomosaic (a top-down view of all objects) of a forested site, generated using Pix4D](figures/L1_eldo_3k_3_ortho_rgb.png)
 
 This is a view of just the points from the point cloud classified as "ground" after using the cloth simulator function in CloudCompare. Essentially, the trees from the previous image have been "deleted" off the landscape.
 
 ![Points from the point cloud classified as ground](figures/eldo_4k_2_no-trees.png)
 
 We can use the same "cloth" that helped classify ground versus non ground to interpolate the terrain underneath the trees, even where the trees may have obscured the ground.
-
-![Digital terrain model underneath the trees determined using the cloth simulator filter in CloudCompare](figures/eldo_3k_1_ground-from-cloth-simulator.png)
-
 In 2 dimensions, the digital terrain model looks like this:
 
-![2 dimensional digital terrain model](figures/eldo_3k_1_dtm.png)
+![2 dimensional digital terrain model](figures/L2_eldo_3k_3_dtm.png)
 
 The Digital Surface Model is an output from Pix4D that represents the height of the surface, which includes the elevation of the ground plus the height of the vegetation.
 
-![Digital Surface Model (DSM) of a forested site](figures/eldo_3k_1_dsm.png)
+![Digital Surface Model (DSM) of a forested site](figures/L1_eldo_3k_3_dsm.png)
 
 By subtracting the Digital Terrain Model (DTM) away from the Digital Surface Model (DSM), we get a representation of the heights of all the vegetation-- a Canopy Height Model (CHM).
 
-![A Canopy Height Model representing the height above the ground for each tree in the scene.](figures/eldo_3k_1_chm.png)
+![A Canopy Height Model representing the height above the ground for each tree in the scene.](figures/L2_eldo_3k_3_chm.png)
 
 The "variable window filter" algorithm detects tree tops as local maxima using the Canopy Height Model.
 
-![Tree tops detected using the variable window filter algorithm on the Canopy Height Model.](figures/eldo_3k_1_chm-with-ttops.png)
+![Tree tops detected using the variable window filter algorithm on the Canopy Height Model.](figures/L3a_eldo_3k_3_ttops_cropped.png)
 
 The tree top locations and the Canopy Height Model are then used to determine the spatial extent of each tree's crown using a marker controlled watershed segmentation algorithm.
 
-![Crown spatial extent, or "segments", detected using marker controlled watershed segmentation algorithm on the Canopy Height Model and using the tree top locations.](figures/eldo_3k_1_ttops-with-crowns.png)
+![Crown spatial extent, or "segments", detected using marker controlled watershed segmentation algorithm on the Canopy Height Model and using the tree top locations.](figures/L3a_eldo_3k_3_crowns_cropped.png)
 
-The results of the tree top identification and crown segmentation steps can be seen by comparing the same orthomosaic above with the crown segment polygons overlaid on them.
-
-![The orthomosaic as above](figures/eldo_3k_1_ortho-without-crown-segmentation.PNG)
-
-![The orthomosaic with polygons representing tree crowns overlaid](figures/eldo_3k_1_ortho-with-crown-segmentation.PNG)
 
 The classification of all trees in the study (whether they were alive or dead) based on the extracted pixel values from the orthomosaic for each crown segment generates a "forest stem map" for each site.
 
-![A stem map showing the prediction of which trees are alive and which ones are dead based on extracted pixel values for each tree crown and the logistic regression model.](figures/eldo_3k_1_classified-ttops.png)
+![A stem map showing the prediction of which trees are alive and which ones are dead based on extracted pixel values for each tree crown and the boosted logistic regression model.](figures/L3b_eldo_3k_3_live_dead.png)
+
+We can use a different model to classify the live trees to species.
+
+![A stem map showing the species of each tree based on extracted pixel values for each tree crown and a regularized discriminant analysis model. Ponderosa pine trees are the host to the western pine beetle, and all other species are non-hosts.](figures/L3b_eldo_3k_3_host_nonhost.png)
