@@ -13,7 +13,7 @@ library(tidyverse)
 library(purrr)
 library(raster)
 
-source("data/data_carpentry/make-processing-checklist.R")
+source("workflow/01_make-processing-checklist.R")
 
 # overwrite variable if user wants to rewrite all exported geospatial files (dem of each site, bounding box around
 # each site, photo points for each site)
@@ -33,6 +33,20 @@ sites_to_process <-
 
 dem <- raster::raster("data/data_raw/srtm_30m.tif")
 
+
+# Create directories if necessary
+if (!dir.exists("data/data_drone/L0/mission-footprint/srtm30m")) {
+  dir.create("data/data_drone/L0/mission-footprint/srtm30m")
+}
+
+if (!dir.exists("data/data_drone/L0/mission-footprint/photo-points")) {
+  dir.create("data/data_drone/L0/mission-footprint/photo-points")
+}
+
+if (!dir.exists("data/data_drone/L0/mission-footprint/site-bounds")) {
+  dir.create("data/data_drone/L0/mission-footprint/site-bounds")
+}
+
 # Iterate through all the available sites
 # For loop is much more inuitive to use here (IMO)
 for (i in seq_along(sites_to_process)) {
@@ -44,7 +58,7 @@ for (i in seq_along(sites_to_process)) {
   # to be the coordinates
   
   flight_logs_list <- 
-    list.files(paste0("data/data_output/site_data/", current_site, "/", current_site, "_flight-logs/"), pattern = "[0-9].csv", full.names = TRUE) %>% 
+    list.files(paste0("data/data_drone/L0/flight-logs/", current_site), pattern = "[0-9].csv", full.names = TRUE) %>% 
     purrr::map(read_csv) %>% 
     purrr::map(.f = function(x) {
       x %>% 
@@ -94,26 +108,16 @@ for (i in seq_along(sites_to_process)) {
   
   site_dem <- raster::crop(x = dem, y = as(site_bounds, "Spatial"), snap = "out")
   
-  if (overwrite) {
-    if (dir.exists(paste0("data/data_output/site_data/", current_site, "/", current_site, "_mission-footprint"))) {
-      unlink(paste0("data/data_output/site_data/", current_site, "/", current_site, "_mission-footprint"), recursive = TRUE)
-    }
-  }
-  
-  if (!dir.exists(paste0("data/data_output/site_data/", current_site, "/", current_site, "_mission-footprint"))) {
-    dir.create(paste0("data/data_output/site_data/", current_site, "/", current_site, "_mission-footprint"))
-  }
-  
-  if (!file.exists(paste0("data/data_output/site_data/", current_site, "/", current_site, "_mission-footprint/", current_site, "_srtm30m.tif"))) {
-    raster::writeRaster(site_dem, filename = paste0("data/data_output/site_data/", current_site, "/", current_site, "_mission-footprint/", current_site, "_srtm30m.tif"), overwrite = TRUE)
-  }
-  
-  if (!file.exists(paste0("data/data_output/site_data/", current_site, "/", current_site, "_mission-footprint/", current_site, "_photo-points.geoJSON"))) {
-    sf::st_write(obj = photo_points, dsn = paste0("data/data_output/site_data/", current_site, "/", current_site, "_mission-footprint/", current_site, "_photo-points.geoJSON"), delete_dsn = TRUE)
-  }
-  
-  if (!file.exists(paste0("data/data_output/site_data/", current_site, "/", current_site, "_mission-footprint/", current_site, "_site-bounds.geoJSON"))) {
-    sf::st_write(obj = site_bounds, dsn = paste0("data/data_output/site_data/", current_site, "/", current_site, "_mission-footprint/", current_site, "_site-bounds.geoJSON"), delete_dsn = TRUE)
-  }
+  raster::writeRaster(x = site_dem, 
+                      filename = paste0("data/data_drone/L0/mission-footprint/srtm30m/", current_site, "_srtm30m.tif"), 
+                      overwrite = overwrite)
+
+  sf::st_write(obj = photo_points, 
+               dsn = paste0("data/data_drone/L0/mission-footprint/photo-points/", current_site, "_photo-points.geoJSON"), 
+               delete_dsn = overwrite)
+
+  sf::st_write(obj = site_bounds, 
+               dsn = paste0("data/data_drone/L0/mission-footprint/site-bounds/", current_site, "_site-bounds.geoJSON"), 
+               delete_dsn = overwrite)
   
 }

@@ -45,14 +45,14 @@ merged_sites <- c("eldo_3k_2",
                   "eldo_3k_3",
                   "eldo_4k_2")
 
-unusable_sites <- c("eldo_4k_3", # too many blocks
-                    "stan_4k_3", # too many blocks
-                    "stan_5k_3", # too many blocks
-                    "sequ_4k_2") # middle section flown on a separate day and the stitch looks terrible
-
 # First get the formatted ground data; the object is called `d`
-source("data/data_carpentry/format_ground-data.R")
-source("data/data_carpentry/make_processing-checklist.R")
+if(!file.exists("data/data_output/formatted-ground-data.csv")) {
+  source("workflow/09_format-ground-data.R")
+}
+
+d <- readr::read_csv("data/data_output/formatted-ground-data.csv")
+
+source("workflow/01_make-processing-checklist.R")
 
 # This is where I can put in sites that need their processing redone. An empty 
 # string means that no already-processed site output will be overwritten
@@ -74,50 +74,46 @@ ground_trees <-
   sites_to_process %>% 
   map(.f = function(current_site) {
     
-    if (current_site %in% merged_sites) {
-      current_site_plot_locations <- 
-        sf::st_read(paste0("data/data_output/site_data/", current_site, "/", current_site, "_plot-locations/", current_site, "_plot-locations.shp")) %>% 
-        mutate(plot = paste(current_site, id, sep = "_")) %>%
-        dplyr::arrange(id) %>% 
-        st_zm()
-    } else {
-      current_site_plot_locations <- 
-        sf::st_read(paste0("data/data_output/site_data/", current_site, "/", current_site, "_plot-locations_re/", current_site, "_plot-locations_re.shp")) %>% 
-        mutate(plot = paste(current_site, id, sep = "_")) %>%
-        dplyr::arrange(id) %>% 
-        st_zm()
-    }
+    current_site_plot_locations <- sf::st_read(paste0("data/data_drone/L1/plot-locations/", current_site, "_plot-locations.gpkg"), stringsAsFactors = FALSE)
     
-    current_plot_ground_trees <- 
-      d %>% 
-      filter(site == current_site) %>% 
-      left_join(current_site_plot_locations, by = "plot") %>% 
-      dplyr::mutate(delta_x = cospi((1 / 2) - (azm / 180)) * dist) %>% 
-      dplyr::mutate(delta_y = sinpi((1 / 2) - (azm / 180)) * dist) %>%
-      st_as_sf() %>%
-      dplyr::mutate(x = st_coordinates(.)[, "X"],
-                    y = st_coordinates(.)[, "Y"]) %>% 
-      as.data.frame() %>% 
-      dplyr::mutate(new_x = x + delta_x,
-                    new_y = y + delta_y) %>% 
-      filter(!is.na(x)) %>% 
-      st_as_sf(coords = c("new_x", "new_y")) %>% 
-      st_set_crs(st_crs(current_site_plot_locations))
+    current_site_ground_trees <-
+      map(current_site_plot_locations$plot, .f = function(current_plot) {
+        
+        current_plot_ground_trees <- 
+          d %>% 
+          filter(plot == current_plot) %>% 
+          dplyr::mutate(delta_x = cospi((1 / 2) - (azm / 180)) * dist) %>% 
+          dplyr::mutate(delta_y = sinpi((1 / 2) - (azm / 180)) * dist) %>%
+          left_join(current_site_plot_locations, by = "plot") %>%
+          st_as_sf() %>%
+          dplyr::mutate(x = st_coordinates(.)[, "X"],
+                        y = st_coordinates(.)[, "Y"]) %>% 
+          dplyr::mutate(new_x = x + delta_x,
+                        new_y = y + delta_y) %>% 
+          sf::st_drop_geometry() %>% 
+          st_as_sf(coords = c("new_x", "new_y")) %>% 
+          st_set_crs(st_crs(current_site_plot_locations))
+        
+        nn <- 
+          nngeo::st_nn(x = current_plot_ground_trees, 
+                       y = current_plot_ground_trees, 
+                       k = min(c(4, nrow(current_plot_ground_trees))), 
+                       returnDist = TRUE, sparse = FALSE, progress = FALSE)$dist %>% 
+          do.call("rbind", .) %>% 
+          as_tibble() %>% 
+          dplyr::select(-1)
+        
+        if (ncol(nn) == 1) {nn <- nn %>% rename(nn1 = V2) %>% mutate(nn2 = NA, nn3 = NA)} else
+          if (ncol(nn) == 2) {nn <- nn %>% rename(nn1 = V2, nn2 = V3) %>% mutate(nn3 = NA)} else
+            if (ncol(nn) == 3) {nn <- nn %>% rename(nn1 = V2, nn2 = V3, nn3 = V4) }
+        
+        current_plot_ground_trees <- 
+          current_plot_ground_trees %>% 
+          bind_cols(nn)  %>% 
+          st_transform(4326)
+      }) %>% 
+      do.call("rbind", .)
     
-    nn <- 
-      st_nn(current_plot_ground_trees, current_plot_ground_trees, k = min(c(4, nrow(current_plot_ground_trees))), returnDist = TRUE, sparse = FALSE, progress = FALSE)$dist %>% 
-      as.data.frame()
-    
-    nn <- nn %>% dplyr::select(-1)
-    
-    if (ncol(nn) == 1) {nn <- nn %>% rename(nn1 = V2) %>% mutate(nn2 = NA, nn3 = NA)} else
-      if (ncol(nn) == 2) {nn <- nn %>% rename(nn1 = V2, nn2 = V3) %>% mutate(nn3 = NA)} else
-        if (ncol(nn) == 3) {nn <- nn %>% rename(nn1 = V2, nn2 = V3, nn3 = V4) }
-    
-    current_plot_ground_trees <- 
-      current_plot_ground_trees %>% 
-      bind_cols(nn)  %>% 
-      st_transform(4326)
   }) %>%
   do.call("rbind", .)
 
@@ -173,9 +169,16 @@ ground_trees %>%
             ecdf_20_dbh = ecdf(dbh)(20),
             ecdf_25_dbh = ecdf(dbh)(25))
 
-ggplot(ground_trees, aes(x = dbh, y = height, col = as.factor(live))) +
+ggplot(ground_trees, aes(x = dbh, y = height, color = species, lty = as.factor(live))) +
   geom_point() +
-  geom_smooth(method = "lm")
+  geom_smooth(method = "lm") +
+  labs(color = "Species",
+       lty = "Live (1) or dead (0)?")
+
+ggplot(ground_trees %>% filter(species == "PIPO"), aes(x = dbh, y = height, color = as.factor(live))) +
+  geom_point() +
+  geom_smooth(method = "lm") +
+  labs(color = "Live (1) or dead (0)?")
 
 # Now we have a summary of what all of the ground plots looks like with respsect
 # to a few of these plot-level characteristics.
