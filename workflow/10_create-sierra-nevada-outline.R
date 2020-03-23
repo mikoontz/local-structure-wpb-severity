@@ -7,7 +7,7 @@ library(ggplot2)
 library(raster)
 library(lwgeom)
 
-jep <- st_read(here::here("data/features/jepcodes-v7.kml"))
+jep <- st_read(here::here("data/data_raw/jepcodes-v7.kml"))
 glimpse(jep)
 
 sn_names <- c("nSNF", "cSNF", "sSNF", "nSNH", "cSNH", "sSNH", "Teh")
@@ -34,4 +34,4 @@ sn <-
   st_union() %>% 
   st_zm()
 
-st_write(sn, dsn = here::here("data/data_output/sierra-nevada-jepson/sierra-nevada-jepson.shp"))
+st_write(sn, dsn = here::here("data/data_output/sierra-nevada-jepson.gpkg"))
