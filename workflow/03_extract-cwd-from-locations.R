@@ -21,7 +21,8 @@ crs(cwd) <- st_crs(3310)$proj4string
 
 # Remember to put them in the same coordinate reference system
 # as the CWD raster
-site_centers <- st_read(here::here("data/features/plot-centers_ground-gps-measured.kml")) %>% 
+site_centers <- 
+  st_read(here::here("data/data_raw/plot-centers_ground-gps-measured.kml")) %>% 
   st_transform(3310) %>% 
   tidyr::separate(col = Name, into = c("forest", "elevation_band", "rep", "nickname", "plot_id"), sep = "_") %>% 
   dplyr::select(-Description) %>% 
@@ -58,10 +59,10 @@ cwd_data <-
 # What do these CWD values mean for the overall PIPO distribution
 # in the Sierra Nevada?
 
-sn <- sf::st_read(here::here("data/data_output/sierra-nevada-jepson/sierra-nevada-jepson.shp"))
+sn <- sf::st_read(here::here("data/data_output/sierra-nevada-jepson.gpkg"))
 
 sn_pipo <-
-  data.table::fread(here::here("data/features/California_Species_clean_All_epsg_3310.csv")) %>% 
+  data.table::fread(here::here("data/data_raw/California_Species_clean_All_epsg_3310.csv")) %>% 
   dplyr::as_tibble() %>% 
   dplyr::mutate(current_genus = tolower(current_genus),
                 current_species = tolower(current_species)) %>% 
@@ -75,7 +76,7 @@ sn_pipo <-
   dplyr::mutate(cwd = raster::extract(cwd, ., method = "bilinear"))
 
 # sn_pipo has 179 rows and thus represents 179 herbaria records
-# of ponderosa pine for which the CWD was extracted (using CWD as defined # by the Basin Characterizatin Model)
+# of ponderosa pine for which the CWD was extracted (using CWD as defined # by the Basin Characterization Model)
 
 mean_cwd_sn_pipo <- mean(sn_pipo$cwd, na.rm = TRUE)
 sd_cwd_sn_pipo <- sd(sn_pipo$cwd, na.rm = TRUE)

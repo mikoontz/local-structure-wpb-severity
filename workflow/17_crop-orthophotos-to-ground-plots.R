@@ -11,14 +11,35 @@ library(lidR)
 # Now there is an R object in the environment called "sites_checklist" that has
 # infomation about how far along all processing steps are.
 
-source("data/data_carpentry/make-processing-checklist.R")
+source("workflow/01_make-processing-checklist.R")
 
-unusable_sites <- c("eldo_4k_3", # too many blocks
-                    "stan_4k_3", # too many blocks
-                    "stan_5k_3", # too many blocks
-                    "sequ_4k_2") # middle section flown on a separate day and the stitch looks terrible
+# Create directories if needed
+if(!dir.exists("data/data_drone/L1/dsm/cropped-to-plot/")) {
+  dir.create("data/data_drone/L1/dsm/cropped-to-plot/")
+}
 
-G# These sites were processed with their X3 and RedEdge imagery combined so some of their
+if(!dir.exists("data/data_drone/L1/ortho/cropped-to-plot/")) {
+  dir.create("data/data_drone/L1/ortho/cropped-to-plot/")
+}
+
+if(!dir.exists("data/data_drone/L2/chm/cropped-to-plot/")) {
+  dir.create("data/data_drone/L2/chm/cropped-to-plot/")
+}
+
+if(!dir.exists("data/data_drone/L2/classified-point-cloud/cropped-to-plot/")) {
+  dir.create("data/data_drone/L2/classified-point-cloud/cropped-to-plot/")
+}
+
+if(!dir.exists("data/data_drone/L2/dtm/cropped-to-plot/")) {
+  dir.create("data/data_drone/L2/dtm/cropped-to-plot/")
+}
+
+if(!dir.exists("data/data_drone/L2/index/cropped-to-plot/")) {
+  dir.create("data/data_drone/L2/index/cropped-to-plot/")
+}
+
+
+# These sites were processed with their X3 and RedEdge imagery combined so some of their
 # output products will be in a slightly different place in the project directory
 merged_sites <- c("eldo_3k_2",
                   "eldo_3k_3",
@@ -32,11 +53,9 @@ sites_checklist$overwrite <- ifelse(sites_to_overwrite == "all", yes = TRUE, no 
 
 sites_checklist[sites_checklist$site %in% sites_to_overwrite, "overwrite"] <- TRUE
 
-
 sites_to_process <- 
   sites_checklist %>% 
-  dplyr::filter(!(site %in% unusable_sites)) %>%
-  dplyr::filter(overwrite | (!plot_remote_data_check & chm_check)) %>% 
+  dplyr::filter(overwrite | (!L1_plot_remote_data_check & chm_check)) %>% 
   dplyr::select(site) %>% 
   dplyr::pull()
 
@@ -46,70 +65,40 @@ for (i in seq_along(sites_to_process)) {
   # get the character string representing the ith site
   current_site <- sites_to_process[i]
   
-  current_dir <- paste0("data/data_output/site_data/", current_site, "/")
-  
-  if (sites_checklist$overwrite[sites_checklist$site == current_site]) {
-    if (dir.exists(paste0(current_dir, current_site, "_plot-remote-data"))) {
-      unlink(paste0(current_dir, current_site, "_plot-remote-data"), recursive = TRUE)
-      message(paste("...Erasing", paste0(current_dir, current_site, "_plot-remote-data", "...")))
-    }
-  }
-  
-  # Create a new directory to put the plot-specific remotely sensed data
-  dir.create(paste0(current_dir, current_site, "_plot-remote-data"))
-  
   # Import all of the products that we want to crop to the inidivdual ground plots
   # DTM, DSM, point cloud, index tifs, ortho tifs
+  
+  # The Digital Surface Model (dsm) is the ~5cm resolution raster representing
+  # the surface (ground + objects on top) that the drone flew over
+  dsm <- raster::raster(x = here::here(paste0("data/data_drone/L1/dsm/", current_site, "_dsm.tif")))
+  
+  # Orthomosaic (could be 5-band or 8-band depending on whether it includes the 
+  # X3-derived R, G, and B bands)
+  ortho <- raster::brick(here::here(paste0("data/data_drone/L1/ortho/", current_site, "_ortho.tif")))
   
   # The Digital Terrain Model (dtm) represents the "ground" underneath
   # the current site. Created using the cloth simulation filter implemented in 
   # the lidR package. See the "create-canopy-height-models.R" script.
-  dtm <- raster::raster(paste0(current_dir, current_site, "_dtm.tif"))
-  
-  # The Digital Surface Model (dsm) is the ~5cm resolution raster representing
-  # the surface (ground + objects on top) that the drone flew over
-  if (current_site %in% merged_sites) {
-    dsm <- raster::raster(x = here::here(paste0("data/data_output/site_data/", current_site, "/", "3_dsm_ortho/1_dsm/", current_site, "_dsm.tif")))
-  } else {
-    dsm <- raster::raster(x = here::here(paste0("data/data_output/site_data/", current_site, "/", current_site, "_re/3_dsm_ortho/1_dsm/", current_site, "_re_dsm.tif")))
-  }
+  dtm <- raster::raster(here::here(paste0("data/data_drone/L2/dtm/", current_site, "_dtm.tif")))
   
   # The Canopy Height Model (chm) represents the height of the canopy above
   # the ground level. It is derived by subtracting the digital terrain
   # model from the digital surface model (chm = dsm - dtm). See the
   # "create-canopy-height-models.R" script
-  chm <- raster::raster(paste0(current_dir, current_site, "_chm.tif"))
-  
-  # Orthomosaic (could be 5-band or 8-band depending on whether it includes the 
-  # X3-derived R, G, and B bands)
-  ortho <- raster::brick(here::here(paste0(current_dir, current_site, "_ortho.tif")))
+  chm <- raster::raster(here::here(paste0("data/data_drone/L2/chm/", current_site, "_chm.tif")))
   
   # Index mosaic (could be 6-band or 9-band depending on whether it includes the
   # X3-derived R, G, and B bands)
-  index <- raster::brick(here::here(paste0(current_dir, current_site, "_index.tif")))
+  index <- raster::brick(here::here(paste0("data/data_drone/L2/index/", current_site, "_index.tif")))
   
-  # # Make sure the Coordinate Reference Systems (crs) are the same
-  # raster::crs(dtm) <- raster::crs(ortho)
-  # 
+  # The densified point cloud can be read in and cropped using the LAScatalog functionality from {lidR}
+  current_site_las_catalog <- lidR::catalog(here::here(paste0("data/data_drone/L2/classified-point-cloud/", current_site, "_classified-point-cloud.las")))
   
   plot_radius <- sqrt((66*66) / pi) * 12 * 2.54 / 100
   
   # Get plot locations as determined by visually inspecting orthophotos and finding orange X's laid
   # across the plot centers
-  if (current_site %in% merged_sites) {
-    current_site_plot_locations <- 
-      sf::st_read(paste0(current_dir, current_site, "_plot-locations/", current_site, "_plot-locations.shp")) %>% 
-      mutate(plot = paste(current_site, id, sep = "_")) %>%
-      dplyr::arrange(id) %>% 
-      st_zm()
-  } else {
-    current_site_plot_locations <- 
-      sf::st_read(paste0(current_dir, current_site, "_plot-locations_re/", current_site, "_plot-locations_re.shp")) %>% 
-      mutate(plot = paste(current_site, id, sep = "_")) %>%
-      dplyr::arrange(id) %>% 
-      st_zm()
-  }
-  
+  current_site_plot_locations <- sf::st_read(here::here(paste0("data/data_drone/L1/plot-locations/", current_site, "_plot-locations.gpkg")), stringsAsFactors = FALSE)
   
   for (j in seq_along(current_site_plot_locations$plot)) {
     current_plot <- current_site_plot_locations[j, ]
@@ -129,23 +118,24 @@ for (i in seq_along(sites_to_process)) {
     current_plot_chm <- raster::crop(chm, current_plot_boundary)
     current_plot_ortho <- raster::crop(ortho, current_plot_boundary)
     current_plot_index <- raster::crop(index, current_plot_boundary)
-    
-    current_site_las_catalog <- lidR::catalog(paste0(current_dir, current_site, "_classified_point_cloud.las"))
     current_plot_las <- lidR::lasclip(current_site_las_catalog, as(current_plot_boundary, "Spatial")@polygons[[1]]@Polygons[[1]])
     
     # Write the cropped geospatial data to files for rapid recall and use in segmentation algorithm validation against ground data
+    # Level 1
     # dsm
-    writeRaster(x = current_plot_dsm, filename = paste0(current_dir, current_site, "_plot-remote-data/", pull(current_plot, plot), "_dsm.tif"), overwrite = TRUE)
-    # dtm
-    writeRaster(x = current_plot_dtm, filename = paste0(current_dir, current_site, "_plot-remote-data/", pull(current_plot, plot), "_dtm.tif"), overwrite = TRUE)
-    # chm
-    writeRaster(x = current_plot_chm, filename = paste0(current_dir, current_site, "_plot-remote-data/", pull(current_plot, plot), "_chm.tif"), overwrite = TRUE)
-    # las
-    writeLAS(las = current_plot_las, file = paste0(current_dir, current_site, "_plot-remote-data/", pull(current_plot, plot), "_classified-point-cloud.las"))
+    writeRaster(x = current_plot_dsm, filename = here::here(paste0("data/data_drone/L1/dsm/cropped-to-plot/", current_plot$plot, "_dsm.tif")), overwrite = TRUE)
     # ortho
-    writeRaster(x = current_plot_ortho, filename = paste0(current_dir, current_site, "_plot-remote-data/", pull(current_plot, plot), "_ortho.tif"), overwrite = TRUE)
+    writeRaster(x = current_plot_ortho, filename = here::here(paste0("data/data_drone/L1/ortho/cropped-to-plot/", current_plot$plot, "_ortho.tif")), overwrite = TRUE)
+
+    # Level 2
+    # dtm
+    writeRaster(x = current_plot_dtm, filename = here::here(paste0("data/data_drone/L2/dtm/cropped-to-plot/", current_plot$plot, "_dtm.tif")), overwrite = TRUE)
+    # chm
+    writeRaster(x = current_plot_chm, filename = here::here(paste0("data/data_drone/L2/chm/cropped-to-plot/", current_plot$plot, "_chm.tif")), overwrite = TRUE)
+    # las
+    writeLAS(las = current_plot_las, file = here::here(paste0("data/data_drone/L2/classified-point-cloud/cropped-to-plot/", current_plot$plot, "_classified-point-cloud.las")))
     # index
-    writeRaster(x = current_plot_index, filename = paste0(current_dir, current_site, "_plot-remote-data/", pull(current_plot, plot), "_index.tif"), overwrite = TRUE)
+    writeRaster(x = current_plot_index, filename = here::here(paste0("data/data_drone/L2/index/cropped-to-plot/", current_plot$plot, "_index.tif")), overwrite = TRUE)
   } # End loop working through the different plots within a site
   
   print(Sys.time() - start)

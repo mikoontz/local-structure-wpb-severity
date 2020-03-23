@@ -7,20 +7,42 @@ library(purrr)
 library(raster)
 library(rgl)
 
-source("data/data_carpentry/make-processing-checklist.R")
+source("workflow/01_make-processing-checklist.R")
 
 sites_checklist
-
-unusable_sites <- c("eldo_4k_3", # too many blocks
-                    "stan_4k_3", # too many blocks
-                    "stan_5k_3", # too many blocks
-                    "sequ_4k_2") # middle section flown on a separate day and the stitch looks terrible
 
 # These sites were processed with their X3 and RedEdge imagery combined so some of their
 # output products will be in a slightly different place in the project directory
 merged_sites <- c("eldo_3k_2",
                   "eldo_3k_3",
                   "eldo_4k_2")
+
+sites_to_overwrite <- "all"
+sites_checklist$overwrite <- FALSE
+
+sites_checklist[sites_checklist$site %in% sites_to_overwrite, "overwrite"] <- TRUE
+
+if(sites_to_overwrite == "all") {
+  sites_checklist[, "overwrite"] <- TRUE
+}
+
+sites_to_process <- 
+  sites_checklist %>% 
+  dplyr::filter(overwrite | !classified_point_cloud_check | !dtm_check | !chm_check) %>% 
+  dplyr::pull(site)
+
+if(!dir.exists("data/data_drone/L2/classified-point-cloud/")) {
+  dir.create("data/data_drone/L2/classified-point-cloud/")
+}
+
+if(!dir.exists("data/data_drone/L2/dtm/")) {
+  dir.create("data/data_drone/L2/dtm/")
+}
+
+if(!dir.exists("data/data_drone/L2/chm/")) {
+  dir.create("data/data_drone/L2/chm/")
+}
+
 
 # Set the Cloth Simulation Filter processing parameters for different sites
 # These parameters are the defaults
@@ -48,30 +70,13 @@ csf_parameters[csf_parameters$site %in% cloth_res_0.5_sites, "cloth_resolution"]
 cloth_res_0.4_sites <- c("eldo_5k_1", "stan_4k_1", "sequ_4k_3", "sequ_6k_3")
 csf_parameters[csf_parameters$site %in% cloth_res_0.4_sites, "cloth_resolution"] <- 0.4
 
-sites_to_overwrite <- ""
-sites_checklist$overwrite <- FALSE
-
-sites_checklist[sites_checklist$site %in% sites_to_overwrite, "overwrite"] <- TRUE
-
-sites_to_process <- 
-  sites_checklist %>% 
-  dplyr::filter(!(site %in% unusable_sites)) %>%
-  dplyr::filter(overwrite | !classified_point_cloud_check | !dtm_check | !chm_check) %>% 
-  dplyr::pull(site)
-
-
 (start <- Sys.time())
 
 for (i in seq_along(sites_to_process)) {
   current_site <- sites_to_process[i]
   
-  if (current_site %in% merged_sites) {
-    current_point_cloud <- lidR::readLAS(files = here::here(paste0("data/data_output/site_data/", current_site, "/", "2_densification/point_cloud/", current_site, "_densified_point_cloud.las")))
-  } else {
-    current_point_cloud <- lidR::readLAS(files = here::here(paste0("data/data_output/site_data/", current_site, "/", current_site, "_re/2_densification/point_cloud/", current_site, "_re_Green_densified_point_cloud.las")))
-  }
-  
-  
+  current_point_cloud <- lidR::readLAS(files = here::here(paste0("data/data_drone/L1/dense-point-cloud/", current_site, "_dense-point-cloud.las")))
+
   # Wipe clean all of Pix4D classification
   current_point_cloud@data[, Classification := 0L]
 
@@ -93,12 +98,12 @@ for (i in seq_along(sites_to_process)) {
   
   # Plot the classification of the point cloud for inspection
   plot(current_point_cloud, color = "Classification")
-  legend3d("topright", legend = current_site, bty = "n")
+  rgl::legend3d("topright", legend = current_site, bty = "n")
   
   
   # Export the classified point cloud to disk so we can use the vegetation points for tree segmentation if
   # we want
-  lidR::writeLAS(las = current_point_cloud, file = here::here(paste0("data/data_output/site_data/", current_site, "/", current_site, "_classified-point-cloud.las")))
+  lidR::writeLAS(las = current_point_cloud, file = here::here(paste0("data/data_drone/L2/classified-point-cloud/", current_site, "_classified-point-cloud.las")))
   
   
   # Create a 1m resolution digital terrain model using the classified ground points
@@ -112,15 +117,10 @@ for (i in seq_along(sites_to_process)) {
   # Write the dtm file to disk so we can use it later.
   # Note that all of these outputs generated using R get written to the same place, regardless of whether the
   # output is derived from merged X3+RedEdge imagery versus just being derived from RedEdge imagery
-  raster::writeRaster(x = dtm, filename = here::here(paste0("data/data_output/site_data/", current_site, "/", current_site, "_dtm.tif")), overwrite = TRUE)
+  raster::writeRaster(x = dtm, filename = here::here(paste0("data/data_drone/L2/dtm/", current_site, "_dtm.tif")), overwrite = TRUE)
   
   # Import the digital surface model Pix4D output in order to generate a canopy height model
-  if (current_site %in% merged_sites) {
-    dsm <- raster::raster(x = here::here(paste0("data/data_output/site_data/", current_site, "/", "3_dsm_ortho/1_dsm/", current_site, "_dsm.tif")))
-  } else {
-    dsm <- raster::raster(x = here::here(paste0("data/data_output/site_data/", current_site, "/", current_site, "_re/3_dsm_ortho/1_dsm/", current_site, "_re_dsm.tif")))
-  }
-
+  dsm <- raster::raster(x = here::here(paste0("data/data_drone/L1/dsm/", current_site, "_dsm.tif")))
   
   # Using bilinear interpolation to downsample the 1m resolution DTM to have the
   # same resolution as the dsm (~5cm, but slightly different for each site)
@@ -141,20 +141,10 @@ for (i in seq_along(sites_to_process)) {
   # Write the chm file to disk so we can use it later
   # Note that all of these outputs generated using R get written to the same place, regardless of whether the
   # output is derived from merged X3+RedEdge imagery versus just being derived from RedEdge imagery
-  raster::writeRaster(x = chm, filename = here::here(paste0("data/data_output/site_data/", current_site, "/", current_site, "_chm.tif")), overwrite = TRUE)
+  raster::writeRaster(x = chm, filename = here::here(paste0("data/data_drone/L2/chm/", current_site, "_chm.tif")), overwrite = TRUE)
 
   print(paste0("...", current_site, " complete..."))
 }  
 
 (end <- Sys.time())
 (end - start)
-
-# # Testing the snag detection algorithms. Might be another way to find dead trees.
-# bbpr_thresholds <- matrix(c(0.80, 0.80, 0.70,
-#                             0.85, 0.85, 0.60,
-#                             0.80, 0.80, 0.60,
-#                             0.90, 0.90, 0.55),
-#                           nrow =3, ncol = 4)
-# 
-# # Run snag classification and assign classes to each point
-# snags <- lassnags(las = current_point_cloud, algorithm = wing2015(neigh_radii = c(1.5, 1, 2), BBPRthrsh_mat = bbpr_thresholds))

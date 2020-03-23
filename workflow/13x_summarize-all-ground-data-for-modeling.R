@@ -6,7 +6,11 @@ library(lubridate)
 library(raster)
 library(here)
 
-source(here::here("data/data_carpentry/format-ground-data.R"))
+if(!file.exists("data/data_output/formatted-ground-data.csv")) {
+  source(here::here("workflow/11_format-ground-data.R"))
+}
+d <- readr::read_csv("data/data_output/formatted-ground-data.csv")
+
 cwd <- raster::raster(here::here("data/features/cwd1981_2010_ave_HST_1550861123/cwd1981_2010_ave_HST_1550861123.tif"))
 # The .prj file doesn't seem to be reading in properly with the .tif, but we can look at it in a text editor and see that it is EPSG3310
 crs(cwd) <- st_crs(3310)$proj4string

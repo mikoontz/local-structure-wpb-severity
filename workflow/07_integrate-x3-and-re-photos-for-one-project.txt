@@ -7,6 +7,13 @@ H:/ (a solid-state local drive)
       |---- readme.md
       |---- my_project.Rproj
       |---- data/
+            |---- data_drone/
+                  |---- L0/
+                  |---- L1/
+                  |---- L2/
+                  |---- L3a/
+                  |---- L3b/
+                  |---- L4/
             |---- data_working/
       	          |---- "current_site".p4d
 		              |---- "current_site"_re_photos/

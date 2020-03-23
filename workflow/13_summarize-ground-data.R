@@ -46,76 +46,11 @@ merged_sites <- c("eldo_3k_2",
                   "eldo_4k_2")
 
 # First get the formatted ground data; the object is called `d`
-if(!file.exists("data/data_output/formatted-ground-data.csv")) {
-  source("workflow/09_format-ground-data.R")
+if(!file.exists("data/data_drone/L1/ground-trees.gpkg")) {
+  source("workflow/12_make-ground-trees-spatial.R")
 }
 
-d <- readr::read_csv("data/data_output/formatted-ground-data.csv")
-
-source("workflow/01_make-processing-checklist.R")
-
-# This is where I can put in sites that need their processing redone. An empty 
-# string means that no already-processed site output will be overwritten
-# (but sites that have yet to be processed will still have their processing done)
-
-sites_to_overwrite <- ""
-sites_checklist$overwrite <- FALSE
-
-sites_checklist[sites_checklist$site %in% sites_to_overwrite, "overwrite"] <- TRUE
-
-sites_to_process <- 
-  sites_checklist %>% 
-  dplyr::filter(!(site %in% unusable_sites)) %>%
-  dplyr::filter(overwrite | plot_remote_data_check) %>% 
-  dplyr::select(site) %>% 
-  dplyr::pull()
-
-ground_trees <- 
-  sites_to_process %>% 
-  map(.f = function(current_site) {
-    
-    current_site_plot_locations <- sf::st_read(paste0("data/data_drone/L1/plot-locations/", current_site, "_plot-locations.gpkg"), stringsAsFactors = FALSE)
-    
-    current_site_ground_trees <-
-      map(current_site_plot_locations$plot, .f = function(current_plot) {
-        
-        current_plot_ground_trees <- 
-          d %>% 
-          filter(plot == current_plot) %>% 
-          dplyr::mutate(delta_x = cospi((1 / 2) - (azm / 180)) * dist) %>% 
-          dplyr::mutate(delta_y = sinpi((1 / 2) - (azm / 180)) * dist) %>%
-          left_join(current_site_plot_locations, by = "plot") %>%
-          st_as_sf() %>%
-          dplyr::mutate(x = st_coordinates(.)[, "X"],
-                        y = st_coordinates(.)[, "Y"]) %>% 
-          dplyr::mutate(new_x = x + delta_x,
-                        new_y = y + delta_y) %>% 
-          sf::st_drop_geometry() %>% 
-          st_as_sf(coords = c("new_x", "new_y")) %>% 
-          st_set_crs(st_crs(current_site_plot_locations))
-        
-        nn <- 
-          nngeo::st_nn(x = current_plot_ground_trees, 
-                       y = current_plot_ground_trees, 
-                       k = min(c(4, nrow(current_plot_ground_trees))), 
-                       returnDist = TRUE, sparse = FALSE, progress = FALSE)$dist %>% 
-          do.call("rbind", .) %>% 
-          as_tibble() %>% 
-          dplyr::select(-1)
-        
-        if (ncol(nn) == 1) {nn <- nn %>% rename(nn1 = V2) %>% mutate(nn2 = NA, nn3 = NA)} else
-          if (ncol(nn) == 2) {nn <- nn %>% rename(nn1 = V2, nn2 = V3) %>% mutate(nn3 = NA)} else
-            if (ncol(nn) == 3) {nn <- nn %>% rename(nn1 = V2, nn2 = V3, nn3 = V4) }
-        
-        current_plot_ground_trees <- 
-          current_plot_ground_trees %>% 
-          bind_cols(nn)  %>% 
-          st_transform(4326)
-      }) %>% 
-      do.call("rbind", .)
-    
-  }) %>%
-  do.call("rbind", .)
+ground_trees <- sf::st_read("data/data_drone/L1/ground-trees.gpkg")
 
 # Use the plot radius to determine the area of the plot and thus the tree density
 plot_radius <- sqrt((66*66) / pi) * 12 *2.54 / 100
@@ -141,8 +76,7 @@ ground_tree_summary <-
                    nn_3_mean = mean(nn3),
                    tree_count_above_15m = sum(height >= 15),
                    tree_count_below_15m = sum(height < 15)) %>% 
-  as.data.frame() %>% 
-  dplyr::select(-geometry) %>% 
+  sf::st_drop_geometry() %>% 
   dplyr::mutate(elapsed_time = NA) %>% 
   dplyr::select(plot, ttops_method, elapsed_time, everything())
 
