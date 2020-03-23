@@ -22,12 +22,15 @@ sites_checklist <-
                   file.exists(paste0("data/data_drone/L0/mission-footprint/srtm30m/", site, "_srtm30m.tif")) &
                   file.exists(paste0("data/data_drone/L0/mission-footprint/photo-points/", site, "_photo-points.geoJSON")) &
                   file.exists(paste0("data/data_drone/L0/mission-footprint/site-bounds/", site, "_site-bounds.geoJSON"))) %>% 
-  dplyr::mutate(classified_point_cloud_check = file.exists(paste0("data/data_output/site_data/", site, "/", site, "_classified_point_cloud.las"))) %>% 
-  dplyr::mutate(dtm_check = file.exists(paste0("data/data_output/site_data/", site, "/", site, "_dtm.tif"))) %>% 
-  dplyr::mutate(chm_check = file.exists(paste0("data/data_output/site_data/", site, "/", site, "_chm.tif"))) %>% 
-  dplyr::mutate(stacked_ortho_check = file.exists(paste0("data/data_output/site_data/", site, "/", site, "_ortho.tif"))) %>% 
-  dplyr::mutate(stacked_index_check = file.exists(paste0("data/data_output/site_data/", site, "/", site, "_index.tif"))) %>% 
-  dplyr::mutate(plot_remote_data_check = map_lgl(paste0("data/data_output/site_data/", site, "/", site, "_plot-remote-data"), .f = function(x) length(list.files(x)) > 0)) %>% 
+  dplyr::mutate(stacked_ortho_check = file.exists(paste0("data/data_drone/L1/ortho/", site, "_ortho.tif"))) %>% 
+  dplyr::mutate(stacked_index_check = file.exists(paste0("data/data_drone/L2/index/", site, "_index.tif"))) %>% 
+  dplyr::mutate(classified_point_cloud_check = file.exists(paste0("data/data_drone/L2/classified-point-cloud/", site, "_classified-point-cloud.las"))) %>% 
+  dplyr::mutate(dtm_check = file.exists(paste0("data/data_drone/L2/dtm/", site, "_dtm.tif"))) %>% 
+  dplyr::mutate(chm_check = file.exists(paste0("data/data_drone/L2/chm/", site, "_chm.tif"))) %>% 
+  dplyr::mutate(L1_plot_remote_data_check = map_lgl(site, .f = function(current_site) {
+    x <- paste0("data/data_drone/L1/dsm/cropped-to-plot/", current_site, "/", current_site, "_plot-remote-data")
+    length(list.files(x, pattern = current_site)) > 0
+    })) %>% 
   dplyr::mutate(ground_trees_check = file.exists(paste0("data/data_output/site_data/", site, "/", site, "_ground-trees/", site, "_ground-trees.shp"))) %>% 
   dplyr::mutate(ttops_check = file.exists(paste0("data/data_output/site_data/", site, "/", site, "_ttops/", site, "_ttops.shp"))) %>% 
   dplyr::mutate(crowns_check = file.exists(paste0("data/data_output/site_data/", site, "/", site, "_crowns/", site, "_crowns.shp"))) %>% 
