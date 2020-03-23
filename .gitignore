@@ -4,6 +4,7 @@
 *.tex
 *.docx
 *.Rapp.history
+.Rhistory
 
 incubator/*
 data/data_raw/*
@@ -26,4 +27,4 @@ figures/L0_eldo_3k_3_x3_100MEDIA_DJI_0705.JPG
 figures/drone-data-levels*
 
 docs/manuscript/local-structure-wpb-severity_supp-methods.pdf
-docs/manuscript/local-structure-wpb-severity_cover-letter_nature-ecology-and-evolution.*
+docs/manuscript/submission
