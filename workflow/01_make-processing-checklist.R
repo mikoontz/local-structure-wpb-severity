@@ -13,11 +13,15 @@ sites_checklist <-
   dplyr::filter(!(forest != "sequ" & elev == "6k")) %>% 
   dplyr::arrange(forest, elev, rep) %>% 
   dplyr::mutate(site = paste(forest, elev, rep, sep = "_")) %>% 
+  dplyr::filter(!(site %in% c("eldo_4k_3", "stan_4k_3", "stan_5k_3", "sequ_4k_2"))) %>% # These sites did not process well
   dplyr::select(-forest, -elev, -rep) %>% 
   dplyr::mutate(plot_locations_check = ifelse(site %in%  c("eldo_3k_2", "eldo_3k_3", "eldo_4k_2"),
                                               yes = file.exists(paste0("data/data_output/site_data/", site, "/", site, "_plot-locations/", site, "_plot-locations.shp")),
                                               no = file.exists(paste0("data/data_output/site_data/", site, "/", site, "_plot-locations_re/", site, "_plot-locations_re.shp")))) %>% 
-  dplyr::mutate(mission_footprint_check = file.exists(paste0("data/data_output/site_data/", site, "/", site, "_mission-footprint"))) %>% 
+  dplyr::mutate(mission_footprint_check = 
+                  file.exists(paste0("data/data_drone/L0/mission-footprint/srtm30m/", site, "_srtm30m.tif")) &
+                  file.exists(paste0("data/data_drone/L0/mission-footprint/photo-points/", site, "_photo-points.geoJSON")) &
+                  file.exists(paste0("data/data_drone/L0/mission-footprint/site-bounds/", site, "_site-bounds.geoJSON"))) %>% 
   dplyr::mutate(classified_point_cloud_check = file.exists(paste0("data/data_output/site_data/", site, "/", site, "_classified_point_cloud.las"))) %>% 
   dplyr::mutate(dtm_check = file.exists(paste0("data/data_output/site_data/", site, "/", site, "_dtm.tif"))) %>% 
   dplyr::mutate(chm_check = file.exists(paste0("data/data_output/site_data/", site, "/", site, "_chm.tif"))) %>% 
@@ -31,3 +35,4 @@ sites_checklist <-
   dplyr::mutate(rasterized_trees_check = file.exists(paste0("analyses/analyses_output/rasterized-trees/", site, "_rasterized-trees.tif")))
 
 sites_checklist
+
