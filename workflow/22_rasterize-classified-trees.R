@@ -31,9 +31,9 @@ if(file.exists(here::here("analyses/analyses_output/classified-trees.geojson")))
 
 # Now there is an R object in the environment called "sites_checklist" that has
 # infomation about how far along all processing steps are.
-source("data/data_carpentry/make-processing-checklist.R")
+source("workflow/01_make-processing-checklist.R")
 
-cwd <- raster::raster(here::here("data/features/cwd1981_2010_ave_HST_1550861123/cwd1981_2010_ave_HST_1550861123.tif"))
+cwd <- raster::raster(here::here("data/data_raw/cwd1981_2010_ave_HST_1550861123/cwd1981_2010_ave_HST_1550861123.tif"))
 
 # The .prj file doesn't seem to be reading in properly with the .tif, but we can look at it in a text editor and see that it is EPSG3310
 
@@ -47,7 +47,7 @@ sn <- sf::st_read(here::here("data/data_output/sierra-nevada-jepson/sierra-nevad
 #   dplyr::filter(scientificName == "Pinus ponderosa")
 
 sn_pipo <-
-  data.table::fread(here::here("data/features/California_Species_clean_All_epsg_3310.csv")) %>% 
+  data.table::fread(here::here("data/data_raw/California_Species_clean_All_epsg_3310.csv")) %>% 
   dplyr::as_tibble() %>% 
   dplyr::mutate(current_genus = tolower(current_genus),
                 current_species = tolower(current_species)) %>% 

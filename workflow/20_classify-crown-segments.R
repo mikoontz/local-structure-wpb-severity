@@ -9,13 +9,13 @@ library(viridis)
 # Source in the classifier code.
 # The live/dead classifier is an R object called `live_or_dead_fit`
 # The species classifier is an R object called `rdafit`
-source(here::here("analyses/build-crown-classifier.R"))
+source(here::here("workflow/18_build-crown-classifier.R"))
 live_or_dead_fit
 rdaFit
 
 # Source in the allometric scaling models based on the ground data
 # object is called `allometry_models`
-source(here::here("analyses/allometric-scaling-models.R"))
+source(here::here("workflow/19_allometric-scaling-models.R"))
 allometry_models
 
 allometry_models %>% filter(species == "pipo") %>% pull(model) %>% magrittr::extract2(1) %>% predict(newdata = data.frame(height = 20))
