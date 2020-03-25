@@ -8,17 +8,8 @@ library(raster)
 library(ForestTools)
 library(gstat)
 library(nngeo)
-# Will need to use lidR v 2.0.2 from GitHub in order to use the lidRplugins version that has lmfx algorithm
-devtools::install_github("cran/lidR@fd23e40058363f2e1ea29ade94fd06504422ed1f")
-library(lidR)
-devtools::install_github("Jean-Romain/lidRplugins@a06022664534778aa7c10e4681f64f61c89aad24")
-library(lidRplugins)
 
-# devtools::install_github("Jean-Romain/lidRplugins")
-library(lidRplugins)
-library(furrr)
-
-source(here::here("data/data_carpentry/segmentation-helper-functions.R"))
+source(here::here("workflow/18a_segmentation-helper-functions.R"))
 
 # begin main program ------------------------------------------------------
 
@@ -48,16 +39,16 @@ merged_sites <- c("eldo_3k_2",
                   "eldo_3k_3",
                   "eldo_4k_2")
 
-# This is where I can put in sites that need their processing redone. An empty 
-# string means that no already-processed site output will be overwritten
-# (but sites that have yet to be processed will still have their processing done)
 if(file.exists(here::here("analyses/analyses_output/ground-tree-summary.csv"))) {
   ground_tree_summary <- readr::read_csv(here::here(paste0("analyses/analyses_output/ground-tree-summary.csv")))
 } else {
-  source(here::here(paste0("analyses/summarize-ground-data.R")))
+  source(here::here(paste0("workflow/13_summarize-ground-data.R")))
 }
 
 all_validation_plots <- ground_tree_summary$plot
+
+# For testing
+# current_plot <- all_validation_plots[1]
 
 # Start the timer
 start <- Sys.time()
@@ -73,32 +64,19 @@ ttops_summary <-
   # get data for particular plot --------------------------------------------
   print(current_plot)
   current_site <- substr(current_plot, start = 1, stop = 9)
-  current_dir <- paste0("data/data_output/site_data/", current_site, "/")
-  
-  if (current_site %in% merged_sites) {
-    current_site_plot_locations <- 
-      sf::st_read(paste0("data/data_output/site_data/", current_site, "/", current_site, "_plot-locations/", current_site, "_plot-locations.shp"), quiet = TRUE) %>% 
-      mutate(plot = paste(current_site, id, sep = "_")) %>%
-      dplyr::arrange(id) %>% 
-      st_zm()
-  } else {
-    current_site_plot_locations <- 
-      sf::st_read(paste0("data/data_output/site_data/", current_site, "/", current_site, "_plot-locations_re/", current_site, "_plot-locations_re.shp"), quiet = TRUE) %>% 
-      mutate(plot = paste(current_site, id, sep = "_")) %>%
-      dplyr::arrange(id) %>% 
-      st_zm()
-  }
+ 
+  current_site_plot_locations <- sf::st_read(here::here(paste0("data/data_drone/L1/plot-locations/", current_site, "_plot-locations.gpkg")), stringsAsFactors = FALSE, quiet = TRUE)
   
   # The dtm is the terrain model for a particular site. We need it to normalize the objects returned from the
   # ptrees algorithm, which acts on a non-normalized point cloud.
-  current_dtm <- raster::raster(paste0(current_dir, current_site, "_plot-remote-data/", current_plot, "_dtm.tif"))
+  current_dtm <- raster::raster(here::here(paste0("data/data_drone/L2/dtm/cropped-to-plot/", current_plot, "_dtm.tif")))
   
   # The Canopy Height Model (chm) is the dsm (vegetation + ground) minus the dtm (ground)
   # to give just the height of the vegetation.
-  current_chm_rough <- raster::raster(paste0(current_dir, current_site, "_plot-remote-data/", current_plot, "_chm.tif"))
+  current_chm_rough <- raster::raster(here::here(paste0("data/data_drone/L2/chm/cropped-to-plot/", current_plot, "_chm.tif")))
   
   # The point cloud is directly used for some segmentation algorithms, so we import that too
-  current_las <- lidR::readLAS(paste0(current_dir, current_site, "_plot-remote-data/", current_plot, "_classified-point-cloud.las"))
+  current_las <- lidR::readLAS(here::here(paste0("data/data_drone/L2/classified-point-cloud/cropped-to-plot/", current_plot, "_classified-point-cloud.las")))
   # current_las_normalized <- lidR::lasnormalize(las = current_las, algorithm = tin())
   current_las_normalized <- lidR::lasnormalize(las = current_las, algorithm = current_dtm, na.rm = TRUE)
   
@@ -189,7 +167,7 @@ ttops_summary <-
 
   # First row is default values for li2012 algorithm
   # second row come from Jakubowski et al. (2013) [mixed conifer forest near Tahoe-- pretty comparable to our study]
-  lmf_params <- data_frame(ws = ws_vals, ws_in_pixels_vals, ws_names)
+  lmf_params <- tibble(ws = ws_vals, ws_in_pixels_vals, ws_names)
 
   lmf_chm_list <-
     lmf_params %>%
@@ -272,7 +250,7 @@ ttops_summary <-
 
   # First row is default values for li2012 algorithm
   # second row come from Jakubowski et al. (2013) [mixed conifer forest near Tahoe-- pretty comparable to our study]
-  li2012_params <- data_frame(dt1 = dt1_vals, dt2 = dt2_vals, R = R_vals, Zu = Zu_vals, hmin = min_height, speed_up = speed_up,
+  li2012_params <- tibble(dt1 = dt1_vals, dt2 = dt2_vals, R = R_vals, Zu = Zu_vals, hmin = min_height, speed_up = speed_up,
                               dt1_names, dt2_names, Zu_names, R_names, speed_up_names)
 
 
@@ -284,7 +262,7 @@ ttops_summary <-
   speed_up <- c(10, 15)
 
   li2012_params <-
-    as_data_frame(expand.grid(dt1_vals, dt2_vals, R_vals, Zu_vals, speed_up)) %>%
+    tidyr::crossing(dt1_vals, dt2_vals, R_vals, Zu_vals, speed_up) %>%
     setNames(c("dt1", "dt2", "R", "Zu", "speed_up")) %>%
     filter(dt2 > dt1) %>%
     dplyr::mutate(dt1_names = paste("dt1", dt1, sep = "_")) %>%
