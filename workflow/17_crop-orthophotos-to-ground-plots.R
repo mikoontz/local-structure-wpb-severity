@@ -38,13 +38,6 @@ if(!dir.exists("data/data_drone/L2/index/cropped-to-plot/")) {
   dir.create("data/data_drone/L2/index/cropped-to-plot/")
 }
 
-
-# These sites were processed with their X3 and RedEdge imagery combined so some of their
-# output products will be in a slightly different place in the project directory
-merged_sites <- c("eldo_3k_2",
-                  "eldo_3k_3",
-                  "eldo_4k_2")
-
 # This is where I can put in sites that need their processing redone. An empty 
 # string means that no already-processed site output will be overwritten
 # (but sites that have yet to be processed will still have their processing done)
@@ -92,7 +85,7 @@ for (i in seq_along(sites_to_process)) {
   index <- raster::brick(here::here(paste0("data/data_drone/L2/index/", current_site, "_index.tif")))
   
   # The densified point cloud can be read in and cropped using the LAScatalog functionality from {lidR}
-  current_site_las_catalog <- lidR::catalog(here::here(paste0("data/data_drone/L2/classified-point-cloud/", current_site, "_classified-point-cloud.las")))
+  current_site_las_catalog <- lidR::readLAScatalog(here::here(paste0("data/data_drone/L2/classified-point-cloud/", current_site, "_classified-point-cloud.las")))
   
   plot_radius <- sqrt((66*66) / pi) * 12 * 2.54 / 100
   
@@ -113,12 +106,15 @@ for (i in seq_along(sites_to_process)) {
       current_plot %>% 
       st_buffer(plot_radius + 5)
     
+    # Until patch is integrated into {lidR}, we have to rename the geometry column to be "geometry"
+    current_plot_boundary <- st_sf(sf::st_drop_geometry(current_plot_boundary), geometry = sf::st_geometry(current_plot_boundary))
+    
     current_plot_dtm <- raster::crop(dtm, current_plot_boundary)
     current_plot_dsm <- raster::crop(dsm, current_plot_boundary)
     current_plot_chm <- raster::crop(chm, current_plot_boundary)
     current_plot_ortho <- raster::crop(ortho, current_plot_boundary)
     current_plot_index <- raster::crop(index, current_plot_boundary)
-    current_plot_las <- lidR::lasclip(current_site_las_catalog, as(current_plot_boundary, "Spatial")@polygons[[1]]@Polygons[[1]])
+    current_plot_las <- lidR::clip_roi(current_site_las_catalog, current_plot_boundary)
     
     # Write the cropped geospatial data to files for rapid recall and use in segmentation algorithm validation against ground data
     # Level 1
