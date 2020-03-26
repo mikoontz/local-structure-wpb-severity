@@ -9,11 +9,9 @@ library(raster)
 library(ForestTools)
 library(lidR)
 
-remotes::install_github("mikoontz/lidRplugins")
-
-# if (try(packageVersion("lidRplugins")) != "0.1.0") {
-#   remotes::install_github("Jean-Romain/lidRplugins@a06022664534778aa7c10e4681f64f61c89aad24")
-# }
+if (try(packageVersion("lidRplugins")) != "0.2.0") {
+  remotes::install_github("mikoontz/lidRplugins@master")
+}
 
 library(lidRplugins)
 
@@ -205,7 +203,7 @@ st_lmf <- function(obj, plot_boundary = NULL, ws) {
   start <- Sys.time()
   ttops_sf <-
     obj %>%
-    lidR::tree_detection(algorithm = lmf(ws = ws)) %>%
+    lidR::find_trees(algorithm = lmf(ws = ws)) %>%
     st_as_sf() %>% 
     rename(height = Z) %>%
     st_set_agr("constant")
@@ -227,7 +225,7 @@ st_li2012 <- function(las, plot_boundary = NULL, dt1, dt2, R, Zu, hmin, speed_up
   start <- Sys.time()
   ttops_las <- 
     las %>% 
-    lidR::lastrees(algorithm = li2012(dt1 = dt1, dt2 = dt2, R = R, Zu = Zu, hmin = hmin, speed_up = speed_up))
+    lidR::segment_trees(algorithm = li2012(dt1 = dt1, dt2 = dt2, R = R, Zu = Zu, hmin = hmin, speed_up = speed_up))
   
   ttops_sf <-
     ttops_las %>% 
@@ -257,7 +255,7 @@ st_watershed <- function(las, plot_boundary = NULL, chm, th_tree, tol, ext) {
   
   ttops_las <-
     las %>% 
-    lidR::lastrees(algorithm = watershed(chm = current_chm, th_tree = th_tree, tol = tol, ext = ext))
+    lidR::segment_trees(algorithm = watershed(chm = current_chm, th_tree = th_tree, tol = tol, ext = ext))
   
   ttops_sf <-  
     ttops_las %>% 
@@ -289,7 +287,7 @@ st_ptree <- function(las, plot_boundary = NULL, dtm, k, algorithm_hmin, post_hmi
   
   ttops_las <-
     las %>%
-    lidR::lastrees(algorithm = ptrees(k = k, hmin = algorithm_hmin, nmax = nmax))
+    lidR::segment_trees(algorithm = ptrees(k = k, hmin = algorithm_hmin, nmax = nmax))
   
   ttops_sf <-
     ttops_las %>%
@@ -309,8 +307,8 @@ st_ptree <- function(las, plot_boundary = NULL, dtm, k, algorithm_hmin, post_hmi
   
   ttops_sf <-
     ttops_sf %>%
-    dplyr::mutate(elev = raster::extract(dtm, .)) %>% 
-    dplyr::mutate(height = height - elev)
+    dplyr::mutate(elev = ifelse(nrow(.) > 0, yes = raster::extract(dtm, .), no = NA_real_)) %>% 
+    dplyr::mutate(height = ifelse(nrow(.) > 0, yes = height - elev, no = NA_real_))
   
   if(!is.null(post_hmin)) {
     ttops_sf <-
@@ -337,7 +335,7 @@ st_multichm <- function(las, plot_boundary = NULL, res, layer_thickness, dist_2d
   
   ttops_sf <-
     las %>% 
-    lidR::tree_detection(algorithm = multichm(res = res, layer_thickness = layer_thickness, dist_2d = dist_2d, dist_3d = dist_3d, use_max = use_max, ws = ws)) %>% 
+    lidR::find_trees(algorithm = multichm(res = res, layer_thickness = layer_thickness, dist_2d = dist_2d, dist_3d = dist_3d, use_max = use_max, ws = ws)) %>% 
     st_as_sf() %>% 
     rename(height = Z) %>%
     st_set_agr("constant")
@@ -361,7 +359,7 @@ st_lmfx <- function(las, plot_boundary = NULL, hmin, dist_2d, ws) {
   
   ttops_sf <- 
     las %>% 
-    lidR::tree_detection(algorithm = lmfx(hmin = hmin, dist_2d = dist_2d, ws = ws)) %>% 
+    lidR::find_trees(algorithm = lmfx(hmin = hmin, dist_2d = dist_2d, ws = ws)) %>% 
     st_as_sf() %>% 
     rename(height = Z) %>%
     st_set_agr("constant")
