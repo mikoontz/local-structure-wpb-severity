@@ -1,23 +1,5 @@
-library(foreach)
-library(doParallel)
 library(sf)
 library(tidyverse)
-library(purrr)
-library(lidR)
-library(viridis)
-library(raster)
-library(ForestTools)
-library(gstat)
-library(nngeo)
-# devtools::install_github("Jean-Romain/lidRplugins")
-library(lidRplugins)
-library(furrr)
-
-source("analyses/vwf2.R")
-
-
-# begin main program ------------------------------------------------------
-
 
 # Pseudocode
 # Calculate the "validation metrics" for the ground data at the plots that are visible in the drone-derived orthophotos
@@ -38,12 +20,6 @@ source("analyses/vwf2.R")
 
 # Establish a method for detecting tree tops and segmenting crowns
 # Work through all of the remotely-visible plots at each site (144 in total) applying the ttops and crown segmentation approach
-
-# These sites were processed with their X3 and RedEdge imagery combined so some of their
-# output products will be in a slightly different place in the project directory
-merged_sites <- c("eldo_3k_2",
-                  "eldo_3k_3",
-                  "eldo_4k_2")
 
 # First get the formatted ground data; the object is called `d`
 if(!file.exists("data/data_drone/L1/ground-trees.gpkg")) {

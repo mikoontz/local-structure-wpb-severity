@@ -1,5 +1,8 @@
 library(sf)
 library(tidyverse)
+library(nngeo)
+library(purrr)
+library(here)
 
 # This script will generate a shapefile of all the locations of the trees that
 # were measured in the ~110 field plots that are visible from the aerial imagery.
@@ -36,7 +39,7 @@ sites_to_process <-
 
 ground_trees <- 
   sites_to_process %>% 
-  map(.f = function(current_site) {
+  purrr::map(.f = function(current_site) {
     
     current_site_plot_locations <- sf::st_read(paste0("data/data_drone/L1/plot-locations/", current_site, "_plot-locations.gpkg"), stringsAsFactors = FALSE)
     
@@ -55,8 +58,8 @@ ground_trees <-
           dplyr::mutate(new_x = x + delta_x,
                         new_y = y + delta_y) %>% 
           sf::st_drop_geometry() %>% 
-          st_as_sf(coords = c("new_x", "new_y")) %>% 
-          st_set_crs(st_crs(current_site_plot_locations))
+          sf::st_as_sf(coords = c("new_x", "new_y")) %>% 
+          sf::st_set_crs(st_crs(current_site_plot_locations))
         
         nn <- 
           nngeo::st_nn(x = current_plot_ground_trees, 
@@ -73,7 +76,7 @@ ground_trees <-
         
         current_plot_ground_trees <- 
           current_plot_ground_trees %>% 
-          bind_cols(nn)  %>% 
+          dplyr::bind_cols(nn)  %>% 
           st_transform(3310)
       }) %>% 
       do.call("rbind", .)
