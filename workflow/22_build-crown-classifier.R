@@ -40,9 +40,10 @@ sites_to_hand_classify %>%
   walk(.f = function(current_site) {
     
     if(!file.exists(here::here(paste0("data/data_drone/L3b/hand-classified-crowns/", current_site, "_hand-classified-crowns.gpkg")))) {  
-      crowns <- sf::st_read(dsn = here::here(paste0("data/data_output/site_data/", current_site, "/", current_site, "_crowns/", current_site, "_crowns.shp")))
       
-      sf::st_write(obj = crowns, dsn = here::here(paste0("data/data_output/classified/hand-classified/", current_site, "_hand-classified-crowns/", current_site, "_hand-classified-crowns.shp")))
+      file.copy(from = here::here(paste0("data/data_drone/L3a/crowns/", current_site, "_crowns.gpkg")),
+                to = here::here(paste0("data/data_drone/L3b/hand-classified-crowns/", current_site, "_hand-classified-crowns.gpkg")))
+      
     } else (print(paste0("GPKG for hand classified crowns of ", current_site, " already exists!")))
     
   })

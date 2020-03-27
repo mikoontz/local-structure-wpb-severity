@@ -23,5 +23,4 @@ dd <-
 allometry_models <-
   dd %>% 
   dplyr::group_by(species) %>% 
-  dplyr::do(model = lm(dbh ~ height, data = .))
-
+  dplyr::summarize(model = list(lm(dbh ~ height)))
