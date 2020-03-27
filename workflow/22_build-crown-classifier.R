@@ -86,13 +86,13 @@ if(!file.exists(here::here("data/data_drone/L3b/hand-classified-crowns.csv"))) {
     }) %>% 
     do.call("rbind", .)
 
-  write_csv(x = crowns_with_reflectance, path = here::here("data/data_drone/L3b/hand-classified-crowns.csv"))
+  write_csv(x = crowns_with_reflectance, path = here::here("data/data_drone/L3b/hand-classified-crowns_all.csv"))
 }
 
 
 # read in the hand-classified crowns --------------------------------------
 
-crowns_with_reflectance <- readr::read_csv(here::here("data/data_drone/L3b/hand-classified-crowns.csv"))
+crowns_with_reflectance <- readr::read_csv(here::here("data/data_drone/L3b/hand-classified-crowns_all.csv"))
 
 # create the live/dead classifier -----------------------------------------
 set.seed(1409)
@@ -148,5 +148,5 @@ if(!dir.exists("data/data_drone/L3b/classifier-models")) {
   dir.create("data/data_drone/L3b/classifier-models", recursive = TRUE)
 }
 
-saveRDS(object = live_or_dead_classifier, file = "data/data_drone/L3b/classifier-models/live-or-dead-classifier.rds")
-saveRDS(object = species_classifier, file = "data/data_drone/L3b/classifier-models/species-classifier.rds")
+readr::write_rds(x = live_or_dead_classifier, path = "data/data_drone/L3b/classifier-models/live-or-dead-classifier.rds")
+readr::write_rds(x = species_classifier, path = "data/data_drone/L3b/classifier-models/species-classifier.rds")
