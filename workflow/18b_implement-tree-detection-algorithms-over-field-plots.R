@@ -43,19 +43,26 @@ all_validation_plots <- ground_tree_summary$plot
 # For testing
 # current_plot <- all_validation_plots[1]
 
-# Start the timer
-start <- Sys.time()
 # Set up the parallelization
 num_cores_to_use <- 10
 plan(multiprocess, workers = num_cores_to_use)
 
-suppressWarnings(suppressMessages( # Suppress all the outputs from lidR functions. Too much red text!
-  ttops_summary <- 
-    all_validation_plots %>% 
-    furrr::future_map(.f = function(current_plot) {
-      
+# Start the timer
+start <- Sys.time()
+
+# suppressWarnings(suppressMessages( # Suppress all the outputs from lidR functions. Too much red text!
+#   ttops_summary <- 
+#     all_validation_plots %>% 
+#     furrr::future_map(.f = function(current_plot) {
+
+ttops_summary <- vector(mode = "list", length = length(all_validation_plots))
+
+for (i in seq_along(all_validation_plots)) {
+  current_plot <- all_validation_plots[i]
       # get data for particular plot --------------------------------------------
-      print(current_plot)
+      this_plot_starttime <- Sys.time()
+      print(paste0(current_plot, " started at ", this_plot_starttime, "."))
+      
       current_site <- substr(current_plot, start = 1, stop = 9)
       
       current_site_plot_locations <- sf::st_read(here::here(paste0("data/data_drone/L1/plot-locations/", current_site, "_plot-locations.gpkg")), stringsAsFactors = FALSE, quiet = TRUE)
@@ -229,11 +236,11 @@ suppressWarnings(suppressMessages( # Suppress all the outputs from lidR function
       # cover, and 1.7 m for areas of 50% or less canopy cover."
       
       # First round used a few deliberate combinations of parameters (one from the literature)
-      dt1_vals <- c(1.4, 1.5, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0)
-      dt2_vals <- c(1.4, 2.0, 2.0, 2.0, 1.5, 1.5, 1.4, 1.4, 1.3, 1.5, 1.3)
-      R_vals <- c(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
-      Zu_vals <- c(15, 15, 15, 20, 25, 20, 20, 25, 20, 25, 20)
-      speed_up <- c(10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 20)
+      dt1_vals <- c(1.4, 1.5, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0, 1.0)
+      dt2_vals <- c(1.4, 2.0, 2.0, 2.0, 1.5, 1.5, 1.4, 1.4, 1.3, 1.5)
+      R_vals <- c(0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+      Zu_vals <- c(15, 15, 15, 20, 25, 20, 20, 25, 20, 25)
+      speed_up <- c(10, 10, 10, 10, 10, 10, 10, 10, 10, 10)
       
       dt1_names <- paste("dt1", dt1_vals, sep = "_")
       dt2_names <- paste("dt2", dt2_vals, sep = "_")
@@ -243,7 +250,7 @@ suppressWarnings(suppressMessages( # Suppress all the outputs from lidR function
       
       # First row is default values for li2012 algorithm
       # second row come from Jakubowski et al. (2013) [mixed conifer forest near Tahoe-- pretty comparable to our study]
-      li2012_params <- tibble(dt1 = dt1_vals, dt2 = dt2_vals, R = R_vals, Zu = Zu_vals, hmin = min_height, speed_up = speed_up,
+      li2012_params1 <- tibble(dt1 = dt1_vals, dt2 = dt2_vals, R = R_vals, Zu = Zu_vals, hmin = min_height, speed_up = speed_up,
                               dt1_names, dt2_names, Zu_names, R_names, speed_up_names)
       
       
@@ -252,27 +259,30 @@ suppressWarnings(suppressMessages( # Suppress all the outputs from lidR function
       dt2_vals <- c(dt1_vals + 0.5)
       R_vals <- c(0, 2)
       Zu_vals <- c(15, 20, 25)
-      speed_up <- c(10, 15)
+      speed_up <- c(15, 10)
       
-      li2012_params <-
-        tidyr::crossing(dt1_vals, dt2_vals, R_vals, Zu_vals, speed_up) %>%
-        setNames(c("dt1", "dt2", "R", "Zu", "speed_up")) %>%
+      li2012_params2 <-
+        tidyr::crossing(dt1_vals, dt2_vals, R_vals, Zu_vals, min_height, speed_up) %>%
+        setNames(c("dt1", "dt2", "R", "Zu", "hmin", "speed_up")) %>%
         filter(dt2 > dt1) %>%
         dplyr::mutate(dt1_names = paste("dt1", dt1, sep = "_")) %>%
         dplyr::mutate(dt2_names = paste("dt2", dt2, sep = "_")) %>%
-        dplyr::mutate(R_names = paste("R", R, sep = "_")) %>%
         dplyr::mutate(Zu_names = paste("zu", Zu, sep = "_")) %>%
+        dplyr::mutate(R_names = paste("R", R, sep = "_")) %>%
         dplyr::mutate(speed_up_names = paste("speedUp", speed_up, sep = "_"))
+      
+      li2012_params <- rbind(li2012_params1, li2012_params2)
+      li2012_params <- li2012_params[!duplicated(li2012_params), ]
       
       li2012_list <-
         li2012_params %>%
-        pmap(.f = function(dt1, dt2, R, Zu, speed_up, ...) {
+        pmap(.f = function(dt1, dt2, R, Zu, hmin, speed_up, ...) {
           
           current_las_normalized %>%
-            st_li2012(plot_boundary = current_plot_boundary, dt1 = dt1, dt2 = dt2, R = R, Zu = Zu, hmin = min_height, speed_up = speed_up)
+            st_li2012(plot_boundary = current_plot_boundary, dt1 = dt1, dt2 = dt2, R = R, Zu = Zu, hmin = hmin, speed_up = speed_up)
           
         })
-      
+    
       li2012_names <-
         li2012_params %>%
         tidyr::unite(col = "ttops_method", ends_with("names")) %>%
@@ -520,8 +530,14 @@ suppressWarnings(suppressMessages( # Suppress all the outputs from lidR function
                          tree_count_below_15m = sum(height < 15)) %>%
         dplyr::left_join(ttops_time, by = "ttops_method") %>% 
         dplyr::select(plot, ttops_method, elapsed_time, everything())
-    })
-))
+
+      ttops_summary[[i]] <- current_plot_ttops_summary
+      this_plot_endtime <- Sys.time()
+      print(paste0(current_plot, " took ", round(difftime(this_plot_endtime, this_plot_starttime, units = "mins"), 2), " minutes. Total elapsed time: ", round(difftime(this_plot_endtime, start, units = "mins"), 2), " minutes."))
+      
+      }
+    # })
+# ))
 
 ttops_summary <- 
   do.call("rbind", ttops_summary) %>% 

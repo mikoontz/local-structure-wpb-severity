@@ -1,35 +1,23 @@
-library(sf)
-library(tidyverse)
 library(purrr)
-library(lidR)
 library(viridis)
-library(raster)
-library(ForestTools)
 library(gstat)
 library(nngeo)
-# devtools::install_github("Jean-Romain/lidRplugins")
-library(lidRplugins)
 library(furrr)
 library(stars)
-library(tictoc)
 library(here)
 library(units)
 
-source(here::here("data/data_carpentry/segmentation-helper-functions.R"))
-source(here::here("data/data_carpentry/make-processing-checklist.R"))
+source(here::here("workflow/01_make-processing-checklist.R"))
+source(here::here("workflow/18a_tree-detection-and-crown-segmentation-functions.R"))
 
 sites_checklist
+
 # These sites had X3 and RedEdge photos merged into the same project, so we look in a different place for some of the relevant
 # files.
 merged_sites <- c("eldo_3k_2",
                   "eldo_3k_3",
                   "eldo_4k_2")
 
-
-unusable_sites <- c("eldo_4k_3", # too many blocks
-                    "stan_4k_3", # too many blocks
-                    "stan_5k_3", # too many blocks
-                    "sequ_4k_2") # middle section flown on a separate day and the stitch looks terrible
 
 # The merged versus the unmerged sites will have different numbers of bands
 # Because the merged sites will have the X3 imagery incorporated, there will
@@ -52,7 +40,6 @@ sites_checklist[sites_checklist$site %in% sites_to_overwrite, "overwrite"] <- TR
 
 sites_to_process <- 
   sites_checklist %>% 
-  dplyr::filter(!(site %in% unusable_sites)) %>%
   dplyr::filter(overwrite | !ttops_check | !crowns_check) %>% 
   dplyr::select(site) %>% 
   dplyr::pull()
@@ -60,41 +47,33 @@ sites_to_process <-
 # Get an example for testing
 # current_site <- sites_to_process[1]
 
-sites_to_process %>% 
-  walk(.f = function(current_site) {
-    current_dir <- paste0("data/data_output/site_data/", current_site, "/")
-    
-    if (dir.exists(here::here(paste0(current_dir, current_site, "_ttops")))) {
-      unlink(here::here(paste0(current_dir, current_site, "_ttops")), recursive = TRUE)
-    }
-    
-    if (dir.exists(here::here(paste0(current_dir, current_site, "_crowns")))) {
-      unlink(here::here(paste0(current_dir, current_site, "_crowns")), recursive = TRUE)
-    }
-  })
+if(!dir.exists("data/data_drone/L3a/ttops")) {
+  dir.create("data/data_drone/L3a/ttops", recursive = TRUE)
+}
 
-tic()
+if(!dir.exists("data/data_drone/L3a/crowns")) {
+  dir.create("data/data_drone/L3a/crowns", recursive = TRUE)
+}
+
 # Set up the parallelization
-num_cores_to_use <- availableCores() - 6 # Took 1996.05 sec on Alienware using 6 workers + 64GB RAM
+num_cores_to_use <- 6 # Took 1996.05 sec on Alienware using 6 workers + 64GB RAM
 plan(multiprocess, workers = num_cores_to_use)
 
 crowns <-
   sites_to_process %>% 
   furrr::future_map(.f = function(current_site) {
  
-    current_dir <- paste0("data/data_output/site_data/", current_site, "/")
- 
     # The dtm is the terrain model for a particular site. We need it to normalize the objects returned from the
     # ptrees algorithm, which acts on a non-normalized point cloud.
-    current_dtm <- raster::raster(here::here(paste0(current_dir, current_site, "_dtm.tif")))
+    current_dtm <- raster::raster(here::here(paste0("data/data_drone/L2/dtm/", current_site, "_dtm.tif")))
     
     # The Canopy Height Model (chm) is the dsm (vegetation + ground) minus the dtm (ground)
     # to give just the height of the vegetation.
-    current_chm_rough <- raster::raster(here::here(paste0(current_dir, current_site, "_chm.tif")))
+    current_chm_rough <- raster::raster(here::here(paste0("data/data_drone/L2/chm/", current_site, "_chm.tif")))
     
     # The point cloud is directly used for some segmentation algorithms, so we import that too
-    current_las <- lidR::readLAS(paste0(current_dir, current_site, "_classified-point-cloud.las"))
-    current_las_normalized <- lidR::lasnormalize(las = current_las, algorithm = current_dtm, na.rm = TRUE)
+    current_las <- lidR::readLAS(here::here(paste0("data/data_drone/L2/classified-point-cloud/", current_site, "_classified-point-cloud.las")))
+    current_las_normalized <- lidR::normalize_elevation(las = current_las, algorithm = current_dtm, na.rm = TRUE)
     
     # Smooth out the chm and set any negative values to 0 (meaning "ground") following
     # advice from Zagalikis, Cameron, and Miller (2004) and references therein
@@ -138,12 +117,8 @@ crowns <-
     # 
     max_crown_area <- pi * 10^2 %>% set_units(m^2)
     
-    # Write the ttops point geometries to a file
-     dir.create(here::here(paste0(current_dir, current_site, "_ttops")))
+    st_write(obj = ttops_sf, dsn = here::here(paste0("data/data_drone/L3a/ttops/", current_site, "_ttops.gpkg")), delete_dsn = TRUE)
     
-    st_write(obj = ttops_sf, dsn = here::here(paste0(current_dir, current_site, "_ttops/", current_site, "_ttops.shp")), delete_dsn = TRUE)
-    
-
     non_spatial_ttops <-
       ttops_sf %>%
       dplyr::mutate(x = st_coordinates(.)[, 1],
@@ -175,10 +150,7 @@ crowns <-
       crowns %>%
       rbind(points_to_crowns)
 
-    # Write the crowns polygons to a file
-    dir.create(here::here(paste0(current_dir, current_site, "_crowns")))
-    
-    st_write(obj = crowns, dsn = here::here(paste0(current_dir, current_site, "_crowns/", current_site, "_crowns.shp")), delete_dsn = TRUE)
+    st_write(obj = crowns, dsn = here::here(paste0("data/data_drone/L3a/crowns/", current_site, "_crowns.gpkg")), delete_dsn = TRUE)
     
     return(list(ttops = ttops_sf, crowns = crowns))
     
