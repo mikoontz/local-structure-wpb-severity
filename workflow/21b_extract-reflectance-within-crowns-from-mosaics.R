@@ -7,21 +7,14 @@ library(purrr)
 library(velox)
 library(viridis)
 
-source(here::here("data/data_carpentry/make-processing-checklist.R"))
-source(here::here("data/data_carpentry/extract-reflectance-within-crowns-from-mosaics-function.R"))
+source(here::here("workflow/01_make-processing-checklist.R"))
+source(here::here("workflow/21a_extract-reflectance-within-crowns-from-mosaics-function.R"))
 
 sites_checklist
 
-unusable_sites <- c("eldo_4k_3", # too many blocks
-                    "stan_4k_3", # too many blocks
-                    "stan_5k_3", # too many blocks
-                    "sequ_4k_2") # middle section flown on a separate day and the stitch looks terrible
-
-# These sites were processed with their X3 and RedEdge imagery combined so some of their
-# output products will be in a slightly different place in the project directory
-merged_sites <- c("eldo_3k_2",
-                  "eldo_3k_3",
-                  "eldo_4k_2")
+if(!dir.exists("data/data_drone/L3b/crowns-with-reflectance/")) {
+  dir.create("data/data_drone/L3b/crowns-with-reflectance/", recursive = TRUE)
+}
 
 # This is where I can put in sites that need their processing redone. An empty 
 # string means that no already-processed site output will be overwritten
@@ -33,22 +26,17 @@ sites_checklist[sites_checklist$site %in% sites_to_overwrite, "overwrite"] <- TR
 
 sites_to_process <- 
   sites_checklist %>% 
-  dplyr::filter(!(site %in% unusable_sites)) %>%
   dplyr::filter(overwrite | !reflectance_extraction_check) %>% 
   dplyr::pull(site)
 
-tic()
 crowns_with_reflectance <-
   lapply(seq_along(sites_to_process), FUN = function(i) {
     current_site <- sites_to_process[i]
     
-    crowns_path <- here::here(paste0("data/data_output/site_data/", current_site, "/", current_site, "_crowns/", current_site, "_crowns.shp"))
-    ttops_path <- here::here(paste0("data/data_output/site_data/", current_site, "/", current_site, "_ttops/", current_site, "_ttops.shp"))
-    crowns <- sf::st_read(crowns_path)
-    ttops <- sf::st_read(ttops_path)
+    ttops <- sf::st_read(here::here(paste0("data/data_drone/L3a/ttops/", current_site, "_ttops.gpkg")))
+    crowns <- sf::st_read(here::here(paste0("data/data_drone/L3a/crowns/", current_site, "_crowns.gpkg")))
     
-    index_path <- here::here(paste0("data/data_output/site_data/", current_site, "/", current_site, "_index.tif"))
-    index <- velox::velox(index_path)
+    index <- velox::velox(here::here(paste0("data/data_drone/L2/index/", current_site, "_index.tif")))
     index_copy <- index$copy()
     
     current_crowns <- extract_reflectance_from_crowns(index = index_copy,
@@ -61,61 +49,29 @@ crowns_with_reflectance <-
       dplyr::mutate(treeID = paste(current_site, treeID, sep = "_"),
                     crs = st_crs(.)$proj4string)
     
-    suppressWarnings(dir.create(here::here(paste0("data/data_output/classified/model-classified/crowns-with-reflectance/", current_site, "_crowns-with-reflectance"))))
-    
-    sf::st_write(current_crowns, dsn = here::here(paste0("data/data_output/classified/model-classified/crowns-with-reflectance/", current_site, "_crowns-with-reflectance/", current_site, "_crowns-with-reflectance.shp")), delete_dsn = TRUE)
+    sf::st_write(obj = current_crowns, 
+                 dsn = here::here(paste0("data/data_drone/L3b/crowns-with-reflectance/", current_site, "_crowns-with-reflectance.gpkg")), delete_dsn = TRUE)
     
     return(st_drop_geometry(current_crowns))
     
   }) %>% 
   do.call("rbind", .)
-toc()
 
-# Write the full set of trees to a file
-write_csv(crowns_with_reflectance, path = here::here(paste0("data/data_output/classified/model-classified/crowns-with-reflectance_all.csv")))
+# Write the full (nonspatial) set of trees to a file
+write_csv(crowns_with_reflectance, path = here::here(paste0("data/data_drone/L3b/crowns-with-reflectance_all.csv")))
 
 # Do some spatial subsetting to remove trees too close to the border of the study area
-
-# With a given buffer size, how big will the total area surveyed be?
-survey_area <-
-  list.files(here::here("data/data_output/classified/model-classified/crowns-with-reflectance")) %>% 
-  map_dbl(.f = function(current_crowns_path) {
-    
-    current_site <- substr(current_crowns_path, start = 1, stop = 9)
-    
-    # One site has additional restrictions on its flight bounds in order to avoid any chance of visible private property in the processed imagery.
-    if(current_site == "stan_3k_2") {
-      site_bounds <- sf::st_read(here::here("data/data_output/site_data/stan_3k_2/stan_3k_2_mission-footprint/stan_3k_2_site-bounds_privacy.geoJSON"))
-    } else {
-      site_bounds <- sf::st_read(here::here(paste0("data/data_output/site_data/", current_site, "/", current_site, "_mission-footprint/", current_site, "_site-bounds.geoJSON")))
-    }
-    
-    buffered_bounds <-
-      site_bounds %>% 
-      st_transform(3310) %>% 
-      st_buffer(-35)
-    
-    return(st_area(buffered_bounds))
-    
-  })
-
-current_crowns_path <-  list.files(here::here("data/data_output/classified/model-classified/crowns-with-reflectance"))[27]
+surveyed_area <- sf::st_read("data/data_drone/L0/surveyed-area-3310.gpkg")
 
 # Subset the crowns here
 crowns <-
-  list.files(here::here("data/data_output/classified/model-classified/crowns-with-reflectance")) %>% 
-  map(.f = function(current_crowns_path) {
+  sites_checklist$site %>% 
+  map(.f = function(current_site) {
     
-    current_site <- substr(current_crowns_path, start = 1, stop = 9)
-    current_crowns <- sf::st_read(here::here(paste0("data/data_output/classified/model-classified/crowns-with-reflectance/", current_crowns_path, "/", current_crowns_path, ".shp")))
+    current_crowns <- sf::st_read(here::here(paste0("data/data_drone/L3b/crowns-with-reflectance/", current_site, "_crowns-with-reflectance.gpkg")))
     
-    # One site has additional restrictions on its flight bounds in order to avoid any chance of visible private property in the processed imagery.
-    if(current_site == "stan_3k_2") {
-      site_bounds <- sf::st_read(here::here("data/data_output/site_data/stan_3k_2/stan_3k_2_mission-footprint/stan_3k_2_site-bounds_privacy.geoJSON"))
-    } else {
-      site_bounds <- sf::st_read(here::here(paste0("data/data_output/site_data/", current_site, "/", current_site, "_mission-footprint/", current_site, "_site-bounds.geoJSON")))
-    }
-    
+    site_bounds <- dplyr::filter(surveyed_area, site == current_site)
+
     buffered_bounds <-
       site_bounds %>% 
       st_transform(st_crs(current_crowns)) %>% 
@@ -132,9 +88,8 @@ crowns <-
 
     return(buffered_trees)
     
-    
   }) %>% 
   do.call("rbind", .)
   
 # write the buffered set of crowns to a file
-write_csv(crowns, path = here::here(paste0("data/data_output/classified/model-classified/crowns-with-reflectance_35m-buffer.csv")))
+write_csv(crowns, path = here::here(paste0("data/data_drone/L3b/crowns-with-reflectance_35m-buffer.csv")))

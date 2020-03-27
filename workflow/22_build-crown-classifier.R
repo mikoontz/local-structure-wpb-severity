@@ -17,47 +17,35 @@ library(sf)
 library(tidyverse)
 library(purrr)
 library(raster)
-library(tictoc)
 library(here)
 library(caret)
+library(caTools)
+library(klaR)
 
-source(here::here("workflow/17a_extract-reflectance-within-crowns-from-mosaics-function.R"))
-
-# These sites had X3 and RedEdge photos merged into the same project, so we look in a different place for some of the relevant files. These are also the ones we'll start with for hand classifying
-merged_sites <- c("eldo_3k_2",
-                  "eldo_3k_3",
-                  "eldo_4k_2")
-
-other_sites_to_hand_classify <-
-  c("eldo_3k_1", "sequ_4k_1", "sequ_5k_1", "sequ_6k_2", "stan_3k_1", "stan_4k_1", "stan_5k_1", "sier_3k_1", "sier_4k_1", "sier_5k_1", 
-    "eldo_4k_1", "eldo_5k_2", "eldo_5k_3", "sequ_5k_2", "sequ_6k_3", "sier_5k_3", "stan_5k_2")
-
-unusable_sites <- c("eldo_4k_3", # too many blocks
-                    "stan_4k_3", # too many blocks
-                    "stan_5k_3", # too many blocks
-                    "sequ_4k_2") # middle section flown on a separate day and the stitch looks terrible
+source(here::here("workflow/21a_extract-reflectance-within-crowns-from-mosaics-function.R"))
 
 sites_to_hand_classify <-
-  c(merged_sites, other_sites_to_hand_classify)
-
+  c("eldo_3k_1", "eldo_3k_2", "eldo_3k_3", "eldo_4k_1", "eldo_4k_2", "eldo_5k_2", "eldo_5k_3",
+    "stan_3k_1", "stan_4k_1", "stan_5k_1", "stan_5k_2",
+    "sier_3k_1", "sier_4k_1", "sier_5k_1", "sier_5k_3",
+    "sequ_4k_1", "sequ_5k_1", "sequ_5k_2", "sequ_6k_2", "sequ_6k_3")
 
 # Copy segmented crowns shapefile to hand-classified directory ------------
+
+if(!dir.exists("data/data_drone/L3b/hand-classified-crowns")) {
+  dir.create("data/data_drone/L3b/hand-classified-crowns", recursive = TRUE)
+}
 
 sites_to_hand_classify %>%
   walk(.f = function(current_site) {
     
-    if(!dir.exists(here::here(paste0("data/data_output/classified/hand-classified/", current_site, "_hand-classified-crowns")))) {
-      dir.create(here::here(paste0("data/data_output/classified/hand-classified/", current_site, "_hand-classified-crowns")))
-    } 
-    
-    if(!file.exists(here::here(paste0("data/data_output/classified/hand-classified/", current_site, "_hand-classified-crowns/", current_site, "_hand-classified-crowns.shp")))) {  
+    if(!file.exists(here::here(paste0("data/data_drone/L3b/hand-classified-crowns/", current_site, "_hand-classified-crowns.gpkg")))) {  
       crowns <- sf::st_read(dsn = here::here(paste0("data/data_output/site_data/", current_site, "/", current_site, "_crowns/", current_site, "_crowns.shp")))
       
       sf::st_write(obj = crowns, dsn = here::here(paste0("data/data_output/classified/hand-classified/", current_site, "_hand-classified-crowns/", current_site, "_hand-classified-crowns.shp")))
-    } else (print(paste0("Shapefile for hand classified crowns of ", current_site, " already exists!")))
+    } else (print(paste0("GPKG for hand classified crowns of ", current_site, " already exists!")))
     
   })
-
 
 # Pause to go hand classify the crowns ------------------------------------
 
@@ -68,19 +56,18 @@ sites_to_hand_classify %>%
 ### for a couple hundred trees.
 
 # Extract the reflectance data from within hand-classified crowns ---------
-if(!file.exists(here::here("data/data_output/classified/hand-classified/hand-classified-crowns.csv"))) {
+if(!file.exists(here::here("data/data_drone/L3b/hand-classified-crowns.csv"))) {
   
-  tic()
   crowns_with_reflectance <-
     map(.x = sites_to_hand_classify, .f = function(current_site) {
       
-      crowns_path <- here::here(paste0("data/data_output/classified/hand-classified/", current_site, "_hand-classified-crowns/", current_site, "_hand-classified-crowns.shp"))
-      ttops_path <- here::here(paste0("data/data_output/site_data/", current_site, "/", current_site, "_ttops/", current_site, "_ttops.shp"))
-      crowns <- sf::st_read(crowns_path) %>% filter(!is.na(live) | !is.na(species))
-      ttops <- sf::st_read(ttops_path)
+      ttops <- sf::st_read(here::here(paste0("data/data_drone/L3a/ttops/", current_site, "_ttops.gpkg")))
+
+      crowns <- 
+        sf::st_read(here::here(paste0("data/data_drone/L3b/hand-classified-crowns/", current_site, "_hand-classified-crowns.gpkg"))) %>% 
+        filter(!is.na(live) | !is.na(species))
       
-      index_path <- here::here(paste0("data/data_output/site_data/", current_site, "/", current_site, "_index.tif"))
-      index <- velox::velox(index_path)
+      index <- velox::velox(here::here(paste0("data/data_drone/L2/index/", current_site, "_index.tif")))
       index_copy <- index$copy()
       
       current_crowns <- extract_reflectance_from_crowns(index = index_copy,
@@ -98,32 +85,30 @@ if(!file.exists(here::here("data/data_output/classified/hand-classified/hand-cla
       
     }) %>% 
     do.call("rbind", .)
-  toc()
-  
-  glimpse(crowns_with_reflectance)
-  write_csv(x = crowns_with_reflectance, path = here::here("data/data_output/classified/hand-classified/hand-classified-crowns.csv"))
+
+  write_csv(x = crowns_with_reflectance, path = here::here("data/data_drone/L3b/hand-classified-crowns.csv"))
 }
 
 
 # read in the hand-classified crowns --------------------------------------
 
-crowns_with_reflectance <- readr::read_csv(here::here("data/data_output/classified/hand-classified/hand-classified-crowns.csv"))
-
+crowns_with_reflectance <- readr::read_csv(here::here("data/data_drone/L3b/hand-classified-crowns.csv"))
 
 # create the live/dead classifier -----------------------------------------
+set.seed(1409)
 live_or_dead_idx <- caret::createDataPartition(crowns_with_reflectance$live, p = 0.8, list = FALSE)
 
 live_or_dead_training <- crowns_with_reflectance[live_or_dead_idx, ]
 live_or_dead_testing <- crowns_with_reflectance[-live_or_dead_idx, ]
 
-live_or_dead_fit <- train(
+live_or_dead_classifier <- caret::train(
   as.factor(live) ~ b_mean + g_mean + r_mean + re_mean + nir_mean + ndvi_mean + rgi_mean + cire_mean + cig_mean + ndre_mean,
   data = live_or_dead_training,
   method = "LogitBoost"
 )
 
-# Classifier is called `live_or_dead_fit`
-live_or_dead_fit
+# Classifier is called `live_or_dead_classifier`
+live_or_dead_classifier
 
 
 # subset to only the live crowns ------------------------------------------
@@ -147,7 +132,7 @@ species_training <- live_crowns[species_idx, ]
 species_testing <- live_crowns[-species_idx, ]
 
 # Best classification method after tests (see docs/interim-reports/)
-rdaFit <- train(
+species_classifier <- caret::train(
   species ~ b_mean + g_mean + r_mean + re_mean + nir_mean + ndvi_mean + rgi_mean + cire_mean + cig_mean + ndre_mean,
   data = species_training,
   method = "rda",
@@ -155,6 +140,13 @@ rdaFit <- train(
   tuneGrid = expand.grid(gamma = 0, lambda = c(seq(0.2, 1.0, by = 0.1)))
 )
 
-# species classifier is called rdaFit
-rdaFit
+# species classifier is called 'species_classifier
+species_classifier
 
+
+if(!dir.exists("data/data_drone/L3b/classifier-models")) {
+  dir.create("data/data_drone/L3b/classifier-models", recursive = TRUE)
+}
+
+saveRDS(object = live_or_dead_classifier, file = "data/data_drone/L3b/classifier-models/live-or-dead-classifier.rds")
+saveRDS(object = species_classifier, file = "data/data_drone/L3b/classifier-models/species-classifier.rds")

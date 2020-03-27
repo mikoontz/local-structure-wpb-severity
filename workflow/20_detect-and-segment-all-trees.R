@@ -18,18 +18,6 @@ merged_sites <- c("eldo_3k_2",
                   "eldo_3k_3",
                   "eldo_4k_2")
 
-
-# The merged versus the unmerged sites will have different numbers of bands
-# Because the merged sites will have the X3 imagery incorporated, there will
-# be an extra 3 bands for the ortho and the index outputs (the R, G, and B
-# from the X3 camera)
-# The R, G, and B bands from the X3 images will always be the final three bands
-# if they exist.
-# For the RedEdge-derived products, the bands go in the order of wavelength,
-# from shortest to longest (B, G, R, RE, NIR)
-# There is one Pix4D derived index (NDVI), which will go after the NIR band
-# for the index mosaic
-
 # This is where I can put in sites that need their processing redone. An empty 
 # string means that no already-processed site output will be overwritten
 # (but sites that have yet to be processed will still have their processing done)
@@ -155,4 +143,3 @@ crowns <-
     return(list(ttops = ttops_sf, crowns = crowns))
     
   }) # end unnamed, mapped function; end map
-toc()

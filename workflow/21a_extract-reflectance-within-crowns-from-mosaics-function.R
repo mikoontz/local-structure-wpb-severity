@@ -5,8 +5,13 @@ library(raster)
 library(tidyverse)
 library(viridis)
 library(purrr)
-library(velox)
 library(viridis)
+
+# Until velox goes back on CRAN, use the GitHub version
+if(!require(velox)) {
+  remotes::install_github('hunzikp/velox')
+  library(velox)
+}
 
 # If the crowns vector shapefile represents a result of hand classifying live/dead and
 # species, set the hand_classified= argument to TRUE and the crowns will be subset
@@ -22,6 +27,17 @@ extract_reflectance_from_crowns <- function(index, crowns, ttops) {
                   y = st_coordinates(.)[,2]) %>% 
     st_drop_geometry()
   
+  
+  # The merged versus the unmerged sites will have different numbers of bands
+  # Because the merged sites will have the X3 imagery incorporated, there will
+  # be an extra 3 bands for the ortho and the index outputs (the R, G, and B
+  # from the X3 camera)
+  # The R, G, and B bands from the X3 images will always be the final three bands
+  # if they exist.
+  # For the RedEdge-derived products, the bands go in the order of wavelength,
+  # from shortest to longest (B, G, R, RE, NIR)
+  # There is one Pix4D derived index (NDVI), which will go after the NIR band
+  # for the index mosaic
   # give the velox object bands for its different raster layers
   if(length(index$rasterbands) == 6) {
     names(index$rasterbands) <- c("b", "g", "r", "re", "nir", "ndvi")
@@ -48,6 +64,12 @@ extract_reflectance_from_crowns <- function(index, crowns, ttops) {
     dplyr::left_join(non_spatial_ttops) %>% 
     dplyr::mutate(object_ = 1:nrow(.))
   
+  # I have since learned that the {exactextractr} package benchmarks even better than the {velox}
+  # package for polygon-based cell value extraction from rasters.
+  # Learned from here: https://github.com/hunzikp/velox/issues/43#issuecomment-604663649
+  # It might be worth refactoring this whole function to use exactextractr instead of velox.
+  # https://isciences.gitlab.io/exactextractr/
+  
   # I learned from here: https://gis.stackexchange.com/questions/286409/fastest-way-to-extract-a-raster-in-r-improve-the-time-of-my-reproducible-code
   # that the velox$extract() method works fastest if you crop the raster to the polygons first.
   index$crop(crowns)
@@ -66,9 +88,9 @@ extract_reflectance_from_crowns <- function(index, crowns, ttops) {
 }
 
 # # Example use:
-# index_path <- "data/data_output/site_data/eldo_3k_1/eldo_3k_1_index.tif"
-# crowns_path <- "data/data_output/classified/hand-classified/eldo_3k_1_hand-classified-crowns/eldo_3k_1_hand-classified-crowns.shp"
-# ttops_path <- "data/data_output/site_data/eldo_3k_1/eldo_3k_1_ttops/eldo_3k_1_ttops.shp"
+# index_path <- "data/data_drone/L2/index/eldo_3k_1_index.tif"
+# crowns_path <- "data/data_drone/L3b/hand-classified-crowns/eldo_3k_1_hand-classified-crowns.gpkg"
+# ttops_path <- "data/data_drone/L3a/ttops/eldo_3k_1_ttops.gpkg"
 # 
 # index <- velox::velox(here::here(index_path))
 # crowns <- sf::st_read(here::here(crowns_path)) %>% dplyr::filter(!is.na(live) | !is.na(species))
