@@ -28,14 +28,14 @@ sites_checklist <-
   dplyr::mutate(dtm_check = file.exists(paste0("data/data_drone/L2/dtm/", site, "_dtm.tif"))) %>% 
   dplyr::mutate(chm_check = file.exists(paste0("data/data_drone/L2/chm/", site, "_chm.tif"))) %>% 
   dplyr::mutate(L1_plot_remote_data_check = map_lgl(site, .f = function(current_site) {
-    x <- paste0("data/data_drone/L1/dsm/cropped-to-plot/", current_site, "/", current_site, "_plot-remote-data")
-    length(list.files(x, pattern = current_site)) > 0
+    x <- paste0("data/data_drone/L1/dsm/cropped-to-plot/")
+    length(list.files(x)) > 0
     })) %>% 
-  dplyr::mutate(ground_trees_check = file.exists(paste0("data/data_output/site_data/", site, "/", site, "_ground-trees/", site, "_ground-trees.shp"))) %>% 
-  dplyr::mutate(ttops_check = file.exists(paste0("data/data_output/site_data/", site, "/", site, "_ttops/", site, "_ttops.shp"))) %>% 
-  dplyr::mutate(crowns_check = file.exists(paste0("data/data_output/site_data/", site, "/", site, "_crowns/", site, "_crowns.shp"))) %>% 
-  dplyr::mutate(reflectance_extraction_check = file.exists(paste0("data/data_output/classified/model-classified/crowns-with-reflectance/", site, "_crowns-with-reflectance/", site, "_crowns-with-reflectance.shp"))) %>% 
-  dplyr::mutate(rasterized_trees_check = file.exists(paste0("analyses/analyses_output/rasterized-trees/", site, "_rasterized-trees.tif")))
+  dplyr::mutate(ground_trees_check = file.exists("data/data_drone/L1/ground-trees.gpkg")) %>% 
+  dplyr::mutate(ttops_check = file.exists(paste0("data/data_drone/L3a/ttops/", site, "_ttops.gpkg"))) %>% 
+  dplyr::mutate(crowns_check = file.exists(paste0("data/data_drone/L3a/crowns/", site, "_crowns.gpkg"))) %>% 
+  dplyr::mutate(reflectance_extraction_check = file.exists(paste0("data/data_drone/L3b/crowns-with-reflectance/", site, "_crowns-with-reflectance.gpkg"))) %>% 
+  dplyr::mutate(rasterized_trees_check = file.exists(paste0("data/data_drone/L4/rasterized-trees/", site, "_rasterized-trees.tif")))
 
 sites_checklist
 
