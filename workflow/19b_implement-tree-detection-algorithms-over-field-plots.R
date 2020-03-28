@@ -50,15 +50,15 @@ plan(multiprocess, workers = num_cores_to_use)
 # Start the timer
 start <- Sys.time()
 
-# suppressWarnings(suppressMessages( # Suppress all the outputs from lidR functions. Too much red text!
-#   ttops_summary <- 
-#     all_validation_plots %>% 
-#     furrr::future_map(.f = function(current_plot) {
-
-ttops_summary <- vector(mode = "list", length = length(all_validation_plots))
-
-for (i in seq_along(all_validation_plots)) {
-  current_plot <- all_validation_plots[i]
+suppressWarnings(suppressMessages( # Suppress all the outputs from lidR functions. Too much red text!
+  ttops_summary <-
+    all_validation_plots %>%
+    furrr::future_map(.f = function(current_plot) {
+      
+      # ttops_summary <- vector(mode = "list", length = length(all_validation_plots))
+      
+      # for (i in seq_along(all_validation_plots)) {
+      # current_plot <- all_validation_plots[i]
       # get data for particular plot --------------------------------------------
       this_plot_starttime <- Sys.time()
       print(paste0(current_plot, " started at ", this_plot_starttime, "."))
@@ -251,7 +251,7 @@ for (i in seq_along(all_validation_plots)) {
       # First row is default values for li2012 algorithm
       # second row come from Jakubowski et al. (2013) [mixed conifer forest near Tahoe-- pretty comparable to our study]
       li2012_params1 <- tibble(dt1 = dt1_vals, dt2 = dt2_vals, R = R_vals, Zu = Zu_vals, hmin = min_height, speed_up = speed_up,
-                              dt1_names, dt2_names, Zu_names, R_names, speed_up_names)
+                               dt1_names, dt2_names, Zu_names, R_names, speed_up_names)
       
       
       # Second round was systematically exploring the parameter space
@@ -282,7 +282,7 @@ for (i in seq_along(all_validation_plots)) {
             st_li2012(plot_boundary = current_plot_boundary, dt1 = dt1, dt2 = dt2, R = R, Zu = Zu, hmin = hmin, speed_up = speed_up)
           
         })
-    
+      
       li2012_names <-
         li2012_params %>%
         tidyr::unite(col = "ttops_method", ends_with("names")) %>%
@@ -530,14 +530,14 @@ for (i in seq_along(all_validation_plots)) {
                          tree_count_below_15m = sum(height < 15)) %>%
         dplyr::left_join(ttops_time, by = "ttops_method") %>% 
         dplyr::select(plot, ttops_method, elapsed_time, everything())
-
-      ttops_summary[[i]] <- current_plot_ttops_summary
+      
+      # ttops_summary[[i]] <- current_plot_ttops_summary
       this_plot_endtime <- Sys.time()
       print(paste0(current_plot, " took ", round(difftime(this_plot_endtime, this_plot_starttime, units = "mins"), 2), " minutes. Total elapsed time: ", round(difftime(this_plot_endtime, start, units = "mins"), 2), " minutes."))
       
-      }
-    # })
-# ))
+      # }
+    })
+))
 
 ttops_summary <- 
   do.call("rbind", ttops_summary) %>% 
