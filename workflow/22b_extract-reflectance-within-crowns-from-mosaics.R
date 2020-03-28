@@ -8,7 +8,7 @@ library(velox)
 library(viridis)
 
 source(here::here("workflow/01_make-processing-checklist.R"))
-source(here::here("workflow/21a_extract-reflectance-within-crowns-from-mosaics-function.R"))
+source(here::here("workflow/22a_extract-reflectance-within-crowns-from-mosaics-function.R"))
 
 sites_checklist
 

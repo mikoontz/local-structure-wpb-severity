@@ -8,15 +8,9 @@ library(here)
 library(units)
 
 source(here::here("workflow/01_make-processing-checklist.R"))
-source(here::here("workflow/18a_tree-detection-and-crown-segmentation-functions.R"))
+source(here::here("workflow/19a_tree-detection-and-crown-segmentation-functions.R"))
 
 sites_checklist
-
-# These sites had X3 and RedEdge photos merged into the same project, so we look in a different place for some of the relevant
-# files.
-merged_sites <- c("eldo_3k_2",
-                  "eldo_3k_3",
-                  "eldo_4k_2")
 
 # This is where I can put in sites that need their processing redone. An empty 
 # string means that no already-processed site output will be overwritten

@@ -9,7 +9,7 @@ library(modelr)
 # The live/dead classifier is an R object called `live_or_dead_classifier`
 # The species classifier is an R object called `species_classifier`
 if (!file.exists("data/data_drone/L3b/classifier-models/live-or-dead-classifier.rds") | !file.exists("data/data_drone/L3b/classifier-models/species-classifier.rds")) {
-  source(here::here("workflow/22_build-tree-classifier.R"))
+  source(here::here("workflow/23_build-tree-classifier.R"))
 }
 
 live_or_dead_classifier <- readr::read_rds("data/data_drone/L3b/classifier-models/live-or-dead-classifier.rds")
@@ -17,7 +17,7 @@ species_classifier <- readr::read_rds("data/data_drone/L3b/classifier-models/spe
 
 # Source in the allometric scaling models based on the ground data
 # object is called `allometry_models`
-source(here::here("workflow/23_allometric-scaling-models.R"))
+source(here::here("workflow/14_allometric-scaling-models.R"))
 allometry_models
 
 crowns_with_reflectance <- readr::read_csv(file = here::here("data/data_drone/L3b/crowns-with-reflectance_35m-buffer.csv"))

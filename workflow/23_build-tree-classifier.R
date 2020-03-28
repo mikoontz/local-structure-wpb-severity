@@ -22,7 +22,7 @@ library(caret)
 library(caTools)
 library(klaR)
 
-source(here::here("workflow/21a_extract-reflectance-within-crowns-from-mosaics-function.R"))
+source(here::here("workflow/22a_extract-reflectance-within-crowns-from-mosaics-function.R"))
 
 sites_to_hand_classify <-
   c("eldo_3k_1", "eldo_3k_2", "eldo_3k_3", "eldo_4k_1", "eldo_4k_2", "eldo_5k_2", "eldo_5k_3",
