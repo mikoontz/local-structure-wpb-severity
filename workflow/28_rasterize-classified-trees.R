@@ -9,6 +9,10 @@ library(tictoc)
 library(lubridate)
 library(nngeo)
 
+# Now there is an R object in the environment called "sites_checklist" that has
+# infomation about how far along all processing steps are.
+source("workflow/01_make-processing-checklist.R")
+
 # Converts a per-cell value (20 x 20m) to a per acre value
 perCell_to_perAc <- function(r) {
   r / (prod(res(r)) / 4046.856)
@@ -19,64 +23,14 @@ perCell_to_perHa <- function(r) {
 } # returns trees per hectare when r represents a raster with counts of trees per cell
 
 
-if(file.exists(here::here("analyses/analyses_output/classified-trees.geojson"))) {
+if(!file.exists(here::here("data/data_drone/L3b/model-classified-trees_all.gpkg"))) {
   
-  classified_trees <- 
-    sf::st_read(here::here("analyses/analyses_output/classified-trees.geojson")) %>% 
-    sf::st_transform(3310)
+  source("workflow/24_classify-all-trees.R")
   
-} else {
-  stop("Trees haven't been classified yet! See the analyses/classify-crown-segments.R script.")
-}
+} 
 
-# Now there is an R object in the environment called "sites_checklist" that has
-# infomation about how far along all processing steps are.
-source("workflow/01_make-processing-checklist.R")
-
-cwd <- raster::raster(here::here("data/data_raw/cwd1981_2010_ave_HST_1550861123/cwd1981_2010_ave_HST_1550861123.tif"))
-
-# The .prj file doesn't seem to be reading in properly with the .tif, but we can look at it in a text editor and see that it is EPSG3310
-
-crs(cwd) <- st_crs(3310)$proj4string
-
-sn <- sf::st_read(here::here("data/data_output/sierra-nevada-jepson/sierra-nevada-jepson.shp"))
-
-# herbarium_records <- 
-#   data.table::fread(here::here("data/features/California_Species_clean_All_epsg_3310.csv")) %>% 
-#   dplyr::as_tibble() %>% 
-#   dplyr::filter(scientificName == "Pinus ponderosa")
-
-sn_pipo <-
-  data.table::fread(here::here("data/data_raw/California_Species_clean_All_epsg_3310.csv")) %>% 
-  dplyr::as_tibble() %>% 
-  dplyr::mutate(current_genus = tolower(current_genus),
-                current_species = tolower(current_species)) %>% 
-  dplyr::filter(current_genus == "pinus") %>% 
-  dplyr::filter(current_species == "ponderosa") %>% 
-  sf::st_as_sf(coords = c("x_epsg_3310", "y_epsg_3310"), crs = 3310) %>% 
-  dplyr::select(id, early_julian_day, late_julian_day, verbatim_date, elevation) %>% 
-  sf::st_intersection(sn) %>% 
-  dplyr::mutate(date = parse_date_time(early_julian_day, c("mdy", "ymd", "ymdHM"))) %>% 
-  dplyr::mutate(year = year(date)) %>% 
-  dplyr::mutate(cwd = raster::extract(cwd, ., method = "bilinear"))
-
-mean_cwd_sn_pipo <- mean(sn_pipo$cwd, na.rm = TRUE)
-sd_cwd_sn_pipo <- sd(sn_pipo$cwd, na.rm = TRUE)
-
-# source(here::here("data/data_carpentry/extract-cwd-from-locations.R"))
-# R object is called `cwd_data`
-
-
-unusable_sites <- c("eldo_4k_3", # too many blocks
-                    "stan_4k_3", # too many blocks
-                    "stan_5k_3", # too many blocks
-                    "sequ_4k_2") # middle section flown on a separate day and the stitch looks terrible
-
-# These sites were processed with their X3 and RedEdge imagery combined so some of their
-# output products will be in a slightly different place in the project directory
-merged_sites <- c("eldo_3k_2",
-                  "eldo_3k_3",
-                  "eldo_4k_2")
+classified_trees <- 
+  sf::st_read(here::here("data/data_drone/L3b/model-classified-trees_all.gpkg"))
 
 # This is where I can put in sites that need their processing redone. An empty 
 # string means that no already-processed site output will be overwritten
@@ -88,29 +42,27 @@ sites_checklist[sites_checklist$site %in% sites_to_overwrite, "overwrite"] <- TR
 
 sites_to_process <- 
   sites_checklist %>% 
-  dplyr::filter(!(site %in% unusable_sites)) %>%
   dplyr::filter(overwrite | !rasterized_trees_check) %>% 
   dplyr::select(site) %>% 
   dplyr::pull()
+
+surveyed_area <- 
+  sf::st_read("data/data_drone/L0/surveyed-area-3310.gpkg")
+
+if(!dir.exists(here::here(paste0("data/data_drone/L4/rasterized-trees/")))) {
+  dir.create(here::here(paste0("data/data_drone/L4/rasterized-trees/")), recursive = TRUE)
+}
 
 results_list <- vector(mode = "list", length = length(sites_to_process))
 
 for(i in seq_along(sites_to_process)) {
   
   current_site <- sites_to_process[i]
-  
-  # Build the template raster using the site bounds as an outer border
-  # One site has additional restrictions on its flight bounds in order to avoid any chance of visible private property in the processed imagery.
-  if(current_site == "stan_3k_2") {
-    site_bounds <- sf::st_read(here::here("data/data_output/site_data/stan_3k_2/stan_3k_2_mission-footprint/stan_3k_2_site-bounds_privacy.geoJSON"))
-  } else {
-    site_bounds <- sf::st_read(here::here(paste0("data/data_output/site_data/", current_site, "/", current_site, "_mission-footprint/", current_site, "_site-bounds.geoJSON")))
-  }
-  
+
   buffered_bounds <-
-    site_bounds %>% 
-    st_transform(3310) %>% 
-    st_buffer(-35) # buffer in a little further than the trees were to reduce edge effects (-40 worked)
+    surveyed_area %>% 
+    dplyr::filter(site == current_site) %>% 
+    st_buffer(-35) # buffer in a little further than the trees were to reduce edge effects (-35 worked)
   
   raster_template <- raster::raster(buffered_bounds, res = 20)
   
@@ -127,26 +79,27 @@ for(i in seq_along(sites_to_process)) {
     st_voronoi() %>% 
     st_cast() %>% 
     st_intersection(st_geometry(buffered_bounds)) %>% 
-    data.frame(geometry = .) %>% 
-    st_sf() %>% 
+    sf::st_sf(geometry = .) %>% 
     dplyr::mutate(voronoi_area = st_area(.)) %>% 
     dplyr::mutate(voronoi_poly = geometry) %>% 
     st_join(current_trees, .) %>% 
-    st_set_geometry(value = "geometry") %>% 
-    dplyr::mutate(nn1 = st_nn(., ., k = 4, returnDist = TRUE, sparse = FALSE, progress = FALSE)$dist[, 2],
-                  nn2 = st_nn(., ., k = 4, returnDist = TRUE, sparse = FALSE, progress = FALSE)$dist[, 3],
-                  nn3 = st_nn(., ., k = 4, returnDist = TRUE, sparse = FALSE, progress = FALSE)$dist[, 4])
+    dplyr::mutate(nn = nngeo::st_nn(., ., k = 4, returnDist = TRUE, sparse = FALSE, progress = FALSE)$dist) %>% 
+    dplyr::mutate(nn1 = map_dbl(nn, magrittr::extract, 2),
+                  nn2 = map_dbl(nn, magrittr::extract, 3),
+                  nn3 = map_dbl(nn, magrittr::extract, 4)) %>% 
+    dplyr::select(-nn)
   
   current_cwd <- raster::resample(cwd, raster_template, method = "bilinear")
+
+  # See the workflow/03_extract-cwd-from-locations.R script to get this vector file
+  sn_pipo <- sf::st_read("data/data_output/sierra-nevada-pipo-cwd.gpkg")
+  
+  mean_cwd_sn_pipo <- mean(sn_pipo$cwd, na.rm = TRUE)
+  sd_cwd_sn_pipo <- sd(sn_pipo$cwd, na.rm = TRUE)
+  
   current_cwd_zscore <- (current_cwd - mean_cwd_sn_pipo) / sd_cwd_sn_pipo
   
-  # plot(crop(cwd, site_bounds %>% st_transform(3310) %>% st_buffer(200)))
-  # plot(buffered_bounds$geometry, add = TRUE)
-  # plot(current_cwd, add = TRUE)
-  # plot(buffered_bounds$geometry)
-  # plot(cwd, add = TRUE)
   # # count of trees per cell -------------------------------------------------
-  
   
   live_count <- raster::rasterize(x = current_trees, 
                                   y = raster_template, 
@@ -746,7 +699,7 @@ for(i in seq_along(sites_to_process)) {
                              "live_cov_voronoi", "dead_cov_voronoi", "pipo_cov_voronoi", "non_pipo_cov_voronoi", "pipo_and_dead_cov_voronoi", "overall_cov_voronoi",
                              "local_cwd", "local_cwd_zscore")
   
-  writeRaster(x = results_raster, filename = here::here(paste0("analyses/analyses_output/rasterized-trees/", current_site, "_rasterized-trees.tif")), overwrite = TRUE)
+  writeRaster(x = results_raster, filename = here::here(paste0("data/data_drone/L4/rasterized-trees/", current_site, "_rasterized-trees.tif")), overwrite = TRUE)
   
   results_df <- 
     results_raster %>% 
@@ -760,4 +713,4 @@ for(i in seq_along(sites_to_process)) {
 
 final_results <- do.call("rbind", results_list)
 
-write.csv(final_results, file = here::here("analyses/analyses_output/data-from-rasterized-classified-trees.csv"), row.names = FALSE)
+write.csv(final_results, file = here::here("data/data_drone/L4/data-from-rasterized-classified-trees.csv"), row.names = FALSE)

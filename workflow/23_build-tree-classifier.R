@@ -57,7 +57,7 @@ sites_to_hand_classify %>%
 ### for a couple hundred trees.
 
 # Extract the reflectance data from within hand-classified crowns ---------
-if(!file.exists(here::here("data/data_drone/L3b/hand-classified-trees.csv"))) {
+if(!file.exists(here::here("data/data_drone/L3b/hand-classified-trees_all.csv"))) {
   
   crowns_with_reflectance <-
     map(.x = sites_to_hand_classify, .f = function(current_site) {
@@ -65,7 +65,7 @@ if(!file.exists(here::here("data/data_drone/L3b/hand-classified-trees.csv"))) {
       ttops <- sf::st_read(here::here(paste0("data/data_drone/L3a/ttops/", current_site, "_ttops.gpkg")))
 
       crowns <- 
-        sf::st_read(here::here(paste0("data/data_drone/L3b/hand-classified-trees/", current_site, "_hand-classified-crowns.gpkg"))) %>% 
+        sf::st_read(here::here(paste0("data/data_drone/L3b/hand-classified-trees/", current_site, "_hand-classified-trees.gpkg"))) %>% 
         filter(!is.na(live) | !is.na(species))
       
       index <- velox::velox(here::here(paste0("data/data_drone/L2/index/", current_site, "_index.tif")))
@@ -93,7 +93,9 @@ if(!file.exists(here::here("data/data_drone/L3b/hand-classified-trees.csv"))) {
 
 # read in the hand-classified crowns --------------------------------------
 
-crowns_with_reflectance <- readr::read_csv(here::here("data/data_drone/L3b/hand-classified-trees_all.csv"))
+crowns_with_reflectance <- 
+  readr::read_csv(here::here("data/data_drone/L3b/hand-classified-trees_all.csv")) %>% 
+  dplyr::mutate(live = ifelse(live == 1, yes = "live", no = "dead"))
 
 # create the live/dead classifier -----------------------------------------
 set.seed(1409)
@@ -105,12 +107,14 @@ live_or_dead_testing <- crowns_with_reflectance[-live_or_dead_idx, ]
 live_or_dead_classifier <- caret::train(
   as.factor(live) ~ b_mean + g_mean + r_mean + re_mean + nir_mean + ndvi_mean + rgi_mean + cire_mean + cig_mean + ndre_mean,
   data = live_or_dead_training,
-  method = "LogitBoost"
+  method = "LogitBoost",
+  trControl = trainControl(classProbs = TRUE, 
+                           summaryFunction = twoClassSummary),
+  metric = "ROC"
 )
 
 # Classifier is called `live_or_dead_classifier`
 live_or_dead_classifier
-
 
 # subset to only the live crowns ------------------------------------------
 
@@ -151,3 +155,32 @@ if(!dir.exists("data/data_drone/L3b/classifier-models")) {
 
 readr::write_rds(x = live_or_dead_classifier, path = "data/data_drone/L3b/classifier-models/live-or-dead-classifier.rds")
 readr::write_rds(x = species_classifier, path = "data/data_drone/L3b/classifier-models/species-classifier.rds")
+
+
+# assess the classifiers --------------------------------------------------
+
+live_or_dead_predict <- predict(live_or_dead_classifier, newdata = live_or_dead_testing)
+
+live_or_dead_pred_accuracy <- 
+  data.frame(data = live_or_dead_testing$live, pred = live_or_dead_predict) %>% 
+  dplyr::mutate(match = data == pred)
+
+mean(live_or_dead_pred_accuracy$match)
+
+species_predict <- predict(species_classifier, newdata = species_testing)
+
+species_pred_accuracy <- 
+  data.frame(data = species_testing$species, pred = species_predict) %>% 
+  dplyr::mutate(match = data == pred) %>% 
+  dplyr::mutate(data_host = ifelse(data == "pipo", yes = "host", no = "non-host"),
+                pred_host = ifelse(pred == "pipo", yes = "host", no = "non-host")) %>% 
+  dplyr::mutate(match_host = data_host == pred_host)
+
+mean(species_pred_accuracy$match)
+mean(species_pred_accuracy$match_host)
+
+classification_summary_stats <-
+  tibble(type = c("live/dead", "species", "host/non-host"),
+         accuracy = c(mean(live_or_dead_pred_accuracy$match), mean(species_pred_accuracy$match), mean(species_pred_accuracy$match_host)))
+
+write_csv(classification_summary_stats, path = "analyses/analyses_output/classification-summary-stats.csv")

@@ -77,6 +77,7 @@ sn_pipo <-
 
 # sn_pipo has 179 rows and thus represents 179 herbaria records
 # of ponderosa pine for which the CWD was extracted (using CWD as defined # by the Basin Characterization Model)
+sf::st_write(obj = sn_pipo, dsn = "data/data_output/sierra-nevada-pipo-cwd.gpkg")
 
 mean_cwd_sn_pipo <- mean(sn_pipo$cwd, na.rm = TRUE)
 sd_cwd_sn_pipo <- sd(sn_pipo$cwd, na.rm = TRUE)

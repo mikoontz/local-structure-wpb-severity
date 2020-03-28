@@ -39,4 +39,4 @@ units(survey_area$buffered_survey_area) <- "ha"
 
 survey_area
 
-sf::st_write(obj = survey_area, dsn = "data/data_drone/L0/surveyed-area-3310.gpkg")
+sf::st_write(obj = survey_area, dsn = "data/data_drone/L0/surveyed-area-3310.gpkg", delete_dsn = TRUE)

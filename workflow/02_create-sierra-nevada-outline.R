@@ -34,4 +34,4 @@ sn <-
   st_union() %>% 
   st_zm()
 
-st_write(sn, dsn = here::here("data/data_output/sierra-nevada-jepson.gpkg"))
+st_write(sn, dsn = here::here("data/data_output/sierra-nevada-jepson.gpkg"), delete_dsn = TRUE)
