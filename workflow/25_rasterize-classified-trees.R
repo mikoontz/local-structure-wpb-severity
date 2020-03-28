@@ -49,6 +49,12 @@ sites_to_process <-
 surveyed_area <- 
   sf::st_read("data/data_drone/L0/surveyed-area-3310.gpkg")
 
+# See the workflow/03_extract-cwd-from-locations.R script to get this vector file
+sn_pipo <- sf::st_read("data/data_output/sierra-nevada-pipo-cwd.gpkg")
+
+mean_cwd_sn_pipo <- mean(sn_pipo$cwd, na.rm = TRUE)
+sd_cwd_sn_pipo <- sd(sn_pipo$cwd, na.rm = TRUE)
+
 if(!dir.exists(here::here(paste0("data/data_drone/L4/rasterized-trees/")))) {
   dir.create(here::here(paste0("data/data_drone/L4/rasterized-trees/")), recursive = TRUE)
 }
@@ -90,13 +96,6 @@ for(i in seq_along(sites_to_process)) {
     dplyr::select(-nn)
   
   current_cwd <- raster::resample(cwd, raster_template, method = "bilinear")
-
-  # See the workflow/03_extract-cwd-from-locations.R script to get this vector file
-  sn_pipo <- sf::st_read("data/data_output/sierra-nevada-pipo-cwd.gpkg")
-  
-  mean_cwd_sn_pipo <- mean(sn_pipo$cwd, na.rm = TRUE)
-  sd_cwd_sn_pipo <- sd(sn_pipo$cwd, na.rm = TRUE)
-  
   current_cwd_zscore <- (current_cwd - mean_cwd_sn_pipo) / sd_cwd_sn_pipo
   
   # # count of trees per cell -------------------------------------------------
