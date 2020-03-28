@@ -32,23 +32,23 @@ sites_to_hand_classify <-
 
 # Copy segmented crowns shapefile to hand-classified directory ------------
 
-if(!dir.exists("data/data_drone/L3b/hand-classified-crowns")) {
-  dir.create("data/data_drone/L3b/hand-classified-crowns", recursive = TRUE)
+if(!dir.exists("data/data_drone/L3b/hand-classified-trees")) {
+  dir.create("data/data_drone/L3b/hand-classified-trees", recursive = TRUE)
 }
 
 sites_to_hand_classify %>%
   walk(.f = function(current_site) {
     
-    if(!file.exists(here::here(paste0("data/data_drone/L3b/hand-classified-crowns/", current_site, "_hand-classified-crowns.gpkg")))) {  
+    if(!file.exists(here::here(paste0("data/data_drone/L3b/hand-classified-trees/", current_site, "_hand-classified-trees.gpkg")))) {  
       
       file.copy(from = here::here(paste0("data/data_drone/L3a/crowns/", current_site, "_crowns.gpkg")),
-                to = here::here(paste0("data/data_drone/L3b/hand-classified-crowns/", current_site, "_hand-classified-crowns.gpkg")))
+                to = here::here(paste0("data/data_drone/L3b/hand-classified-trees/", current_site, "_hand-classified-trees.gpkg")))
       
-    } else (print(paste0("GPKG for hand classified crowns of ", current_site, " already exists!")))
+    } else (print(paste0("GPKG for hand classified trees of ", current_site, " already exists!")))
     
   })
 
-# Pause to go hand classify the crowns ------------------------------------
+# Pause to go hand classify the trees ------------------------------------
 
 ### Pause!! Go use QGIS to overlay these crowns shapefiles on top of the index mosaic
 ### and add two extra attributes: live (1/0) and species (pipo/pila/cade/abco). Use the
@@ -57,7 +57,7 @@ sites_to_hand_classify %>%
 ### for a couple hundred trees.
 
 # Extract the reflectance data from within hand-classified crowns ---------
-if(!file.exists(here::here("data/data_drone/L3b/hand-classified-crowns.csv"))) {
+if(!file.exists(here::here("data/data_drone/L3b/hand-classified-trees.csv"))) {
   
   crowns_with_reflectance <-
     map(.x = sites_to_hand_classify, .f = function(current_site) {
@@ -65,7 +65,7 @@ if(!file.exists(here::here("data/data_drone/L3b/hand-classified-crowns.csv"))) {
       ttops <- sf::st_read(here::here(paste0("data/data_drone/L3a/ttops/", current_site, "_ttops.gpkg")))
 
       crowns <- 
-        sf::st_read(here::here(paste0("data/data_drone/L3b/hand-classified-crowns/", current_site, "_hand-classified-crowns.gpkg"))) %>% 
+        sf::st_read(here::here(paste0("data/data_drone/L3b/hand-classified-trees/", current_site, "_hand-classified-crowns.gpkg"))) %>% 
         filter(!is.na(live) | !is.na(species))
       
       index <- velox::velox(here::here(paste0("data/data_drone/L2/index/", current_site, "_index.tif")))
@@ -87,13 +87,13 @@ if(!file.exists(here::here("data/data_drone/L3b/hand-classified-crowns.csv"))) {
     }) %>% 
     do.call("rbind", .)
 
-  write_csv(x = crowns_with_reflectance, path = here::here("data/data_drone/L3b/hand-classified-crowns_all.csv"))
+  write_csv(x = crowns_with_reflectance, path = here::here("data/data_drone/L3b/hand-classified-trees_all.csv"))
 }
 
 
 # read in the hand-classified crowns --------------------------------------
 
-crowns_with_reflectance <- readr::read_csv(here::here("data/data_drone/L3b/hand-classified-crowns_all.csv"))
+crowns_with_reflectance <- readr::read_csv(here::here("data/data_drone/L3b/hand-classified-trees_all.csv"))
 
 # create the live/dead classifier -----------------------------------------
 set.seed(1409)

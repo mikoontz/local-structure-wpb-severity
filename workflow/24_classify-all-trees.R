@@ -9,7 +9,7 @@ library(modelr)
 # The live/dead classifier is an R object called `live_or_dead_classifier`
 # The species classifier is an R object called `species_classifier`
 if (!file.exists("data/data_drone/L3b/classifier-models/live-or-dead-classifier.rds") | !file.exists("data/data_drone/L3b/classifier-models/species-classifier.rds")) {
-  source(here::here("workflow/22_build-crown-classifier.R"))
+  source(here::here("workflow/22_build-tree-classifier.R"))
 }
 
 live_or_dead_classifier <- readr::read_rds("data/data_drone/L3b/classifier-models/live-or-dead-classifier.rds")
@@ -42,16 +42,16 @@ classified_and_allometried_trees <-
   dplyr::select(-model) %>% 
   dplyr::mutate(estimated_ba = (estimated_dbh / 2)^2 * pi / 10000)
 
-classified_trees_4326 <-
+classified_trees_3310 <-
   classified_and_allometried_trees %>% 
   split(f = .$crs) %>% 
   lapply(FUN = function(trees) {
     current_crs <- unique(trees$crs)
     
-    trees4326 <-
+    trees3310 <-
       trees %>% 
       st_as_sf(coords = c("x", "y"), crs = current_crs, remove = FALSE) %>% 
-      st_transform(4326) %>% 
+      st_transform(3310) %>% 
       dplyr::rename(local_crs = crs,
                     local_x = x,
                     local_y = y) %>% 
@@ -62,4 +62,21 @@ classified_trees_4326 <-
   }) %>% 
   do.call("rbind", .)
 
-sf::st_write(classified_trees_4326, dsn = here::here("data/data_drone/L3b/classified-trees_all.gpkg"), delete_dsn = TRUE)
+sf::st_write(classified_trees_3310, dsn = here::here("data/data_drone/L3b/model-classified-trees_all.gpkg"), delete_dsn = TRUE)
+
+# Also write classified trees to individual sites
+if(!dir.exists("data/data_drone/L3b/model-classified-trees")) {
+  dir.create("data/data_drone/L3b/model-classified-trees")
+}
+
+sites <- unique(classified_trees_3310$site)
+
+purrr::walk(sites, .f = function(current_site) {
+  
+  current_trees <- 
+    classified_trees_3310 %>% 
+    dplyr::filter(site == current_site)
+  
+  sf::st_write(obj = current_trees, dsn = here::here(paste0("data/data_drone/L3b/model-classified-trees/", current_site, "_model-classified-trees.gpkg")))
+
+})
