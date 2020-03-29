@@ -8,15 +8,17 @@ library(mgcv)
 library(brms)
 library(future)
 
-if(file.exists(here::here("analyses/analyses_output/data-from-rasterized-classified-trees.csv"))) {
+if(file.exists(here::here("data/data_drone/L4/data-from-rasterized-classified-trees.csv"))) {
   
   data_from_rasterized_trees <- 
-    readr::read_csv(here::here("analyses/analyses_output/data-from-rasterized-classified-trees.csv"))
+    readr::read_csv(here::here("data/data_drone/L4/data-from-rasterized-classified-trees.csv"))
 } else {
-  stop("You need to extract the data from the rasterized version of the classified trees! See the analyses/rasterize-classified-trees.R script.")
+  stop("You need to extract the data from the rasterized version of the classified trees! See the workflow/25_rasterize-classified-trees.R script.")
 }
 
 glimpse(data_from_rasterized_trees)
+
+cwd_data <- readr::read_csv("data/data_output/cwd-data.csv")
 
 center_param <- TRUE
 scale_param <- TRUE
