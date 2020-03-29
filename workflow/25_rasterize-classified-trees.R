@@ -49,6 +49,10 @@ sites_to_process <-
 surveyed_area <- 
   sf::st_read("data/data_drone/L0/surveyed-area-3310.gpkg")
 
+# CWD and CWD z-scores
+cwd <- raster::raster("data/data_raw/cwd1981_2010_ave_HST_1550861123/cwd1981_2010_ave_HST_1550861123.tif")
+crs(cwd) <- sf::st_crs(3310)$proj4string
+
 # See the workflow/03_extract-cwd-from-locations.R script to get this vector file
 sn_pipo <- sf::st_read("data/data_output/sierra-nevada-pipo-cwd.gpkg")
 
@@ -203,25 +207,25 @@ for(i in seq_along(sites_to_process)) {
   live_basal_area <- raster::rasterize(x = current_trees %>% dplyr::filter((live == 1)), 
                                        y = raster_template, 
                                        field = "estimated_ba", 
-                                       background = NA, 
+                                       background = 0, 
                                        fun = sum)
   
   dead_basal_area <- raster::rasterize(x = current_trees %>% dplyr::filter((live == 0)), 
                                        y = raster_template, 
                                        field = "estimated_ba", 
-                                       background = NA, 
+                                       background = 0, 
                                        fun = sum)
   
   pipo_basal_area <- raster::rasterize(x = current_trees %>% dplyr::filter((species == "pipo")), 
                                        y = raster_template, 
                                        field = "estimated_ba", 
-                                       background = NA, 
+                                       background = 0, 
                                        fun = sum)
   
   non_pipo_basal_area <- raster::rasterize(x = current_trees %>% dplyr::filter((species != "pipo")), 
                                            y = raster_template, 
                                            field = "estimated_ba", 
-                                           background = NA, 
+                                           background = 0, 
                                            fun = sum)
   
   pipo_and_dead_basal_area <- dead_basal_area + pipo_basal_area
@@ -229,7 +233,7 @@ for(i in seq_along(sites_to_process)) {
   total_basal_area <- raster::rasterize(x = current_trees, 
                                         y = raster_template, 
                                         field = "estimated_ba", 
-                                        background = NA, 
+                                        background = 0, 
                                         fun = sum)
   
   # r3 <- live_basal_area + dead_basal_area
