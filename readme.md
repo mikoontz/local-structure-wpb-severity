@@ -1,6 +1,6 @@
 Drone-enabled forest ecology: A fine-grain, broad-extent analysis of how forest structure and regional climate interact to influence the western pine beetle-induced mortality rate of ponderosa pine in the Sierra Nevada Mountain range of California during the exceptional hot drought of 2012-2015.
 
-The manuscript describing this work can be found as a preprint here: [Koontz et al., 2020. Cross-scale interaction of host tree size and climate governs bark beetle-induced tree mortality.](https://doi.org/10.32942/osf.io/jz964).
+The manuscript describing this work can be found as a preprint here: [Koontz et al., 2020. Cross-scale interaction of host tree size and climate governs bark beetle-induced tree mortality.](https://doi.org/10.32942/osf.io/jz964)
 
 This repository represents the workflow used to process the drone data from aerial photographs taken over ~40 ha of forested area surrounding each of 32 field plots along a 350 km latitudinal gradient and 1,000 m elevational gradient on the western slope Sierra Nevada in yellow pine/mixed-conifer forests. 
 In total, over 9 km^2^ of forest was surveyed between early April, 2018 and early July, 2018 at a spatial resolution of approximately 8 cm per pixel.
@@ -28,6 +28,56 @@ Script files labeled with an 'x' after their number represent workflow steps tha
 The number in these files still represents the order in which these idiosyncratic workflow steps were run.
 In one case, workflow/06x_alternative_rename-and-integrate-x3-and-re-photos.R), the script should be run *in place of* the script with the similar name (workflow/06_rename-and-integrate-x3-and-re-photos.R).
 In all other 'x' cases, the script is run in addition to the other scripts in the workflow.
+
+The file organization for the drone-related data looks like this:
+
+local-structure-wpb-severity
+|--analyses/
+|--docs/
+|--figures/
+|--workflow/
+|__data/
+   |--data_raw/
+   |--data_output/
+   |__data_drone/
+      |--L0/
+      |  |--flight-logs/
+      |  |--photos/
+      |  |--photos-metadata/
+      |  |--mission-footprint/
+      |  |  |--photo-points/
+      |  |  |--site-bounds/
+      |  |  |__srtm30m/
+      |  |__surveyed-area-3310.gpkg
+      |
+      |--L1/
+      |  |--pix4d-reports/
+      |  |--plot-locations/
+      |  |--ortho/
+      |  |--dsm/
+      |  |--dense-point-cloud/
+      |  |--ground-trees.gpkg
+      |  |__plot-centers-identifiable-from-air_3310.gpkg
+      |
+      |--L2/
+      |  |--index/
+      |  |--classified-point-cloud/
+      |  |--dtm/
+      |  |__chm/
+      |
+      |--L3a/
+      |  |--ttops/
+      |  |__crowns
+      |
+      |--L3b/
+      |  |--hand-classified-trees/
+      |  |--model-classified-trees/
+      |  |__crowns-with-reflectance/
+      |  
+      |__L4/
+         |--rasterized-trees/
+         |__data-from-rasterized-classified-trees.csv
+
 
 The general workflow is:
 
@@ -78,7 +128,6 @@ The "variable window filter" algorithm detects tree tops as local maxima using t
 The tree top locations and the Canopy Height Model are then used to determine the spatial extent of each tree's crown using a marker controlled watershed segmentation algorithm.
 
 ![Crown spatial extent, or "segments", detected using marker controlled watershed segmentation algorithm on the Canopy Height Model and using the tree top locations.](figures/L3a_eldo_3k_3_crowns_cropped.png)
-
 
 The classification of all trees in the study (whether they were alive or dead) based on the extracted pixel values from the orthomosaic for each crown segment generates a "forest stem map" for each site.
 
