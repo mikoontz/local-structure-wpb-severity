@@ -1,6 +1,32 @@
-Analysis of forest structure data in yellow pine/mixed conifer forests of the Sierra Nevada Mountain Range and severity of western pine beetle in those forests.
+Drone-enabled forest ecology: A fine-grain, broad-extent analysis of how forest structure and regional climate interact to influence the western pine beetle-induced mortality rate of ponderosa pine in the Sierra Nevada Mountain range of California during the exceptional hot drought of 2012-2015.
 
-Forest sites were chosen to have >40% ponderosa pine tree by basal area and >10% mortality of ponderosa pine tree by basal area.
+This repository represents the workflow used to process the drone data from aerial photographs taken over ~40 ha of forested area surrounding each of 32 field plots along a 350 km latitudinal gradient and 1,000 m elevational gradient on the western slope Sierra Nevada in yellow pine/mixed-conifer forests. 
+In total, over 9 km^2^ of forest was surveyed between early April, 2018 and early July, 2018 at a spatial resolution of approximately 8 cm per pixel.
+The coincident field sites (described in [Fettig et al., 2019](https://doi.org/10.1016/j.foreco.2018.09.006)) were selected to have >40% ponderosa pine tree by basal area and >10% mortality of ponderosa pine tree by basal area.
+The manuscript describing this work can be found as a preprint here: [Koontz et al., 2020](https://doi.org/10.32942/osf.io/jz964).
+
+Over 450,000 photographs were captured for this study: approximately 75,000 were captured using a broad band RGB camera, and approximately 75,000 were captured using a Micasense RedEdge narrow band multispectral camera with 5 discrete bands of sensitivity (blue, green, red, red edge, and near infrared). 
+Each image capture with the Micasense RedEdge camera resulted in 5 images generated, one for each narrow band (for a total of 375,000 photographs).
+
+The workflow is detailed in the workflow/ directory, and the files are numbered with the order in which they were run. 
+Data related to the drone-acquired imagery are organized using "data product levels" akin to those used by NASA and USGS and are located in the data/data_drone/ directory under their appropriate Level subdirectory (L0, L1, L2, L3a, L3b, L4).
+In a general sense, Level 0 data represent raw data from the instruments (original photographs and flight logs) while each higher level represents data derived from levels below it.
+See Figure 2 in the manuscript as well as the methods section for more details on this file organization structure.
+
+Level 0 data occupy approximately 1.2 TB of disk space.
+Level 1 data occupy approximately 49.1 GB of disk space.
+Level 2 data occupy approximately 71.1 GB of disk space.
+Level 3a data occupy approximately 1.7 GB of disk space.
+Level 3b data occupy approximately 3.7 GB of disk space.
+Level 4 data occupy approximately 46.9 MB of disk space.
+
+Due to the high volume of data processing required for the project, the Structure from Motion photogrammetry step was performed in a separate directory (data/data_working/) from the final home of the drone-related data (data/data_drone/).
+The software used for the Structure from Motion photogrammetry, Pix4Dmapper, creates a lot of additional files and a very complicated file structure, so some of the workflow files copy and rename files from the default Pix4D output and save them instead in a consistent and more readily discoverable part of the data/data_drone/ directory (e.g., workflow/15_rehome-pix4d-report-dsm-dense-point-cloud.R).
+
+Script files labeled with an 'x' after their number represent workflow steps that were specific to this paper and are not expected to be part of a general drone forest ecology workflow (e.g., estimating geolocation for some Micasense RedEdge photographs using known geolocations from the co-mounted RGB camera, then writing that information to the RedEdge photographs' EXIF metadata to aid the Structure from Motion process).
+The number in these files still represents the order in which these idiosyncratic workflow steps were run.
+In one case, workflow/06x_alternative_rename-and-integrate-x3-and-re-photos.R), the script should be run *in place of* the script with the similar name (workflow/06_rename-and-integrate-x3-and-re-photos.R).
+In all other 'x' cases, the script is run in addition to the other scripts in the workflow.
 
 The general workflow is:
 
