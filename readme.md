@@ -1,9 +1,10 @@
 Drone-enabled forest ecology: A fine-grain, broad-extent analysis of how forest structure and regional climate interact to influence the western pine beetle-induced mortality rate of ponderosa pine in the Sierra Nevada Mountain range of California during the exceptional hot drought of 2012-2015.
 
+The manuscript describing this work can be found as a preprint here: [Koontz et al., 2020. Cross-scale interaction of host tree size and climate governs bark beetle-induced tree mortality.](https://doi.org/10.32942/osf.io/jz964).
+
 This repository represents the workflow used to process the drone data from aerial photographs taken over ~40 ha of forested area surrounding each of 32 field plots along a 350 km latitudinal gradient and 1,000 m elevational gradient on the western slope Sierra Nevada in yellow pine/mixed-conifer forests. 
 In total, over 9 km^2^ of forest was surveyed between early April, 2018 and early July, 2018 at a spatial resolution of approximately 8 cm per pixel.
 The coincident field sites (described in [Fettig et al., 2019](https://doi.org/10.1016/j.foreco.2018.09.006)) were selected to have >40% ponderosa pine tree by basal area and >10% mortality of ponderosa pine tree by basal area.
-The manuscript describing this work can be found as a preprint here: [Koontz et al., 2020](https://doi.org/10.32942/osf.io/jz964).
 
 Over 450,000 photographs were captured for this study: approximately 75,000 were captured using a broad band RGB camera, and approximately 75,000 were captured using a Micasense RedEdge narrow band multispectral camera with 5 discrete bands of sensitivity (blue, green, red, red edge, and near infrared). 
 Each image capture with the Micasense RedEdge camera resulted in 5 images generated, one for each narrow band (for a total of 375,000 photographs).
