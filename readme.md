@@ -73,7 +73,11 @@ local-structure-wpb-severity
       |--L3b/  
       |  |--hand-classified-trees/  
       |  |--model-classified-trees/  
-      |  |__crowns-with-reflectance/  
+      |  |--crowns-with-reflectance/  
+      |  |--crowns-with-reflectance_all.csv
+      |  |--crowns-with-reflectance_35m-buffer.csv
+      |  |--hand-classified-trees_all.csv
+      |  |__model-classified-trees_all.gpkg
       |    
       |__L4/  
          |--rasterized-trees/  
