@@ -31,6 +31,7 @@ In all other 'x' cases, the script is run in addition to the other scripts in th
 
 The file organization for the drone-related data looks like this:
 
+<pre>
 local-structure-wpb-severity  
 |--analyses/  
 |--docs/  
@@ -77,7 +78,7 @@ local-structure-wpb-severity
       |__L4/  
          |--rasterized-trees/  
          |__data-from-rasterized-classified-trees.csv  
-
+</pre>
 
 The general workflow is:
 
