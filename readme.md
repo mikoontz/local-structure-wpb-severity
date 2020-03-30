@@ -31,52 +31,52 @@ In all other 'x' cases, the script is run in addition to the other scripts in th
 
 The file organization for the drone-related data looks like this:
 
-local-structure-wpb-severity
-|--analyses/
-|--docs/
-|--figures/
-|--workflow/
-|__data/
-   |--data_raw/
-   |--data_output/
-   |__data_drone/
-      |--L0/
-      |  |--flight-logs/
-      |  |--photos/
-      |  |--photos-metadata/
-      |  |--mission-footprint/
-      |  |  |--photo-points/
-      |  |  |--site-bounds/
-      |  |  |__srtm30m/
-      |  |__surveyed-area-3310.gpkg
-      |
-      |--L1/
-      |  |--pix4d-reports/
-      |  |--plot-locations/
-      |  |--ortho/
-      |  |--dsm/
-      |  |--dense-point-cloud/
-      |  |--ground-trees.gpkg
-      |  |__plot-centers-identifiable-from-air_3310.gpkg
-      |
-      |--L2/
-      |  |--index/
-      |  |--classified-point-cloud/
-      |  |--dtm/
-      |  |__chm/
-      |
-      |--L3a/
-      |  |--ttops/
-      |  |__crowns
-      |
-      |--L3b/
-      |  |--hand-classified-trees/
-      |  |--model-classified-trees/
-      |  |__crowns-with-reflectance/
+local-structure-wpb-severity  
+|--analyses/  
+|--docs/  
+|--figures/  
+|--workflow/  
+|__data/  
+   |--data_raw/  
+   |--data_output/  
+   |__data_drone/  
+      |--L0/  
+      |  |--flight-logs/  
+      |  |--photos/  
+      |  |--photos-metadata/  
+      |  |--mission-footprint/  
+      |  |  |--photo-points/  
+      |  |  |--site-bounds/  
+      |  |  |__srtm30m/  
+      |  |__surveyed-area-3310.gpkg  
       |  
-      |__L4/
-         |--rasterized-trees/
-         |__data-from-rasterized-classified-trees.csv
+      |--L1/  
+      |  |--pix4d-reports/  
+      |  |--plot-locations/  
+      |  |--ortho/  
+      |  |--dsm/  
+      |  |--dense-point-cloud/  
+      |  |--ground-trees.gpkg  
+      |  |__plot-centers-identifiable-from-air_3310.gpkg  
+      |  
+      |--L2/  
+      |  |--index/  
+      |  |--classified-point-cloud/  
+      |  |--dtm/  
+      |  |__chm/  
+      |  
+      |--L3a/  
+      |  |--ttops/  
+      |  |__crowns  
+      |  
+      |--L3b/  
+      |  |--hand-classified-trees/  
+      |  |--model-classified-trees/  
+      |  |__crowns-with-reflectance/  
+      |    
+      |__L4/  
+         |--rasterized-trees/  
+         |__data-from-rasterized-classified-trees.csv  
 
 
 The general workflow is:
