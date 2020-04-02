@@ -178,7 +178,7 @@ Because forest density is a coarse metric of the forest features to which bark b
 Finally, the challenge of simultaneously measuring the effects of both local-scale forest features (such as structure and composition) and broad-scale environmental conditions (such as climatic water deicit; CWD) on forest insect disturbance leaves their interaction effect relatively underexplored [@seidl2016a; @stephenson2019; @fettig2019].
 
 The ponderosa pine/mixed-conifer forests in California’s Sierra Nevada region are characterized by regular bark beetle disturbances, primarily by the influence of western pine beetle (*Dendroctonus brevicomis*; WPB) on its host ponderosa pine (*Pinus ponderosa*) [@fettig2016]. 
-WPB is a "primary" bark beetle-- its reproductive success is contingent upon host tree mortality, which itself requires enough beetles to "mass attack" the host tree and overwhelm its defenses [@raffa1983]. 
+WPB is a primary bark beetle-- its reproductive success is contingent upon host tree mortality, which itself requires enough beetles to mass attack the host tree and overwhelm its defenses [@raffa1983]. 
 This Allee effect creates a strong coupling between beetle selection behavior of host trees and host tree susceptibility to colonization [@raffa1983; @logan1998]. 
 A key defense mechanism of conifers to bark beetle attack is to flood beetle bore holes with resin, which physically expels beetles and may interrupt beetle communication [@franceschi2005; @raffa2015]. 
 Under normal conditions, weakened trees with compromised defenses are the most susceptible to colonization and will be the main targets of primary bark beetles like WPB [@bentz2010; @raffa2015]. 
@@ -247,6 +247,7 @@ In California, WPB generally has 2-3 generations in a single year and can often 
 
 Nadir-facing imagery was captured using a gimbal-stabilized DJI Zenmuse X3 broad-band red/green/blue (RGB) camera [@dji2015] and a fixed-mounted Micasense Rededge3 multispectral camera with five narrow bands [@micasense2015] on a DJI Matrice 100 aircraft [@dji2015a]. 
 Imagery was captured from both cameras along preprogrammed aerial transects over ~40 hectares surrounding each of the 32 sites (each of these containing five field plots) and was processed in a series of steps to yield local forest structure and composition data suitable for our statistical analyses. 
+All images were captured in 2018 during a 3-month period between early April and early July, and thus our work represents a postmortem investigation into the drivers of cumulative tree mortality through the course of the hot drought.  
 Following the call by @wyngaard2019, we establish "data product levels" to reflect the image processing pipeline from raw imagery (Level 0) to calibrated, fine-scale forest structure and composition information on regular grids (Level 4), with each new data level derived from levels below it.
 Here, we outline the steps in the processing and calibration pipeline visualized in `r fig_nums("fig-drone-data-levels", display = "cite")`, and include additional details in the Supplemental Information.
 
@@ -383,6 +384,7 @@ While the detected mortality is most likely to be ponderosa pine killed by WPB, 
 We used CWD [@stephenson1998] from the 1981-2010 mean value of the basin characterization model [@flint2013] as an integrated measure of temperature and moisture conditions for each of the 32 sites.
 Higher values of CWD correspond to hotter, drier conditions and lower values correspond to cooler, wetter conditions.
 CWD has been shown to correlate well with broad patterns of tree mortality in the Sierra Nevada [@young2017] as well as bark beetle-induced tree mortality [@millar2012].
+The forests along the entire CWD gradient used in this study experienced exceptional hot drought between 2012 to 2015 [@griffin2014; @robeson2015].
 We converted the CWD value for each site into a z-score representing that site's deviation from the mean CWD across the climatic range of Sierra Nevada ponderosa pine as determined from 179 herbarium records described in @baldwin2017a.
 Thus, a CWD z-score of 1 would indicate that the CWD at that site is one standard deviation hotter/drier than the mean CWD across all geolocated herbarium records for ponderosa pine in the Sierra Nevada.
 
@@ -390,9 +392,10 @@ Thus, a CWD z-score of 1 would indicate that the CWD at that site is one standar
 
 We used a generalized linear model with a zero-inflated binomial response and a logit link to predict the probability of ponderosa pine mortality within each 20 x 20-m cell using the total number of ponderosa pine trees in each cell as the number of trials, and the number of dead trees in each cell as the number of "successes".
 As covariates, we used the proportion of trees that are WPB hosts (i.e., ponderosa pine) in each cell, the mean height of ponderosa pine trees in each cell, the count of trees of all species (overall density) in each cell, and the site-level CWD using Eq. 1.
-Note that the two-way interaction between the overall density and the proportion of trees that are hosts is equivalent to the number of ponderosa pine trees in the cell.
+Note that the two-way interaction between the overall density and the proportion of trees that are hosts is directly proportional to the number of ponderosa pine trees in the cell.
+We centered and scaled all predictor values, and used weakly-regularizing default priors from the `brms` package [@burkner2017].
 To measure and account for spatial autocorrelation underlying ponderosa pine mortality, we subsampled the data at each site to a random selection of 200, 20 x 20-m cells representing approximately 27.5% of the surveyed area.
-Additionally with these subsampled data, we included a separate exact Gaussian process term per site of the interaction between the x- and y-position of each cell using the `gp()` function in the `brms` package [@burkner2017].
+Additionally with these subsampled data, we included a separate exact Gaussian process term per site of the noncentered/nonscaled interaction between the x- and y-position of each cell using the `gp()` function in the `brms` package [@burkner2017].
 The Gaussian process estimates the spatial covariance in the response variable (log-odds of ponderosa pine mortality) jointly with the effects of the other covariates.
 
 $$
@@ -412,6 +415,7 @@ $$
 
 Where $y_i$ is the number of dead trees in cell $i$, $n_i$ is the sum of the dead trees (assumed to be ponderosa pine) and live ponderosa pine trees in cell $i$, $\pi_i$ is the probability of ponderosa pine tree mortality in cell $i$, $p$ is the probability of there being zero dead trees in a cell arising as a result of an unmodeled process, $X_{cwd, j}$ is the z-score of CWD for site $j$, $X_{propHost, i}$ is the scaled proportion of trees that are ponderosa pine in cell $i$, $X_{PIPOheight, i}$ is the scaled mean height of ponderosa pine trees in cell $i$, $X_{overallDensity, i}$ is the scaled density of all trees in cell $i$, $x_i$ and $y_i$ are the x- and y- coordinates of the centroid of the cell in an EPSG3310 coordinate reference system, and $\mathcal{GP}_j$ represents the exact Gaussian process describing the spatial covariance between cells at site $j$.
 
+We fit this model using the `brms` package [@burkner2017] which implements the No U-Turn Sampler extension to the Hamiltonian Monte Carlo algorithm [@hoffman2014] in the Stan programming language [@carpenter2017].
 We used 4 chains with 4000 iterations each (2000 warmup, 2000 samples), and confirmed chain convergence by ensuring all `Rhat` values were less than 1.1 [@brooks1998] and that the bulk and tail effective sample sizes (ESS) for each estimated parameter were greater than 100 times the number of chains (i.e., greater than 400 in our case).
 We used posterior predictive checks to visually confirm model performance by overlaying the density curves of the predicted number of dead trees per cell over the observed number [@gabry2019].
 For the posterior predictive checks, we used 50 random samples from the model fit to generate 50 density curves and ensured curves were centered on the observed distribution, paying special attention to model performance at capturing counts of zero.
