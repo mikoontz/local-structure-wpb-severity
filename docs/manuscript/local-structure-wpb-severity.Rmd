@@ -2,7 +2,7 @@
 bibliography: ../docs_carpentry/local-structure-wpb-severity.bib
 csl: ../docs_carpentry/ecological-applications.csl
 params:
-  title: Cross-scale interaction of host tree size and climate governs bark beetle-induced tree mortality
+  title: Cross-scale interaction of host tree size and climatic water deficit governs bark beetle-induced tree mortality
   author: |
     Michael J. Koontz^1,2,3\*^,
     Andrew M. Latimer^1,2^,
