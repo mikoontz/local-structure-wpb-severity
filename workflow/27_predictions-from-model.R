@@ -8,7 +8,7 @@ library(brms)
 
 cwd_data <- read_csv("data/data_output/cwd-data.csv")
 
-fm1 <- readRDS("analyses/analyses_output/fitted-model_zibinomial_site-cwdZscore_prop-host_pipo-height_overall-tpha_exact-gp-per-site_200-samples.rds")
+fm1 <- readr::read_rds(path =  here::here('analyses', 'analyses_output', 'fitted-model_zibinomial_site-cwdZscore_prop-host_pipo-height_overall-tpha_overall-bapha_exact-gp-per-site_200-samples.rds'))
 
 step_size <- 0.1
 
@@ -45,7 +45,7 @@ for (i in seq_along(1:nrow(interaction_covariates))) {
 
 samps <- 
   posterior_samples(fm1) %>% 
-  dplyr::select(one_of(paste0("b_", covariates))) %>% 
+  dplyr::select(tidyselect::all_of(paste0("b_", covariates))) %>% 
   dplyr::sample_n(size = 4000)
 
 (start <- Sys.time())
