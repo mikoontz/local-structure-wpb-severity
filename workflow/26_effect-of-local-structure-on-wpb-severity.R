@@ -53,19 +53,31 @@ adf <-
 
 (start <- Sys.time())
 fm1_brms <- brm(dead_count | trials(pipo_and_dead_count) ~ 
-                   site_cwd_zscore*prop_host_s*pipo_and_dead_mean_height_s +
-                   prop_host_s*overall_tpha_s +
-                   site_cwd_zscore*overall_tpha_s +
-                   gp(x, y, by = site, scale = FALSE),
-                 data = adf,
-                 family = zero_inflated_binomial(),
-                 iter = 4000,
-                 chains = 4,
-                 cores = 4,
-                 control = list(adapt_delta = 0.90))
+                  site_cwd_zscore +
+                  prop_host_s +
+                  pipo_and_dead_mean_height_s +
+                  overall_tpha_s +
+                  overall_bapha_s +
+                  site_cwd_zscore:prop_host_s +
+                  site_cwd_zscore:pipo_and_dead_mean_height_s +
+                  site_cwd_zscore:overall_tpha_s +
+                  site_cwd_zscore:overall_bapha_s +
+                  prop_host_s:overall_tpha_s +
+                  prop_host_s:pipo_and_dead_mean_height_s +
+                  site_cwd_zscore:prop_host_s:pipo_and_dead_mean_height_s +
+                  gp(x, y, by = site, scale = FALSE),
+                data = adf,
+                family = zero_inflated_binomial(),
+                iter = 4000,
+                chains = 4,
+                cores = 4,
+                control = list(adapt_delta = 0.90))
 summary(fm1_brms)
-(elapsed <- Sys.time() - start)
+(elapsed <- difftime(Sys.time(), start, units = "hours"))
 pp_check(fm1_brms, nsamples = 50)
 
-saveRDS(fm1_brms, here::here('analyses/analyses_output/fitted-model_zibinomial_site-cwdZscore_prop-host_pipo-height_overall-tpha_exact-gp-per-site_200-samples.rds'))
+# The final model to use, I think.
+readr::write_rds(x = fm1_brms, path = here::here('analyses/analyses_output/fitted-model_zibinomial_site-cwdZscore_prop-host_pipo-height_overall-tpha_overall-bapha_exact-gp-per-site_200-samples.rds'))
+
+
 
