@@ -27,22 +27,24 @@ prop_host_height_cwd_interaction_df <-
                                 TRUE ~ "average site")) %>% 
   dplyr::mutate(cwd = factor(cwd, levels = c("cool/wet site", "average site", "hot/dry site")))
 
+# colorblind friendly 2-color paletted from https://davidmathlogic.com/colorblind/
+# https://davidmathlogic.com/colorblind/#%23E1BE6A-%2340B0A6
+# https://davidmathlogic.com/colorblind/#%23994F00-%23006CD1
 prop_host_height_cwd_interaction_gg <-
   ggplot(prop_host_height_cwd_interaction_df, 
          aes(x = prop_host_s, 
              y = est_mn, 
              color = pipo_and_dead_mean_height)) +
-  geom_ribbon(aes(ymin = lwr, ymax = upr, group = pipo_and_dead_mean_height, fill = pipo_and_dead_mean_height), alpha = 0.5, color = NA) +
+  geom_ribbon(aes(ymin = lwr, ymax = upr, fill = pipo_and_dead_mean_height), alpha = 0.5, color = NA) +
   geom_line() +
   facet_grid(~ cwd) +
   theme_bw() +
   labs(x = "Proportion host trees (Ponderosa pine); scaled",
        y = "Pr(ponderosa mortality)",
-       color = "Mean height",
-       fill = "Mean height") +
-  # scale_y_continuous(limits = c(0, 1)) +
-  scale_fill_viridis_d(option = "E") +
-  scale_color_viridis_d(option = "E")
+       color = "Mean\nhost tree\nheight",
+       fill = "Mean\nhost tree\nheight") +
+  # scale_fill_manual(values = c("#E1BE6A", "#40B0A6"))
+  scale_fill_manual(values = c("#994F00", "#006CD1"))
 
 prop_host_height_cwd_interaction_gg
 
