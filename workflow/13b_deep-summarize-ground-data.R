@@ -15,36 +15,19 @@ cwd <- raster::raster(here::here("data/features/cwd1981_2010_ave_HST_1550861123/
 # The .prj file doesn't seem to be reading in properly with the .tif, but we can look at it in a text editor and see that it is EPSG3310
 crs(cwd) <- st_crs(3310)$proj4string
 
-sn <- sf::st_read(here::here("data/data_output/sierra-nevada-jepson/sierra-nevada-jepson.shp"))
+if(!file.exists(here::here("data", "data_output", "sierra-nevada-pipo-cwd.gpkg"))) {
+  source(here::here("workflow", "03_extract-cwd-from-locations.R"))
+}
 
-# herbarium_records <- 
-#   data.table::fread(here::here("data/features/California_Species_clean_All_epsg_3310.csv")) %>% 
-#   dplyr::as_tibble() %>% 
-#   dplyr::filter(scientificName == "Pinus ponderosa")
-
-sn_pipo <-
-  data.table::fread(here::here("data/features/California_Species_clean_All_epsg_3310.csv")) %>% 
-  dplyr::as_tibble() %>% 
-  dplyr::mutate(current_genus = tolower(current_genus),
-                current_species = tolower(current_species)) %>% 
-  dplyr::filter(current_genus == "pinus") %>% 
-  dplyr::filter(current_species == "ponderosa") %>% 
-  sf::st_as_sf(coords = c("x_epsg_3310", "y_epsg_3310"), crs = 3310) %>% 
-  dplyr::select(id, early_julian_day, late_julian_day, verbatim_date, elevation) %>% 
-  sf::st_intersection(sn) %>% 
-  dplyr::mutate(date = parse_date_time(early_julian_day, c("mdy", "ymd", "ymdHM"))) %>% 
-  dplyr::mutate(year = year(date)) %>% 
-  dplyr::mutate(cwd = raster::extract(cwd, ., method = "bilinear"))
+sn_pipo <- sf::st_read(here::here("data", "data_output", "sierra-nevada-pipo-cwd.gpkg"))
 
 mean_cwd_sn_pipo <- mean(sn_pipo$cwd, na.rm = TRUE)
 sd_cwd_sn_pipo <- sd(sn_pipo$cwd, na.rm = TRUE)
 
-
 # cwd for individual plots ------------------------------------------------
 
-
 plot_centers <- 
-  st_read(here::here("data/features/plot-centers_ground-gps-measured.kml")) %>% 
+  st_read(here::here("data", "data_raw", "plot-centers_ground-gps-measured.kml")) %>% 
   st_transform(3310) %>% 
   st_zm() %>% 
   tidyr::separate(col = Name, into = c("forest", "elevation_band", "rep", "nickname", "plot_id"), sep = "_") %>% 
@@ -148,7 +131,6 @@ site_centers <-
   dplyr::mutate(site_cwd = raster::extract(cwd, ., method = "bilinear")) %>% 
   dplyr::mutate(site_cwd_zscore = (site_cwd - mean_cwd_sn_pipo) / sd_cwd_sn_pipo)
 
-
 dd_site <-
   d %>% 
   dplyr::mutate(ba = (dbh / 2)^2 * pi) %>% 
@@ -220,7 +202,7 @@ dd_site <-
   st_drop_geometry()
 
   
+readr::write_csv(dd_site, here::here("analyses", "analyses_output", "deep-ground-tree-summary-by-site.csv"))
+readr::write_csv(dd_plot, here::here("analyses", "analyses_output", "deep-ground-tree-summary-by-plot.csv"))
 
-readr::write_csv(dd_site, here::here("data/data_output/ground-data-for-modeling-summarized-by-site.csv"))
-readr::write_csv(dd_plot, here::here("data/data_output/ground-data-for-modeling-summarized-by-plot.csv"))
 
