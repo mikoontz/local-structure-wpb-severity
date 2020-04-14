@@ -54,12 +54,12 @@ eq_nums <- captioner(prefix = "Equation")
 
 ```{r source_necessary_scripts}
 # Information about correspondence of tree top detection algorithms with ground data
-algorithm_stats <- read_rds(here::here("analyses/analyses_output/algorithm_stats.rds"))
+algorithm_stats <- read_rds(here::here("analyses", "analyses_output", "algorithm_stats.rds"))
 best_algorithm_deets <- algorithm_stats$best_algorithm_deets
 algorithm_details <- algorithm_stats$algorithm_details
 algorithm_summary <- algorithm_stats$algorithm_summary
 
-d <- read_csv(here::here("data/data_output/formatted-ground-data.csv"))
+d <- read_csv(here::here("data", "data_output", "formatted-ground-data.csv"))
 ```
 
 ```{r ground_data_deets}
@@ -89,7 +89,7 @@ cade_plus_abco_pct_of_all_dead <-
 ```
 
 ```{r ground_tree_summary}
-ground_tree_summary <- readr::read_csv(here::here("analyses/analyses_output/ground-tree-summary.csv"))
+ground_tree_summary <- readr::read_csv(here::here("analyses", "analyses_output", "ground-tree-summary.csv"))
 
 ground_tree_summary_print <-
   ground_tree_summary %>% 
@@ -107,25 +107,25 @@ ground_tree_summary_print <-
 
 
 ```{r classifier_stats}
-classifier_stats <- read_csv(here::here("analyses/analyses_output/classification-summary-stats.csv"))
+classifier_stats <- read_csv(here::here("analyses", "analyses_output", "classification-summary-stats.csv"))
 ```
 
 ```{r hand_classified_crowns}
-hand_classified_crowns <- read_csv(here::here("data/data_output/classified/hand-classified/hand-classified-crowns.csv")) %>% 
+hand_classified_crowns <- read_csv(here::here("data", "data_drone", "L3b", "hand-classified-trees_all.csv")) %>% 
   dplyr::mutate(site = substr(treeID, start = 1, stop = 9))
 ```
 
 ```{r site_characteristics_read_file}
-site_characteristics <- read_csv(here::here("analyses/analyses_output/summarized-non-spatial-site-data.csv"))
+site_characteristics <- read_csv(here::here("analyses", "analyses_output", "summarized-non-spatial-site-data.csv"))
 ```
 
 ```{r model-predictions}
-model_summary <- read_csv(here::here("analyses/analyses_output/final-model-summary.csv"))
+model_summary <- read_csv(here::here("analyses", "analyses_output", "final-model-summary.csv"))
 ```
 
 ```{r identifiable-plot-centers}
 identifiable_plot_centers <- 
-  sf::st_read(here::here("data/data_output/plot-centers-identifiable-from-air_3310.gpkg")) %>% 
+  sf::st_read(here::here("data", "data_drone", "L1", "plot-centers-identifiable-from-air_3310.gpkg")) %>% 
   dplyr::filter(site %in% site_characteristics$site)
 ```
 
