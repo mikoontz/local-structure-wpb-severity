@@ -54,7 +54,7 @@ eq_nums <- captioner(prefix = "Equation")
 
 ```{r source_necessary_scripts}
 # Information about correspondence of tree top detection algorithms with ground data
-algorithm_stats <- read_rds(here::here("analyses", "analyses_output", "algorithm_stats.rds"))
+algorithm_stats <- readr::read_rds(here::here("analyses", "analyses_output", "algorithm_stats.rds"))
 best_algorithm_deets <- algorithm_stats$best_algorithm_deets
 algorithm_details <- algorithm_stats$algorithm_details
 algorithm_summary <- algorithm_stats$algorithm_summary

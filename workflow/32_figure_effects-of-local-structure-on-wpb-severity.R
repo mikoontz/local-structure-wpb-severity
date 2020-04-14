@@ -43,8 +43,10 @@ prop_host_height_cwd_interaction_gg <-
        y = "Pr(ponderosa mortality)",
        color = "Mean\nhost tree\nheight",
        fill = "Mean\nhost tree\nheight") +
+  scale_fill_manual(values = c("#994F00", "#006CD1")) +
+  scale_color_manual(values = c("#994F00", "#006CD1"))
   # scale_fill_manual(values = c("#E1BE6A", "#40B0A6"))
-  scale_fill_manual(values = c("#994F00", "#006CD1"))
+ 
 
 prop_host_height_cwd_interaction_gg
 

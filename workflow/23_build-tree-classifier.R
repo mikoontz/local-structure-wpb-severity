@@ -120,7 +120,7 @@ live_or_dead_classifier
 
 live_crowns <- 
   crowns_with_reflectance %>% 
-  dplyr::filter(live == 1) %>% 
+  dplyr::filter(live == "live") %>% 
   dplyr::mutate(functional_group = case_when(species == "pila" ~ "pinus",
                                              species == "pipo" ~ "pinus",
                                              TRUE ~ species))
