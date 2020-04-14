@@ -48,6 +48,8 @@ samps <-
   dplyr::select(tidyselect::all_of(paste0("b_", covariates))) %>% 
   dplyr::sample_n(size = 4000)
 
+readr::write_csv(x = samps, path = here::here("analyses", "analyses_output", "final-model-posterior-samples.csv"))
+
 (start <- Sys.time())
 lwr <- purrr::map_dbl(1:nrow(newdata), .f = function(row) {quantile(plogis(as.matrix(samps) %*% t(newdata[row, ])), prob = 0.025)})
 (Sys.time() - start)

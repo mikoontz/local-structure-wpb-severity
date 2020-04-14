@@ -8,18 +8,20 @@ library(tidyverse)
 library(brms)
 library(tidybayes)
 
-fm1 <- readRDS("analyses/analyses_output/fitted-model_zibinomial_site-cwdZscore_prop-host_pipo-height_overall-tpha_exact-gp-per-site_200-samples.rds")
+fm1 <- readr::read_rds(path =  here::here('analyses', 'analyses_output', 'fitted-model_zibinomial_site-cwdZscore_prop-host_pipo-height_overall-tpha_overall-bapha_exact-gp-per-site_200-samples.rds'))
 
 fitted_compact <- read_csv("analyses/analyses_output/model-predictions.csv")
 
 step_size <- 0.1
+tree_size_small <- -0.7
+tree_size_large <- 0.7
 
 prop_host_height_cwd_interaction_df <-
   fitted_compact %>% 
-  dplyr::filter(overall_tpha_s == 0) %>% 
+  dplyr::filter(overall_tpha_s == 0 & overall_bapha_s == 0) %>% 
   dplyr::mutate(pipo_and_dead_mean_height_s = round(pipo_and_dead_mean_height_s, 1)) %>% 
-  dplyr::filter(pipo_and_dead_mean_height_s %in% c(-0.7, 0.7)) %>% 
-  dplyr::mutate(pipo_and_dead_mean_height = ifelse(pipo_and_dead_mean_height_s == -0.7, yes = "Smaller trees", no = "Larger trees")) %>% 
+  dplyr::filter(pipo_and_dead_mean_height_s %in% c(tree_size_small, tree_size_large)) %>% 
+  dplyr::mutate(pipo_and_dead_mean_height = ifelse(pipo_and_dead_mean_height_s == tree_size_small, yes = "Smaller trees", no = "Larger trees")) %>% 
   dplyr::mutate(cwd = case_when(site_cwd_zscore == min(site_cwd_zscore) ~ "cool/wet site",
                                 site_cwd_zscore == max(site_cwd_zscore) ~ "hot/dry site",
                                 TRUE ~ "average site")) %>% 
@@ -47,21 +49,26 @@ prop_host_height_cwd_interaction_gg
 ggsave(filename = "figures/prop-host_pipo-height_cwd_interaction.png", width = 6, height = 3.5, units = "in", plot = prop_host_height_cwd_interaction_gg)
 
 # halfeye plots of model coefficients -------------------------------------
+samps <- readr::read_csv(file = here::here("analyses", "analyses_output", "final-model-posterior-samples.csv"))
 original_names <- colnames(samps)
 replacement_names <- c("Intercept", 
                        "Site CWD", 
                        "Proportion host (ponderosa)", 
                        "Ponderosa mean height", 
                        "Overall density", 
+                       "Overall basal area",
                        "Site CWD : Proportion host (ponderosa)",
                        "Site CWD : Ponderosa mean height",
-                       "Proportion host (ponderosa) : Ponderosa mean height",
-                       "Proportion host (ponderosa) : Overall density",
                        "Site CWD : Overall density",
+                       "Site CWD : Overall basal area",
+                       "Proportion host (ponderosa) : Overall density",
+                       "Proportion host (ponderosa) : Ponderosa mean height",
                        "Site CWD : Proportion host (ponderosa) : Ponderosa mean size")
 
-replacement_name_order <- c(1, 2, 3, 5, 9, 4, 7, 6, 10, 8, 11)
+replacement_name_order <- 1:13
+
 colnames(samps) <- replacement_names
+
 long_samps <-
   samps %>% 
   tidyr::gather(key = "variable", value = "samps") %>% 

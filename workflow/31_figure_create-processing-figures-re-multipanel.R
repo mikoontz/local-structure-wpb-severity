@@ -30,11 +30,7 @@ example_site <- "eldo_3k_3"
 
 # digital surface model, uncorrected orthomosaic, point cloud (as a screen shot; not implemented here)
 
-if (example_site %in% merged_sites) {
-  dsm <- raster::raster(x = here::here(paste0("data/data_output/site_data/", example_site, "/", "3_dsm_ortho/1_dsm/", example_site, "_dsm.tif")))
-} else {
-  dsm <- raster::raster(x = here::here(paste0("data/data_output/site_data/", example_site, "/", example_site, "_re/3_dsm_ortho/1_dsm/", example_site, "_re_dsm.tif")))
-}
+dsm <- raster::raster(x = here::here("data", "data_drone", "L1", "dsm", paste0(example_site, "_dsm.tif")))
 
 dsm_gg <-
   dsm %>% 
@@ -63,8 +59,8 @@ dev.off()
 # radiometric corrected: index (red and near infrared)
 # geometric corrected: digital terrain model, canopy height model
 
-dtm <- raster::raster(paste0("data/data_output/site_data/", example_site, "/", example_site, "_dtm.tif"))
-current_chm_rough <- raster::raster(paste0("data/data_output/site_data/", example_site, "/", example_site, "_chm.tif"))
+dtm <- raster::raster(x = here::here("data", "data_drone", "L2", "dtm", paste0(example_site, "_dtm.tif")))
+current_chm_rough <- raster::raster(x = here::here("data", "data_drone", "L2", "chm", paste0(example_site, "_chm.tif")))
 chm <- raster::focal(current_chm_rough, w = matrix(1/9, nrow = 3, ncol = 3))
 chm[raster::getValues(chm) < 0] <- 0
 
@@ -188,24 +184,14 @@ dev.off()
 # Level 3b: spectral AND geometric information
 # live/dead classified tree tops, host/non-host classified tree tops
 
-if (!file.exists(here::here(paste0("data/data_output/site_data/", example_site, "/", example_site, "_classified-crowns.gpkg")))) {
-  
-  cc <- sf::st_read(here::here("analyses/analyses_output/classified-trees.geojson"))
-  
-  site_cc <- 
-    cc %>% 
-    dplyr::filter(site == example_site) %>% 
-    sf::st_transform(3310) %>% 
-    dplyr::mutate(live = ifelse(live == 1, yes = "live", no = "dead")) %>% 
-    dplyr::mutate(host = ifelse((live == "live" & species == "pipo") | live == "dead",
-                                yes = "host",
-                                no = "non-host"))
-  
-  sf::st_write(obj = site_cc, dsn = here::here(paste0("data/data_output/site_data/", example_site, "/", example_site, "_classified-crowns.gpkg")))
-}
+cc <- sf::st_read(here::here("data", "data_drone", "L3b", "model-classified-trees", paste0(example_site, "_model-classified-trees.gpkg")))
 
 site_cc <- 
-  sf::st_read(dsn = here::here(paste0("data/data_output/site_data/", example_site, "/", example_site, "_classified-crowns.gpkg"))) %>% 
+  cc %>% 
+  dplyr::mutate(live = ifelse(live == 1, yes = "live", no = "dead")) %>% 
+  dplyr::mutate(host = ifelse((live == "live" & species == "pipo") | live == "dead",
+                              yes = "host",
+                              no = "non-host")) %>% 
   dplyr::mutate(x = st_coordinates(.)[,1],
                 y = st_coordinates(.)[,2])
 
@@ -242,7 +228,7 @@ dev.off()
 # rasterized version of live/dead classification at 20m x 20m grid cells
 # rasterized version of host/non-host classification at 20m x 20m grid cells
 
-r_eldo_3k_3 <- raster::brick(here::here("analyses/analyses_output/rasterized-trees/eldo_3k_3_rasterized-trees.tif"))
+r_eldo_3k_3 <- raster::brick(here::here("data", "data_drone", "L4", "rasterized-trees", paste0(example_site, "_rasterized-trees.tif")))
 names(r_eldo_3k_3) <- c("live_count", "dead_count", "pipo_count", "non_pipo_count", "pipo_and_dead_count", "total_count", 
                         "live_tpha", "dead_tpha", "pipo_tpha", "non_pipo_tpha", "pipo_and_dead_tpha", "overall_tpha",
                         "live_mean_height", "dead_mean_height", "pipo_mean_height", "non_pipo_mean_height", "pipo_and_dead_mean_height", "overall_mean_height",

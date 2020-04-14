@@ -9,15 +9,14 @@ library(grid)
 library(tmaptools)
 
 sn <- 
-  st_read("data/data_output/sierra-nevada-jepson/sierra-nevada-jepson.shp") %>% 
-  st_transform(3310)
+  st_read("data/data_output/sierra-nevada-jepson.gpkg")
 
 usfs <- 
-  st_read("data/features/S_USA.AdministrativeForest/S_USA.AdministrativeForest.shp") %>% 
-  st_transform(3310)
+  sf::st_read(here::here("data", "data_raw", "S_USA.AdministrativeForest", "S_USA.AdministrativeForest.shp")) %>% 
+  sf::st_transform(3310)
 
 veg_plots <- 
-  st_read("data/features/plot-centers_ground-gps-measured.kml") %>% 
+  st_read(here::here("data", "data_raw", "plot-centers_ground-gps-measured.kml")) %>% 
   tidyr::separate(col = Name, into = c("forest", "elevation_band", "site", "nickname", "rep"), sep = "_") %>% 
   st_transform(3310) %>% 
   group_by(forest, elevation_band, site) %>% 
