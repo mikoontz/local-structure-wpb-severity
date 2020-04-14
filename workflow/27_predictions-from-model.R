@@ -67,7 +67,7 @@ fitted$upr <- upr
 
 fitted_compact <-
   fitted %>% 
-  dplyr::select(one_of(main_effect_covariates), 
+  dplyr::select(tidyselect::all_of(main_effect_covariates), 
                 lwr, est_mn, upr)
 
 write_csv(fitted_compact, path = "analyses/analyses_output/model-predictions.csv")

@@ -6,11 +6,10 @@ library(tidyverse)
 surveyed_area <- 
   sf::st_read("data/data_output/surveyed-area-3310.gpkg", stringsAsFactors = FALSE)
 
-ground_trees <- read_csv("data/data_output/ground-data-for-modeling-summarized-by-site.csv")
+ground_trees <- read_csv(here::here("analyses", "analyses_output", "deep-ground-tree-summary-by-site.csv"))
 
 trees <- 
-  sf::st_read("analyses/analyses_output/classified-trees.geojson", stringsAsFactors = FALSE) %>% 
-  st_transform(3310)
+  sf::st_read(here::here("data", "data_drone", "L3b", "model-classified-trees_all.gpkg"), stringsAsFactors = FALSE)
 
 trees_split <-
   trees %>% 
@@ -90,4 +89,4 @@ summary_print_table <-
                 air_tpha_pipo_live = air_n_pipo_live / buffered_survey_area,
                 air_tpha_pipo_and_dead = air_n_pipo_and_dead / buffered_survey_area,)
 
-write_csv(summary_print_table, path = "analyses/analyses_output/summarized-non-spatial-site-data.csv")
+write_csv(summary_print_table, path = here::here("analyses", "analyses_output", "summarized-non-spatial-site-data.csv"))
