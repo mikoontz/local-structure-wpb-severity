@@ -33,7 +33,7 @@ header-includes:
   - \captionsetup[figure]{labelformat=empty}
   - \captionsetup[table]{labelformat=empty}
 
-output: pdf_document
+output: word_document
 ---
 
 ```{r setup, include = FALSE, echo = FALSE}
@@ -180,21 +180,21 @@ Finally, the challenge of simultaneously measuring the effects of both local-sca
 
 The ponderosa pine/mixed-conifer forests in California’s Sierra Nevada region are characterized by regular bark beetle disturbances, primarily by the influence of western pine beetle (*Dendroctonus brevicomis*; WPB) on its host ponderosa pine (*Pinus ponderosa*) [@fettig2016]. 
 WPB is a primary bark beetle-- its reproductive success is contingent upon host tree mortality, which itself requires enough beetles to mass attack the host tree and overwhelm its defenses [@raffa1983]. 
-This Allee effect creates a strong coupling between beetle selection behavior of host trees and host tree susceptibility to colonization [@raffa1983; @logan1998]. 
-A key defense mechanism of conifers to bark beetle attack is to flood beetle bore holes with resin, which physically expels beetles and may interrupt beetle communication [@franceschi2005; @raffa2015]. 
-Under normal conditions, weakened trees with compromised defenses are the most susceptible to colonization and will be the main targets of primary bark beetles like WPB [@bentz2010; @raffa2015]. 
+This Allee effect creates a strong coupling between beetle selection behavior of host trees and host tree susceptibility to colonization [@raffa1983; @logan1998; @wallin2004]. 
+A key defense mechanism of conifers to bark beetle attack is to flood beetle bore holes with resin, which physically expels colonizing beetles, can be toxic to the colonizers and their fungi, and may interrupt beetle communication [@franceschi2005; @raffa2015]. 
+Under normal conditions, weakened trees with compromised defenses are the most susceptible to colonization and will be the main targets of primary bark beetles like WPB [@bentz2010; @boone2011; @raffa2015]. 
 Under severe water stress, many trees no longer have the resources available to mount a defense [@kolb2016] and thus prolonged drought can often trigger increased bark beetle-induced tree mortality as average tree vigor declines [@bentz2010]. 
-As the local population density of beetles increases due to successful reproduction within spatially-aggregated weakened trees, as might occur during drought, mass attacks grow in size and become capable of overwhelming formidable tree defenses such that even healthy trees may be susceptible to colonization and mortality [@bentz2010; @raffa2015]. 
+As the local population density of beetles increases due to successful reproduction within spatially-aggregated weakened trees, as might occur during drought, mass attacks grow in size and become capable of overwhelming formidable tree defenses such that even healthy trees may be susceptible to colonization and mortality [@bentz2010; @boone2011; @raffa2015]. 
 Thus, water stress can be a key determinant of whether individual trees are susceptible to bark beetles under many conditions, and this environmental condition may interact with beetle population dynamics to drive tree susceptibility under extreme conditions [@bentz2010; @stephenson2019].
 
 WPB activity is strongly influenced by forest structure-- the spatial distribution and size of trees-- and tree species composition.
 Taking forest structure alone, high-density forests are more prone to bark beetle-induced tree mortality [@fettig2012b] which may arise as greater competition for water resources amongst crowded trees  and thus average tree resistance is lower [@hayes2009], or because smaller gaps between trees protect pheromone plumes from dissipation by the wind and thus enhance intraspecific beetle communication [@thistle2004].
-Tree size is another aspect of forest structure that affects bark beetle host selection behavior with smaller trees tending to have lower capacity for resisting attack, and larger trees being more desirable targets on account of their thicker phloem providing greater nutritional content [@chubaty2009; @graf2012].
+Tree size is another aspect of forest structure that affects bark beetle host selection behavior with smaller trees tending to have lower capacity for resisting attack, and larger trees being more desirable targets on account of their thicker phloem providing greater nutritional content [@chubaty2009; @boone2011; @graf2012].
 Taking forest composition alone, WPB activity in the Sierra Nevada mountain range of California is necessarily tied to the regional distribution of its exclusive host, ponderosa pine [@fettig2016]. 
 Colonization by primary bark beetles can also depend on the relative frequencies of tree species in a more local area, akin to reduced oligophagous insect herbivory in forests comprising taxonomically-distinct tree species compared to monocultures [@jactel2007]. 
 The interaction between forest structure and composition also drives WPB activity. 
 For instance, high-density forests with high host availability may experience greater beetle-induced tree mortality because dispersal distances between potential host trees are shorter reducing predation of adults searcing for hosts and facilitating higher rates of colonization [@miller1960; @berryman1982; @fettig2007] or because high host availability reduces the chance of individual beetles wasting their limited resources flying to and landing on a non-host tree [@moeck1981; @evenden2014].
-Stand-scale measures of forest structure and composition thus paint a fundamentally limited picture of the mechanisms by which these forest characteristics affect bark beetle disturbance, but finer-grain information explicitly recognizing tree size, tree species, and local tree density should more appropriately capture the ecological processes underlying insect-induced tree mortality.
+Stand-scale measures of forest structure and composition thus paint a fundamentally limited picture of the mechanisms by which these forest characteristics affect bark beetle disturbance, but finer-grain information explicitly recognizing tree size, tree species, and local tree density should more appropriately capture the ecological processes underlying insect-induced tree mortality [@kaiser2013].
 Additionally, considering the effects of local forest structure and composition with the effects of environmental conditions may help refine our understanding of tree mortality patterns in widespread events such as during the recent California hot drought.
 
 The vast spatial extent of tree mortality in the 2012 to 2015 California hot drought challenges our ability to simultaneously consider how broad-scale environmental conditions may interact with local forest structure and composition to affect the dynamic between bark beetle selection and colonization of host trees, and host tree susceptibility to attack [@anderegg2015a; @stephenson2019].
@@ -241,8 +241,8 @@ In the typical life cycle of WPBs, females initiate host colonization by tunneli
 As a result, oleoresin exudes and collects on the bark surface, as is commonly observed with other bark beetle species. 
 During the early stages of attack, females release an aggregation pheromone component which, in combination with host monoterpenes released from pitch tubes, is attractive to conspecifics [@bedard1969]. 
 An antiaggregation pheromone component is produced during latter stages of host colonization by several pathways, and is thought to reduce intraspecific competition by altering adult behavior to minimize overcrowding of developing brood within the host [@byers1980]. 
-Volatiles from several nonhosts sympatric with ponderosa pine have been demonstrated to inhibit attraction of WPB [@fettig2015; @shepherd2007]. 
-In California, WPB generally has 2-3 generations in a single year and can often out-compete its congener, the mountain pine beetle, *Dendroctonus ponderosae*, in ponderosa pines, especially in larger trees [@miller1960].
+Volatiles from several nonhosts sympatric with ponderosa pine have been demonstrated to inhibit attraction of WPB to its aggregation pheromones [@fettig2015; @shepherd2007]. 
+In California, WPB generally has 2-3 generations in a single year and can often out-compete other primary bark beetles such as the mountain pine beetle (*Dendroctonus ponderosae*), in ponderosa pines, especially in larger trees [@miller1960].
 
 ### Aerial data collection and processing
 
@@ -540,7 +540,7 @@ Furthermore, it has been demonstrated that nonhost volatiles reduce attraction o
 In general, @hayes2009 and @fettig2019 found that measures of host availability explained less variation in mortality than measures of overall tree density, but those conclusions were based on a response variable of "total number of dead host trees," rather than the number of dead host trees conditional on the total number of host trees as in our study (i.e., a binomial response).
 
 The negative relationship between overall tree density, a potential correlate of the local competitive environment, and the probability of ponderosa pine mortality is counter-intuitive but corroborates findings of coincident ground plots [@fettig2019, in their analysis using proportion of trees killed as a response] and other work during the same hot drought [@restaino2019]. 
-In the absence of management, the forest structure is itself a product of climate and, with increasing importance at finer spatial scales, topographic conditions [@fricker2019]. 
+The forest structure (in the absence of management) is itself a product of climate and, with increasing importance at finer spatial scales, topographic conditions [@fricker2019]. 
 Thus, the denser forest patches in our study may indicate greater local water availability, more favorable conditions for tree growth and survivorship, and increased resistance to beetle-induced mortality [@restaino2019]. 
 The negative two-way interaction between site CWD and overall density that amplifies the negative overall density effect in hotter, drier sites (effect size: `r model_summary %>% dplyr::filter(beta == "site_cwd_zscore:overall_tpha_s") %>% pull(Estimate) %>% sprintf("%.2f", .)`; 95% CI: `r paste0("[", model_summary %>% dplyr::filter(beta == "site_cwd_zscore:overall_tpha_s") %>% pull(lwr0_025) %>% sprintf("%.2f", .), ", ", model_summary %>% dplyr::filter(beta == "site_cwd_zscore:overall_tpha_s") %>% pull(upr0_975) %>% sprintf("%.2f", .), "]")`) supports this explanation if greater local tree density implies especially favorable growing conditions (and locally resistant trees) when denser patches are found in hot, dry sites.
 
