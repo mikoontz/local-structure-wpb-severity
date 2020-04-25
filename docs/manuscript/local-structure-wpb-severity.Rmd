@@ -33,7 +33,7 @@ header-includes:
   - \captionsetup[figure]{labelformat=empty}
   - \captionsetup[table]{labelformat=empty}
 
-output: word_document
+output: pdf_document
 ---
 
 ```{r setup, include = FALSE, echo = FALSE}
@@ -363,7 +363,8 @@ We extracted all the pixel values within each segmented crown polygon from the f
 For each crown polygon, we calculated the mean value of the extracted Level 2 and Level 3a pixels and used them as ten independent variables in a five-fold cross validated boosted logistic regression model to predict whether the hand classified trees were alive or dead.
 For just the living trees, we similarly used all 10 mean reflectance values per crown polygon to predict tree species using a five-fold cross validated regularized discriminant analysis.
 The boosted logistic regression and regularized discriminant analysis were implemented using the `caret` package in R [@kuhn2008].
-Finally, we used these models to classify all tree crowns in the data set as alive or dead (`r fig_nums("fig-drone-data-levels", display = "cite")`; Level 3b, first image) as well as the species of living trees (`r fig_nums("fig-drone-data-levels", display = "cite")`; Level 3b, second image).
+We used these models to classify all tree crowns in the data set as alive or dead (`r fig_nums("fig-drone-data-levels", display = "cite")`; Level 3b, first image) as well as the species of living trees (`r fig_nums("fig-drone-data-levels", display = "cite")`; Level 3b, second image).
+Finally, we estimated the basal area of each tree from their photogrammetry-derived height using species-specific simple linear regressions of the relationship between height and diameter at breast height as measured in the coincident field plots from @fettig2019.
 
 ### Level 4: Aggregations to regular grids
 
@@ -406,15 +407,17 @@ y_{i,j} \sim &\ \begin{cases}
 Binom(n_i, \pi_i), & 1-p
 \end{cases} \\
 logit(\pi_i) = &\ \beta_0\ + \\
-& \beta_1X_{cwd, j}\ + \beta_2X_{propHost, i} + \beta_3X_{PIPOheight, i} + \beta_4X_{overallDensity, i} + \\
-& \beta_5X_{cwd, j}X_{PIPOheight, i} + \beta_6X_{cwd, j}X_{propHost, i} + \beta_7X_{cwd, j}X_{overallDensity, i} + \\
-& \beta_8X_{propHost, i}X_{PIPOheight, i} + \beta_9X_{propHost, i}X_{overallDensity, i} + \\ 
-& \beta_{10}X_{cwd, j}X_{propHost, i}X_{PIPOheight, i}\ + \\
+& \beta_1X_{cwd, j}\ + \beta_2X_{propHost, i} + \beta_3X_{PipoHeight, i} + \\ 
+& \beta_4X_{overallDensity, i} + \beta_5X_{overallBA, i} + \\
+& \beta_6X_{cwd, j}X_{PipoHeight, i} + \beta_7X_{cwd, j}X_{propHost, i} + \\
+& \beta_8X_{cwd, j}X_{overallDensity, i} + \beta_9X_{cwd, j}X_{overallBA, i} + \\
+& \beta_10X_{propHost, i}X_{PipoHeight, i} + \beta_11X_{propHost, i}X_{overallDensity, i} + \\ 
+& \beta_{12}X_{cwd, j}X_{propHost, i}X_{PipoHeight, i}\ + \\
 & \mathcal{GP}_j(x_i, y_i) \\
 \end{aligned}
 $$
 
-Where $y_i$ is the number of dead trees in cell $i$, $n_i$ is the sum of the dead trees (assumed to be ponderosa pine) and live ponderosa pine trees in cell $i$, $\pi_i$ is the probability of ponderosa pine tree mortality in cell $i$, $p$ is the probability of there being zero dead trees in a cell arising as a result of an unmodeled process, $X_{cwd, j}$ is the z-score of CWD for site $j$, $X_{propHost, i}$ is the scaled proportion of trees that are ponderosa pine in cell $i$, $X_{PIPOheight, i}$ is the scaled mean height of ponderosa pine trees in cell $i$, $X_{overallDensity, i}$ is the scaled density of all trees in cell $i$, $x_i$ and $y_i$ are the x- and y- coordinates of the centroid of the cell in an EPSG3310 coordinate reference system, and $\mathcal{GP}_j$ represents the exact Gaussian process describing the spatial covariance between cells at site $j$.
+Where $y_i$ is the number of dead trees in cell $i$, $n_i$ is the sum of the dead trees (assumed to be ponderosa pine) and live ponderosa pine trees in cell $i$, $\pi_i$ is the probability of ponderosa pine tree mortality in cell $i$, $p$ is the probability of there being zero dead trees in a cell arising as a result of an unmodeled process, $X_{cwd, j}$ is the z-score of CWD for site $j$, $X_{propHost, i}$ is the scaled proportion of trees that are ponderosa pine in cell $i$, $X_{PipoHeight, i}$ is the scaled mean height of ponderosa pine trees in cell $i$, $X_{overallDensity, i}$ is the scaled density of all trees in cell $i$, $X_{overallBA, i}$ is the scaled basal area of all trees in cell $i$, $x_i$ and $y_i$ are the x- and y- coordinates of the centroid of the cell in an EPSG3310 coordinate reference system, and $\mathcal{GP}_j$ represents the exact Gaussian process describing the spatial covariance between cells at site $j$.
 
 We fit this model using the `brms` package [@burkner2017] which implements the No U-Turn Sampler extension to the Hamiltonian Monte Carlo algorithm [@hoffman2014] in the Stan programming language [@carpenter2017].
 We used 4 chains with 4000 iterations each (2000 warmup, 2000 samples), and confirmed chain convergence by ensuring all `Rhat` values were less than 1.1 [@brooks1998] and that the bulk and tail effective sample sizes (ESS) for each estimated parameter were greater than 100 times the number of chains (i.e., greater than 400 in our case).
@@ -508,13 +511,15 @@ The gray density distribution for each model covariate represents the density of
 
 We detected a positive main effect of CWD on the probability of ponderosa pine mortality within each 20 x 20-m cell (`r fig_nums(name = "fig-halfeye", display = "cite")`).
 We found a positive main effect of proportion of host trees per cell (effect size: `r model_summary %>% dplyr::filter(beta == "prop_host_s") %>% pull(Estimate) %>% sprintf("%.2f", .)`; 95% CI: `r paste0("[", model_summary %>% dplyr::filter(beta == "prop_host_s") %>% pull(lwr0_025) %>% sprintf("%.2f", .), ", ", model_summary %>% dplyr::filter(beta == "prop_host_s") %>% pull(upr0_975) %>% sprintf("%.2f", .), "]")`), with a greater proportion of host trees (i.e., ponderosa pine) in a cell increasing the probability of ponderosa pine mortality.
-Conversely, we found a negative effect of overall tree density (i.e., including both ponderosa pine and non-host species) such that greater tree density in a 20 x 20-m cell (for the same proportion of host trees) would decrease the probability of ponderosa pine mortality.
+We detected no effect of overall tree density nor overall basal area (i.e., including both ponderosa pine and non-host species; tree density effect size: `r model_summary %>% dplyr::filter(beta == "overall_tpha_s") %>% pull(Estimate) %>% sprintf("%.2f", .)`; 95% CI: `r paste0("[", model_summary %>% dplyr::filter(beta == "overall_tpha_s") %>% pull(lwr0_025) %>% sprintf("%.2f", .), ", ", model_summary %>% dplyr::filter(beta == "overall_tpha_s") %>% pull(upr0_975) %>% sprintf("%.2f", .), "]")`; basal area effect size: `r model_summary %>% dplyr::filter(beta == "overall_bapha_s") %>% pull(Estimate) %>% sprintf("%.2f", .)`; 95% CI: `r paste0("[", model_summary %>% dplyr::filter(beta == "overall_bapha_s") %>% pull(lwr0_025) %>% sprintf("%.2f", .), ", ", model_summary %>% dplyr::filter(beta == "overall_bapha_s") %>% pull(upr0_975) %>% sprintf("%.2f", .), "]")`).
+
 We found a positive two-way interaction between the overall tree density per cell and the proportion of trees that were hosts, which is equivalent to a positive effect of the density of host trees (effect size: `r model_summary %>% dplyr::filter(beta == "prop_host_s:overall_tpha_s") %>% pull(Estimate) %>% sprintf("%.2f", .)`; 95% CI: `r paste0("[", model_summary %>% dplyr::filter(beta == "prop_host_s:overall_tpha_s") %>% pull(lwr0_025) %>% sprintf("%.2f", .), ", ", model_summary %>% dplyr::filter(beta == "prop_host_s:overall_tpha_s") %>% pull(upr0_975) %>% sprintf("%.2f", .), "]")`; `r fig_nums(name = "fig-halfeye", display = "cite")`).
 
 We found a negative effect of mean height of ponderosa pine on the probability of ponderosa mortality, suggesting that WPB attacked smaller trees, on average (effect size: `r model_summary %>% dplyr::filter(beta == "pipo_and_dead_mean_height_s") %>% pull(Estimate) %>% sprintf("%.2f", .)`; 95% CI: `r paste0("[", model_summary %>% dplyr::filter(beta == "pipo_and_dead_mean_height_s") %>% pull(lwr0_025) %>% sprintf("%.2f", .), ", ", model_summary %>% dplyr::filter(beta == "pipo_and_dead_mean_height_s") %>% pull(upr0_975) %>% sprintf("%.2f", .), "]")`).
-However, there was a positive interaction between CWD and ponderosa pine mean height, such that larger trees were more likely to increase the probability of ponderosa mortality in hotter, drier sites (effect size: `r model_summary %>% dplyr::filter(beta == "site_cwd_zscore:pipo_and_dead_mean_height_s") %>% pull(Estimate) %>% sprintf("%.2f", .)`; 95% CI: `r paste0("[", model_summary %>% dplyr::filter(beta == "site_cwd_zscore:pipo_and_dead_mean_height_s") %>% pull(lwr0_025) %>% sprintf("%.2f", .), ", ", model_summary %>% dplyr::filter(beta == "site_cwd_zscore:pipo_and_dead_mean_height_s") %>% pull(upr0_975) %>% sprintf("%.2f", .), "]")`; `r fig_nums(name = "fig-three-way-interaction", display = "cite")`).
+However, there was a positive interaction between CWD and ponderosa pine mean height, such that larger trees were more likely to increase the local probability of ponderosa mortality in hotter, drier sites (effect size: `r model_summary %>% dplyr::filter(beta == "site_cwd_zscore:pipo_and_dead_mean_height_s") %>% pull(Estimate) %>% sprintf("%.2f", .)`; 95% CI: `r paste0("[", model_summary %>% dplyr::filter(beta == "site_cwd_zscore:pipo_and_dead_mean_height_s") %>% pull(lwr0_025) %>% sprintf("%.2f", .), ", ", model_summary %>% dplyr::filter(beta == "site_cwd_zscore:pipo_and_dead_mean_height_s") %>% pull(upr0_975) %>% sprintf("%.2f", .), "]")`; `r fig_nums(name = "fig-three-way-interaction", display = "cite")`).
 
-We found weakly negative effects of the site-level CWD interactions with both the proportion of host trees and overall tree density (`r fig_nums(name = "fig-halfeye", display = "cite")`).
+We found weakly negative effects of the site-level CWD interactions with both the proportion of host trees and overall tree density (CWD/proportion host interaction effect size: `r model_summary %>% dplyr::filter(beta == "site_cwd_zscore:prop_host_s") %>% pull(Estimate) %>% sprintf("%.2f", .)`; 95% CI: `r paste0("[", model_summary %>% dplyr::filter(beta == "site_cwd_zscore:prop_host_s") %>% pull(lwr0_025) %>% sprintf("%.2f", .), ", ", model_summary %>% dplyr::filter(beta == "site_cwd_zscore:prop_host_s") %>% pull(upr0_975) %>% sprintf("%.2f", .), "]")`; `r fig_nums(name = "fig-halfeye", display = "cite")`; CWD/overall tree density interaction effect size: `r model_summary %>% dplyr::filter(beta == "site_cwd_zscore:overall_tpha_s") %>% pull(Estimate) %>% sprintf("%.2f", .)`; 95% CI: `r paste0("[", model_summary %>% dplyr::filter(beta == "site_cwd_zscore:overall_tpha_s") %>% pull(lwr0_025) %>% sprintf("%.2f", .), ", ", model_summary %>% dplyr::filter(beta == "site_cwd_zscore:overall_tpha_s") %>% pull(upr0_975) %>% sprintf("%.2f", .), "]")`; `r fig_nums(name = "fig-halfeye", display = "cite")`; `r fig_nums(name = "fig-three-way-interaction", display = "cite")`). 
+We found a positive effect of the interaction between CWD and total basal area (effect size: `r model_summary %>% dplyr::filter(beta == "site_cwd_zscore:overall_bapha_s") %>% pull(Estimate) %>% sprintf("%.2f", .)`; 95% CI: `r paste0("[", model_summary %>% dplyr::filter(beta == "site_cwd_zscore:overall_bapha_s") %>% pull(lwr0_025) %>% sprintf("%.2f", .), ", ", model_summary %>% dplyr::filter(beta == "site_cwd_zscore:overall_bapha_s") %>% pull(upr0_975) %>% sprintf("%.2f", .), "]")`; `r fig_nums(name = "fig-halfeye", display = "cite")`; `r fig_nums(name = "fig-three-way-interaction", display = "cite")`).
 
 ```{r}
 fig_nums(name = "fig-three-way-interaction", "Line version of model results with 95% credible intervals showing primary influence of ponderosa pine structure on the probability of ponderosa pine mortality, and the interaction across climatic water deficit.
