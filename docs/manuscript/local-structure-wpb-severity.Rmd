@@ -2,7 +2,7 @@
 bibliography: ../docs_carpentry/local-structure-wpb-severity.bib
 csl: ../docs_carpentry/ecological-applications.csl
 params:
-  title: Cross-scale interaction of host tree size and climatic water deficit governs bark beetle-induced tree mortality
+  title: Cross-scale interaction of host tree size and climate governs bark beetle-induced tree mortality
   author: |
     Michael J. Koontz^1,2,3\*^,
     Andrew M. Latimer^1,2^,
@@ -164,7 +164,7 @@ We use drone surveys over 32 distinct sites along a 350-km latitudinal and 1000-
 We validated the segmentation and classification with data from 160 coincident field plots (each 0.041 ha in area) throughout the 32 sites, with the caveat that dead trees were all classified as ponderosa pine. 
 We modeled the probability of ponderosa pine mortality as a function of forest structure and composition and their interaction with site-level climatic water deficit (CWD), accounting for spatial covariance using exact Gaussian processes.
 A greater local proportion of host trees strongly increased the probability of host mortality, with greater host density amplifying this effect.
-Further, we found a strong interaction between host size and CWD such that larger trees increased the probability of host mortality at hot/dry sites, but smaller trees tended to drive mortality in cool/wet sites.  
+Further, we found a strong interaction between host size and CWD such that larger trees increased the probability of host mortality at hot/dry sites, but smaller trees tended to drive mortality in cool/wet sites.
 Our results demonstrate a variable response of WPB to local forest structure and composition across an environmental gradient, which may help reconcile differences between observed ecosystem-wide tree mortality patterns and predictions from models based on coarser-scale forest structure.
 Climate change adaptation strategies should consider that future disturbance outcomes may depend on interactions between local forest structure and broad-scale environmental gradients, with the potential for cross-scale interactions that challenge our current understanding of forest insect dynamics.
 
@@ -498,13 +498,13 @@ The accuracy of WPB host/non-WPB-host (i.e., ponderosa pine versus other tree sp
 
 ### Site summary based on best tree detection algorithm and classification
 
-Across all study sites, we detected, segmented, and classified `r sum(site_characteristics$air_n_total) %>% formatC(format="f", big.mark=",", digits=0)` trees (see Supplemental Information for site summaries). Of these trees, we classified `r sum(site_characteristics$air_n_dead) %>% formatC(format="f", big.mark=",", digits=0)` as dead (`r (sum(site_characteristics$air_n_dead) / sum(site_characteristics$air_n_total) * 100) %>% formatC(format="f", digits=1)`% mortality). Estimated site-level tree mortality ranged from `r (min(site_characteristics$air_n_dead / site_characteristics$air_n_total)) %>% round(3) * 100`% to `r (max(site_characteristics$air_n_dead / site_characteristics$air_n_total)) %>% round(3) * 100`%.
+Across all study sites, we detected, segmented, and classified `r sum(site_characteristics$air_n_total) %>% formatC(format="f", big.mark=",", digits=0)` trees. Of these trees, we classified `r sum(site_characteristics$air_n_dead) %>% formatC(format="f", big.mark=",", digits=0)` as dead (`r (sum(site_characteristics$air_n_dead) / sum(site_characteristics$air_n_total) * 100) %>% formatC(format="f", digits=1)`% mortality). Estimated site-level tree mortality ranged from `r (min(site_characteristics$air_n_dead / site_characteristics$air_n_total)) %>% round(3) * 100`% to `r (max(site_characteristics$air_n_dead / site_characteristics$air_n_total)) %>% round(3) * 100`%. See Supplemental Information for site summaries and comparisons to site-level mortality measured from field data.
 
 ### Effect of local structure and regional climate on tree mortality attributed to western pine beetle
 
 ```{r}
 fig_nums(name = "fig-halfeye", "Posterior distributions of effect size from zero-inflated binomial model predicting the probability of ponderosa pine mortality in a 20 x 20-m cell given forest structure characteristics and site-level climatic water deficit (CWD).
-The gray density distribution for each model covariate represents the density of the posterior distribution, the point underneath each density curve represents the median of the estimate, the bold interval surrounding the point estimate represents the 66% credible interval, and the thin interval surrounding the point estimate represents the 95% credible interval.")
+The gray filled area for each model covariate represents the probability density of the posterior distribution, the point underneath each density curve represents the median of the estimate, the bold interval surrounding the point estimate represents the 66% credible interval, and the thin interval surrounding the point estimate represents the 95% credible interval.")
 ```
 
 ![`r fig_nums(name = "fig-halfeye")`](../../figures/effect-sizes-halfeye.png)
@@ -534,7 +534,7 @@ This study represents a novel use of drones to further our understanding of the 
 We found strong positive effects (effect sizes >0.4) of both the proportion of host trees and the interaction between site CWD and host tree mean size (height) on the probability of ponderosa pine mortality. 
 Conversely, we found a strong negative effect (effect size <-0.4) of mean height of ponderosa pine.
 Site-level CWD exerted a positive, but relatively weak, main effect on the probability of ponderosa mortality (effect size: `r model_summary %>% dplyr::filter(beta == "site_cwd_zscore") %>% pull(Estimate) %>% sprintf("%.2f", .)`; 95% CI: `r paste0("[", model_summary %>% dplyr::filter(beta == "site_cwd_zscore") %>% pull(lwr0_025) %>% sprintf("%.2f", .), ", ", model_summary %>% dplyr::filter(beta == "site_cwd_zscore") %>% pull(upr0_975) %>% sprintf("%.2f", .), "]")`).
-To that end, we did not measure tree water stress at an individual tree level as in other recent work [@stephenson2019], and instead treated CWD as a general indicator of tree stress following results of coarser-scale studies [e.g., @asner2016; @young2017], which may have contributed to our failure to detect a stronger CWD effect.
+To that end, we did not measure tree water stress at an individual tree level as in other recent work [@stephenson2019], and instead treated CWD as a general indicator of tree stress following results of coarser-scale studies [e.g., @young2017], which may have contributed to our failure to detect a stronger CWD effect.
 Also, our entire study area experienced the same extreme hot drought between 2012 and 2015 and the variation of mortality explained by a main effect of CWD may be dampened when most trees are experiencing a high degree of water stress [@floyd2009; @fettig2019].
 
 ### Positive effect of host density and a negative effect of overall density
