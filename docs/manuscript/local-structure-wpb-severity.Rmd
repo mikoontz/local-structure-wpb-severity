@@ -172,25 +172,39 @@ Climate change adaptation strategies should consider that future disturbance out
 
 Bark beetles dealt the final blow to many of the nearly 150 million trees killed in the California hot drought of 2012 to 2015 and its aftermath [@usdafs2019]. 
 A harbinger of climate change effects to come, record high temperatures exacerbated the drought [@griffin2014], which increased water stress in trees [@asner2016], making them more susceptible to colonization by bark beetles [@fettig2012b; @kolb2016]. 
-Further, a century of fire suppression policy has enabled forests to grow into dense stands, which can also makes them more vulnerable to bark beetles [@fettig2012b]. 
-This combination of environmental conditions and forest structural characteristics led to tree mortality events of unprecedented size in the driest, densest forests across the state [@young2017]. 
+Further, a century of fire suppression policy has enabled forests to grow into dense stands, which can also make them more vulnerable to bark beetles [@fettig2012b]. 
+This combination of environmental conditions and forest structural characteristics led to tree mortality events of unprecedented size in the driest, most biomass-rich forests across the state [@asner2016; @young2017]. 
+However, broad-scale analyses can only offer a partial explanation for the strong latitudinal and elevational gradients of observed tree mortality [@young2017].
+
+Bark beetles can amplify tree mortality dynamics against a background of stressful environmental conditions [@raffa2008; @boone2011]
+
+The mechanism linking hot, dry conditions to tree susceptibility to bark beetle colonization is often attributed directly to tree physiology [@bentz2010; @kolb2016], while the link to forest structure is multifaceted [@fettig2012b].
+
+[@geiszler1978]
+[@klein1978]
+[@mitchell1991]
+[@preisler1993a]
+[@senf2017]
+[@jeronimo2019]
 
 
-The mechanisms underlying the link between tree susceptibility to colonization by insects and hot, dry conditions are often directly attributed to tree physiology [@bentz2010; @kolb2016], while the link to forest density is multifaceted [@fettig2012b]. 
-Because forest density is a coarse metric of the forest features to which bark beetles respond [@raffa2008], our understanding of the connection between forest density and insect disturbance severity could be enhanced with more finely-resolved measures of forest structure as well as explicit consideration of tree species composition [@fettig2019; @stephenson2019]. 
-Finally, the challenge of simultaneously measuring the effects of both local-scale forest features (such as structure and composition) and broad-scale environmental conditions (such as climatic water deicit; CWD) on forest insect disturbance leaves their interaction effect relatively underexplored [@seidl2016a; @stephenson2019; @fettig2019].
+Because forest density is a coarse metric of the forest features to which bark beetles respond [@raffa2008], our understanding of the connection between forest density and insect disturbance severity could be enhanced with more finely-resolved measures of forest structure as well as explicit consideration of tree species composition [@geiszler1978; @mitchell1991; @preisler1993a; @fettig2019; @stephenson2019]. 
+
+Finally, the challenge of simultaneously measuring the effects of both local-scale forest features (such as structure and composition) and broad-scale environmental conditions (such as climatic water deficit; CWD) on forest insect disturbance leaves their interaction effect relatively underexplored [@seidl2016a; @stephenson2019; @fettig2019].
+
+
 
 The ponderosa pine/mixed-conifer forests in California’s Sierra Nevada region are characterized by regular bark beetle disturbances, primarily by the influence of western pine beetle (*Dendroctonus brevicomis*; WPB) on its host ponderosa pine (*Pinus ponderosa*) [@fettig2016]. 
 WPB is a primary bark beetle-- its reproductive success is contingent upon host tree mortality, which itself requires enough beetles to mass attack the host tree and overwhelm its defenses [@raffa1983]. 
 This Allee effect creates a strong coupling between beetle selection behavior of host trees and host tree susceptibility to colonization [@raffa1983; @logan1998; @wallin2004]. 
 A key defense mechanism of conifers to bark beetle attack is to flood beetle bore holes with resin, which physically expels colonizing beetles, can be toxic to the colonizers and their fungi, and may interrupt beetle communication [@franceschi2005; @raffa2015]. 
 Under normal conditions, weakened trees with compromised defenses are the most susceptible to colonization and will be the main targets of primary bark beetles like WPB [@bentz2010; @boone2011; @raffa2015]. 
-Under severe water stress, many trees no longer have the resources available to mount a defense [@kolb2016] and thus prolonged drought can often trigger increased bark beetle-induced tree mortality as average tree vigor declines [@bentz2010]. 
+Under severe water stress, many trees no longer have the resources available to mount a defense [@boone2011; @kolb2016] and thus prolonged drought can often trigger increased bark beetle-induced tree mortality as average tree vigor declines [@bentz2010]. 
 As the local population density of beetles increases due to successful reproduction within spatially-aggregated weakened trees, as might occur during drought, mass attacks grow in size and become capable of overwhelming formidable tree defenses such that even healthy trees may be susceptible to colonization and mortality [@bentz2010; @boone2011; @raffa2015]. 
-Thus, water stress can be a key determinant of whether individual trees are susceptible to bark beetles under many conditions, and this environmental condition may interact with beetle population dynamics to drive tree susceptibility under extreme conditions [@bentz2010; @stephenson2019].
+Thus, water stress can be a key determinant of whether individual trees are susceptible to bark beetles under many conditions, and this environmental condition may interact with beetle population dynamics to drive tree susceptibility under extreme conditions [@bentz2010; @boone2011; @stephenson2019].
 
 WPB activity is strongly influenced by forest structure-- the spatial distribution and size of trees-- and tree species composition.
-Taking forest structure alone, high-density forests are more prone to bark beetle-induced tree mortality [@fettig2012b] which may arise as greater competition for water resources amongst crowded trees  and thus average tree resistance is lower [@hayes2009], or because smaller gaps between trees protect pheromone plumes from dissipation by the wind and thus enhance intraspecific beetle communication [@thistle2004].
+Taking forest structure alone, high-density forests are more prone to bark beetle-induced tree mortality [@fettig2012b] which may arise as greater competition for water resources amongst crowded trees and thus average tree resistance is lower [@hayes2009], or because smaller gaps between trees protect pheromone plumes from dissipation by the wind and thus enhance intraspecific beetle communication [@thistle2004].
 Tree size is another aspect of forest structure that affects bark beetle host selection behavior with smaller trees tending to have lower capacity for resisting attack, and larger trees being more desirable targets on account of their thicker phloem providing greater nutritional content [@chubaty2009; @boone2011; @graf2012].
 Taking forest composition alone, WPB activity in the Sierra Nevada mountain range of California is necessarily tied to the regional distribution of its exclusive host, ponderosa pine [@fettig2016]. 
 Colonization by primary bark beetles can also depend on the relative frequencies of tree species in a more local area, akin to reduced oligophagous insect herbivory in forests comprising taxonomically-distinct tree species compared to monocultures [@jactel2007]. 
