@@ -3,7 +3,7 @@
 library(tidyverse)
 library(sf)
 
-source(here::here("workflow/01_make-processing-checklist.R"))
+source(here::here("workflow", "01_make-processing-checklist.R"))
 sites_checklist
 
 sites <- sites_checklist$site
@@ -13,7 +13,7 @@ plot_locations <-
   map(.f = function(current_site) {
     
       current_site_plot_locations <-
-        sf::st_read(paste0("data/data_drone/L1/plot-locations/", current_site, "_plot-locations.gpkg")) %>%
+        sf::st_read(here::here("data", "data_drone", "L1", "plot-locations", paste0(current_site, "_plot-locations.gpkg"))) %>%
         mutate(plot = paste(current_site, id, sep = "_")) %>%
         dplyr::arrange(id) %>%
         sf::st_zm() %>% 
@@ -29,4 +29,4 @@ plot_locations <-
 
 plot_locations
 
-sf::st_write(obj = plot_locations, dsn = "data/data_drone/L1/plot-centers-identifiable-from-air_3310.gpkg")
+sf::st_write(obj = plot_locations, dsn = here::here("data", "data_drone", "L1", "plot-centers-identifiable-from-air_3310.gpkg"), delete_dsn = TRUE)
