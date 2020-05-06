@@ -139,11 +139,11 @@ identifiable_plot_centers <-
 
 # `r params$title`
 
-<!-- `r params$author` -->
+`r params$author`
 
-<!-- `r params$affiliation` -->
+`r params$affiliation`
 
-<!-- *^\*^Correspondence:* ``r params$correspondence`` -->
+*^\*^Correspondence:* ``r params$correspondence``
 
 *Keywords:* `r params$keywords`
 
@@ -432,11 +432,15 @@ We used 4 chains with 4000 iterations each (2000 warmup, 2000 samples), and conf
 We used posterior predictive checks to visually confirm model performance by overlaying the density curves of the predicted number of dead trees per cell over the observed number [@gabry2019].
 For the posterior predictive checks, we used 50 random samples from the model fit to generate 50 density curves and ensured curves were centered on the observed distribution, paying special attention to model performance at capturing counts of zero.
 
-### Software and data availability
+### Data availability
 
-All data are available via the Open Science Framework.
+All data are available via the Open Science Framework (DOI available upon publication).
+
+### Code availability
+
 Statistical analyses were performed using the `brms` packages.
-With the exception of the SfM software (Pix4Dmapper Cloud) and the GIS software QGIS, all data carpentry and analyses were performed using `R` [@rcoreteam2018].
+With the exception of the SfM software (Pix4Dmapper Cloud) and the GIS software QGIS, all data carpentry and analyses were performed using `R` [@rcoreteam2018]. 
+All code used to generate the results from this study are available via the Open Science Framework.
 
 ## Results
 
