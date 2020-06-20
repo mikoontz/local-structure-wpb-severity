@@ -12,7 +12,9 @@ cwd <- raster::raster(here::here("data/data_raw/cwd1981_2010_ave_HST_1550861123/
 
 # The .prj file doesn't seem to be reading in properly with the .tif, but we can look at it in a text editor and see that it is EPSG3310
 
-crs(cwd) <- st_crs(3310)$proj4string
+# Note that using a PROJ4 string probably won't work going forward, given the
+# shift to PROJ6
+crs(cwd) <- sf::st_crs(3310)$proj4string
 
 # There are approximately 4 CWD pixels (at 270m spatial resolution) per
 # 40ha site (if square, about 625m on a side).
@@ -50,10 +52,27 @@ site_centers
 #   geom_sf() +
 #   scale_color_viridis_c()
 
+#### CWD data per plot
+plot_centers <- 
+  st_read(here::here("data/data_raw/plot-centers_ground-gps-measured.kml")) %>% 
+  st_transform(3310) %>% 
+  tidyr::separate(col = Name, into = c("forest", "elevation_band", "rep", "nickname", "plot_id"), sep = "_") %>% 
+  dplyr::select(-Description) %>% 
+  dplyr::mutate(plot_cwd = raster::extract(cwd, ., method = "bilinear")) %>% 
+  dplyr::mutate(elevation_band = as.numeric(as.character(elevation_band))) %>% 
+  dplyr::mutate(forest = substr(forest, start = 1, stop = 4)) %>% 
+  dplyr::mutate(elevation_band = paste0(substr(elevation_band, start = 1, stop = 1), "k")) %>% 
+  dplyr::mutate(site = paste(forest, elevation_band, rep, sep = "_"))
+
 # This is the raw CWD data. 
-cwd_data <- 
+cwd_site_data <- 
   site_centers %>% 
   dplyr::select(site, site_cwd) %>% 
+  sf::st_drop_geometry()
+
+cwd_plot_data <- 
+  plot_centers %>% 
+  dplyr::select(site, plot_cwd) %>% 
   sf::st_drop_geometry()
 
 # What do these CWD values mean for the overall PIPO distribution
@@ -82,8 +101,14 @@ sf::st_write(obj = sn_pipo, dsn = "data/data_output/sierra-nevada-pipo-cwd.gpkg"
 mean_cwd_sn_pipo <- mean(sn_pipo$cwd, na.rm = TRUE)
 sd_cwd_sn_pipo <- sd(sn_pipo$cwd, na.rm = TRUE)
 
-cwd_data <-
-  cwd_data %>% 
+cwd_site_data <-
+  cwd_site_data %>% 
   dplyr::mutate(site_cwd_zscore = (site_cwd - mean_cwd_sn_pipo) / sd_cwd_sn_pipo)
 
-readr::write_csv(cwd_data, here::here("data/data_output/cwd-data.csv"))
+readr::write_csv(cwd_site_data, here::here("data/data_output/cwd-data.csv"))
+
+cwd_plot_data <-
+  cwd_plot_data %>% 
+  dplyr::mutate(plot_cwd_zscore = (plot_cwd - mean_cwd_sn_pipo) / sd_cwd_sn_pipo)
+
+readr::write_csv(cwd_plot_data, here::here("data/data_output/cwd-plot-data.csv"))
