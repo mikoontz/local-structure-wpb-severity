@@ -5,25 +5,25 @@
 
 library(tidyverse)
 library(sf)
+library(here)
 
 cwd <-
-  read_csv("data/data_output/cwd-data.csv")
+  read_csv(here::here("data", "data_output", "cwd-data.csv"))
 
 # Get classified trees
 d <- 
-  sf::st_read("analyses/analyses_output/classified-trees.geojson", 
+  sf::st_read(here::here("data", "data_drone", "L3b", "model-classified-trees_all.gpkg"), 
               stringsAsFactors = FALSE)  
 
-# Join classified trees with CWD data and transform to California Albers crs
+# Join classified trees with CWD data
 dd <-
-  d %>% 
-  left_join(cwd, by = "site") %>% 
-  sf::st_transform(3310)
+  d %>%
+  dplyr::left_join(cwd, by = "site")
 
 # get plot locations
 plot_radius <- sqrt((66*66) / pi) * (12 * 2.54 / 100) 
 plot_locations <- 
-  sf::st_read("data/data_output/plot-centers-identifiable-from-air_3310.gpkg") %>% 
+  sf::st_read(here::here("data", "data_drone", "L1", "plot-centers-identifiable-from-air_3310.gpkg")) %>% 
   sf::st_buffer(plot_radius) %>% 
   dplyr::select(-site, -local_x, -local_y, -local_crs)
 
@@ -65,7 +65,7 @@ air_trees_by_plot_from_raster <-
 
 # Get the ground trees from the 110 plots that are identifiable by air
 ground_trees <-
-  read_csv("data/data_output/formatted-ground-data.csv") %>%
+  read_csv(here::here("data", "data_output", "formatted-ground-data.csv")) %>%
   filter(is.na(year_fall)) %>%
   left_join(cwd, by = "site") %>% 
   filter(plot %in% unique(plot_locations$plot))
