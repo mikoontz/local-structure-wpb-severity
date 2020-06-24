@@ -72,7 +72,10 @@ cwd_site_data <-
 
 cwd_plot_data <- 
   plot_centers %>% 
-  dplyr::select(site, plot_cwd) %>% 
+  dplyr::select(site, plot_id, rep, plot_cwd) %>% 
+  dplyr::mutate(plot_id = as.numeric(plot_id) - (5 * (as.numeric(rep) - 1))) %>% 
+  dplyr::mutate(plot = paste(site, plot_id, sep = "_")) %>% 
+  dplyr::select(site, plot, plot_cwd) %>% 
   sf::st_drop_geometry()
 
 # What do these CWD values mean for the overall PIPO distribution
