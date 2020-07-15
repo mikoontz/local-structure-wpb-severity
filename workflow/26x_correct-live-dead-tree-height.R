@@ -2,6 +2,7 @@
 
 library(tidyverse)
 library(sf)
+library(mgcv)
 library(modelr)
 library(here)
 
@@ -27,44 +28,43 @@ ground_trees <-
 atrees <-
   air_trees %>% 
   sf::st_drop_geometry() %>% 
-  dplyr::select(treeID, live, height) %>% 
-  dplyr::rename(height_a = height)
+  dplyr::select(treeID, plot, live, height) %>% 
+  dplyr::mutate(ag = "a")
 
 gtrees <-
   ground_trees %>% 
   sf::st_drop_geometry() %>% 
-  dplyr::select(tree, live, height) %>% 
-  dplyr::rename(treeID = tree,
-                height_g = height)
+  dplyr::select(tree, plot, live, height) %>% 
+  dplyr::rename(treeID = tree) %>% 
+  dplyr::mutate(ag = "g")
 
 ### Using the individual-tree level corrections
-corrections <- 
-  readr::read_csv("data/data_drone/L3b/height-corrections-individual-tree-level.csv") %>% 
-  dplyr::mutate(atreeID = paste0(site, "_", air_tree_id),
-                gtreeID = paste0(plot, "_", ground_tree_id)) %>% 
-  dplyr::select(atreeID, gtreeID)
-
-correction_table <-
-  atrees %>% 
-  dplyr::inner_join(corrections, by = c(treeID = "atreeID"), live) %>% 
-  dplyr::left_join(dplyr::select(gtrees, -live), by = c(gtreeID = "treeID"), live)
-
-ggplot(correction_table, aes(x = height_g, y = height_a, color = as.factor(live))) +
-  geom_point() +
-  geom_smooth() +
-  geom_abline(slope = 1, intercept = 0)
-
-correction_table %>% 
-  mutate(ratio = height_a / height_g) %>% 
-  group_by(live) %>% 
-  summarize(mean_ratio = mean(ratio))
+# corrections <- 
+#   readr::read_csv("data/data_drone/L3b/height-corrections-individual-tree-level.csv") %>% 
+#   dplyr::mutate(atreeID = paste0(site, "_", air_tree_id),
+#                 gtreeID = paste0(plot, "_", ground_tree_id)) %>% 
+#   dplyr::select(atreeID, gtreeID)
+# 
+# correction_table <-
+#   atrees %>% 
+#   dplyr::inner_join(corrections, by = c(treeID = "atreeID"), live) %>% 
+#   dplyr::left_join(dplyr::select(gtrees, -live), by = c(gtreeID = "treeID"), live)
+# 
+# ggplot(correction_table, aes(x = height_g, y = height_a, color = as.factor(live))) +
+#   geom_point() +
+#   geom_smooth() +
+#   geom_abline(slope = 1, intercept = 0)
+# 
+# correction_table %>% 
+#   mutate(ratio = height_a / height_g) %>% 
+#   group_by(live) %>% 
+#   summarize(mean_ratio = mean(ratio))
 
 trees <- 
-  rbind(dplyr::rename(atrees, height = height_a), dplyr::gtrees)
+  rbind(atrees, gtrees)
 
 mean_heights <-
   trees %>% 
-  # dplyr::filter(species == "pipo") %>% 
   dplyr::group_by(plot, live, ag) %>% 
   dplyr::summarize(mean_height = mean(height),
                    n = n())
@@ -82,26 +82,32 @@ mean_heights_wide <-
 
 #### Plot to show any interacting effect of CWD on the live vs. dead height estimates
 
-ggplot(mean_heights_wide[complete.cases(mean_heights_wide), ], aes(x = site_cwd_zscore, y = a_div_g, color = live)) +
+ggplot(mean_heights_wide, aes(x = mean_height_a, y = mean_height_g, color = live)) +
   geom_point() +
-  geom_smooth(method = "gam", formula = y ~ s(x, bs = "cs"))
+  geom_smooth(method = "gam", formula = y ~ s(x, bs = "cs")) +
+  geom_abline(slope = 1, intercept = 0)
 
-#### Model the effect of the site CWD and live/dead status on the ratio of drone-derived
-height_corrections <-
-  mean_heights_wide %>% 
-  dplyr::group_by(live) %>% 
-  dplyr::summarize(a_div_g = mean(a_div_g, na.rm = TRUE)) %>% 
-  dplyr::ungroup() %>% 
-  dplyr::mutate(a_div_g_reciprocal = 1 / a_div_g) %>% 
-  dplyr::mutate(live = ifelse(live == "live", yes = 1, no = 0))
+ggplot(mean_heights_wide, aes(x = mean_height_a, y = mean_height_g, color = live)) +
+  geom_point() +
+  geom_smooth(method = "lm") +
+  geom_abline(slope = 1, intercept = 0)
 
-height_corrections
+ggplot(mean_heights_wide, aes(x = mean_height_a, y = mean_height_g, color = live)) +
+  geom_point() +
+  geom_smooth(method = "gam", formula = y ~ s(x)) +
+  geom_abline(slope = 1, intercept = 0)
+
+fm1 <- mgcv::gam(formula = mean_height_g ~ live + s(mean_height_a, by = live), data = mean_heights_wide)
+summary(fm1)
+
+gratia::draw(fm1)
+
 
 readr::write_csv(x = preds, path = here::here("analyses", "analyses_output", "tree-height-correction-factor-by-live-dead.csv"))
 
 #### Correct the tree heights
 #### Get trees identified (segmented and classified) from the air
-trees <- 
+all_trees <- 
   sf::st_read(here::here("data", "data_drone", "L3b", "model-classified-trees_all.gpkg"), 
               stringsAsFactors = FALSE)  
 
@@ -111,8 +117,8 @@ source(here::here("workflow/14_allometric-scaling-models.R"))
 allometry_models
 
 # Use the corrected height to estimate basal area and dbh with allometry equations
-trees <- 
-  trees %>% 
+all_trees <- 
+  all_trees %>% 
   dplyr::left_join(height_corrections, by = "live") %>% 
   dplyr::mutate(height_raw = height,
                 height = height_raw * a_div_g_reciprocal) %>% 
