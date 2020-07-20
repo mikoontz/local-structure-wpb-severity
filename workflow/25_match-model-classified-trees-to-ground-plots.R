@@ -31,5 +31,5 @@ air_trees <-
   dplyr::select(forest, elev, rep, site, plot, everything())
 
 # Write the tree locations and attributes to plots
-sf::st_write(obj = air_trees, dsn = here::here("data", "data_drone", "L3b", "model-classified-trees-within-ground-plots.gpkg"))
+sf::st_write(obj = air_trees, dsn = here::here("data", "data_drone", "L3b", "model-classified-trees-within-ground-plots.gpkg"), append = FALSE)
 
