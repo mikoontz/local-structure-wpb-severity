@@ -24,14 +24,14 @@ perCell_to_perHa <- function(r) {
 } # returns trees per hectare when r represents a raster with counts of trees per cell
 
 
-if(!file.exists(here::here("data/data_drone/L3b/model-classified-trees_all.gpkg"))) {
+if(!file.exists(here::here("data/data_drone/L3b/model-classified-trees_all_height-corrected.gpkg"))) {
   
   source("workflow/24_classify-all-trees.R")
   
 } 
 
 classified_trees <- 
-  sf::st_read(here::here("data/data_drone/L3b/model-classified-trees_all.gpkg"),
+  sf::st_read(here::here("data/data_drone/L3b/model-classified-trees_all_height-corrected.gpkg"),
               stringsAsFactors = FALSE)
 
 # This is where I can put in sites that need their processing redone. An empty 
@@ -55,11 +55,6 @@ surveyed_area <-
 cwd <- raster::raster("data/data_raw/cwd1981_2010_ave_HST_1550861123/cwd1981_2010_ave_HST_1550861123.tif")
 crs(cwd) <- sf::st_crs(3310)$proj4string
 cwd_table <- readr::read_csv(here::here("data/data_output/cwd-data.csv"))
-
-# Get the height correction model (see workflow/26_determine-tree-height-correction-factors.R)
-height_correction_table <- 
-  readr::read_csv(here::here("analyses", "analyses_output", "tree-height-correction-factor-by-cwd.csv")) %>% 
-  dplyr::mutate(live = ifelse(live == "live", yes = 1, no = 0))
 
 # See the workflow/03_extract-cwd-from-locations.R script to get this vector file
 sn_pipo <- sf::st_read("data/data_output/sierra-nevada-pipo-cwd.gpkg")
@@ -106,9 +101,6 @@ for(i in seq_along(sites_to_process)) {
                   nn2 = map_dbl(nn, magrittr::extract, 3),
                   nn3 = map_dbl(nn, magrittr::extract, 4)) %>% 
     dplyr::select(-nn)
-  
-  current_trees %>% 
-    dplyr::left_join(height_correction_table, by = "site")
   
   current_cwd <- raster::resample(cwd, raster_template, method = "bilinear")
   current_cwd_zscore <- (current_cwd - mean_cwd_sn_pipo) / sd_cwd_sn_pipo
@@ -670,243 +662,6 @@ for(i in seq_along(sites_to_process)) {
   
   overall_cov_voronoi <- overall_sd_voronoi / overall_mean_voronoi 
   
-
-#### tree height corrected by live/dead status based on ground plots
-  
-  # mean heights of trees per cell ------------------------------------------
-  
-  live_mean_height_corrected <- raster::rasterize(x = current_trees %>% dplyr::filter((live == 1)), 
-                                        y = raster_template, 
-                                        field = "height_corrected", 
-                                        background = NA, 
-                                        fun = mean)
-  
-  dead_mean_height_corrected <- raster::rasterize(x = current_trees %>% dplyr::filter((live == 0)), 
-                                        y = raster_template, 
-                                        field = "height_corrected", 
-                                        background = NA, 
-                                        fun = mean)
-  
-  pipo_mean_height_corrected <- raster::rasterize(x = current_trees %>% dplyr::filter((species == "pipo")), 
-                                        y = raster_template, 
-                                        field = "height_corrected", 
-                                        background = NA, 
-                                        fun = mean)
-  
-  non_pipo_mean_height_corrected <- raster::rasterize(x = current_trees %>% dplyr::filter((species != "pipo")), 
-                                            y = raster_template, 
-                                            field = "height_corrected", 
-                                            background = NA, 
-                                            fun = mean)
-  
-  pipo_and_dead_mean_height_corrected <- raster::rasterize(x = current_trees %>% dplyr::filter((live == 0) | (species == "pipo")), 
-                                                 y = raster_template, 
-                                                 field = "height_corrected", 
-                                                 background = NA, 
-                                                 fun = mean)
-  
-  overall_mean_height_corrected <- raster::rasterize(x = current_trees, 
-                                           y = raster_template, 
-                                           field = "height_corrected", 
-                                           background = NA, 
-                                           fun = mean)
-  
-  # total basal area per cell -----------------------------------------------
-  
-  live_basal_area_corrected <- raster::rasterize(x = current_trees %>% dplyr::filter((live == 1)), 
-                                       y = raster_template, 
-                                       field = "estimated_ba_corrected", 
-                                       background = 0, 
-                                       fun = sum)
-  
-  dead_basal_area_corrected <- raster::rasterize(x = current_trees %>% dplyr::filter((live == 0)), 
-                                       y = raster_template, 
-                                       field = "estimated_ba_corrected", 
-                                       background = 0, 
-                                       fun = sum)
-  
-  pipo_basal_area_corrected <- raster::rasterize(x = current_trees %>% dplyr::filter((species == "pipo")), 
-                                       y = raster_template, 
-                                       field = "estimated_ba_corrected", 
-                                       background = 0, 
-                                       fun = sum)
-  
-  non_pipo_basal_area_corrected <- raster::rasterize(x = current_trees %>% dplyr::filter((species != "pipo")), 
-                                           y = raster_template, 
-                                           field = "estimated_ba_corrected", 
-                                           background = 0, 
-                                           fun = sum)
-  
-  pipo_and_dead_basal_area_corrected <- dead_basal_area_corrected + pipo_basal_area_corrected
-  
-  total_basal_area_corrected <- raster::rasterize(x = current_trees, 
-                                        y = raster_template, 
-                                        field = "estimated_ba_corrected", 
-                                        background = 0, 
-                                        fun = sum)
-  
-  # r3 <- live_basal_area + dead_basal_area
-  # compareRaster(r3, total_basal_area, values = TRUE)
-  # 
-  # r4 <- pipo_basal_area + non_pipo_basal_area
-  # compareRaster(r4, live_basal_area, values = TRUE)
-  
-  # convert to basal area per hectare ---------------------------------------
-  
-  # We can actually use the same equations as for trees per hectare
-  
-  live_bapha_corrected <- perCell_to_perHa(live_basal_area_corrected)  
-  dead_bapha_corrected <- perCell_to_perHa(dead_basal_area_corrected)
-  pipo_bapha_corrected <- perCell_to_perHa(pipo_basal_area_corrected)
-  non_pipo_bapha_corrected <- perCell_to_perHa(non_pipo_basal_area_corrected)
-  pipo_and_dead_bapha_corrected <- perCell_to_perHa(pipo_and_dead_basal_area_corrected)
-  overall_bapha_corrected <- perCell_to_perHa(total_basal_area_corrected)
-  
-  # mean basal area per tree ------------------------------------------------
-  
-  
-  live_mean_ba_corrected <- raster::rasterize(x = current_trees %>% dplyr::filter((live == 1)), 
-                                    y = raster_template, 
-                                    field = "estimated_ba_corrected", 
-                                    background = NA, 
-                                    fun = mean)
-  
-  dead_mean_ba_corrected <- raster::rasterize(x = current_trees %>% dplyr::filter((live == 0)), 
-                                    y = raster_template, 
-                                    field = "estimated_ba_corrected", 
-                                    background = NA, 
-                                    fun = mean)
-  
-  pipo_mean_ba_corrected <- raster::rasterize(x = current_trees %>% dplyr::filter((species == "pipo")), 
-                                    y = raster_template, 
-                                    field = "estimated_ba_corrected", 
-                                    background = NA, 
-                                    fun = mean)
-  
-  non_pipo_mean_ba_corrected <- raster::rasterize(x = current_trees %>% dplyr::filter((species != "pipo")), 
-                                        y = raster_template, 
-                                        field = "estimated_ba_corrected", 
-                                        background = NA, 
-                                        fun = mean)
-  
-  pipo_and_dead_mean_ba_corrected <- raster::rasterize(x = current_trees %>% dplyr::filter((species == "pipo") | (live == 0)), 
-                                             y = raster_template, 
-                                             field = "estimated_ba_corrected", 
-                                             background = NA, 
-                                             fun = mean)
-  
-  overall_mean_ba_corrected <- raster::rasterize(x = current_trees, 
-                                       y = raster_template, 
-                                       field = "estimated_ba_corrected", 
-                                       background = NA, 
-                                       fun = mean)
-  
-  
-  # mean diameter -----------------------------------------------------------
-  
-  live_mean_dbh_corrected <- raster::rasterize(x = current_trees %>% dplyr::filter((live == 1)), 
-                                     y = raster_template, 
-                                     field = "estimated_dbh_corrected", 
-                                     background = NA, 
-                                     fun = mean)
-  
-  dead_mean_dbh_corrected <- raster::rasterize(x = current_trees %>% dplyr::filter((live == 0)), 
-                                     y = raster_template, 
-                                     field = "estimated_dbh_corrected", 
-                                     background = NA, 
-                                     fun = mean)
-  
-  pipo_mean_dbh_corrected <- raster::rasterize(x = current_trees %>% dplyr::filter((species == "pipo")), 
-                                     y = raster_template, 
-                                     field = "estimated_dbh_corrected", 
-                                     background = NA, 
-                                     fun = mean)
-  
-  non_pipo_mean_dbh_corrected <- raster::rasterize(x = current_trees %>% dplyr::filter((species != "pipo")), 
-                                         y = raster_template, 
-                                         field = "estimated_dbh_corrected", 
-                                         background = NA, 
-                                         fun = mean)
-  
-  pipo_and_dead_mean_dbh_corrected <- raster::rasterize(x = current_trees %>% dplyr::filter((species == "pipo") | (live == 0)), 
-                                              y = raster_template, 
-                                              field = "estimated_dbh_corrected", 
-                                              background = NA, 
-                                              fun = mean)
-  
-  overall_mean_dbh_corrected <- raster::rasterize(x = current_trees, 
-                                        y = raster_template, 
-                                        field = "estimated_dbh_corrected", 
-                                        background = NA, 
-                                        fun = mean)  
-  
-  # quadratic mean diameter -------------------------------------------------
-  
-  live_qmd_corrected <- raster::rasterize(x = current_trees %>% dplyr::filter((live == 1)), 
-                                y = raster_template, 
-                                field = "estimated_dbh_corrected", 
-                                background = NA, 
-                                fun = function(x, ...) {sqrt(sum(x^2) / length(x))})
-  
-  dead_qmd_corrected <- raster::rasterize(x = current_trees %>% dplyr::filter((live == 0)), 
-                                y = raster_template, 
-                                field = "estimated_dbh_corrected", 
-                                background = NA, 
-                                fun = function(x, ...) {sqrt(sum(x^2) / length(x))})
-  
-  pipo_qmd_corrected <- raster::rasterize(x = current_trees %>% dplyr::filter((species == "pipo")), 
-                                y = raster_template, 
-                                field = "estimated_dbh_corrected", 
-                                background = NA, 
-                                fun = function(x, ...) {sqrt(sum(x^2) / length(x))})
-  
-  non_pipo_qmd_corrected <- raster::rasterize(x = current_trees %>% dplyr::filter((species != "pipo")), 
-                                    y = raster_template, 
-                                    field = "estimated_dbh_corrected", 
-                                    background = NA, 
-                                    fun = function(x, ...) {sqrt(sum(x^2) / length(x))})
-  
-  pipo_and_dead_qmd_corrected <- raster::rasterize(x = current_trees %>% dplyr::filter((species == "pipo") | (live == 0)), 
-                                         y = raster_template, 
-                                         field = "estimated_dbh_corrected", 
-                                         background = NA, 
-                                         fun = function(x, ...) {sqrt(sum(x^2) / length(x))})
-  
-  overall_qmd_corrected <- raster::rasterize(x = current_trees, 
-                                   y = raster_template, 
-                                   field = "estimated_dbh_corrected", 
-                                   background = NA, 
-                                   fun = function(x, ...) {sqrt(sum(x^2) / length(x))})  
-  
-  
-  # stand density index -----------------------------------------------------
-  # A transformation to the equivalent number of trees with a 10 inch diameter
-  # Original by Reineke 1933 (if qmd is in centimters)
-  # sdi = tpa * ( qmd / 25.4)^1.605
-  
-  # Proposed constant for ponderosa in California by Oliver 1995
-  # (if qmd is in centimeters)
-  # sdi = tpa * ( qmd / 25.4)^1.77
-  
-  live_sdi_ha_corrected <- perCell_to_perHa(live_count) * (live_qmd_corrected / 25.4)^1.77
-  live_sdi_ac_corrected <- perCell_to_perAc(live_count) * (live_qmd_corrected / 25.4)^1.77
-  
-  dead_sdi_ha_corrected <- perCell_to_perHa(dead_count) * (dead_qmd_corrected / 25.4)^1.77
-  dead_sdi_ac_corrected <- perCell_to_perAc(dead_count) * (dead_qmd_corrected / 25.4)^1.77
-  
-  pipo_sdi_ha_corrected <- perCell_to_perHa(pipo_count) * (pipo_qmd_corrected / 25.4)^1.77
-  pipo_sdi_ac_corrected <- perCell_to_perAc(pipo_count) * (pipo_qmd_corrected / 25.4)^1.77
-  
-  non_pipo_sdi_ha_corrected <- perCell_to_perHa(non_pipo_count) * (non_pipo_qmd_corrected / 25.4)^1.77
-  non_pipo_sdi_ac_corrected <- perCell_to_perAc(non_pipo_count) * (non_pipo_qmd_corrected / 25.4)^1.77
-  
-  pipo_and_dead_sdi_ha_corrected <- perCell_to_perHa(pipo_and_dead_count) * (pipo_and_dead_qmd_corrected / 25.4)^1.77
-  pipo_and_dead_sdi_ac_corrected <- perCell_to_perAc(pipo_and_dead_count) * (pipo_and_dead_qmd_corrected / 25.4)^1.77
-  
-  overall_sdi_ha_corrected <- perCell_to_perHa(total_count) * (overall_qmd_corrected / 25.4)^1.77
-  overall_sdi_ac_corrected <- perCell_to_perAc(total_count) * (overall_qmd_corrected / 25.4)^1.77
-  
-  #####
   
 # stack results together --------------------------------------------------
 
@@ -929,14 +684,6 @@ for(i in seq_along(sites_to_process)) {
                                   live_cov_nn1, dead_cov_nn1, pipo_cov_nn1, non_pipo_cov_nn1, pipo_and_dead_cov_nn1, overall_cov_nn1,
                                   live_sd_voronoi, dead_sd_voronoi, pipo_sd_voronoi, non_pipo_sd_voronoi, pipo_and_dead_sd_voronoi, overall_sd_voronoi,
                                   live_cov_voronoi, dead_cov_voronoi, pipo_cov_voronoi, non_pipo_cov_voronoi, pipo_and_dead_cov_voronoi, overall_cov_voronoi,
-                                  live_mean_height_corrected, dead_mean_height_corrected, pipo_mean_height_corrected, non_pipo_mean_height_corrected, pipo_and_dead_mean_height_corrected, overall_mean_height_corrected,
-                                  live_basal_area_corrected, dead_basal_area_corrected, pipo_basal_area_corrected, non_pipo_basal_area_corrected, pipo_and_dead_basal_area_corrected, total_basal_area_corrected,
-                                  live_bapha_corrected, dead_bapha_corrected, pipo_bapha_corrected, non_pipo_bapha_corrected, pipo_and_dead_bapha_corrected, overall_bapha_corrected,
-                                  live_mean_ba_corrected, dead_mean_ba_corrected, pipo_mean_ba_corrected, non_pipo_mean_ba_corrected, pipo_and_dead_mean_ba_corrected, overall_mean_ba_corrected,
-                                  live_mean_dbh_corrected, dead_mean_dbh_corrected, pipo_mean_dbh_corrected, non_pipo_mean_dbh_corrected, pipo_and_dead_mean_dbh_corrected, overall_mean_dbh_corrected,
-                                  live_qmd_corrected, dead_qmd_corrected, pipo_qmd_corrected, non_pipo_qmd_corrected, pipo_and_dead_qmd_corrected, overall_qmd_corrected,
-                                  live_sdi_ha_corrected, dead_sdi_ha_corrected, pipo_sdi_ha_corrected, non_pipo_sdi_ha_corrected, pipo_and_dead_sdi_ha_corrected, overall_sdi_ha_corrected,
-                                  live_sdi_ac_corrected, dead_sdi_ac_corrected, pipo_sdi_ac_corrected, non_pipo_sdi_ac_corrected, pipo_and_dead_sdi_ac_corrected, overall_sdi_ac_corrected,
                                   current_cwd, current_cwd_zscore)
   
   names(results_raster) <- c("live_count", "dead_count", "pipo_count", "non_pipo_count", "pipo_and_dead_count", "total_count", 
@@ -957,14 +704,6 @@ for(i in seq_along(sites_to_process)) {
                              "live_cov_nn1", "dead_cov_nn1", "pipo_cov_nn1", "non_pipo_cov_nn1", "pipo_and_dead_cov_nn1", "overall_cov_nn1",
                              "live_sd_voronoi", "dead_sd_voronoi", "pipo_sd_voronoi", "non_pipo_sd_voronoi", "pipo_and_dead_sd_voronoi", "overall_sd_voronoi",
                              "live_cov_voronoi", "dead_cov_voronoi", "pipo_cov_voronoi", "non_pipo_cov_voronoi", "pipo_and_dead_cov_voronoi", "overall_cov_voronoi",
-                             "live_mean_height_corrected", "dead_mean_height_corrected", "pipo_mean_height_corrected", "non_pipo_mean_height_corrected", "pipo_and_dead_mean_height_corrected", "overall_mean_height_corrected",
-                             "live_basal_area_corrected", "dead_basal_area_corrected", "pipo_basal_area_corrected", "non_pipo_basal_area_corrected", "pipo_and_dead_basal_area_corrected", "total_basal_area_corrected",
-                             "live_bapha_corrected", "dead_bapha_corrected", "pipo_bapha_corrected", "non_pipo_bapha_corrected", "pipo_and_dead_bapha_corrected", "overall_bapha_corrected",
-                             "live_mean_ba_corrected", "dead_mean_ba_corrected", "pipo_mean_ba_corrected", "non_pipo_mean_ba_corrected", "pipo_and_dead_mean_ba_corrected", "overall_mean_ba_corrected",
-                             "live_mean_dbh_corrected", "dead_mean_dbh_corrected", "pipo_mean_dbh_corrected", "non_pipo_mean_dbh_corrected", "pipo_and_dead_mean_dbh_corrected", "overall_mean_dbh_corrected",
-                             "live_qmd_corrected", "dead_qmd_corrected", "pipo_qmd_corrected", "non_pipo_qmd_corrected", "pipo_and_dead_qmd_corrected", "overall_qmd_corrected",
-                             "live_sdi_ha_corrected", "dead_sdi_ha_corrected", "pipo_sdi_ha_corrected", "non_pipo_sdi_ha_corrected", "pipo_and_dead_sdi_ha_corrected", "overall_sdi_ha_corrected",
-                             "live_sdi_ac_corrected", "dead_sdi_ac_corrected", "pipo_sdi_ac_corrected", "non_pipo_sdi_ac_corrected", "pipo_and_dead_sdi_ac_corrected", "overall_sdi_ac_corrected",
                              "local_cwd", "local_cwd_zscore")
   
   writeRaster(x = results_raster, filename = here::here(paste0("data/data_drone/L4/rasterized-trees/", current_site, "_rasterized-trees.tif")), overwrite = TRUE)

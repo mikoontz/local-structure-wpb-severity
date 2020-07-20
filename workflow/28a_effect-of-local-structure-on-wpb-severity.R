@@ -77,6 +77,8 @@ summary(fm1_brms)
 pp_check(fm1_brms, nsamples = 50)
 
 # The final model to use, I think.
+readr::write_rds(x = fm1_brms, path = here::here('analyses/analyses_output/fitted-model_zibinomial_site-cwdZscore_prop-host_pipo-height_overall-tpha_overall-bapha_height-corrected_exact-gp-per-site_200-samples.rds'))
+
 readr::write_rds(x = fm1_brms, path = here::here('analyses/analyses_output/fitted-model_zibinomial_site-cwdZscore_prop-host_pipo-height_overall-tpha_overall-bapha_exact-gp-per-site_200-samples.rds'))
 
 
