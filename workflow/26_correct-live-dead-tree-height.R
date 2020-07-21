@@ -96,10 +96,10 @@ ggplot(correction_table, aes(x = height_raw, y = height, color = live)) +
 ## trees) is very close to 1, suggesting 1 more meter of drone-measured height
 ## is associated with 1 more meter of ground-measured height. 
 
-## Here, we subset to the trees greater than 18 meters in height
+## Here, we subset to the trees greater than 20 meters in height
 conservative_height_calibration <-
   correction_table %>% 
-  dplyr::filter(height_raw > 15)
+  dplyr::filter(height_raw > 20)
 
 ## Check the plot and the GAM fits look good!
 ggplot(conservative_height_calibration, aes(x = height_raw, y = height, color = live)) +
