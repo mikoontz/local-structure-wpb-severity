@@ -52,7 +52,7 @@ correction_table <-
   corrections %>% 
   dplyr::left_join(atrees, by = c("atreeID" = "treeID")) %>% 
   dplyr::left_join(dplyr::select(gtrees, -live), by = c("gtreeID" = "treeID"), live) %>% 
-  dplyr::mutate(live = as.factor(ifelse(live == 0, yes = "dead", no = "live")),
+  dplyr::mutate(live = as.factor(live),
                 site = substr(atreeID, start = 1, stop = 9)) %>% 
   dplyr::left_join(cwd, by = "site") %>% 
   dplyr::as_tibble()
@@ -172,7 +172,7 @@ allometry_models
 # Use the corrected height to estimate basal area and dbh with allometry equations
 all_trees <- 
   all_trees %>% 
-  dplyr::mutate(live = ifelse(live == 1, yes = "live", no = "dead"),
+  dplyr::mutate(live = as.factor(live),
                 height_raw = height,
                 estimated_dbh_raw = estimated_dbh) %>% 
   modelr::add_predictions(model = fm2, var = "height_correction") %>% 
