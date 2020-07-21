@@ -3,9 +3,7 @@
 library(tidyverse)
 library(raster)
 library(sf)
-library(velox)
 library(here)
-library(tictoc)
 library(lubridate)
 library(nngeo)
 library(mgcv)
@@ -204,6 +202,44 @@ for(i in seq_along(sites_to_process)) {
                                         field = "height", 
                                         background = NA, 
                                         fun = mean)
+  
+  # max heights of trees per cell ------------------------------------------
+  
+  live_max_height <- raster::rasterize(x = current_trees %>% dplyr::filter((live == 1)), 
+                                        y = raster_template, 
+                                        field = "height", 
+                                        background = NA, 
+                                        fun = max)
+  
+  dead_max_height <- raster::rasterize(x = current_trees %>% dplyr::filter((live == 0)), 
+                                        y = raster_template, 
+                                        field = "height", 
+                                        background = NA, 
+                                        fun = max)
+  
+  pipo_max_height <- raster::rasterize(x = current_trees %>% dplyr::filter((species == "pipo")), 
+                                        y = raster_template, 
+                                        field = "height", 
+                                        background = NA, 
+                                        fun = max)
+  
+  non_pipo_max_height <- raster::rasterize(x = current_trees %>% dplyr::filter((species != "pipo")), 
+                                            y = raster_template, 
+                                            field = "height", 
+                                            background = NA, 
+                                            fun = max)
+  
+  pipo_and_dead_max_height <- raster::rasterize(x = current_trees %>% dplyr::filter((live == 0) | (species == "pipo")), 
+                                                 y = raster_template, 
+                                                 field = "height", 
+                                                 background = NA, 
+                                                 fun = max)
+  
+  overall_max_height <- raster::rasterize(x = current_trees, 
+                                           y = raster_template, 
+                                           field = "height", 
+                                           background = NA, 
+                                           fun = max)
   
   # total basal area per cell -----------------------------------------------
   
@@ -669,6 +705,7 @@ for(i in seq_along(sites_to_process)) {
   results_raster <- raster::stack(live_count, dead_count, pipo_count, non_pipo_count, pipo_and_dead_count, total_count, 
                                   live_tpha, dead_tpha, pipo_tpha, non_pipo_tpha, pipo_and_dead_tpha, overall_tpha, 
                                   live_mean_height, dead_mean_height, pipo_mean_height, non_pipo_mean_height, pipo_and_dead_mean_height, overall_mean_height,
+                                  live_max_height, dead_max_height, pipo_max_height, non_pipo_max_height, pipo_and_dead_max_height, overall_max_height,
                                   live_basal_area, dead_basal_area, pipo_basal_area, non_pipo_basal_area, pipo_and_dead_basal_area, total_basal_area,
                                   live_bapha, dead_bapha, pipo_bapha, non_pipo_bapha, pipo_and_dead_bapha, overall_bapha,
                                   live_mean_ba, dead_mean_ba, pipo_mean_ba, non_pipo_mean_ba, pipo_and_dead_mean_ba, overall_mean_ba,
@@ -689,6 +726,7 @@ for(i in seq_along(sites_to_process)) {
   names(results_raster) <- c("live_count", "dead_count", "pipo_count", "non_pipo_count", "pipo_and_dead_count", "total_count", 
                              "live_tpha", "dead_tpha", "pipo_tpha", "non_pipo_tpha", "pipo_and_dead_tpha", "overall_tpha",
                              "live_mean_height", "dead_mean_height", "pipo_mean_height", "non_pipo_mean_height", "pipo_and_dead_mean_height", "overall_mean_height",
+                             "live_max_height", "dead_max_height", "pipo_max_height", "non_pipo_max_height", "pipo_and_dead_max_height", "overall_max_height",
                              "live_ba", "dead_ba", "pipo_ba", "non_pipo_ba", "pipo_and_dead_ba", "total_ba",
                              "live_bapha", "dead_bapha", "pipo_bapha", "non_pipo_bapha", "pipo_and_dead_bapha", "overall_bapha",
                              "live_mean_ba", "dead_mean_ba", "pipo_mean_ba", "non_pipo_mean_ba", "pipo_and_dead_mean_ba", "overall_mean_ba",
@@ -716,6 +754,8 @@ for(i in seq_along(sites_to_process)) {
     dplyr::mutate(crs = 3310)
   
   results_list[[i]] <- results_df
+  
+  print(paste0("... ", current_site, " processed..."))
 }
 
 final_results <- do.call("rbind", results_list)
