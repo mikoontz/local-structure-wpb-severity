@@ -29,7 +29,7 @@ analysis_df <-
   dplyr::left_join(cwd_data, by = "site") %>% 
   as_tibble() %>% 
   dplyr::mutate_at(.vars = vars(-x, -y, -local_cwd, -local_cwd_zscore, -site, -forest, -elev, -rep, -crs, -site_cwd, -site_cwd_zscore), .funs = list(s = function(x) {scale(x, center = center_param, scale = scale_param)[, 1]}))
-                     
+
 # Implement a zero-inflated binomial with an exact Gaussian process to
 # estimate the spatial autocorrelation
 
@@ -110,33 +110,58 @@ readr::write_rds(x = fm1_brms, path = here::here('analyses/analyses_output/fitte
 # (elapsed <- difftime(Sys.time(), start, units = "hours"))
 # pp_check(fm1b_brms, nsamples = 50)
 
+# (start <- Sys.time())
+# fm1b_brms <- brm(dead_count | trials(pipo_and_dead_count) ~ 
+#                   site_cwd_zscore +
+#                   prop_host_count_s +
+#                   pipo_and_dead_ba_s +
+#                   overall_tpha_s +
+#                   non_pipo_ba_s +
+#                   site_cwd_zscore:prop_host_count_s +
+#                   site_cwd_zscore:pipo_and_dead_ba_s +
+#                   site_cwd_zscore:overall_tpha_s +
+#                   site_cwd_zscore:non_pipo_ba_s +
+#                   pipo_and_dead_ba_s:non_pipo_ba_s +
+#                   prop_host_count_s:overall_tpha_s +
+#                   prop_host_count_s:pipo_and_dead_ba_s +
+#                   site_cwd_zscore:prop_host_count_s:pipo_and_dead_ba_s +
+#                   gp(x, y, by = site, scale = FALSE),
+#                 data = adf,
+#                 family = zero_inflated_binomial(),
+#                 iter = 5000,
+#                 chains = 4,
+#                 cores = 4,
+#                 control = list(adapt_delta = 0.80))
+# summary(fm1b_brms)
+# (elapsed <- difftime(Sys.time(), start, units = "hours"))
+# pp_check(fm1b_brms, nsamples = 50)
+
 (start <- Sys.time())
-fm1b_brms <- brm(dead_count | trials(pipo_and_dead_count) ~ 
-                  site_cwd_zscore +
-                  prop_host_count_s +
-                  pipo_and_dead_ba_s +
-                  overall_tpha_s +
-                  non_pipo_ba_s +
-                  site_cwd_zscore:prop_host_count_s +
-                  site_cwd_zscore:pipo_and_dead_ba_s +
-                  site_cwd_zscore:overall_tpha_s +
-                  site_cwd_zscore:non_pipo_ba_s +
-                  pipo_and_dead_ba_s:non_pipo_ba_s +
-                  prop_host_count_s:overall_tpha_s +
-                  prop_host_count_s:pipo_and_dead_ba_s +
-                  site_cwd_zscore:prop_host_count_s:pipo_and_dead_ba_s +
-                  gp(x, y, by = site, scale = FALSE),
-                data = adf,
-                family = zero_inflated_binomial(),
-                iter = 5000,
-                chains = 4,
-                cores = 4,
-                control = list(adapt_delta = 0.80))
-summary(fm1b_brms)
+fm1d_brms <- brm(dead_count | trials(pipo_and_dead_count) ~ 
+                   site_cwd_zscore +
+                   prop_host_count_s +
+                   pipo_and_dead_mean_height_s +
+                   overall_tpha_s +
+                   overall_bapha_s +
+                   site_cwd_zscore:prop_host_count_s +
+                   site_cwd_zscore:pipo_and_dead_mean_height_s +
+                   site_cwd_zscore:overall_tpha_s +
+                   site_cwd_zscore:overall_bapha_s +
+                   prop_host_count_s:overall_tpha_s +
+                   pipo_and_dead_mean_height_s:prop_host_count_s +
+                   pipo_and_dead_mean_height_s:overall_bapha_s +
+                   site_cwd_zscore:prop_host_count_s:pipo_and_dead_mean_height_s +
+                   gp(x, y, by = site, scale = FALSE),
+                 data = adf,
+                 family = zero_inflated_binomial(),
+                 iter = 5000,
+                 warmup = 2000,
+                 chains = 4,
+                 cores = 4,
+                 control = list(adapt_delta = 0.80))
+summary(fm1d_brms)
 (elapsed <- difftime(Sys.time(), start, units = "hours"))
-pp_check(fm1b_brms, nsamples = 50)
-
-
+pp_check(fm1d_brms, nsamples = 50)
 
 
 

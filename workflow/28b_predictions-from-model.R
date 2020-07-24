@@ -9,6 +9,7 @@ library(brms)
 cwd_data <- read_csv("data/data_output/cwd-data.csv")
 
 fm1 <- readr::read_rds(path =  here::here('analyses', 'analyses_output', 'fitted-model_zibinomial_site-cwdZscore_prop-host_pipo-height_overall-tpha_overall-bapha_exact-gp-per-site_200-samples.rds'))
+fm1 <- readr::read_rds(path =  here::here('analyses', 'analyses_output', 'fitted-model_zibinomial_site-cwdZscore_prop-host_pipo-height_overall-tpha_overall-bapha_height-corrected-from-20m_exact-gp-per-site_200-samples.rds'))
 
 step_size <- 0.1
 
@@ -48,7 +49,8 @@ samps <-
   dplyr::select(tidyselect::all_of(paste0("b_", covariates))) %>% 
   dplyr::sample_n(size = 4000)
 
-readr::write_csv(x = samps, path = here::here("analyses", "analyses_output", "final-model-posterior-samples.csv"))
+# readr::write_csv(x = samps, path = here::here("analyses", "analyses_output", "final-model-posterior-samples.csv"))
+readr::write_csv(x = samps, path = here::here("analyses", "analyses_output", "final-model-posterior-samples_height-corrected.csv"))
 
 (start <- Sys.time())
 lwr <- purrr::map_dbl(1:nrow(newdata), .f = function(row) {quantile(plogis(as.matrix(samps) %*% t(newdata[row, ])), prob = 0.025)})
@@ -73,3 +75,4 @@ fitted_compact <-
                 lwr, est_mn, upr)
 
 write_csv(fitted_compact, path = "analyses/analyses_output/model-predictions.csv")
+write_csv(fitted_compact, path = "analyses/analyses_output/model-predictions_height-corrected.csv")
