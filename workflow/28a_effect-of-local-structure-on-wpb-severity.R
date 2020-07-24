@@ -44,8 +44,10 @@ analysis_df <-
 set.seed(1356) # Only meaningful for when randomly subsetting data
 adf <-
   analysis_df %>% 
-  dplyr::mutate(prop_host = pipo_and_dead_count / total_count,
-                prop_host_s = as.numeric(scale(prop_host))) %>% 
+  dplyr::mutate(prop_host_count = pipo_and_dead_count / total_count,
+                prop_host_count_s = as.numeric(scale(prop_host_count)),
+                prop_host_ba = pipo_and_dead_ba / total_ba,
+                prop_host_ba_s = as.numeric(scale(prop_host_ba))) %>% 
   dplyr::filter(pipo_and_dead_count != 0) %>% 
   dplyr::mutate(site = as.factor(site)) %>% 
   dplyr::group_by(site) %>%
@@ -54,24 +56,24 @@ adf <-
 (start <- Sys.time())
 fm1_brms <- brm(dead_count | trials(pipo_and_dead_count) ~ 
                   site_cwd_zscore +
-                  prop_host_s +
+                  prop_host_count_s +
                   pipo_and_dead_mean_height_s +
                   overall_tpha_s +
                   overall_bapha_s +
-                  site_cwd_zscore:prop_host_s +
+                  site_cwd_zscore:prop_host_count_s +
                   site_cwd_zscore:pipo_and_dead_mean_height_s +
                   site_cwd_zscore:overall_tpha_s +
                   site_cwd_zscore:overall_bapha_s +
-                  prop_host_s:overall_tpha_s +
-                  prop_host_s:pipo_and_dead_mean_height_s +
-                  site_cwd_zscore:prop_host_s:pipo_and_dead_mean_height_s +
+                  prop_host_count_s:overall_tpha_s +
+                  prop_host_count_s:pipo_and_dead_mean_height_s +
+                  site_cwd_zscore:prop_host_count_s:pipo_and_dead_mean_height_s +
                   gp(x, y, by = site, scale = FALSE),
                 data = adf,
                 family = zero_inflated_binomial(),
                 iter = 4000,
                 chains = 4,
                 cores = 4,
-                control = list(adapt_delta = 0.90))
+                control = list(adapt_delta = 0.80))
 summary(fm1_brms)
 (elapsed <- difftime(Sys.time(), start, units = "hours"))
 pp_check(fm1_brms, nsamples = 50)
@@ -79,7 +81,91 @@ pp_check(fm1_brms, nsamples = 50)
 # The final model to use, I think.
 readr::write_rds(x = fm1_brms, path = here::here('analyses/analyses_output/fitted-model_zibinomial_site-cwdZscore_prop-host_pipo-height_overall-tpha_overall-bapha_height-corrected_exact-gp-per-site_200-samples.rds'))
 
-readr::write_rds(x = fm1_brms, path = here::here('analyses/analyses_output/fitted-model_zibinomial_site-cwdZscore_prop-host_pipo-height_overall-tpha_overall-bapha_exact-gp-per-site_200-samples.rds'))
+
+###
+# (start <- Sys.time())
+# fm1b_brms <- brm(dead_count | trials(pipo_and_dead_count) ~ 
+#                   site_cwd_zscore +
+#                   prop_host_count_s +
+#                   prop_host_ba_s +
+#                   total_count_s +
+#                   total_ba_s +
+#                   site_cwd_zscore:prop_host_count_s +
+#                   site_cwd_zscore:prop_host_ba_s +
+#                   site_cwd_zscore:total_count_s +
+#                   site_cwd_zscore:total_ba_s +
+#                   prop_host_count_s:total_count_s +
+#                   prop_host_ba_s:total_ba_s +
+#                   prop_host_count_s:prop_host_ba_s +
+#                   site_cwd_zscore:prop_host_ba_s:total_ba_s +
+#                   site_cwd_zscore:prop_count_ba_s:total_count_s +
+#                   gp(x, y, by = site, scale = FALSE),
+#                 data = adf,
+#                 family = zero_inflated_binomial(),
+#                 iter = 5000,
+#                 chains = 4,
+#                 cores = 4,
+#                 control = list(adapt_delta = 0.80))
+# summary(fm1b_brms)
+# (elapsed <- difftime(Sys.time(), start, units = "hours"))
+# pp_check(fm1b_brms, nsamples = 50)
+
+(start <- Sys.time())
+fm1b_brms <- brm(dead_count | trials(pipo_and_dead_count) ~ 
+                  site_cwd_zscore +
+                  prop_host_count_s +
+                  pipo_and_dead_ba_s +
+                  overall_tpha_s +
+                  non_pipo_ba_s +
+                  site_cwd_zscore:prop_host_count_s +
+                  site_cwd_zscore:pipo_and_dead_ba_s +
+                  site_cwd_zscore:overall_tpha_s +
+                  site_cwd_zscore:non_pipo_ba_s +
+                  pipo_and_dead_ba_s:non_pipo_ba_s +
+                  prop_host_count_s:overall_tpha_s +
+                  prop_host_count_s:pipo_and_dead_ba_s +
+                  site_cwd_zscore:prop_host_count_s:pipo_and_dead_ba_s +
+                  gp(x, y, by = site, scale = FALSE),
+                data = adf,
+                family = zero_inflated_binomial(),
+                iter = 5000,
+                chains = 4,
+                cores = 4,
+                control = list(adapt_delta = 0.80))
+summary(fm1b_brms)
+(elapsed <- difftime(Sys.time(), start, units = "hours"))
+pp_check(fm1b_brms, nsamples = 50)
+
+
+
+
+
+
+(start <- Sys.time())
+fm2_brms <- brm(dead_ba / total_ba ~ 
+                  site_cwd_zscore +
+                  prop_host_count_s +
+                  pipo_and_dead_mean_height_s +
+                  overall_tpha_s +
+                  overall_bapha_s +
+                  site_cwd_zscore:prop_host_count_s +
+                  site_cwd_zscore:pipo_and_dead_mean_height_s +
+                  site_cwd_zscore:overall_tpha_s +
+                  site_cwd_zscore:overall_bapha_s +
+                  prop_host_count_s:overall_tpha_s +
+                  pipo_and_dead_mean_height_s:prop_host_count_s +
+                  pipo_and_dead_mean_height_s:overall_bapha_s +
+                  site_cwd_zscore:prop_host_count_s:pipo_and_dead_mean_height_s +
+                  gp(x, y, by = site, scale = TRUE),
+                data = adf,
+                family = zero_one_inflated_beta(),
+                iter = 4000,
+                chains = 4,
+                cores = 4,
+                control = list(adapt_delta = 0.80))
+summary(fm2_brms)
+(elapsed <- difftime(Sys.time(), start, units = "hours"))
+pp_check(fm2_brms, nsamples = 50)
 
 
 
