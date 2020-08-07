@@ -141,8 +141,8 @@ ggplot(conservative_height_calibration, aes(x = height_raw, y = height, color = 
 ## though that is outside the scope of this particular study. And would be an
 ## excellent avenue for new research! (i.e., how can we better detect and 
 ## measure dead trees using Structure from Motion techniques?)
-fm1 <- lm(formula = (height - height_raw) ~ height_raw * live, 
-           data = correction_table)
+fm1 <- lm(formula = height ~ height_raw * live, 
+           data = conservative_height_calibration)
 summary(fm1)
 
 fm2 <- lm(formula = (height - height_raw) ~ height_raw * live, 
@@ -157,6 +157,54 @@ ggplot(conservative_height_calibration, aes(x = height_raw, y = height - height_
        title = "Comparison of drone-derived and field-derived tree heights",
        color = "Live or dead") +
   theme_bw()
+
+#### Plot GAM fit and correction applied together
+newdata <- 
+  tidyr::crossing(height_raw = 0:50, live = as.factor(c(0, 1))) %>% 
+  modelr::add_predictions(model = fm1, var = "height") %>% 
+  dplyr::mutate(live = ifelse(live == 0, yes = "dead", no = "live"),
+                type = "calibration")
+
+correction_table_plotting <-
+  correction_table %>% 
+  dplyr::select(height_raw, live, height) %>% 
+  dplyr::mutate(live = ifelse(live == 0, yes = "dead", no = "live"),
+                type = "raw")
+
+raw_and_calibration <-
+  rbind(correction_table_plotting, newdata) %>% 
+  dplyr::mutate(type = as.factor(type))
+
+level3b_calibration_plot <-
+  ggplot(mapping = aes(x = height_raw, y = height, color = live, lty = type)) +
+  geom_point(data = subset(raw_and_calibration, subset = type == "raw"), alpha = 0.5) +
+  geom_smooth(data = raw_and_calibration, method = "gam", formula = y ~ s(x, bs = "cs"), lwd = 0.5) +
+  geom_abline(slope = 1, intercept = 0) +
+  labs(x = "Height measured from drone (m)",
+       y = "Height measured from ground (m)",
+       title = "Comparison of drone-derived and field-derived tree heights",
+       color = "Live or dead",
+       lty = "Raw data or calibration") +
+  theme_bw() +
+  scale_color_manual(values = c("#994F00", "#006CD1")) +
+  scale_linetype_manual(values = c(2, 1))
+
+ggsave(filename = "figures/level-3b-calibration-plot.png", plot = level3b_calibration_plot)
+
+#### Output the technical details of the height correction in a table
+
+correction_table <-
+  correction_table %>% 
+  dplyr::mutate(conservative_height_calibration_tree = ifelse(height_raw > 20, yes = 1, no = 0))
+
+readr::write_csv(x = correction_table, path = "analyses/analyses_output/height-corrections-individual-tree-level_details.csv")
+
+example_corrections <-
+  tidyr::crossing(live = factor(c(0, 1)), height_raw = 3:50) %>% 
+  modelr::add_predictions(model = fm2, var = "height_diff") %>% 
+  dplyr::mutate(height = height_raw + height_diff)
+
+readr::write_csv(x = example_corrections, path = "analyses/analyses_output/example-height-corrections.csv")
 
 #### Correct the tree heights
 #### Get trees identified (segmented and classified) from the air

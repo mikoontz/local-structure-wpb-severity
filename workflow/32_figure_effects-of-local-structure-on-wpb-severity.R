@@ -9,8 +9,11 @@ library(brms)
 library(tidybayes)
 
 fm1 <- readr::read_rds(path =  here::here('analyses', 'analyses_output', 'fitted-model_zibinomial_site-cwdZscore_prop-host_pipo-height_overall-tpha_overall-bapha_exact-gp-per-site_200-samples.rds'))
+fm1 <- readr::read_rds(path =  here::here('analyses', 'analyses_output', 'fitted-model_zibinomial_site-cwdZscore_prop-host_pipo-height_overall-tpha_overall-bapha_height-corrected-from-20m_exact-gp-per-site_200-samples.rds'))
+fm2 <- readr::read_rds(path = here::here("analyses/analyses_output/fitted-model_zibinomial_site-cwdZscore_prop-host_pipo-ba_overall-tpha_overall-bapha_height-corrected-from-20m_exact-gp-per-site_200-samples.rds"))
 
 fitted_compact <- read_csv("analyses/analyses_output/model-predictions.csv")
+fitted_compact <- read_csv("analyses/analyses_output/model-predictions_height-corrected.csv")
 
 step_size <- 0.1
 tree_size_small <- -0.7
@@ -52,8 +55,12 @@ prop_host_height_cwd_interaction_gg
 
 ggsave(filename = "figures/prop-host_pipo-height_cwd_interaction.png", width = 6, height = 3.5, units = "in", plot = prop_host_height_cwd_interaction_gg)
 
+ggsave(filename = "figures/prop-host_pipo-height_cwd_interaction_presentation.png", width = 6, height = 3.5, units = "in", plot = prop_host_height_cwd_interaction_gg)
+
 # halfeye plots of model coefficients -------------------------------------
 samps <- readr::read_csv(file = here::here("analyses", "analyses_output", "final-model-posterior-samples.csv"))
+samps <- readr::read_csv(file = here::here("analyses", "analyses_output", "final-model-posterior-samples_height-corrected.csv"))
+
 original_names <- colnames(samps)
 replacement_names <- c("Intercept", 
                        "Site CWD", 
