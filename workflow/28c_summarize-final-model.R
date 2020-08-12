@@ -3,7 +3,7 @@
 library(brms)
 library(tidyverse)
 
-fm1 <- readr::read_rds(path =  here::here('analyses', 'analyses_output', 'fitted-model_zibinomial_site-cwdZscore_prop-host_pipo-height_overall-tpha_overall-bapha_exact-gp-per-site_200-samples.rds'))
+fm1 <- readr::read_rds(path = here::here('analyses/analyses_output/fitted-model_zibinomial_site-cwdZscore_prop-host_pipo-height_overall-tpha_overall-bapha_overall-bapha-pipo-height-interaction_height-corrected-from-20m_exact-gp-per-site_200-samples.rds'))
 
 fm1
 summary(fm1)

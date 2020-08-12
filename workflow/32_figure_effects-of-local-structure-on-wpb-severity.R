@@ -8,11 +8,8 @@ library(tidyverse)
 library(brms)
 library(tidybayes)
 
-fm1 <- readr::read_rds(path =  here::here('analyses', 'analyses_output', 'fitted-model_zibinomial_site-cwdZscore_prop-host_pipo-height_overall-tpha_overall-bapha_exact-gp-per-site_200-samples.rds'))
-fm1 <- readr::read_rds(path =  here::here('analyses', 'analyses_output', 'fitted-model_zibinomial_site-cwdZscore_prop-host_pipo-height_overall-tpha_overall-bapha_height-corrected-from-20m_exact-gp-per-site_200-samples.rds'))
-fm2 <- readr::read_rds(path = here::here("analyses/analyses_output/fitted-model_zibinomial_site-cwdZscore_prop-host_pipo-ba_overall-tpha_overall-bapha_height-corrected-from-20m_exact-gp-per-site_200-samples.rds"))
+fm1 <- readr::read_rds(path = here::here('analyses/analyses_output/fitted-model_zibinomial_site-cwdZscore_prop-host_pipo-height_overall-tpha_overall-bapha_overall-bapha-pipo-height-interaction_height-corrected-from-20m_exact-gp-per-site_200-samples.rds'))
 
-fitted_compact <- read_csv("analyses/analyses_output/model-predictions.csv")
 fitted_compact <- read_csv("analyses/analyses_output/model-predictions_height-corrected.csv")
 
 step_size <- 0.1
@@ -35,7 +32,7 @@ prop_host_height_cwd_interaction_df <-
 # https://davidmathlogic.com/colorblind/#%23994F00-%23006CD1
 prop_host_height_cwd_interaction_gg <-
   ggplot(prop_host_height_cwd_interaction_df, 
-         aes(x = prop_host_s, 
+         aes(x = prop_host_count_s, 
              y = est_mn, 
              color = pipo_and_dead_mean_height)) +
   geom_ribbon(aes(ymin = lwr, ymax = upr, fill = pipo_and_dead_mean_height), alpha = 0.5, color = NA) +
@@ -58,7 +55,6 @@ ggsave(filename = "figures/prop-host_pipo-height_cwd_interaction.png", width = 6
 ggsave(filename = "figures/prop-host_pipo-height_cwd_interaction_presentation.png", width = 6, height = 3.5, units = "in", plot = prop_host_height_cwd_interaction_gg)
 
 # halfeye plots of model coefficients -------------------------------------
-samps <- readr::read_csv(file = here::here("analyses", "analyses_output", "final-model-posterior-samples.csv"))
 samps <- readr::read_csv(file = here::here("analyses", "analyses_output", "final-model-posterior-samples_height-corrected.csv"))
 
 original_names <- colnames(samps)
@@ -74,9 +70,10 @@ replacement_names <- c("Intercept",
                        "Site CWD : Overall basal area",
                        "Proportion host (ponderosa) : Overall density",
                        "Proportion host (ponderosa) : Ponderosa mean height",
+                       "Ponderosa mean height : Overall basal area",
                        "Site CWD : Proportion host (ponderosa) : Ponderosa mean size")
 
-replacement_name_order <- 1:13
+replacement_name_order <- 1:14
 
 colnames(samps) <- replacement_names
 

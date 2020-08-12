@@ -9,7 +9,7 @@ surveyed_area <-
 ground_trees <- read_csv(here::here("analyses", "analyses_output", "deep-ground-tree-summary-by-site.csv"))
 
 trees <- 
-  sf::st_read(here::here("data", "data_drone", "L3b", "model-classified-trees_all.gpkg"), stringsAsFactors = FALSE)
+  sf::st_read(here::here("data", "data_drone", "L3b", "model-classified-trees_all_height-corrected.gpkg"), stringsAsFactors = FALSE)
 
 trees_split <-
   trees %>% 

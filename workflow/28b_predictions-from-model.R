@@ -8,8 +8,7 @@ library(brms)
 
 cwd_data <- read_csv("data/data_output/cwd-data.csv")
 
-fm1 <- readr::read_rds(path =  here::here('analyses', 'analyses_output', 'fitted-model_zibinomial_site-cwdZscore_prop-host_pipo-height_overall-tpha_overall-bapha_exact-gp-per-site_200-samples.rds'))
-fm1 <- readr::read_rds(path =  here::here('analyses', 'analyses_output', 'fitted-model_zibinomial_site-cwdZscore_prop-host_pipo-height_overall-tpha_overall-bapha_height-corrected-from-20m_exact-gp-per-site_200-samples.rds'))
+fm1 <- readr::read_rds(path = here::here('analyses/analyses_output/fitted-model_zibinomial_site-cwdZscore_prop-host_pipo-height_overall-tpha_overall-bapha_overall-bapha-pipo-height-interaction_height-corrected-from-20m_exact-gp-per-site_200-samples.rds'))
 
 step_size <- 0.1
 
@@ -74,5 +73,5 @@ fitted_compact <-
   dplyr::select(tidyselect::all_of(main_effect_covariates), 
                 lwr, est_mn, upr)
 
-write_csv(fitted_compact, path = "analyses/analyses_output/model-predictions.csv")
+# write_csv(fitted_compact, path = "analyses/analyses_output/model-predictions.csv")
 write_csv(fitted_compact, path = "analyses/analyses_output/model-predictions_height-corrected.csv")
