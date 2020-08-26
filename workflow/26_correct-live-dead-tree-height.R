@@ -99,7 +99,8 @@ ggplot(correction_table, aes(x = height_raw, y = height, color = live)) +
 ## Here, we subset to the trees greater than 20 meters in height
 conservative_height_calibration <-
   correction_table %>% 
-  dplyr::filter(height_raw > 20)
+  dplyr::filter(height_raw > 20) %>% 
+  dplyr::mutate(live = ifelse(live == 1, yes = "live", no = "dead"))
 
 ## Check the plot and the GAM fits look good!
 ggplot(conservative_height_calibration, aes(x = height_raw, y = height, color = live)) +
@@ -142,21 +143,25 @@ ggplot(conservative_height_calibration, aes(x = height_raw, y = height, color = 
 ## excellent avenue for new research! (i.e., how can we better detect and 
 ## measure dead trees using Structure from Motion techniques?)
 fm1 <- lm(formula = height ~ height_raw * live, 
-           data = conservative_height_calibration)
+          data = conservative_height_calibration)
 summary(fm1)
 
 fm2 <- lm(formula = (height - height_raw) ~ height_raw * live, 
           data = conservative_height_calibration)
 summary(fm2)
 
-ggplot(conservative_height_calibration, aes(x = height_raw, y = height - height_raw, color = live)) +
+level3b_calibration_diff_plot <-
+  ggplot(conservative_height_calibration, aes(x = height_raw, y = height - height_raw, color = live)) +
   geom_point() +
   geom_smooth(method = "lm") +
   labs(x = "Height measured from drone (m)",
-       y = "Height measured from ground (m)",
-       title = "Comparison of drone-derived and field-derived tree heights",
+       y = "Field-measured height minus drone-measured height (m)",
+       title = "Calibration applied to drone-derived tree heights",
        color = "Live or dead") +
+  scale_color_manual(values = c("#994F00", "#006CD1")) +
   theme_bw()
+
+ggsave(filename = "figures/level-3b-calibration-diff-plot.png", plot = level3b_calibration_diff_plot)
 
 #### Plot GAM fit and correction applied together
 newdata <- 
@@ -236,3 +241,24 @@ all_trees <-
   dplyr::mutate(estimated_ba = (estimated_dbh / 2)^2 * pi / 10000)
 
 sf::st_write(obj = all_trees, dsn = here::here("data", "data_drone", "L3b", "model-classified-trees_all_height-corrected.gpkg"), append = FALSE)  
+
+
+### Same procedure for the trees that are identifiable from the air
+air_trees_in_plots <- 
+  sf::st_read(dsn = here::here("data", "data_drone", "L3b", "model-classified-trees-within-ground-plots.gpkg"), stringsAsFactors = FALSE) %>% 
+  dplyr::mutate(live = as.factor(live),
+                height_raw = height,
+                estimated_dbh_raw = estimated_dbh) %>% 
+  modelr::add_predictions(model = fm2, var = "height_correction") %>% 
+  dplyr::mutate(height = height_raw + height_correction) %>% 
+  dplyr::left_join(allometry_models, by = "species") %>% 
+  dplyr::mutate(model = ifelse(live == 0, 
+                               yes = allometry_models %>% 
+                                 dplyr::filter(species == "pipo") %>% 
+                                 pull(model), 
+                               no = model)) %>% 
+  dplyr::do(modelr::add_predictions(., model = first(.$model), var = "estimated_dbh")) %>% 
+  dplyr::select(-model) %>% 
+  dplyr::mutate(estimated_ba = (estimated_dbh / 2)^2 * pi / 10000)
+
+sf::st_write(obj = air_trees_in_plots, dsn = here::here("data", "data_drone", "L3b", "model-classified-trees-within-ground-plots_height-corrected.gpkg"), append = FALSE)
