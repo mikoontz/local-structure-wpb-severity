@@ -79,6 +79,11 @@ hand_classified_crowns <- read_csv(here::here("data", "data_drone", "L3b", "hand
   dplyr::mutate(site = substr(treeID, start = 1, stop = 9))
 ```
 
+```{r l3b_calibrations}
+height_corrections <- readr::read_csv(here::here("analyses/analyses_output/height-corrections-individual-tree-level_details.csv"))
+example_height_corrections <- readr::read_csv(here::here("analyses/analyses_output/example-height-corrections.csv"))
+```
+
 
 ```{r feet_to_meters}
 # 3000 = 914
@@ -281,6 +286,32 @@ For just the living trees, we similarly used all 10 reflectance values to predic
 
 Finally, we used these models to classify all tree crowns in the data set as alive or dead as well as the species of living trees.
 
+### Calibrating heights of live and dead trees
+
+We calibrated the live/dead classified tree heights (a Level3b product) by identifying `r nrow(height_corrections)` field-measured trees in the drone-derived tree data.
+Compared to field-measured live trees, drone-measured live tree height showed a small overestimation in height across the range of drone-measured tree heights (`r fig_nums(name = "fig-l3b-calibration", display = "cite")`).
+The heights of dead trees greater than 20 m (as measured by the drone) showed a small underestimation of height, but heights of dead trees less than 20 m (as measured by the drone) showed a greater average underestimation (and variability) compared to the field measurements (`r fig_nums(name = "fig-l3b-calibration", display = "cite")`).
+
+Using the field and drone matched tree data for drone-measured trees greater than 20 m in height, we applied a conservative height correction to all live and dead trees in the Level 3b data product based on a linear regression of the difference between the field- and drone-measured tree heights as a function of drone-measured tree height: 
+
+$$
+\Delta_{height} = \beta_0 + X_{height}\beta_1 + X_{live}\beta_2 + X_{height}X_{live}\beta_3 + \epsilon
+$$
+
+where $\Delta_{height}$ represents the field-measured tree height subtracted from the drone-measured tree height, $X_{height}$ represents the drone-measured tree height, and $X_{live}$ represents a boolean variable for whether the tree is alive or dead. We applied this $\Delta_{height}$ to the drone-measured heights of each of the detected and classified trees in the dataset based on whether the tree was classified as live or dead and based on its drone-measured tree height (`r fig_nums(name = "fig-l3b-calibration-diff", display = "cite")`).
+
+```{r}
+fig_nums(name = "fig-l3b-calibration", paste0("We identified ", nrow(height_corrections), " field-measured trees in the Level 3b drone-derived data representing segmented and classified trees. Comparing the field- versus drone-measured tree heights for the live and dead trees, we see good agreement for live trees (albeit a small, consistent overestimate of height), and a somewhat good agreement for trees for which the drone-measured height was greater than 20 m (albeit a small, consistent underestimate of height). The solid lines and confidence ribbons represent a General Additive Model fit to these data. Using a linear relationship for trees for which the drone-measured height was greater than 20 m, we modeled the difference between field- and drone-measured height as a function of drone-measured height and extended this relationship to all drone-measured heights (the dashed line). This represents a conservative correction of the drone-measured tree heights."))
+```
+
+![`r fig_nums(name = "fig-l3b-calibration")`](../../figures/level-3b-calibration-plot.png)
+
+```{r}
+fig_nums(name = "fig-l3b-calibration-diff", paste0("We applied a conservative correction to live and dead tree heights in our dataset based on the relationship between the difference between field-measured and drone-measured tree heights as a function of drone-measured tree height. Heights of trees classified as 'dead' were augmented slightly, while heights of trees classified as 'live' were reduced slightly."))
+```
+
+![`r fig_nums(name = "fig-l3b-calibration-diff")`](../../figures/level-3b-calibration-diff-plot.png)
+
 ### Rasterizing individual tree data
 
 ```{r}
@@ -295,6 +326,9 @@ That is, we rasterized the individual tree data to 20m x 20m pixels equaling 400
 In each raster cell, we calculated the: number of live trees, number of dead trees, number of ponderosa pine trees, total number of trees (of all species, including ponderosa pine), quadratic mean diameter (QMD) of ponderosa pine trees, and QMD of all trees of any species (overall QMD).
 We converted the count of ponderosa pine trees and the total tree count to a density measurement of trees per hectare (tpha) by multiplying the counts in each 20m x 20m cell by `r 10000/400` to create a "host density" and an "overall density" variable per cell.
 
+### Basal area consequences of proportion of dead host trees
+The proportion of basal area killed is also an important measure of forest disturbance severity. We graphically assessed how the proportion of basal area killed varied as a function of proportion of host trees killed (i.e., the response variable of our formal statistical analysis). We opted to not treat proportion of basal area killed as a response variable in a second formal modeling framework due to unsatisfactory model fitting, likely arising from the additional uncertainty in estimates of basal area from allometric relationships with drone-measured tree height and/or the height calibrations depending on live/dead status prior to estimating each tree's basal area.
+
 ## Supplemental results
 
 ```{r}
@@ -305,7 +339,7 @@ table_nums(name = "table-model-summary", "Summary of posterior distributions of 
 ```{r model_summary_print, echo = FALSE, include = TRUE, results = 'asis'}
 model_summary_print <-
   model_summary %>% 
-  dplyr::slice(1:78) %>% 
+  dplyr::slice(c(1:14, 79, 15:78)) %>% 
   dplyr::select(beta, Estimate, lwr0_025, upr0_975) %>% 
   dplyr::mutate(beta = ifelse(beta == "zi", yes = "p", no = beta)) %>% 
   dplyr::mutate(beta = stringi::stri_replace_all_fixed(str = beta, pattern = ":", replacement = " :\n")) %>% 
@@ -321,12 +355,6 @@ pandoc.table(model_summary_print,
              caption = table_nums(name = "table-model-summary"),
              keep.line.breaks = TRUE)
 ```
-
-```{r}
-fig_nums(name = "fig-height-mortality-by-data-source", "The relationship between mean host height and the proportion of host mortality based on the data source. Field plot data come from @fettig2019, drone data over field plots comes from this study, but with trees subsetted to only those identified within the ground footprints of the field plots of @fettig2019, and drone data randomly selected at each site come from this study but are randomly selected 20 x 20 m cells (5 from each site) from the Level 4 product. The tree height/mortality relationship appears similar for trees in the coincident field plots (both field-derived and drone-derived tree measurements), while the drone data representing the broader context around the coincident field plots show a dramatically different relationship.")
-```
-
-![`r fig_nums(name = "fig-height-mortality-by-data-source")`](../../figures/supplemental-figure_height-mortality-relationship-depends-on-data-source.png)
 
 ```{r}
 table_nums(name = "table-site-deets", "Site characteristics for each of the 32 sites.
@@ -386,6 +414,22 @@ fig_nums(name = "fig-posterior-predictive-checks", "Posterior predictive checks 
 ```
 
 ![`r fig_nums(name = "fig-posterior-predictive-checks")`](../../figures/posterior-prediction-model-checking.png)
+
+### Basal area consequences of proportion of host trees killed
+An increasing proportion of dead host trees corresponded to increasing proportion of host basal area killed and total basal area killed (`r fig_nums(name = "fig-basal-area-consequences", display = "cite")`). Coupled with the positive effect of mean host tree height on the probability of host tree mortality, we suggest that our model coefficient estimates can also be interpreted as the relative influence on the proportion of host basal area killed.
+
+```{r}
+fig_nums(name = "fig-basal-area-consequences", "The basal area mortality consequences as a function of the proportion of dead host trees (i.e., the response variable of our analysis). Note that the y-axis is constrained in order to highlight the trend in the mean. An increase in the proportion of dead trees (based on count) correlates with an increasing mean quantity of basal area killed. Coupled with the positive effect of mean tree height in a pixel with the probability of host tree mortality, this suggests that larger trees were the actual victim of bark beetle attack, rather than the alternative scenario whereby large trees in a plot act as a siren call that increases the probability of mortalitheir smaller neighbors but not themselves.")
+```
+
+![`r fig_nums(name = "fig-basal-area-consequences")`](../../figures/basal-area-consequences.png)
+
+```{r}
+fig_nums(name = "fig-height-mortality-by-data-source", "The relationship between mean host height and the proportion of host mortality based on the data source. Field plot data come from @fettig2019, drone data over field plots comes from this study, but with trees subsetted to only those identified within the ground footprints of the field plots of @fettig2019, and drone data randomly selected at each site come from this study but are randomly selected 20 x 20 m cells (5 from each site) from the Level 4 product. The tree height/mortality relationship appears similar for trees in the coincident field plots (both field-derived and drone-derived tree measurements), while the drone data representing the broader context around the coincident field plots show a dramatically different relationship.")
+```
+
+![`r fig_nums(name = "fig-height-mortality-by-data-source")`](../../figures/supplemental-figure_height-mortality-relationship-depends-on-data-source.png)
+
 
 \newpage
 
