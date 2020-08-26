@@ -107,19 +107,6 @@ stacked <-
                                  type == "pipo_and_dead_ba" ~ "host tree basal area",
                                  TRUE ~ "total basal area"))
 
-ba_v_prop_dead_hosts_gg <-
-  ggplot(stacked, aes(prop_dead_pipo_count, basal_area, color = type)) + 
-  geom_point(alpha = 0.2) + 
-  geom_smooth(formula = y ~ s(x, bs = "cs", k = 4)) +
-  scale_y_continuous(limits = c(0, 2.5)) +
-  scale_color_viridis_d() +
-  labs(x = "Proportion of dead hosts\n(#dead / #hosts)",
-       y = "Basal area\n(m^2)",
-       color = "Basal area type") +
-  theme_bw()
-
-ggsave(filename = "figures/basal-area-consequences.png", plot = ba_v_prop_dead_hosts_gg)
-
 ggplot(stacked, aes(prop_dead_pipo_count, basal_area, color = type)) + 
   geom_point(alpha = 0.2) + 
   geom_smooth(formula = y ~ s(x, bs = "cs", k = 4)) +
@@ -129,11 +116,32 @@ ggplot(stacked, aes(prop_dead_pipo_count, basal_area, color = type)) +
        color = "Basal area type") +
   theme_bw()
 
+### Zoomed in version so smoothed lines are more legible
+# Huge thanks to this Twitter thread for pointing out behavior of 
+# ylim() and scale_y_continuous(limits = c()) [i.e., dropping data
+# prior to performing geom_smooth() fits]
+ba_v_prop_dead_hosts_gg <-
+  ggplot(stacked, aes(prop_dead_pipo_count, basal_area, color = type)) + 
+  geom_point(alpha = 0.2) + 
+  geom_smooth(formula = y ~ s(x, bs = "cs", k = 4)) +
+  scale_color_viridis_d() +
+  labs(x = "Proportion of dead hosts\n(#dead / #hosts)",
+       y = "Basal area\n(m^2)",
+       color = "Basal area type") +
+  theme_bw() +
+  coord_cartesian(ylim = c(0, 2.5))
+
+ba_v_prop_dead_hosts_gg
+
+ggsave(filename = "figures/basal-area-consequences.png", plot = ba_v_prop_dead_hosts_gg)
+
+
 ggplot(adf, aes(x = prop_dead_pipo_count, y = prop_dead_ba, color = pipo_count_binned)) +
   geom_point(alpha = 0.2) +
   geom_smooth(method = "gam", formula = y ~ s(x, bs = "cs", k = 7)) +
   scale_color_viridis_d() +
   labs(x = "Proportion of dead hosts\n(#dead / #hosts)",
        y = "Proportion of dead basal area\n(dead basal area / total basal area)",
-       color = "Number\nof host trees")
+       color = "Number\nof host trees") +
+  theme_bw()
 
