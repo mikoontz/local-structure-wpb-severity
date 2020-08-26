@@ -11,31 +11,29 @@ cwd <-
   read_csv(here::here("data", "data_output", "cwd-data.csv"))
 
 # Get classified trees
-d <- 
-  sf::st_read(here::here("data", "data_drone", "L3b", "model-classified-trees_all.gpkg"), 
-              stringsAsFactors = FALSE)  
-
-# Join classified trees with CWD data
-dd <-
-  d %>%
-  dplyr::left_join(cwd, by = "site")
+# d <- 
+#   sf::st_read(here::here("data/data_drone/L3b/model-classified-trees_all_height-corrected.gpkg"), 
+#               stringsAsFactors = FALSE)  
+# 
+# # Join classified trees with CWD data
+# dd <-
+#   d %>%
+#   dplyr::left_join(cwd, by = "site")
 
 # get plot locations
-plot_radius <- sqrt((66*66) / pi) * (12 * 2.54 / 100) 
-plot_locations <- 
-  sf::st_read(here::here("data", "data_drone", "L1", "plot-centers-identifiable-from-air_3310.gpkg")) %>% 
-  sf::st_buffer(plot_radius) %>% 
-  dplyr::select(-site, -local_x, -local_y, -local_crs)
+# plot_radius <- sqrt((66*66) / pi) * (12 * 2.54 / 100) 
+# plot_locations <- 
+#   sf::st_read(here::here("data", "data_drone", "L1", "plot-centers-identifiable-from-air_3310.gpkg")) %>% 
+#   sf::st_buffer(plot_radius) %>% 
+#   dplyr::select(-site, -local_x, -local_y, -local_crs)
 
 # subset classified trees to just those within plots that are identifiable
 # from the air
-air_trees <-
-  dd %>% 
-  sf::st_intersection(plot_locations) %>% 
-  dplyr::mutate(species = ifelse(is.na(species), yes = "pipo", no = species))
+air_trees <- sf::st_read(here::here("data", "data_drone", "L3b", "model-classified-trees-within-ground-plots_height-corrected.gpkg"), stringsAsFactors = FALSE)
 
 air_trees_by_plot <-
   air_trees %>% 
+  dplyr::mutate(live = as.numeric(as.character(live))) %>% 
   st_drop_geometry() %>% 
   group_by(plot) %>% 
   summarize(mean_height = mean(height[species == "pipo"]),
@@ -48,19 +46,21 @@ air_trees_by_plot <-
 
 # Get random pixels stratified by each site that describe mean host height
 # and proportion of host mortality
-r_data <- read_csv("analyses/analyses_output/data-from-rasterized-classified-trees.csv")
+r_data <- readr::read_csv("data/data_drone/L4/data-from-rasterized-classified-trees.csv")
 
 set.seed(123)
+set.seed(1609)
 r_data_sample <-
   r_data %>% 
+  dplyr::filter(pipo_and_dead_count > 0) %>% 
   group_by(site) %>% 
-  sample_n(5) %>% 
+  sample_n(5) %>%
   dplyr::mutate(prop_dead = dead_count / pipo_and_dead_count) %>% 
   dplyr::ungroup()
 
 air_trees_by_plot_from_raster <-
   r_data_sample %>% 
-  dplyr::select(plot = site, mean_height = pipo_mean_height, prop_dead) %>% 
+  dplyr::select(plot = site, mean_height = pipo_and_dead_mean_height, prop_dead) %>% 
   dplyr::mutate(plot = 1:n())
 
 # Get the ground trees from the 110 plots that are identifiable by air
