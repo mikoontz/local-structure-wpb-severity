@@ -167,20 +167,24 @@ Date report generated: `r params$date_generated`
 
 ## Abstract 
 
-The Californian hot drought of 2012 to 2015 created favorable conditions for unprecedented ponderosa pine (*Pinus ponderosa*) mortality in the Sierra Nevada mountain range, largely attributable to the western pine beetle (*Dendroctonus brevicomis*; WPB). 
+The Californian hot drought of 2012 to 2016 created favorable conditions for unprecedented ponderosa pine (*Pinus ponderosa*) mortality in the Sierra Nevada mountain range, largely attributable to the western pine beetle (*Dendroctonus brevicomis*; WPB). 
 Climate conditions can partially explain tree mortality patterns through their direct effect on tree vigor, but tree mortality rates can respond non-linearly to climate conditions when bark beetles interact with local forest characteristics while they colonize drought-stressed trees.
 Measuring broad-scale climate conditions simultaneously with local forest composition and structure-- the spatial distribution and size of trees-- will refine our understanding of how these variables interact, but is generally expensive and/or labor-intensive. 
 We use drone surveys over 32 distinct sites along a 350-km latitudinal and 1000-m elevational gradient in western slope Sierra Nevada ponderosa pine/mixed-conifer forests and structure from motion (SfM) photogrammetry to segment and classify more than 450,000 trees over 9 km^2^ of forest with WPB-induced tree mortality.
-We validated the segmentation and classification with data from 160 coincident field plots (each 0.041 ha in area) throughout the 32 sites, assuming that dead trees were all ponderosa pine killed by WPB. 
+We validated the segmentation and classification with data from 160 coincident field plots with documented WPB activity and high ponderosa mortality, assuming that dead trees were all ponderosa pine killed by WPB. 
 We modeled the probability of ponderosa pine mortality as a function of forest structure and composition and their interaction with site-level climatic water deficit (CWD), accounting for spatial covariance using exact Gaussian processes.
 A greater local proportion of host trees strongly increased the probability of host mortality, with greater host density amplifying this effect.
-Further, we found a strong interaction between host size and CWD such that larger trees increased the probability of host mortality at hot/dry sites, but smaller trees tended to drive mortality in cool/wet sites.
+
+Further, larger host trees increased host mortality rates.
+
+Finally, we found a strong interaction between host size and CWD such that larger trees increased the probability of host mortality at hot/dry sites, but smaller trees tended to drive mortality in cool/wet sites.
+
 Our results demonstrate a variable response of WPB to local forest structure and composition across an environmental gradient, which may help reconcile differences between observed ecosystem-wide tree mortality patterns and predictions from models based on coarser-scale forest structure.
 Climate change adaptation strategies should consider that future disturbance outcomes may depend on interactions between local forest structure and broad-scale environmental gradients, with the potential for cross-scale interactions that challenge our current understanding of forest insect dynamics.
 
 ## Introduction
 
-Bark beetles dealt the final blow to many of the nearly 150 million trees killed in the California hot drought of 2012 to 2015 and its aftermath [@usdafs2019]. 
+Bark beetles dealt the final blow to many of the nearly 150 million trees killed in the California hot drought of 2012 to 2016 and its aftermath [@usdafs2019]. 
 A harbinger of climate change effects to come, record high temperatures exacerbated the drought [@griffin2014; @robeson2015], which increased water stress in trees [@asner2016; @brodrick2017], making them more susceptible to colonization by bark beetles [@fettig2012b; @kolb2016]. 
 Further, a century of fire suppression has enabled forests to grow into dense stands, which can also make them more vulnerable to bark beetles [@waring1985; @fettig2012b; @restaino2019]. 
 This combination of environmental conditions and forest structural characteristics led to tree mortality events of unprecedented size across the state [@usdafs2017; @young2017]. 
@@ -212,7 +216,7 @@ For instance, dense forests with high host availability may experience greater b
 Stand-scale measures of forest structure and composition thus paint a fundamentally limited picture of the mechanisms by which these forest characteristics affect bark beetle disturbance, but finer-grain information explicitly recognizing tree species, size, and local density should better capture the ecological processes underlying insect-induced tree mortality [@geiszler1978; @mitchell1991; @preisler1993a; @kaiser2013].
 Additionally, considering the effects of local forest structure and composition with the effects of environmental conditions may help refine our understanding of tree mortality patterns in widespread events, such as during the recent California hot drought.
 
-The vast spatial extent of tree mortality in the 2012 to 2015 California hot drought challenges our ability to simultaneously consider how broad-scale environmental conditions may interact with local forest structure and composition to affect the dynamic between bark beetle selection and colonization of host trees, and host tree susceptibility to attack [@anderegg2015a; @stephenson2019].
+The vast spatial extent of tree mortality in the 2012 to 2016 California hot drought challenges our ability to simultaneously consider how broad-scale environmental conditions may interact with local forest structure and composition to affect the dynamic between bark beetle selection and colonization of host trees, and host tree susceptibility to attack [@anderegg2015a; @stephenson2019].
 Measuring local forest structure generally requires expensive instrumentation [@kane2014; @asner2016] or labor-intensive field surveys [@larson2012; @fettig2019; @stephenson2019], which constrains survey extent and frequency.
 Small, unhumanned aerial systems (sUAS) enable relatively fast and cheap remote imaging over hundreds of hectares of forest, which can be used to measure complex forest structure and composition at the individual tree scale with Structure from Motion (SfM) photogrammetry [@morris2017; @shiklomanov2019].
 The ultra-high resolution of sUAS-derived measurements as well as the ability to incorporate vegetation reflectance can help overcome challenges in species classification and dead tree detection inherent in other remote sensing methods, such as airborne LiDAR [@jeronimo2019].
@@ -407,7 +411,7 @@ While the detected mortality is most likely to be ponderosa pine killed by WPB, 
 We used CWD [@stephenson1998] from the 1981-2010 mean value of the basin characterization model [@flint2013] as an integrated measure of historic temperature and moisture conditions for each of the 32 sites.
 Higher values of CWD correspond to historically hotter, drier conditions and lower values correspond to historically cooler, wetter conditions.
 CWD has been shown to correlate well with broad patterns of tree mortality in the Sierra Nevada [@young2017] as well as bark beetle-induced tree mortality [@millar2012].
-The forests along the entire CWD gradient used in this study experienced exceptional hot drought between 2012 to 2015 with a severity of at least a 1,200-year event, and perhaps more severe than a 10,000-year event [@griffin2014; @robeson2015].
+The forests along the entire CWD gradient used in this study experienced exceptional hot drought between 2012 to 2016 with a severity of at least a 1,200-year event, and perhaps more severe than a 10,000-year event [@griffin2014; @robeson2015].
 We converted the CWD value for each site into a z-score representing that site's deviation from the mean CWD across the climatic range of Sierra Nevada ponderosa pine as determined from 179 herbarium records described in @baldwin2017a.
 Thus, a CWD z-score of 1 would indicate that the CWD at that site is one standard deviation hotter/drier than the mean CWD across all geolocated herbarium records for ponderosa pine in the Sierra Nevada.
 
@@ -560,7 +564,7 @@ The 'larger trees' line represents the mean height of ponderosa pine 0.7 standar
 
 ## Discussion
 
-This study represents a novel use of drones to refine our understanding of the patterns of tree mortality following the 2012 to 2015 California hot drought and its aftermath.
+This study represents a novel use of drones to refine our understanding of the patterns of tree mortality following the 2012 to 2016 California hot drought and its aftermath.
 By simultaneously measuring the effects of local forest structure and composition across broad-scale environmental gradients, we were able to better characterize the influence of a tree-killing insect, the WPB, compared to using correlates of tree stress alone.
 
 ### Strong positive main effect of CWD
@@ -619,7 +623,7 @@ Our work suggests that the WPB was cueing into different aspects of forest struc
 A temporal signal of bark beetles attacking larger and larger host trees reflects the positive feedback between forest structure and bark beetle population dynamics as the population phase progresses from endemic to epidemic [@boone2011]. 
 This positive feedback leading to eruptive population dynamics is well-documented as a temporal phenomenon, and here we show a similar pattern in a spatial context.
 Though all of our sites were considered in an "epidemic" population phase for WPB [>5 trees killed per ha; see Supplemental Information; @miller1960; @hayes2009], our large sample size from surveying the broader context surrounding coincident field plots [@fettig2019] reveals that ponderosa pine mortality was strongly influenced by the cross-scale interaction between broad-scale CWD and local-scale host tree size.
-Thus, it is possible that the massive tree mortality in hotter/drier Sierra Nevada forests [lower latitudes and elevations; @asner2016; @young2017] during the 2012 to 2015 hot drought arose as a synergistic alignment of environmental conditions and local forest structure that allowed WPB to successfully colonize large trees, rapidly increase in population size, and expand.
+Thus, it is possible that the massive tree mortality in hotter/drier Sierra Nevada forests [lower latitudes and elevations; @asner2016; @young2017] during the 2012 to 2016 hot drought arose as a synergistic alignment of environmental conditions and local forest structure that allowed WPB to successfully colonize large trees, rapidly increase in population size, and expand.
 The unexpectedly low mortality in cooler/wetter Sierra Nevada forests compared to model predictions based on coarser-scale forest structure data [@young2017] may result from a different WPB response to local forest structure due to a lack of an alignment with favorable climate conditions.
 
 ## Limitations and future directions
