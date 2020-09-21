@@ -241,6 +241,46 @@ for(i in seq_along(sites_to_process)) {
                                            background = NA, 
                                            fun = max)
   
+  
+  #---------------- raw height (pre-correction)
+  
+  live_mean_height_raw <- raster::rasterize(x = current_trees %>% dplyr::filter((live == 1)), 
+                                        y = raster_template, 
+                                        field = "height_raw", 
+                                        background = NA, 
+                                        fun = mean)
+  
+  dead_mean_height_raw <- raster::rasterize(x = current_trees %>% dplyr::filter((live == 0)), 
+                                        y = raster_template, 
+                                        field = "height_raw", 
+                                        background = NA, 
+                                        fun = mean)
+  
+  pipo_mean_height_raw <- raster::rasterize(x = current_trees %>% dplyr::filter((species == "pipo")), 
+                                        y = raster_template, 
+                                        field = "height_raw", 
+                                        background = NA, 
+                                        fun = mean)
+  
+  non_pipo_mean_height_raw <- raster::rasterize(x = current_trees %>% dplyr::filter((species != "pipo")), 
+                                            y = raster_template, 
+                                            field = "height_raw", 
+                                            background = NA, 
+                                            fun = mean)
+  
+  pipo_and_dead_mean_height_raw <- raster::rasterize(x = current_trees %>% dplyr::filter((live == 0) | (species == "pipo")), 
+                                                 y = raster_template, 
+                                                 field = "height_raw", 
+                                                 background = NA, 
+                                                 fun = mean)
+  
+  overall_mean_height_raw <- raster::rasterize(x = current_trees, 
+                                           y = raster_template, 
+                                           field = "height_raw", 
+                                           background = NA, 
+                                           fun = mean)
+  
+  
   # total basal area per cell -----------------------------------------------
   
   live_basal_area <- raster::rasterize(x = current_trees %>% dplyr::filter((live == 1)), 
@@ -706,6 +746,7 @@ for(i in seq_along(sites_to_process)) {
                                   live_tpha, dead_tpha, pipo_tpha, non_pipo_tpha, pipo_and_dead_tpha, overall_tpha, 
                                   live_mean_height, dead_mean_height, pipo_mean_height, non_pipo_mean_height, pipo_and_dead_mean_height, overall_mean_height,
                                   live_max_height, dead_max_height, pipo_max_height, non_pipo_max_height, pipo_and_dead_max_height, overall_max_height,
+                                  live_mean_height_raw, dead_mean_height_raw, pipo_mean_height_raw, non_pipo_mean_height_raw, pipo_and_dead_mean_height_raw, overall_mean_height_raw,
                                   live_basal_area, dead_basal_area, pipo_basal_area, non_pipo_basal_area, pipo_and_dead_basal_area, total_basal_area,
                                   live_bapha, dead_bapha, pipo_bapha, non_pipo_bapha, pipo_and_dead_bapha, overall_bapha,
                                   live_mean_ba, dead_mean_ba, pipo_mean_ba, non_pipo_mean_ba, pipo_and_dead_mean_ba, overall_mean_ba,
@@ -727,6 +768,7 @@ for(i in seq_along(sites_to_process)) {
                              "live_tpha", "dead_tpha", "pipo_tpha", "non_pipo_tpha", "pipo_and_dead_tpha", "overall_tpha",
                              "live_mean_height", "dead_mean_height", "pipo_mean_height", "non_pipo_mean_height", "pipo_and_dead_mean_height", "overall_mean_height",
                              "live_max_height", "dead_max_height", "pipo_max_height", "non_pipo_max_height", "pipo_and_dead_max_height", "overall_max_height",
+                             "live_mean_height_raw", "dead_mean_height_raw", "pipo_mean_height_raw", "non_pipo_mean_height_raw", "pipo_and_dead_mean_height_raw", "overall_mean_height_raw",
                              "live_ba", "dead_ba", "pipo_ba", "non_pipo_ba", "pipo_and_dead_ba", "total_ba",
                              "live_bapha", "dead_bapha", "pipo_bapha", "non_pipo_bapha", "pipo_and_dead_bapha", "overall_bapha",
                              "live_mean_ba", "dead_mean_ba", "pipo_mean_ba", "non_pipo_mean_ba", "pipo_and_dead_mean_ba", "overall_mean_ba",

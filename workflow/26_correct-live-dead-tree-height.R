@@ -243,7 +243,7 @@ all_trees <-
 sf::st_write(obj = all_trees, dsn = here::here("data", "data_drone", "L3b", "model-classified-trees_all_height-corrected.gpkg"), append = FALSE)  
 
 
-### Same procedure for the trees that are identifiable from the air
+### Same procedure for the trees in ground plots that are identifiable from the air
 air_trees_in_plots <- 
   sf::st_read(dsn = here::here("data", "data_drone", "L3b", "model-classified-trees-within-ground-plots.gpkg"), stringsAsFactors = FALSE) %>% 
   dplyr::mutate(live = as.factor(live),
@@ -262,3 +262,36 @@ air_trees_in_plots <-
   dplyr::mutate(estimated_ba = (estimated_dbh / 2)^2 * pi / 10000)
 
 sf::st_write(obj = air_trees_in_plots, dsn = here::here("data", "data_drone", "L3b", "model-classified-trees-within-ground-plots_height-corrected.gpkg"), append = FALSE)
+
+
+#---------
+cwd_order <- cwd %>% arrange(site_cwd) %>% pull(site)
+
+correction_consequences <-
+  all_trees %>% 
+  sf::st_drop_geometry() %>% 
+  dplyr::select(site, live, species, height, height_raw) %>% 
+  dplyr::mutate(species = ifelse(live == 0, yes = "pipo", no = species)) %>% 
+  tidyr::pivot_longer(cols = 4:5, names_to = "raw", values_to = "height") %>% 
+  dplyr::mutate(raw = ifelse(raw == "height_raw", yes = "raw", no = "corrected")) %>% 
+  dplyr::left_join(cwd, by = "site") %>% 
+  dplyr::mutate(site = factor(site, levels = cwd_order, ordered = TRUE),
+                live = ifelse(live == 1, yes = "live", no = "dead"))
+
+
+correction_consequences_gg <-
+  ggplot(correction_consequences, aes(x = site, y = height, fill = raw)) +
+  geom_boxplot() +
+  facet_wrap(facets = vars(live), ncol = 1) +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 90)) +
+  labs(fill = "",
+       x = "Site\n(in ascending order of CWD)",
+       y = "Tree height (m)") +
+  # scale_fill_manual(values = c("#994F00", "#006CD1"))
+scale_fill_manual(values = c("#005AB5", "#DC3220"))
+
+
+correction_consequences_gg
+
+ggsave(filename = "figures/level-3b-calibration-consequences.png", plot = correction_consequences_gg)
