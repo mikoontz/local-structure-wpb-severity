@@ -30,9 +30,9 @@ library(captioner)
 ```
 
 ```{r captions}
-fig_nums <- captioner(prefix = "Figure")
-table_nums <- captioner(prefix = "Table")
-eq_nums <- captioner(prefix = "Equation")
+fig_nums <- captioner(prefix = "Supplemental Figure")
+table_nums <- captioner(prefix = "Supplemental Table")
+eq_nums <- captioner(prefix = "Supplemental Equation")
 ```
 
 ```{r source_necessary_scripts}
@@ -298,7 +298,9 @@ $$
 \Delta_{height} = \beta_0 + X_{height}\beta_1 + X_{live}\beta_2 + X_{height}X_{live}\beta_3 + \epsilon
 $$
 
-where $\Delta_{height}$ represents the field-measured tree height subtracted from the drone-measured tree height, $X_{height}$ represents the drone-measured tree height, and $X_{live}$ represents a boolean variable for whether the tree is alive or dead. We applied this $\Delta_{height}$ to the drone-measured heights of each of the detected and classified trees in the dataset based on whether the tree was classified as live or dead and based on its drone-measured tree height (`r fig_nums(name = "fig-l3b-calibration-diff", display = "cite")`).
+where $\Delta_{height}$ represents the field-measured tree height subtracted from the drone-measured tree height, $X_{height}$ represents the drone-measured tree height, and $X_{live}$ represents a boolean variable for whether the tree is alive or dead. 
+We applied this $\Delta_{height}$ to the drone-measured heights of each of the detected and classified trees in the dataset based on whether the tree was classified as live or dead and based on its drone-measured tree height (`r fig_nums(name = "fig-l3b-calibration-diff", display = "cite")`).
+The effect of the calibration of the tree heights across the range of site-level CWD is depicted in `r fig_nums(name = "fig-l3b-calibration-consequences", display = "cite")`.
 
 ```{r}
 fig_nums(name = "fig-l3b-calibration", paste0("We identified ", nrow(height_corrections), " field-measured trees in the Level 3b drone-derived data representing segmented and classified trees. Comparing the field- versus drone-measured tree heights for the live and dead trees, we see good agreement for live trees (albeit a small, consistent overestimate of height), and a somewhat good agreement for trees for which the drone-measured height was greater than 20 m (albeit a small, consistent underestimate of height). The solid lines and confidence ribbons represent a General Additive Model fit to these data. Using a linear relationship for trees for which the drone-measured height was greater than 20 m, we modeled the difference between field- and drone-measured height as a function of drone-measured height and extended this relationship to all drone-measured heights (the dashed line). This represents a conservative correction of the drone-measured tree heights."))
@@ -311,6 +313,13 @@ fig_nums(name = "fig-l3b-calibration-diff", paste0("We applied a conservative co
 ```
 
 ![`r fig_nums(name = "fig-l3b-calibration-diff")`](../../figures/level-3b-calibration-diff-plot.png)
+
+
+```{r}
+fig_nums(name = "fig-l3b-calibration-consequences", paste0("Original height distributions for individual classified trees in each site, and the height distributions after the Level 3B calibration. Effect on dead trees ."))
+```
+
+![`r fig_nums(name = "fig-l3b-calibration-consequences")`](../../figures/level-3b-calibration-consequences.png)
 
 ### Rasterizing individual tree data
 
@@ -429,6 +438,19 @@ fig_nums(name = "fig-height-mortality-by-data-source", "The relationship between
 ```
 
 ![`r fig_nums(name = "fig-height-mortality-by-data-source")`](../../figures/supplemental-figure_height-mortality-relationship-depends-on-data-source.png)
+
+### Effect of Level 3b tree height calibration on model results
+
+Here, we show the original fitted model prior to calibrating the tree heights as detailed above. 
+Comparing this figure of posterior distributions of model parameters with the fitted model we report in the main paper, we find that the height calibration strengthens the CWD effect and reverses the host tree height effect.
+`r fig_nums(name = "fig-halfeye-uncalibrated", display = "cite")` shows a negative effect of host tree mean height on host mortality, while we report in the main text (using the calibrated heights) a positive main effect of host tree mean height.
+
+```{r}
+fig_nums(name = "fig-halfeye-uncalibrated", "Using uncalibrated tree heights, the posterior distributions of effect size from zero-inflated binomial model predicting the probability of ponderosa pine mortality in a 20 x 20-m cell given forest structure characteristics and site-level climatic water deficit (CWD).
+The gray filled area for each model covariate represents the probability density of the posterior distribution, the point underneath each density curve represents the median of the estimate, the bold interval surrounding the point estimate represents the 66% credible interval, and the thin interval surrounding the point estimate represents the 95% credible interval.")
+```
+
+![`r fig_nums(name = "fig-halfeye")`](../../figures/effect-sizes-halfeye_uncalibrated.png)
 
 
 \newpage
