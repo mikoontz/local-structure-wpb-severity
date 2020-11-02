@@ -72,7 +72,8 @@ get_osf_files <- function(this_site, pattern) {
   (difftime(Sys.time(), starttime, units = "mins"))
 }
 
-future::plan(strategy = "multiprocess", workers = 1)
+### This part was parallelized on the Alien
+future::plan(strategy = "multiprocess", workers = 11)
 
 incomplete_re <-
   sites %>% 
@@ -86,9 +87,31 @@ incomplete_x3 <-
   dplyr::pull(site) %>% 
   furrr::future_map(.f = get_osf_files, pattern = "x3")
 
-# all_photos <- 
-#   list.files("data/data_drone/L0/photos-metadata/", full.names = TRUE) %>% 
-#   purrr::map_dfr(.f = function(x) {
-#     metadata <- readr::read_csv(x)
-#   })
+### 
+system2(command = "aws", args = "s3 sync s3://earthlab-mkoontz/local-structure-wpb-severity data/data_output/osf-files")
 
+osf_files <- 
+  list.files("data/data_output/osf-files", pattern = ".csv", full.names = TRUE) %>% 
+  purrr::map_dfr(.f = function(x) {
+    osf <- readr::read_csv(x)
+  }) %>% 
+  dplyr::mutate(x3re = ifelse(test = stringr::str_detect(name, pattern = "x3"), yes = "x3", no = "re"),
+                site_type = paste0(site, x3re))
+
+all_photos <-
+  list.files("data/data_drone/L0/photos-metadata/", full.names = TRUE) %>%
+  purrr::map_dfr(.f = function(x) {
+    metadata <- readr::read_csv(x)
+  }) %>% 
+  dplyr::mutate(x3re = ifelse(test = stringr::str_detect(processed_photos, pattern = "x3"), yes = "x3", no = "re"),
+                site_type = paste0(site, x3re)) %>% 
+  dplyr::filter(site_type %in% unique(osf_files$site_type))
+
+missing_photos <-
+  all_photos %>% 
+  dplyr::anti_join(y = osf_files, by = c(site_type = "site_type", processed_photos = "name")) %>% 
+  dplyr::arrange(x3re, site)
+
+missing_photos %>% as.data.frame()
+
+### Upload missing photos to OSF
