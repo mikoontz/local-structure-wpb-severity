@@ -51,58 +51,44 @@ sites <-
                  31, sequ_6k_2, 5615, 953, good, , bad, 2
                  32, sequ_6k_3, 9470, 1726, good, , bad, 3")
 
+get_osf_files <- function(this_site, pattern) {
+  (starttime <- Sys.time())
+  osf <- osfr::osf_ls_files(x = local_structure_wpb_severity_project, path = glue::glue("data/data_drone/L0/photos/{this_site}"), n_max = Inf, pattern = pattern, verbose = TRUE)
+  
+  saveRDS(osf, file = glue::glue("data/data_output/osf-files/{this_site}_osf-files_{pattern}.rds"))
+  
+  osf_text <-
+    osf %>% 
+    dplyr::mutate(site = this_site) %>% 
+    dplyr::select(site, name, id)
+  
+  readr::write_csv(osf_text, file = glue::glue("data/data_output/osf-files/{this_site}_osf-files_{pattern}.csv"))
+  
+  system2(command = "aws", 
+          args = glue::glue("s3 cp data/data_output/osf-files/{this_site}_osf-files{pattern}.rds s3://earthlab-mkoontz/local-structure-wpb-severity/{this_site}_osf-files_{pattern}.rds"))
+  system2(command = "aws", 
+          args = glue::glue("s3 cp data/data_output/osf-files/{this_site}_osf-files_{pattern}.csv s3://earthlab-mkoontz/local-structure-wpb-severity/{this_site}_osf-files_{pattern}.csv"))
+  
+  (difftime(Sys.time(), starttime, units = "mins"))
+}
+
+future::plan(strategy = "multiprocess", workers = 1)
+
+incomplete_re <-
+  sites %>% 
+  dplyr::filter(re_check == "bad") %>% 
+  dplyr::pull(site) %>% 
+  furrr::future_map(.f = get_osf_files, pattern = "re")
+
+incomplete_x3 <-
+  sites %>% 
+  dplyr::filter(x3_check == "bad") %>% 
+  dplyr::pull(site) %>% 
+  furrr::future_map(.f = get_osf_files, pattern = "x3")
+
 # all_photos <- 
 #   list.files("data/data_drone/L0/photos-metadata/", full.names = TRUE) %>% 
 #   purrr::map_dfr(.f = function(x) {
 #     metadata <- readr::read_csv(x)
 #   })
 
-incomplete_re <-
-  sites %>% 
-  dplyr::filter(re_check == "bad") %>% 
-  dplyr::filter(site != "sier_3k_1")
-
-future::plan(strategy = "multiprocess", workers = 10)
-furrr::future_map(incomplete_re$site, .f = function(this_site) {
-  (starttime <- Sys.time())
-  osf_re <- osfr::osf_ls_files(x = local_structure_wpb_severity_project, path = glue::glue("data/data_drone/L0/photos/{this_site}"), n_max = Inf, pattern = "re_", verbose = TRUE)
-  
-  saveRDS(osf_re, file = glue::glue("data/data_output/osf-files/{this_site}_osf-files.rds"))
-  
-  osf_re_text <-
-    osf_re %>% 
-    dplyr::mutate(site = this_site) %>% 
-    dplyr::select(site, name, id)
-  
-  readr::write_csv(osf_re_text, file = glue::glue("data/data_output/osf-files/{this_site}_osf-files.csv"))
-
-  system2(command = "aws", args = glue::glue("s3 cp data/data_output/osf-files/{this_site}_osf-files.rds s3://earthlab-mkoontz/local-structure-wpb-severity/{this_site}_osf-files.rds"))
-  system2(command = "aws", args = glue::glue("s3 cp data/data_output/osf-files/{this_site}_osf-files.csv s3://earthlab-mkoontz/local-structure-wpb-severity/{this_site}_osf-files.csv"))
-  
-  (difftime(Sys.time(), starttime, units = "mins"))
-})
-
-
-incomplete_x3 <-
-  sites %>% 
-  dplyr::filter(x3_check == "bad")
-
-future::plan(strategy = "multiprocess", workers = 11)
-furrr::future_map(incomplete_x3$site, .f = function(this_site) {
-  (starttime <- Sys.time())
-  osf_x3 <- osfr::osf_ls_files(x = local_structure_wpb_severity_project, path = glue::glue("data/data_drone/L0/photos/{this_site}"), n_max = Inf, pattern = "x3_", verbose = TRUE)
-  
-  saveRDS(osf_x3, file = glue::glue("data/data_output/osf-files/{this_site}_osf-files_x3.rds"))
-  
-  osf_x3_text <-
-    osf_x3 %>% 
-    dplyr::mutate(site = this_site) %>% 
-    dplyr::select(site, name, id)
-  
-  readr::write_csv(osf_x3_text, file = glue::glue("data/data_output/osf-files/{this_site}_osf-files_x3.csv"))
-  
-  system2(command = "aws", args = glue::glue("s3 cp data/data_output/osf-files/{this_site}_osf-files_x3.rds s3://earthlab-mkoontz/local-structure-wpb-severity/{this_site}_osf-files_x3.rds"))
-  system2(command = "aws", args = glue::glue("s3 cp data/data_output/osf-files/{this_site}_osf-files_x3.csv s3://earthlab-mkoontz/local-structure-wpb-severity/{this_site}_osf-files_x3.csv"))
-  
-  (difftime(Sys.time(), starttime, units = "mins"))
-})
