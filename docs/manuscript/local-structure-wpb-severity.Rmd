@@ -33,7 +33,7 @@ header-includes:
   - \captionsetup[figure]{labelformat=empty}
   - \captionsetup[table]{labelformat=empty}
 
-output: word_document
+output: pdf_document
 ---
 
 ```{r setup, include = FALSE, echo = FALSE}
@@ -156,12 +156,6 @@ identifiable_plot_centers <-
 *^\*^Correspondence:* ``r params$correspondence``
 
 *Keywords:* `r params$keywords`
-
-*Abstract word count:* 387  
-*Overall .docx word count: * 13619   
-*Main text word count:* 4786 (Intro: 1566; Results: 456 (45+140+361); Discussion: 2764)  
-*Methods word count:* 3493 (734+642+1720+397)  
-*Text boxes word count:* 0  
 
 Date report generated: `r params$date_generated`
 
