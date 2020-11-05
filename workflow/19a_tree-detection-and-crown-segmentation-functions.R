@@ -26,8 +26,7 @@ library(lidRplugins)
 # but with this patch applied to prevent even-sided windows in the focal operation: 
 # https://github.com/AndyPL22/ForestTools/pull/6
 # As of 2020-03-24, this patch has been merged into the AndyPL22/ForestTools repo, but hasn't been 
-# submitted to CRAN so I chose to recreate the relevant function here rather than using remotes::install_github()
-# on the unsubmitted version.
+# submitted to CRAN so I chose still use remotes::install_github() on the unsubmitted version.
 # To be clear: most of this function was written by Andrew Plowright (thank you!) except for the small
 # patch. For more clarity about which part I wrote, see the link above.
 

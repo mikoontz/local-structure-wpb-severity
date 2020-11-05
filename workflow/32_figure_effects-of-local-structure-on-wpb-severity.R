@@ -8,7 +8,7 @@ library(tidyverse)
 library(brms)
 library(tidybayes)
 
-fm1 <- readr::read_rds(path = here::here('analyses/analyses_output/fitted-model_zibinomial_site-cwdZscore_prop-host_pipo-height_overall-tpha_overall-bapha_overall-bapha-pipo-height-interaction_height-corrected-from-20m_exact-gp-per-site_200-samples.rds'))
+fm1 <- readr::read_rds(file = here::here('analyses/analyses_output/fitted-model_zibinomial_site-cwdZscore_prop-host_pipo-height_overall-tpha_overall-bapha_overall-bapha-pipo-height-interaction_height-corrected-from-20m_exact-gp-per-site_200-samples.rds'))
 
 fitted_compact <- read_csv("analyses/analyses_output/model-predictions_height-corrected.csv")
 
@@ -50,7 +50,9 @@ prop_host_height_cwd_interaction_gg <-
 
 prop_host_height_cwd_interaction_gg
 
-ggsave(filename = "figures/prop-host_pipo-height_cwd_interaction.png", width = 6, height = 3.5, units = "in", plot = prop_host_height_cwd_interaction_gg)
+# ggsave(filename = "figures/prop-host_pipo-height_cwd_interaction.png", width = 6, height = 3.5, units = "in", plot = prop_host_height_cwd_interaction_gg)
+
+ggsave(filename = "figures/prop-host_pipo-height_cwd_interaction.pdf", width = 6, height = 3.5, units = "in", plot = prop_host_height_cwd_interaction_gg)
 
 ggsave(filename = "figures/prop-host_pipo-height_cwd_interaction_presentation.png", width = 6, height = 3.5, units = "in", plot = prop_host_height_cwd_interaction_gg)
 
@@ -93,3 +95,5 @@ effect_sizes_halfeye <-
 effect_sizes_halfeye
 
 ggsave(plot = effect_sizes_halfeye, filename = "figures/effect-sizes-halfeye.png", width = 6, height = 3.5, units = "in")
+
+ggsave(plot = effect_sizes_halfeye, filename = "figures/effect-sizes-halfeye.pdf", width = 6, height = 3.5, units = "in")

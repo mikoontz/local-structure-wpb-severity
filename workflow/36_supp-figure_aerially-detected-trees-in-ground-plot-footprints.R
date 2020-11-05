@@ -39,8 +39,7 @@ air_trees_by_plot <-
   summarize(mean_height = mean(height[species == "pipo"]),
             prop_host = length(which(species == "pipo")) / n(),
             prop_dead = 1 - mean(live[species == "pipo"]),
-            overall_density = n(),
-            cwd = mean(site_cwd_zscore)) %>% 
+            overall_density = n()) %>% 
   dplyr::mutate(plot = as.character(plot)) %>% 
   dplyr::mutate(air_ground = "drone data over field plots")
 
@@ -68,7 +67,7 @@ ground_trees <-
   read_csv(here::here("data", "data_output", "formatted-ground-data.csv")) %>%
   filter(is.na(year_fall)) %>%
   left_join(cwd, by = "site") %>% 
-  filter(plot %in% unique(plot_locations$plot))
+  filter(plot %in% unique(air_trees$plot))
 
 ground_trees_by_plot <-
   ground_trees %>% 

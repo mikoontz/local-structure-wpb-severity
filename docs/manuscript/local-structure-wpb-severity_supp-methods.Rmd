@@ -1,6 +1,6 @@
 ---
 bibliography: ../docs_carpentry/local-structure-wpb-severity.bib
-csl: ../docs_carpentry/ecological-applications.csl
+csl: ../docs_carpentry/nature-communications.csl
 
 params:
   date_generated: !r format(Sys.Date(), "%B %d, %Y")
@@ -30,9 +30,9 @@ library(captioner)
 ```
 
 ```{r captions}
-fig_nums <- captioner(prefix = "Supplemental Figure")
-table_nums <- captioner(prefix = "Supplemental Table")
-eq_nums <- captioner(prefix = "Supplemental Equation")
+fig_nums <- captioner(prefix = "Supplementary Figure")
+table_nums <- captioner(prefix = "Supplementary Table")
+eq_nums <- captioner(prefix = "Supplementary Equation")
 ```
 
 ```{r source_necessary_scripts}
@@ -93,9 +93,11 @@ example_height_corrections <- readr::read_csv(here::here("analyses/analyses_outp
 # 7000 = 2134
 ```
 
-## Supplemental Methods
+# Supplementary Information
 
 Date report generated: `r params$date_generated`
+
+## Supplementary Methods
 
 ### Instrumentation
 
@@ -103,26 +105,6 @@ Imagery was captured using a DJI Zenmuse X3 RGB camera [@dji2015] and a Micasens
 We mounted both of these instruments simultaneously on a DJI Matrice 100 aircraft [@dji2015a] using the DJI 3-axis stabilized gimbal for the Zenmuse X3 camera and a Micasense angled fixed mount for the RedEdge3 camera.
 The gimbal and the angled fixed mount ensured both instruments were nadir-facing during image capture.
 Just prior to or after image capture at each site, we calibrated the RedEdge3 camera by taking an image of a calibration panel on the ground in full sun with known reflectance values for each of the 5 narrow bands (`r table_nums(name = "table-rededge-specs", display = "cite")`).
-
-```{r}
-table_nums(name = "table-rededge-specs", "Reflectance sensitivity of the Micasense Rededge3 camera.
-The calibration panel value represents the reflectance of the calibration panel for the given wavelength.")
-```
-
-```{r rededge_deets, echo = FALSE, include = TRUE, results = 'asis'}
-rededge_print <- 
-  tibble(`Band\nnumber` = 1:5,
-         `Band\nname` = c("blue (b)", "green (g)", "red (r)", "near infrared (nir)", "red edge (re)"),
-         `Center\nwavelength` = c(475, 560, 668, 840, 717),
-         `Band\nwidth` = c(20, 20, 10, 40, 10),
-         `Wavelength\nrange` = c("465-485", "550-570", "663-673", "820-860", "712-722"),
-         `Panel\nreflectance` = c(0.64, 0.64, 0.64, 0.60, 0.63))
-
-pandoc.table(rededge_print, 
-             split.tables = Inf,
-             caption = table_nums(name = "table-rededge-specs"),
-             keep.line.breaks = TRUE)
-```
 
 ### Flight protocol
 
@@ -260,7 +242,7 @@ Thus, we excluded segmented crowns within 35 meters of the edge of the survey ar
 Given the narrower field of view of the RedEdge3 multispectral camera versus the X3 RGB camera whose optical parameters were used to define the ~40 hectare survey area around each site, as well as the 35 meter additional buffering, the survey area at each site was approximately 30 hectares (`r table_nums(name = "table-site-deets", display = "cite")`).
 
 We used the `velox` package [@hunziker2017] to extract all the pixel values from the orthorectified reflectance map for each of the 5 narrow bands within each segmented crown polygon.
-Per pixel, we additionally calculated the normalized difference vegetation index (NDVI; @rouse1973), the normalized difference red edge (NDRE; @gitelson1994), the red-green index (RGI; @coops2006), the red edge chlorophyll index (CI~red~ ~edge~; @clevers2013), and the green chlorophyll index (CI~green~; @clevers2013).
+Per pixel, we additionally calculated the normalized difference vegetation index [NDVI; @rouse1973], the normalized difference red edge [NDRE; @gitelson1994], the red-green index [RGI; @coops2006], the red edge chlorophyll index [CI~red~ ~edge~; @clevers2013], and the green chlorophyll index [CI~green~; @clevers2013].
 For each crown polygon, we calculated the mean value for each raw and derived reflectance band (5 raw; 5 derived).
 
 ### Classification of trees
@@ -295,7 +277,9 @@ The heights of dead trees greater than 20 m (as measured by the drone) showed a 
 Using the field and drone matched tree data for drone-measured trees greater than 20 m in height, we applied a conservative height correction to all live and dead trees in the Level 3b data product based on a linear regression of the difference between the field- and drone-measured tree heights as a function of drone-measured tree height: 
 
 $$
-\Delta_{height} = \beta_0 + X_{height}\beta_1 + X_{live}\beta_2 + X_{height}X_{live}\beta_3 + \epsilon
+\begin{aligned}
+\Delta_{height} = \beta_0 + X_{height}\beta_1 + X_{live}\beta_2 + X_{height}X_{live}\beta_3 + \epsilon & (1)
+\end{aligned}
 $$
 
 where $\Delta_{height}$ represents the field-measured tree height subtracted from the drone-measured tree height, $X_{height}$ represents the drone-measured tree height, and $X_{live}$ represents a boolean variable for whether the tree is alive or dead. 
@@ -324,44 +308,39 @@ fig_nums(name = "fig-l3b-calibration-consequences", paste0("Original height dist
 ### Rasterizing individual tree data
 
 ```{r}
-fig_nums(name = "fig-rasterized-prop-dead", "We rasterized the individual tree data by aggregating values to 20m x 20m cells.
+fig_nums(name = "fig-rasterized-prop-dead", "We rasterized the individual tree data by aggregating values to 20 x 20 m cells.
 This example shows the proportion of dead trees per cell for the same example site as in the previous figures.")
 ```
 
 ![`r fig_nums(name = "fig-rasterized-prop-dead")`](../../figures/L4_eldo_3k_3_prop-dead-rasterized.png)
 
 Because the tree detection algorithms were validated against ground data at the plot level, we rasterized the classified trees at a spatial resolution similar to that of the ground plots (`r fig_nums(name = "fig-rasterized-prop-dead", display = "cite")`).
-That is, we rasterized the individual tree data to 20m x 20m pixels equaling 400 m^2^, and the circular ground plots with 11.35m radius covered 404 m^2^.
+That is, we rasterized the individual tree data to 20 x 20 m pixels equaling 400 m^2^, and the circular ground plots with 11.35m radius covered 404 m^2^.
 In each raster cell, we calculated the: number of live trees, number of dead trees, number of ponderosa pine trees, total number of trees (of all species, including ponderosa pine), quadratic mean diameter (QMD) of ponderosa pine trees, and QMD of all trees of any species (overall QMD).
-We converted the count of ponderosa pine trees and the total tree count to a density measurement of trees per hectare (tpha) by multiplying the counts in each 20m x 20m cell by `r 10000/400` to create a "host density" and an "overall density" variable per cell.
+We converted the count of ponderosa pine trees and the total tree count to a density measurement of trees per hectare (tpha) by multiplying the counts in each 20 x 20 m cell by `r 10000/400` to create a "host density" and an "overall density" variable per cell.
 
 ### Basal area consequences of proportion of dead host trees
 The proportion of basal area killed is also an important measure of forest disturbance severity. We graphically assessed how the proportion of basal area killed varied as a function of proportion of host trees killed (i.e., the response variable of our formal statistical analysis). We opted to not treat proportion of basal area killed as a response variable in a second formal modeling framework due to unsatisfactory model fitting, likely arising from the additional uncertainty in estimates of basal area from allometric relationships with drone-measured tree height and/or the height calibrations depending on live/dead status prior to estimating each tree's basal area.
 
-## Supplemental results
+## Supplementary Tables
 
 ```{r}
-table_nums(name = "table-model-summary", "Summary of posterior distributions of all model parameters;, including parameter 'p' as well as Gaussian process components for each site.")
+table_nums(name = "table-rededge-specs", "Reflectance sensitivity of the Micasense Rededge3 camera.
+The calibration panel value represents the reflectance of the calibration panel for the given wavelength.")
 ```
 
+```{r rededge_deets, echo = FALSE, include = TRUE, results = 'asis'}
+rededge_print <- 
+  tibble(`Band\nnumber` = 1:5,
+         `Band\nname` = c("blue (b)", "green (g)", "red (r)", "near infrared (nir)", "red edge (re)"),
+         `Center\nwavelength` = c(475, 560, 668, 840, 717),
+         `Band\nwidth` = c(20, 20, 10, 40, 10),
+         `Wavelength\nrange` = c("465-485", "550-570", "663-673", "820-860", "712-722"),
+         `Panel\nreflectance` = c(0.64, 0.64, 0.64, 0.60, 0.63))
 
-```{r model_summary_print, echo = FALSE, include = TRUE, results = 'asis'}
-model_summary_print <-
-  model_summary %>% 
-  dplyr::slice(c(1:14, 79, 15:78)) %>% 
-  dplyr::select(beta, Estimate, lwr0_025, upr0_975) %>% 
-  dplyr::mutate(beta = ifelse(beta == "zi", yes = "p", no = beta)) %>% 
-  dplyr::mutate(beta = stringi::stri_replace_all_fixed(str = beta, pattern = ":", replacement = " :\n")) %>% 
-  dplyr::mutate(Estimate = sprintf("%.3f", Estimate),
-                lwr0_025 = sprintf("%.3f", lwr0_025),
-                upr0_975 = sprintf("%.3f", upr0_975)) %>% 
-  dplyr::rename(Parameter = beta,
-                `Lower 95% CI` = lwr0_025,
-                `Upper 95% CI` = upr0_975)
-
-pandoc.table(model_summary_print, 
+pandoc.table(rededge_print, 
              split.tables = Inf,
-             caption = table_nums(name = "table-model-summary"),
+             caption = table_nums(name = "table-rededge-specs"),
              keep.line.breaks = TRUE)
 ```
 
@@ -418,29 +397,52 @@ pandoc.table(site_characteristics_by_site,
              keep.line.breaks = TRUE)
 ```
 
+
+\newpage
+
 ```{r}
-fig_nums(name = "fig-posterior-predictive-checks", "Posterior predictive checks of the model presented in Eq. 1 (main text) showing good agreement between the actual number of dead trees in the 20 x 20 m cells and 50 posterior predictions from the model.")
+table_nums(name = "table-model-summary", "Summary of posterior distributions of all model parameters;, including parameter 'p' as well as Gaussian process components for each site.")
 ```
 
-![`r fig_nums(name = "fig-posterior-predictive-checks")`](../../figures/posterior-prediction-model-checking.png)
+
+```{r model_summary_print, echo = FALSE, include = TRUE, results = 'asis'}
+model_summary_print <-
+  model_summary %>% 
+  dplyr::slice(c(1:14, 79, 15:78)) %>% 
+  dplyr::select(beta, Estimate, lwr0_025, upr0_975) %>% 
+  dplyr::mutate(beta = ifelse(beta == "zi", yes = "p", no = beta)) %>% 
+  dplyr::mutate(beta = stringi::stri_replace_all_fixed(str = beta, pattern = ":", replacement = " :\n")) %>% 
+  dplyr::mutate(Estimate = sprintf("%.3f", Estimate),
+                lwr0_025 = sprintf("%.3f", lwr0_025),
+                upr0_975 = sprintf("%.3f", upr0_975)) %>% 
+  dplyr::rename(Parameter = beta,
+                `Lower 95% CI` = lwr0_025,
+                `Upper 95% CI` = upr0_975)
+
+pandoc.table(model_summary_print, 
+             split.tables = Inf,
+             caption = table_nums(name = "table-model-summary"),
+             keep.line.breaks = TRUE)
+```
+
+\newpage
+
+## Supplementary Notes
+
+### Potential to generate Level 3b products directly from Level 2 products
+Our study relies on the generation of Level 3a products in order to combine them and create Level 3b products like the classified tree maps, but this need not be the case.
+For instance, deep learning/neural net methods may be able to use both the spectral and geometric information from Level 2 simultaneously to locate and classify trees in a scene and directly generate Level 3b products without a need to first generate the Level 3a products [@weinstein2019; @dossantos2019].
 
 ### Basal area consequences of proportion of host trees killed
 An increasing proportion of dead host trees corresponded to increasing proportion of host basal area killed and total basal area killed (`r fig_nums(name = "fig-basal-area-consequences", display = "cite")`). Coupled with the positive effect of mean host tree height on the probability of host tree mortality, we suggest that our model coefficient estimates can also be interpreted as the relative influence on the proportion of host basal area killed.
 
 ```{r}
-fig_nums(name = "fig-basal-area-consequences", "The basal area mortality consequences as a function of the proportion of dead host trees (i.e., the response variable of our analysis). Note that the y-axis is constrained in order to highlight the trend in the mean. An increase in the proportion of dead trees (based on count) correlates with an increasing mean quantity of basal area killed. Coupled with the positive effect of mean tree height in a pixel with the probability of host tree mortality, this suggests that larger trees were the actual victim of bark beetle attack, rather than the alternative scenario whereby large trees in a plot act as a siren call that increases the probability of mortalitheir smaller neighbors but not themselves.")
+fig_nums(name = "fig-basal-area-consequences", "The basal area mortality consequences as a function of the proportion of dead host trees (i.e., the response variable of our analysis). Note that the y-axis is constrained in order to highlight the trend in the mean. An increase in the proportion of dead trees (based on count) correlates with an increasing mean quantity of basal area killed. Coupled with the positive effect of mean tree height in a pixel with the probability of host tree mortality, this suggests that larger trees were the actual victim of bark beetle attack, rather than the alternative scenario whereby large trees in a plot act as a siren call that increases the probability of mortality of their smaller neighbors but not themselves.")
 ```
 
 ![`r fig_nums(name = "fig-basal-area-consequences")`](../../figures/basal-area-consequences.png)
 
-```{r}
-fig_nums(name = "fig-height-mortality-by-data-source", "The relationship between mean host height and the proportion of host mortality based on the data source. Field plot data come from @fettig2019, drone data over field plots comes from this study, but with trees subsetted to only those identified within the ground footprints of the field plots of @fettig2019, and drone data randomly selected at each site come from this study but are randomly selected 20 x 20 m cells (5 from each site) from the Level 4 product. The tree height/mortality relationship appears similar for trees in the coincident field plots (both field-derived and drone-derived tree measurements), while the drone data representing the broader context around the coincident field plots show a dramatically different relationship.")
-```
-
-![`r fig_nums(name = "fig-height-mortality-by-data-source")`](../../figures/supplemental-figure_height-mortality-relationship-depends-on-data-source.png)
-
 ### Effect of Level 3b tree height calibration on model results
-
 Here, we show the original fitted model prior to calibrating the tree heights as detailed above. 
 Comparing this figure of posterior distributions of model parameters with the fitted model we report in the main paper, we find that the height calibration strengthens the CWD effect and reverses the host tree height effect.
 `r fig_nums(name = "fig-halfeye-uncalibrated", display = "cite")` shows a negative effect of host tree mean height on host mortality, while we report in the main text (using the calibrated heights) a positive main effect of host tree mean height.
@@ -450,9 +452,25 @@ fig_nums(name = "fig-halfeye-uncalibrated", "Using uncalibrated tree heights, th
 The gray filled area for each model covariate represents the probability density of the posterior distribution, the point underneath each density curve represents the median of the estimate, the bold interval surrounding the point estimate represents the 66% credible interval, and the thin interval surrounding the point estimate represents the 95% credible interval.")
 ```
 
-![`r fig_nums(name = "fig-halfeye")`](../../figures/effect-sizes-halfeye_uncalibrated.png)
-
+![`r fig_nums(name = "fig-halfeye-uncalibrated")`](../../figures/effect-sizes-halfeye_uncalibrated.png)
 
 \newpage
 
-# References
+### Additional supplementary figures
+
+```{r}
+fig_nums(name = "fig-posterior-predictive-checks", "Posterior predictive checks of the model presented in Eq. 1 (main text) showing good agreement between the actual number of dead trees in the 20 x 20 m cells and 50 posterior predictions from the model.")
+```
+
+![`r fig_nums(name = "fig-posterior-predictive-checks")`](../../figures/posterior-prediction-model-checking.png)
+
+
+```{r}
+fig_nums(name = "fig-height-mortality-by-data-source", "The relationship between mean host height and the proportion of host mortality based on the data source. Field plot data come from @fettig2019, drone data over field plots comes from this study, but with trees subsetted to only those identified within the ground footprints of the field plots of @fettig2019, and drone data randomly selected at each site come from this study but are randomly selected 20 x 20 m cells (5 from each site) from the Level 4 product. The tree height/mortality relationship appears similar for trees in the coincident field plots (both field-derived and drone-derived tree measurements), increasing confidence in the drone-derived forest measurements. The drone data representing the broader context around the coincident field plots show a dramatically different relationship, highlighting the benefit of extending the field surveys with aerial drone surveys.")
+```
+
+![`r fig_nums(name = "fig-height-mortality-by-data-source")`](../../figures/supplemental-figure_height-mortality-relationship-depends-on-data-source.png)
+
+\newpage
+
+# Supplementary References
