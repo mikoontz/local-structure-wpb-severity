@@ -214,7 +214,7 @@ Small, unhumanned aerial systems (sUAS) enable relatively fast and cheap remote 
 The ultra-high, centimeter-scale resolution of sUAS-derived measurements as well as the ability to incorporate vegetation reflectance can help overcome challenges in species classification and dead tree detection inherent in other remote sensing methods, such as airborne LiDAR [@jeronimo2019].
 Distributing such surveys across an environmental gradient can overcome the data acquisition challenge inherent in investigating phenomena with both a strong local- and a strong broad-scale component.
 
-We used sUAS-derived remote sensing images over a network of 32 sites in Sierra Nevada ponderosa pine/mixed-conifer forests spanning 1000 m of elevation and 350 km of latitude [see @fettig2019] covering a total of 9 km^2^, to investigate how broad-scale environmental conditions interacted with local forest structure and composition to shape patterns of tree mortality during the cumulative tree mortality event of 2012 to 2018.
+We used sUAS-derived remote sensing images over a network of 32 sites in Sierra Nevada ponderosa pine/mixed-conifer forests spanning 1000 m of elevation and 350 km of latitude [@fettig2019] covering a total of 9 km^2^, to investigate how broad-scale environmental conditions interacted with local forest structure and composition to shape patterns of tree mortality during the cumulative tree mortality event of 2012 to 2018.
 We asked:
 
 1. How does the proportion of the ponderosa pine host trees in a local area and average host tree size affect WPB-induced tree mortality?
@@ -300,13 +300,14 @@ The accuracy of WPB host/non-WPB-host (i.e., ponderosa pine versus other tree sp
 
 ### Site summary based on best tree detection algorithm and classification
 
-Across all study sites, we detected, segmented, and classified `r sum(site_characteristics$air_n_total) %>% formatC(format="f", big.mark=",", digits=0)` trees in `r nrow(l4) %>% formatC(format="f", big.mark=",", digits=0)`, 20 x 20m pixels (with the area of each pixel being approximately equivalent to that of a field plot). Of these trees, we classified `r sum(site_characteristics$air_n_dead) %>% formatC(format="f", big.mark=",", digits=0)` as dead (`r (sum(site_characteristics$air_n_dead) / sum(site_characteristics$air_n_total) * 100) %>% formatC(format="f", digits=1)`% mortality). Estimated site-level tree mortality ranged from `r (min(site_characteristics$air_n_dead / site_characteristics$air_n_total)) %>% round(3) * 100`% to `r (max(site_characteristics$air_n_dead / site_characteristics$air_n_total)) %>% round(3) * 100`%. See Supplementary Information for site summaries and comparisons to site-level mortality measured from field data.
+Across all study sites, we detected, segmented, and classified `r sum(site_characteristics$air_n_total) %>% formatC(format="f", big.mark=",", digits=0)` trees in `r nrow(l4) %>% formatC(format="f", big.mark=",", digits=0)`, 20 x 20m pixels (with the area of each pixel being approximately equivalent to that of a field plot). Of these trees, we classified `r sum(site_characteristics$air_n_dead) %>% formatC(format="f", big.mark=",", digits=0)` as dead (`r (sum(site_characteristics$air_n_dead) / sum(site_characteristics$air_n_total) * 100) %>% formatC(format="f", digits=1)`% mortality). Estimated site-level tree mortality ranged from `r (min(site_characteristics$air_n_dead / site_characteristics$air_n_total)) %>% round(3) * 100`% to `r (max(site_characteristics$air_n_dead / site_characteristics$air_n_total)) %>% round(3) * 100`%. See Supplementary Table 1 for site summaries and comparisons to site-level mortality measured from field data.
 
 ### Effect of local structure and regional climate on tree mortality attributed to western pine beetle
 
 ```{r}
 fig_nums(name = "fig-halfeye", "Posterior distributions of effect size from zero-inflated binomial model predicting the probability of ponderosa pine mortality in a 20 x 20-m cell given forest structure characteristics and site-level climatic water deficit (CWD).
-The gray filled area for each model covariate represents the probability density of the posterior distribution, the point underneath each density curve represents the median of the estimate, the bold interval surrounding the point estimate represents the 66% credible interval, and the thin interval surrounding the point estimate represents the 95% credible interval.")
+The gray filled area for each model covariate represents the probability density of the posterior distribution, the point underneath each density curve represents the median of the estimate, the bold interval surrounding the point estimate represents the 66% credible interval, and the thin interval surrounding the point estimate represents the 95% credible interval.
+Estimates for all model parameters, including Gaussian Process parameters for each site, can be found in Supplementary Table 2.")
 ```
 
 ![`r fig_nums(name = "fig-halfeye")`](../../figures/effect-sizes-halfeye.png)
@@ -318,7 +319,7 @@ We detected no effect of overall tree density nor overall basal area (i.e., incl
 We found a positive two-way interaction between the overall tree density per cell and the proportion of trees that were hosts, which is equivalent to a positive effect of the density of host trees (effect size: `r model_summary %>% dplyr::filter(beta == "prop_host_count_s:overall_tpha_s") %>% pull(Estimate) %>% sprintf("%.2f", .)`; 95% CI: `r paste0("[", model_summary %>% dplyr::filter(beta == "prop_host_count_s:overall_tpha_s") %>% pull(lwr0_025) %>% sprintf("%.2f", .), ", ", model_summary %>% dplyr::filter(beta == "prop_host_count_s:overall_tpha_s") %>% pull(upr0_975) %>% sprintf("%.2f", .), "]")`; `r fig_nums(name = "fig-halfeye", display = "cite")`).
 
 We found a positive main effect of mean height of ponderosa pine on the probability of ponderosa mortality (effect size: `r model_summary %>% dplyr::filter(beta == "pipo_and_dead_mean_height_s") %>% pull(Estimate) %>% sprintf("%.2f", .)`; 95% CI: `r paste0("[", model_summary %>% dplyr::filter(beta == "pipo_and_dead_mean_height_s") %>% pull(lwr0_025) %>% sprintf("%.2f", .), ", ", model_summary %>% dplyr::filter(beta == "pipo_and_dead_mean_height_s") %>% pull(upr0_975) %>% sprintf("%.2f", .), "]")`). 
-Coupled with the strong correlation between proportion of dead host trees and basal area killed (See Supplementary Figure 15), these results suggest that WPB attacked larger trees, on average.
+Coupled with the strong correlation between proportion of dead host trees and basal area killed (See Supplementary Figure 1 and Supplementary Note 1), these results suggest that WPB attacked larger trees, on average.
 Further, there was a strong positive interaction between CWD and ponderosa pine mean height, such that larger trees were especially likely to increase the local probability of ponderosa mortality in hotter, drier sites (effect size: `r model_summary %>% dplyr::filter(beta == "site_cwd_zscore:pipo_and_dead_mean_height_s") %>% pull(Estimate) %>% sprintf("%.2f", .)`; 95% CI: `r paste0("[", model_summary %>% dplyr::filter(beta == "site_cwd_zscore:pipo_and_dead_mean_height_s") %>% pull(lwr0_025) %>% sprintf("%.2f", .), ", ", model_summary %>% dplyr::filter(beta == "site_cwd_zscore:pipo_and_dead_mean_height_s") %>% pull(upr0_975) %>% sprintf("%.2f", .), "]")`; `r fig_nums(name = "fig-three-way-interaction", display = "cite")`).
 
 We found no effect of the site-level CWD interactions with the proportion of host trees (effect size: `r model_summary %>% dplyr::filter(beta == "site_cwd_zscore:prop_host_count_s") %>% pull(Estimate) %>% sprintf("%.2f", .)`; 95% CI: `r paste0("[", model_summary %>% dplyr::filter(beta == "site_cwd_zscore:prop_host_count_s") %>% pull(lwr0_025) %>% sprintf("%.2f", .), ", ", model_summary %>% dplyr::filter(beta == "site_cwd_zscore:prop_host_count_s") %>% pull(upr0_975) %>% sprintf("%.2f", .), "]")`) nor of the interaction between CWD and total basal area (effect size: `r model_summary %>% dplyr::filter(beta == "site_cwd_zscore:overall_bapha_s") %>% pull(Estimate) %>% sprintf("%.2f", .)`; 95% CI: `r paste0("[", model_summary %>% dplyr::filter(beta == "site_cwd_zscore:overall_bapha_s") %>% pull(lwr0_025) %>% sprintf("%.2f", .), ", ", model_summary %>% dplyr::filter(beta == "site_cwd_zscore:overall_bapha_s") %>% pull(upr0_975) %>% sprintf("%.2f", .), "]")`; `r fig_nums(name = "fig-halfeye", display = "cite")`).
@@ -342,7 +343,7 @@ By simultaneously measuring the effects of local forest structure and compositio
 ### Strong positive main effect of CWD
 
 We found a strong positive effect of site-level CWD on ponderosa pine mortality rate.
-We did not measure tree water stress at an individual tree level as in other recent work [@stephenson2019], and instead treated CWD as a general indicator of tree stress following results of coarser-scale studies [e.g., @young2017].
+We did not measure tree water stress at an individual tree level as in other recent work [@stephenson2019], and instead treated CWD as a general indicator of tree stress following results of coarser-scale studies [@young2017].
 When measured at a fine scale, even if not at an individual tree level, progressive canopy water loss can be a good indicator of tree water stress and increased vulnerability to mortality from drought or bark beetles [@brodrick2017].
 Though our entire study area experienced exceptional hot drought between 2012 and 2015 [@griffin2014; @robeson2015], using a 30-year historic average of CWD as a site-level indicator of tree stress doesn't allow us to disentangle whether water availability was lower in an absolute sense during the drought or whether increasing tree vulnerability to bark beetles was driven by chronic water stress at these historically hotter/drier sites [@mcdowell2008].
 
@@ -350,21 +351,21 @@ Though our entire study area experienced exceptional hot drought between 2012 an
 
 A number of mechanisms associated with the relative abundance of species in a local area might underlie the strong effect of host proportion on the probability of host tree mortality.
 Frequency-dependent herbivory--whereby mixed-species forests experience less herbivory compared to monocultures (as an extreme example)-- is common, especially for oligophagous insect species [@jactel2007].
-Nonhost volatiles reduce attraction of several species of bark beetles to their aggregation pheromones [@seybold2018], including WPB [@fettig2005]. 
-Combinations of nonhost volatiles and an antiaggregation pheromone have been used successfully to reduce levels of tree mortality attributed to WPB in California [e.g., @fettig2008a; @fettig2012c].
-The positive relationship between host density and susceptibility to colonization by bark beetles has been so well-documented at the experimental plot level [e.g., @oliver1995; @fettig2007; @fettig2014a] that lowering stand densities through selective harvest of hosts is commonly recommended for reducing future levels of tree mortality attributed to bark beetles [@fettig2015], including WPB [@fettig2016].
+Non-host volatiles reduce attraction of several species of bark beetles to their aggregation pheromones [@seybold2018], including WPB [@fettig2005]. 
+Combinations of non-host volatiles and an antiaggregation pheromone have been used successfully to reduce levels of tree mortality attributed to WPB in California [@fettig2008a; @fettig2012c].
+The positive relationship between host density and susceptibility to colonization by bark beetles has been so well-documented at the experimental plot level [@oliver1995; @fettig2007; @fettig2014a] that lowering stand densities through selective harvest of hosts is commonly recommended for reducing future levels of tree mortality attributed to bark beetles [@fettig2015], including WPB [@fettig2016].
 Greater host density shortens the flight distance required for WPB to disperse to new hosts, which likely facilitates bark beetle spread, however we calibrated our aerial tree detection to ~400 m^2^ areas rather than to individual tree locations, so our data are insufficient to address these relationships.
 Increased density of ponderosa pine, specifically, may disproportionately increase the competitive environment for host trees (and thus increase their susceptibility to WPB colonization) if intraspecific competition amongst ponderosa pine trees is stronger than interspecific competition as would be predicted with coexistence theory [@chesson2000]. 
-Finally, greater host densities increase the frequency that searching WPB land on hosts, rather than nonhosts, thus reducing the amount of energy expended during host finding and selection as well as the time that searching WPB spend exposed to a variety of predators outside the host tree. 
+Finally, greater host densities increase the frequency that searching WPB land on hosts, rather than non-hosts, thus reducing the amount of energy expended during host finding and selection as well as the time that searching WPB spend exposed to a variety of predators outside the host tree. 
 
 ### No main effect of overall density, but interaction with CWD
 
 We detected no relationship between overall tree density and ponderosa pine mortality, though work from the coincident ground plots showed a negative relationship [@fettig2019, in their analysis using proportion of trees killed as a response].
-@kaiser2013 also shows greater MPB infestation in lower-density sites in Montana
-However, @hayes2009 and @fettig2019 found that measures of overall tree density explained more variation in tree mortality than measures of host availability, though those conclusions were based on broader-scale analyses [@hayes2009] or a different response variable [i.e., "total number of dead host trees," rather than a binomial response of "number of dead host trees conditional on the total number of host trees" as in our study; @fettig2019].
+Kaiser et al. [@kaiser2013] also show greater MPB infestation in lower-density sites in Montana
+However, Hayes et al. [@hayes2009] and Fettig et al. [@fettig2019] found that measures of overall tree density explained more variation in tree mortality than measures of host availability, though those conclusions were based on broader-scale analyses [@hayes2009] or a different response variable (i.e., "total number of dead host trees" [@fettig2019] rather than a binomial response of "number of dead host trees conditional on the total number of host trees" as in our study).
 
 Our greater sample size may have enabled us to more finely parse the role of multi-faceted forest structure and composition, along with CWD and interactions, in driving ponderosa pine mortality rates.
-Indeed, we did find a negative two-way interaction between site CWD and overall density, suggesting denser stands experienced lower rates of ponderosa mortality in hotter, drier sites, which comports with @restaino2019 in results from their unmanipulated gradient of overall density in the same region during the same hot drought.
+Indeed, we did find a negative two-way interaction between site CWD and overall density, suggesting denser stands experienced lower rates of ponderosa mortality in hotter, drier sites, which comports with Restaino et al. [@restaino2019] in results from their unmanipulated gradient of overall density in the same region during the same hot drought.
 In the absence of active management, forest structure is largely a product of climate and, with increasing importance at finer spatial scales, topographic conditions [@fricker2019]. 
 Denser forest patches in our study may indicate greater local water availability, more favorable conditions for tree growth and survivorship, and increased resistance to beetle-induced tree mortality, especially when denser patches are found in hot, dry sites [@ma2010; @fricker2019; @restaino2019].
 
@@ -372,35 +373,35 @@ Denser forest patches in our study may indicate greater local water availability
 
 While overall tree density is likely an indicator of favorable microsites in fire-suppressed forests, overall basal area is a better indicator of the local competitive environment especially in water-limited forests [@ma2010; @fricker2019].
 However, we found no main effect of overall basal area on the probability of ponderosa mortality, nor of its interaction with site-level CWD.
-This contrasts to the results from @young2017, and from analyses of coincident field plots [@fettig2019].
-While the contrast to @young2017 might be explained by different scales of analyses (i.e., 3500 x 3500 m pixels vs. 20 x 20 m pixels), the contrast with the coincident ground plots is more puzzling.
+This contrasts to the results from Young et al. [@young2017], and from analyses of coincident field plots [@fettig2019].
+While the contrast to Young et al. [@young2017] might be explained by different scales of analyses (i.e., 3500 x 3500 m pixels vs. 20 x 20 m pixels), the contrast with the coincident ground plots is more puzzling.
 One explanation is that the drone sampling captured more area beyond the conditionally-sampled field plots (i.e., 10% ponderosa pine basal area mortality was a criterion for plot selection) that reflected a different relationship between local basal area and tree mortality.
 Perhaps more likely is that our measure of total basal area isn't precise enough to represent the local competitive environment compared to field-derived basal area.
 For our study, basal area was derived from species-specific and inherently noisy allometric relationships with tree height, which itself was derived from the SfM processing of drone imagery.
-As remote sensing technology improves to enable finer-scale information extraction (e.g., individual tree measurements), more dialogue between ecologists of all stripes [e.g., @stovall2019; @stephenson2020; @stovall2020] is needed to fully imagine how to best measure natural phenomena remotely, either by adopting wheels already invented or by innovating something brand new.
+As remote sensing technology improves to enable finer-scale information extraction (e.g., individual tree measurements), more dialogue between ecologists of all stripes [@stovall2019; @stephenson2020; @stovall2020] is needed to fully imagine how to best measure natural phenomena remotely, either by adopting wheels already invented or by innovating something brand new.
 
 ### Positive main effect of host tree mean size
 
 The positive main effect of host tree mean size on ponderosa mortality rates tracks the conventional wisdom on the dynamics of WPB in the Sierra Nevada, as well as other primary bark beetles [@fettig2016].
-WPB exhibit a preference for trees 50.8 to 76.2 cm DBH [@person1928; @person1931], and a positive relationship between host tree size and levels of tree mortality attributed to WPB was reported by @fettig2019 in the coincident field plots as well as in other recent studies [@restaino2019; @pile2019; @stephenson2019].
+WPB exhibit a preference for trees 50.8 to 76.2 cm DBH [@person1928; @person1931], and a positive relationship between host tree size and levels of tree mortality attributed to WPB was reported by Fettig et al. [@fettig2019] in the coincident field plots as well as in other recent studies [@restaino2019; @pile2019; @stephenson2019].
 Larger trees are more nutritious and are therefore ideal targets if local bark beetle density is high enough to successfully initiate mass attack and overwhelm tree defenses, as can occur when many trees are under severe water stress [@bentz2010; @boone2011; @kolb2016].
 In the recent hot drought, we expected that most trees would be under severe water stress, setting the stage for increasing beetle density, successful mass attacks, and targeting of larger trees.
 Given that our dead tree height calibration was conservative (accounting for underestimates of drone-derived dead tree heights relative to field-measured trees), it is likely that the positive main effect of tree height that we report represents a lower bounds of this effect.
-Additionally, @fettig2019 found no tree size/mortality relationship for incense cedar or white fir in the coincident field plots. 
+Additionally, Fettig et al. [@fettig2019] found no tree size/mortality relationship for incense cedar or white fir in the coincident field plots. 
 These species represent `r cade_plus_abco_pct_of_all_dead`% of the total tree mortality observed in their study, yet in our study all dead trees were classified as ponderosa pine (see Methods) which could have further dampened the positive effect of tree size on tree mortality that we identified.
 
 ### Cross-scale interaction of CWD and host tree size
 
 In hotter, drier sites, a larger average host size increased the probability of host mortality.
-Notably, a similar pattern was shown by @stovall2019 in a study confined to the southern Sierra Nevada (i.e., the hottest, driest portion of the more spatially extensive results we present here) with a strong positive tree height/mortality relationship in areas with the greatest vapor pressure deficit and no tree height/mortality relationship in areas with the lowest vapor pressure deficit.
-Our work suggests that the WPB was cueing into different aspects of forest structure across an environmental gradient in a spatial context in a parallel manner to the temporal context noted by @stovall2019 and @pile2019, who observed that mortality was increasingly driven by larger trees as the hot drought proceeded and became more severe.
+Notably, a similar pattern was shown by Stovall et al. [@stovall2019] in a study confined to the southern Sierra Nevada (i.e., the hottest, driest portion of the more spatially extensive results we present here) with a strong positive tree height/mortality relationship in areas with the greatest vapor pressure deficit and no tree height/mortality relationship in areas with the lowest vapor pressure deficit.
+Our work suggests that the WPB was cueing into different aspects of forest structure across an environmental gradient in a spatial context in a parallel manner to the temporal context noted by Stovall et al. [@stovall2019] and Pile et al. [@pile2019], who observed that mortality was increasingly driven by larger trees as the hot drought proceeded and became more severe.
 A temporal signal of bark beetles attacking larger and larger host trees reflects the positive feedback between forest structure and bark beetle population dynamics as the population phase cycles from endemic to epidemic [@boone2011]. 
 This positive feedback leading to eruptive population dynamics is well-documented as a temporal phenomenon, and here we show a similar pattern in a spatial context mediated through site-level CWD.
 
-A key difference from the endemic-to-epidemic positive feedback noted by @boone2011 is that none of our study areas were considered to be in an endemic population phase by typical measures of WPB dynamics [@miller1960; @hayes2009].
-WPB dynamics at all sites were considered epidemic, with >5 trees killed per ha (see Supplementary Information).
+A key difference from the endemic-to-epidemic positive feedback noted by Boone et al. [@boone2011] is that none of our study areas were considered to be in an endemic population phase by typical measures of WPB dynamics [@miller1960; @hayes2009].
+WPB dynamics at all sites were considered epidemic, with >5 trees killed per ha (see Supplementary Table 1).
 The cross-scale interaction between broad-scale CWD and local-scale host tree size, even amongst populations all in an epidemic phase, highlights the dramatic implications of the positive feedback for landscape-scale tree mortality.
-The massive tree mortality in hotter/drier Sierra Nevada forests [lower latitudes and elevations; @asner2016; @young2017] during the 2012 to 2016 hot drought likely arose as a synergistic alignment of environmental conditions and local forest structure that allowed WPB to successfully colonize large trees, rapidly increase in population size, and expand.
+The massive tree mortality in hotter/drier Sierra Nevada forests (lower latitudes and elevations [@asner2016; @young2017]) during the 2012 to 2016 hot drought likely arose as a synergistic alignment of environmental conditions and local forest structure that allowed WPB to successfully colonize large trees, rapidly increase in population size, and expand.
 The unexpectedly low mortality in cooler/wetter Sierra Nevada forests compared to model predictions based on coarser-scale forest structure data [@young2017] may result from a different WPB response to local forest structure due to a lack of an alignment with favorable climate conditions and a weaker positive feedback.
 
 ### Limitations and future directions
@@ -411,7 +412,7 @@ Most of these limitations arise from classification and measurement of standing 
 
 The greatest limitation in our study arising from classification uncertainty is in the assumption that all dead trees were ponderosa pine, which we estimate from coincident field plots is true approximately `r pipo_pct_of_all_dead`% of the time.
 Because the forest structure factors influencing the likelihood of individual tree mortality during the hot drought depended on tree species [@stephenson2019], we cannot rule out that some of the ponderosa pine mortality relationships to forest structure that we observed may be partially explained by those relationships in other species that were misclassified as ponderosa pine using our methods.
-However, the overall community composition across our study area was similar [@fettig2019] and we are able to reproduce similar forest structure/mortality patterns in drone-derived data when restricting the scope of analysis to only trees detected in the footprints of the coincident field plots (see Supplementary Information).
+However, the overall community composition across our study area was similar [@fettig2019] and we are able to reproduce similar forest structure/mortality patterns in drone-derived data when restricting the scope of analysis to only trees detected in the footprints of the coincident field plots (see Supplementary Figure 2).
 Thus, we remain confident that the patterns we observed were driven primarily by the dynamic between WPB and ponderosa pine.
 While spectral information of foliage could help classify living trees to species, the species of standing dead trees were not spectrally distinct.
 This challenge of classifying standing dead trees to species implies that a conifer forest systems with less bark beetle and tree host diversity, such as mountain pine beetle outbreaks in relative monocultures of naturally-occurring lodgepole pine forests in the Intermountain West, should be particularly amenable to the methods presented here even with minimal further refinement because dead trees will almost certainly belong to a single species and have succumbed to colonization by a single bark beetle species. 
@@ -420,13 +421,13 @@ For similar reasons, these methods would also work particularly well if imagery 
 Some uncertainty surrounded our ability to detect trees using the geometry of the dense point clouds derived with SfM.
 The horizontal accuracy (i.e., longitude/latitude position) of the tree detection was better than the vertical accuracy (i.e., height), which may result from a more significant error contribution by the field-based calculations of tree height compared to tree position relative to plot center (`r table_nums(name = "table-best-algorithm-deets", display = "cite")`).
 Height measurements were particularly challenging for standing dead trees, because SfM can fail to produce any points representing narrow, needleless treetops in the resulting dense point cloud.
-Our conservative calibration of drone-measured tree heights to field-measured heights strengthened the main effect of CWD on host mortality in our model and reversed the effect of host tree height (see Supplementary Information).
-We report that larger host trees increase the probability of host tree mortality, while models using uncalibrated tree heights show that larger trees decrease host mortality rates (see Supplementary Information).
+Our conservative calibration of drone-measured tree heights to field-measured heights strengthened the main effect of CWD on host mortality in our model and reversed the effect of host tree height.
+We report that larger host trees increase the probability of host tree mortality, while models using uncalibrated tree heights show that larger trees decrease host mortality rates  (see Supplementary Figure 3 compared to `r fig_nums(name = "fig-halfeye", display = "cite")`).
 While our live/dead classification was fairly accurate (`r round(classifier_stats[classifier_stats$type == "live/dead", "accuracy"] %>% pull() * 100, 1)`% on a withheld dataset), our species classifier would likely benefit from better crown segmentation because the pixel-level reflectance values within each crown are averaged to characterize the "spectral signature" of each tree.
 With better delineation of each tree crown, the mean value of pixels within each tree crown will likely be more representative of that tree's spectral signature.
 
 Better tree detection, crown segmentation, and dead tree height measurement would likely improve with better SfM point clouds which can be enhanced with greater overlap between images [@frey2018] or with oblique (i.e., off-nadir) imagery [@james2014].
-@frey2018 found that 95% overlap was preferable for generating dense point clouds in forested areas, and @james2014 reduced dense point cloud errors using imagery taken at 30 degrees off-nadir.
+Frey et al. [@frey2018] found that 95% overlap was preferable for generating dense point clouds in forested areas, and James and Robson [@james2014] reduced dense point cloud errors using imagery taken at 30 degrees off-nadir.
 We only achieved 91.6% overlap with the X3 RGB camera and 83.9% overlap with the multispectral camera, and all imagery was nadir-facing.
 We anticipate that computer vision and deep learning will also prove helpful in overcoming some of these detection and classification challenges [@gray2019].
 
@@ -454,13 +455,13 @@ Plots were stratified by three elevation bands in each forest, with the plots in
 
 ![`r fig_nums("fig-geographic-extent")`](../../figures/study-geographic-extent-inset.png){ height=7in }
 
-We designed the aerial survey to coincide with 160 vegetation/forest insect monitoring plots at 32 sites established between 2016 and 2017 by @fettig2019 (`r fig_nums(name = "fig-geographic-extent", display = "cite")`).
+We designed the aerial survey to coincide with 160 vegetation/forest insect monitoring plots at 32 sites established between 2016 and 2017 by Fettig et al. [@fettig2019] (`r fig_nums(name = "fig-geographic-extent", display = "cite")`).
 The study sites were chosen to reflect typical west-side Sierra Nevada yellow pine/mixed-conifer forests and were dominated by ponderosa pine [@fettig2019].
 Sites were placed in WPB-attacked, yellow pine/mixed-conifer forests across the Eldorado, Stanislaus, Sierra and Sequoia National Forests and were stratified by elevation (914-1219 m, 1219-1524 m, 1524-1829 m above sea level).
 In the Sequoia National Forest, the southernmost National Forest in our study, sites were stratified with the lowest elevation band of 1219-1524 m and extended to an upper elevation band of 1829-2134 m to capture a more similar forest community composition as at the more northern National Forests.
 The sites have variable forest structure and plot locations were selected in areas with >35% ponderosa pine basal area and >10% ponderosa pine mortality.
 At each site, five 0.041-ha circular plots were installed along transects with 80 to 200m between plots.
-In the field, @fettig2019 mapped all stem locations relative to the center of each plot using azimuth/distance measurements.
+In the field, Fettig et al. [@fettig2019] mapped all stem locations relative to the center of each plot using azimuth/distance measurements.
 Tree identity to species, tree height, and diameter at breast height (DBH) were recorded if DBH was greater than 6.35cm.
 Year of mortality was estimated based on needle color and retention if it occurred prior to plot establishment, and was directly observed thereafter during annual site visits.
 A small section of bark (approximately 625 cm^2^) on both north and south aspects was removed from dead trees to determine if bark beetle galleries were present. 
@@ -471,7 +472,7 @@ In the typical life cycle of WPBs, females initiate host colonization by tunneli
 As a result, oleoresin exudes and collects on the bark surface, as is commonly observed with other bark beetle species. 
 During the early stages of attack, females release an aggregation pheromone component which, in combination with host monoterpenes released from pitch tubes, is attractive to conspecifics [@bedard1969]. 
 An antiaggregation pheromone component is produced during latter stages of host colonization by several pathways, and is thought to reduce intraspecific competition by altering adult behavior to minimize overcrowding of developing brood within the host [@byers1980]. 
-Volatiles from several nonhosts sympatric with ponderosa pine have been demonstrated to inhibit attraction of WPB to its aggregation pheromones [@fettig2005; @shepherd2007]. 
+Volatiles from several non-hosts sympatric with ponderosa pine have been demonstrated to inhibit attraction of WPB to its aggregation pheromones [@fettig2005; @shepherd2007]. 
 In California, WPB generally has 2-3 generations in a single year and can often outcompete other primary bark beetles such as the mountain pine beetle in ponderosa pines, especially in larger trees [@miller1960].
 WPB population growth rates can, however, be reduced by competition with other beetle species cohabitating in the same host tree, as well as by predation during dispersal to seek a host [@miller1960].
 
@@ -480,30 +481,30 @@ WPB population growth rates can, however, be reduced by competition with other b
 Nadir-facing imagery was captured using a gimbal-stabilized DJI Zenmuse X3 broad-band red/green/blue (RGB) camera [@dji2015] and a fixed-mounted Micasense Rededge3 multispectral camera with five narrow bands [@micasense2015] on a DJI Matrice 100 aircraft [@dji2015a]. 
 Imagery was captured from both cameras along preprogrammed aerial transects over ~40 ha surrounding each of the 32 sites (each of these containing five field plots) and was processed in a series of steps to yield local forest structure and composition data suitable for our statistical analyses. 
 All images were captured in 2018 during a 3-month period between early April and early July, and thus our work represents a postmortem investigation into the drivers of cumulative tree mortality.
-Following the call by @wyngaard2019, we establish "data product levels" to reflect the image processing pipeline from raw imagery (Level 0) to calibrated, fine-scale forest structure and composition information on regular grids (Level 4), with each new data level derived from levels below it.
-Here, we outline the steps in the processing and calibration pipeline visualized in `r fig_nums("fig-drone-data-levels", display = "cite")`, and include additional details in the Supplementary Information.
+Following the call by Wyngaard et al. [@wyngaard2019], we establish "data product levels" to reflect the image processing pipeline from raw imagery (Level 0) to calibrated, fine-scale forest structure and composition information on regular grids (Level 4), with each new data level derived from levels below it.
+Here, we outline the steps in the processing and calibration pipeline visualized in `r fig_nums("fig-drone-data-levels", display = "cite")`, and include additional details in the Supplementary Methods.
 
 ```{r}
-fig_nums(name = "fig-drone-data-levels")
+fig_nums(name = "fig-drone-data-levels", "Schematic of the data processing workflow for a single site with each new data product level derived from data at lower levels. 
+Level 0 represents raw data from the sensors. From left to right: RGB photo from DJI Zenmuse X3, output images from Micasense Rededge3 (blue, green, red, near infrared, red edge).
+Level 1 represents basic outputs from the SfM workflow. From left to right: dense point cloud, RGB orthomosaic, digital surface model (DSM; ground elevation plus vegetation height).
+Level 2 represents radiometrically or geometrically corrected Level 1 products. From left to right: radiometrically-corrected 'red' surface reflectance map, radiometrically-corrected 'near infrared' surface reflectance map, digital terrain model (DTM) derived by a geometric correction of the dense point cloud, canopy height model (CHM; DSM - DTM).
+Level 3 represents domain-specific information extraction from Level 2 products and is divided into two sub-levels. 
+Level 3a products are derived using only spectral or only geometric data. From left to right: map of Normalized Difference Vegetation Index (NDVI) [@rouse1973], map of detected trees derived from the CHM, detected trees within red polygon, polygons representing segmented tree crowns within red polygon.
+Level 3b products are derived using both spectral and geometric data. From left to right: trees classified as alive or dead based on spectral reflectance within each segmented tree crown, trees classified as WPB host/non-host.
+Level 4 represents aggregations of Level 3 products to regular grids that better reflects the grain size of the validation (e.g., to match area of validation field plots) or which provides neighborhood- rather than individual-scale information (e.g., stand-level proportion of host trees). From left to right: grid representing fraction of dead trees per cell, grid representing fraction of hosts per cell, grid representing mean host height per cell, tree density per cell. All cells measure 20 x 20 m.")
 ```
 
-![](../../figures/drone-data-levels.png){ height=9in }
+![`r fig_nums("fig-drone-data-levels")`](../../figures/drone-data-levels.png){ height=6in }
 
 <!-- \begin{flushleft}\setstretch{1.0} -->
-`r paste0(fig_nums("fig-drone-data-levels", display = "cite"), ".")` Schematic of the data processing workflow for a single site with each new data product level derived from data at lower levels. 
-Level 0 represents raw data from the sensors. From left to right: RGB photo from DJI Zenmuse X3, output images from Micasense Rededge3 (blue, green, red, near infrared, red edge).
-Level 1 represents basic outputs from the SfM workflow. From left to right: dense point cloud, RGB orthophoto, digital surface model (DSM; ground elevation plus vegetation height).
-Level 2 represents radiometrically or geometrically corrected Level 1 products. From left to right: radiometrically-corrected "red" surface reflectance map, radiometrically-corrected "near infrared" surface reflectance map, digital terrain model (DTM) derived by a geometric correction of the dense point cloud, canopy height model (CHM; DSM - DTM).
-Level 3 represents domain-specific information extraction from Level 2 products and is divided into two sub-levels. 
-Level 3a products are derived using only spectral or only geometric data. From left to right: map of Normalized Difference Vegetation Index [NDVI; @rouse1973], map of detected trees derived from the CHM, detected trees within red polygon, polygons representing segmented tree crowns within red polygon.
-Level 3b products are derived using both spectral and geometric data. From left to right: trees classified as alive or dead based on spectral reflectance within each segmented tree crown, trees classified as WPB host/non-host.
-Level 4 represents aggregations of Level 3 products to regular grids that better reflects the grain size of the validation (e.g., to match area of validation field plots) or which provides neighborhood- rather than individual-scale information (e.g., stand-level proportion of host trees). From left to right: grid representing fraction of dead trees per cell, grid representing fraction of hosts per cell, grid representing mean host height per cell, tree density per cell. All cells measure 20 x 20 m.
+<!-- `r paste0(fig_nums("fig-drone-data-levels", display = "cite"), ".")`  -->
 <!-- \par \end{flushleft} -->
 
 ### Level 0: Raw data from sensors
 
-Raw data comprised approximately 1900 images per camera lens (one broad-band RGB lens and five narrow-band multispectral lenses) for each of the 32 sites (`r fig_nums("fig-drone-data-levels", display = "cite")`; Level 0).
-Prior to the aerial survey, two strips of bright orange drop cloth (~100 x 15 cm) were positioned as an "X" over the permanent monuments marking the center of the 5 field plots from @fettig2019 (see Supplementary Information).
+Raw data comprised approximately 1900 images per camera lens (one broad-band RGB lens and five narrow-band multispectral lenses) for each of the 32 sites (`r fig_nums("fig-drone-data-levels", display = "cite")`; Level 0; Supplementary Figures 4 and 5).
+Prior to the aerial survey, two strips of bright orange drop cloth (~100 x 15 cm) were positioned as an "X" over the permanent monuments marking the center of the 5 field plots from Fettig et al. [@fettig2019] (see Supplementary Figure 6).
 
 We preprogrammed north-south aerial transects using Map Pilot for DJI on iOS flight software [@dronesmadeeasy2018] at an altitude of 120 m above ground level (with "ground" defined using a 1-arc-second digital elevation model [@farr2007]).
 The resulting ground sampling distance was approximately 5 cm/px for the Zenmuse X3 RGB camera and approximately 8 cm/px for the Rededge3 multispectral camera.
@@ -511,31 +512,31 @@ We used 91.6% image overlap (both forward and side) at the ground for the Zenmus
 
 ### Level 1: Basic outputs from photogrammetric processing
 
-We used SfM photogrammetry implemented in Pix4Dmapper Cloud (www.pix4d.com) to generate dense point clouds (`r fig_nums("fig-drone-data-levels", display = "cite")`; Level 1, left), orthophotos (`r fig_nums("fig-drone-data-levels", display = "cite")`; Level 1, center), and digital surface models (`r fig_nums("fig-drone-data-levels", display = "cite")`; Level 1, right) for each field site [@frey2018].
+We used SfM photogrammetry implemented in Pix4Dmapper Cloud (www.pix4d.com) to generate dense point clouds (`r fig_nums("fig-drone-data-levels", display = "cite")`; Level 1, left; Supplementary Figure 7), orthomosaics (`r fig_nums("fig-drone-data-levels", display = "cite")`; Level 1, center; Supplementary Figure 8), and digital surface models (`r fig_nums("fig-drone-data-levels", display = "cite")`; Level 1, right; Supplementary Figure 9) for each field site [@frey2018].
 For 29 sites, we processed the Rededge3 multispectral imagery alone to generate these products.
 For three sites, we processed the RGB and the multispectral imagery together to enhance the point density of the dense point cloud.
 All SfM projects resulted in a single processing "block," indicating that all images in the project were optimized and processed together.
 The dense point cloud represents x, y, and z coordinates as well as the color of millions of points per site.
-The orthophoto represents a radiometrically uncalibrated, top-down view of the survey site that preserves the relative x-y positions of objects in the scene.
+The orthomosaic represents a radiometrically uncalibrated, top-down view of the survey site that preserves the relative x-y positions of objects in the scene.
 The digital surface model is a rasterized version of the dense point cloud that shows the altitude above sea level for each pixel in the scene at the ground sampling distance of the camera that generated the Level 0 data.
 
 ### Level 2: Corrected outputs from photogrammetric processing
 
 #### Radiometric corrections
 
-A radiometrically-corrected reflectance map (`r fig_nums("fig-drone-data-levels", display = "cite")`; Level 2, left two figures; i.e., a corrected version of the Level 1 orthophoto) was generated using the Pix4D software by incorporating incoming light conditions for each narrow band of the Rededge3 camera (captured simultaneously with the Rededge3 camera using an integrated downwelling light sensor) as well as a pre-flight image of a calibration panel of known reflectance (see Supplementary Information for camera and calibration panel details).
+A radiometrically-corrected reflectance map (`r fig_nums("fig-drone-data-levels", display = "cite")`; Level 2, left two figures; i.e., a corrected version of the Level 1 orthomosaic; Supplementary Figure 10) was generated using the Pix4D software by incorporating incoming light conditions for each narrow band of the Rededge3 camera (captured simultaneously with the Rededge3 camera using an integrated downwelling light sensor) as well as a pre-flight image of a calibration panel of known reflectance (see Supplementary Table 3 for camera and calibration panel details).
 
 #### Geometric corrections
 
 We implemented a geometric correction to the Level 1 dense point cloud and digital surface model by normalizing these data for the terrain underneath the vegetation. 
-We generated the digital terrain model representing the ground underneath the vegetation at 1-m resolution (`r fig_nums("fig-drone-data-levels", display = "cite")`; Level 2, third image) by classifying each survey area's dense point cloud into "ground" and "non-ground" points using a cloth simulation filter algorithm [@zhang2016] implemented in the `lidR` [@roussel2019] package and rasterizing the ground points using the `raster` package [@hijmans2019].
-We generated a canopy height model (`r fig_nums("fig-drone-data-levels", display = "cite")`; Level 2, fourth image) by subtracting the digital terrain model from the digital surface model.
+We generated the digital terrain model representing the ground underneath the vegetation at 1-m resolution (`r fig_nums("fig-drone-data-levels", display = "cite")`; Level 2, third image; Supplementary Figure 11) by classifying each survey area's dense point cloud into "ground" and "non-ground" points using a cloth simulation filter algorithm [@zhang2016] implemented in the `lidR` [@roussel2019] package and rasterizing the ground points using the `raster` package [@hijmans2019].
+We generated a canopy height model (`r fig_nums("fig-drone-data-levels", display = "cite")`; Level 2, fourth image; Supplementary Figure 12) by subtracting the digital terrain model from the digital surface model.
 
 ### Level 3: Domain-specific information extraction
 
 #### Level 3a: Data derived from spectral or geometric Level 2 product
 
-Using just the spectral information from the radiometrically-corrected reflectance maps, we calculated several vegetation indices including the normalized difference vegetation index [NDVI; @rouse1973; `r fig_nums("fig-drone-data-levels", display = "cite")`; Level 3a, first image], the normalized difference red edge [NDRE; @gitelson1994], the red-green index [RGI; @coops2006], the red edge chlorophyll index [CI~red~ ~edge~; @clevers2013], and the green chlorophyll index [CI~green~; @clevers2013].
+Using just the spectral information from the radiometrically-corrected reflectance maps, we calculated several vegetation indices including the normalized difference vegetation index [@rouse1973] (NDVI; `r fig_nums("fig-drone-data-levels", display = "cite")`; Level 3a, first image; Supplementary Figure 13), the normalized difference red edge [@gitelson1994] (NDRE) , the red-green index [@coops2006] (RGI), the red edge chlorophyll index [@clevers2013] (CI~red~ ~edge~), and the green chlorophyll index  [@clevers2013] (CI~green~).
 
 ```{r}
 table_nums(name = "table-algorithm-deets", "Algorithm name, number of parameter sets tested for each algorithm, and references.")
@@ -547,7 +548,13 @@ algorithm_summary_print <-
   algorithm_summary %>% 
   dplyr::rename(`Parameter sets\ntested` = n,
                 Algorithm = algorithm) %>%
-  dplyr::mutate(`Reference(s)` = c("@li2012; @jakubowski2013; @shin2018", "@roussel2019a", "@roussel2019", "@eysn2015", "@vega2014", "@plowright2018", "@pau2010"))
+  dplyr::mutate(`Reference(s)` = c("Li et al.[@li2012]; Jakubowski et al.[@jakubowski2013]; Shin et al.[@shin2018]", 
+                                   "Roussel [@roussel2019a]", 
+                                   "Roussel et al. [@roussel2019]", 
+                                   "Eysn et al. [@eysn2015]", 
+                                   "Vega et al. [@vega2014]", 
+                                   "Plowright [@plowright2018]", 
+                                   "Pau et al. [@pau2010]"))
 
 pandoc.table(algorithm_summary_print, 
              split.tables = Inf,
@@ -555,21 +562,21 @@ pandoc.table(algorithm_summary_print,
              keep.line.breaks = TRUE)
 ```
 
-Using just the geometric information from the canopy height model or terrain-normalized dense point cloud, we generated maps of detected trees (`r fig_nums("fig-drone-data-levels", display = "cite")`; Level 3a, second and third images) by testing a total of `r nrow(algorithm_summary)` automatic tree detection algorithms and a total of `r sum(algorithm_summary$n)` parameter sets (`r table_nums(name = "table-algorithm-deets", display = "cite")`).
+Using just the geometric information from the canopy height model or terrain-normalized dense point cloud, we generated maps of detected trees (`r fig_nums("fig-drone-data-levels", display = "cite")`; Level 3a, second and third images; Supplementary Figure 14) by testing a total of `r nrow(algorithm_summary)` automatic tree detection algorithms and a total of `r sum(algorithm_summary$n)` parameter sets (`r table_nums(name = "table-algorithm-deets", display = "cite")`).
 We used the field plot data to assess each tree detection algorithm/parameter set by converting the distance-from-center and azimuth measurements of the trees in the field plots to x-y positions relative to the field plot centers distinguishable in the Level 2 reflectance maps as the orange fabric X's that we laid out prior to each flight.
 In the reflectance maps, we located `r nrow(identifiable_plot_centers)` out of 160 field plot centers while some plot centers were obscured due to dense interlocking tree crowns or because a plot center was located directly under a single tree crown.
-For each of the `r nrow(identifiable_plot_centers)` field plots with identifiable plot centers-- the "validation field plots", we calculated 7 forest structure metrics using the ground data collected by @fettig2019: total number of trees, number of trees greater than 15 m in height, mean height of trees, 25^th^ percentile tree height, 75^th^ percentile tree height, mean distance to nearest tree neighbor, and mean distance to second nearest neighbor.
+For each of the `r nrow(identifiable_plot_centers)` field plots with identifiable plot centers-- the "validation field plots", we calculated 7 forest structure metrics using the ground data collected by Fettig et al. [@fettig2019]: total number of trees, number of trees greater than 15 m in height, mean height of trees, 25^th^ percentile tree height, 75^th^ percentile tree height, mean distance to nearest tree neighbor, and mean distance to second nearest neighbor.
 For each tree detection algorithm and parameter set described above, we calculated the same set of 7 structure metrics within the footprint of the validation field plots.
 We calculated the Pearson's correlation and root mean square error (RMSE) between the ground data and the aerial data for each of the 7 structure metrics for each of the `r sum(algorithm_summary$n)` automatic tree detection algorithms/parameter sets.
 For each algorithm and parameter set, we calculated its performance relative to other algorithms as whether its Pearson's correlation was within 5% of the highest Pearson's correlation as well as whether its RMSE was within 5% of the lowest RMSE.
 We summed the number of forest structure metrics for which it reached these 5% thresholds for each algorithm/parameter set.
 For automatically detecting trees across the whole study, we selected the algorithm/parameter set that performed well across the most forest metrics (see Results).
 
-We delineated individual tree crowns (`r fig_nums("fig-drone-data-levels", display = "cite")`; Level 3a, fourth image) with a marker controlled watershed segmentation algorithm [@meyer1990] implemented in the `ForestTools` package [@plowright2018] using the detected treetops as markers.
+We delineated individual tree crowns (`r fig_nums("fig-drone-data-levels", display = "cite")`; Level 3a, fourth image; Supplementary Figure 15) with a marker controlled watershed segmentation algorithm [@meyer1990] implemented in the `ForestTools` package [@plowright2018] using the detected treetops as markers.
 If the automatic segmentation algorithm failed to generate a crown segment for a detected tree (e.g., often snags with a very small crown footprint), a circular crown was generated with a radius of 0.5 m.
 If the segmentation generated multiple polygons for a single detected tree, only the polygon containing the detected tree was retained.
 Because image overlap decreases near the edges of the overall flight path and reduces the quality of the SfM processing in those areas, we excluded segmented crowns within 35 m of the edge of the survey area.
-Given the narrower field of view of the Rededge3 multispectral camera versus the X3 RGB camera whose optical parameters were used to define the ~40 ha survey area around each site, as well as the 35 m additional buffering, the survey area at each site was ~30 ha (see Supplementary Information).
+Given the narrower field of view of the Rededge3 multispectral camera versus the X3 RGB camera whose optical parameters were used to define the ~40 ha survey area around each site, as well as the 35 m additional buffering, the survey area at each site was ~30 ha (see Supplementary Table 1).
 
 #### Level 3b: Data derived from spectral and geometric information
 
@@ -580,27 +587,30 @@ We extracted all the pixel values within each segmented crown polygon from the f
 For each crown polygon, we calculated the mean value of the extracted Level 2 and Level 3a pixels and used them as ten independent variables in a five-fold cross validated boosted logistic regression model to predict whether the hand classified trees were alive or dead.
 For just the living trees, we similarly used all 10 mean reflectance values per crown polygon to predict tree species using a five-fold cross validated regularized discriminant analysis.
 The boosted logistic regression and regularized discriminant analysis were implemented using the `caret` package in R [@kuhn2008].
-We used these models to classify all tree crowns in the data set as alive or dead (`r fig_nums("fig-drone-data-levels", display = "cite")`; Level 3b, first image) as well as the species of living trees (`r fig_nums("fig-drone-data-levels", display = "cite")`; Level 3b, second image).
+We used these models to classify all tree crowns in the data set as alive or dead (`r fig_nums("fig-drone-data-levels", display = "cite")`; Level 3b, first image; Supplementary Figure 16) as well as to classify the species of living trees (and then host or non-host;`r fig_nums("fig-drone-data-levels", display = "cite")`; Level 3b, second image; Supplementary Figure 17).
 
 Because the tops of dead, needle-less trees are narrow, they may not be well-represented in the point clouds produced using SfM photogrammetry, which biases their height estimates downward.
 Further, field measurements can overestimate the heights of live trees relative to aerial survey methods [@wang2019b].
 To correct these measurement biases, we calibrated aerial tree height measurements to ground-based height measurements.
 Specifically, we identified the crowns of `r nrow(height_corrections)` field-measured trees in the drone-derived tree data, modeled the relationship between field- and drone-measured tree heights for both live and dead trees, and used the models to adjust the drone-measured tree heights (See Supplementary Methods).
-We applied a conservative height correction to live and dead trees based on trees measured by the drone to be greater than 20 m in height that increased dead tree height by an average of `r example_height_corrections %>% dplyr::group_by(live) %>% dplyr::summarize(mn_hgt_diff = mean(height_diff)) %>% dplyr::filter(live == 0) %>% dplyr::pull(mn_hgt_diff) %>% round(1)` m and reduced the heights of live trees by an average of `r example_height_corrections %>% dplyr::group_by(live) %>% dplyr::summarize(mn_hgt_diff = abs(mean(height_diff))) %>% dplyr::filter(live == 1) %>% dplyr::pull(mn_hgt_diff) %>% round(1)` m (See Supplementary Methods).
-Finally, we estimated the basal area of each tree from their corrected drone-measured height using species-specific simple linear regressions of the relationship between height and DBH as measured in the coincident field plots from @fettig2019.
+We applied a conservative height correction to live and dead trees based on trees measured by the drone to be greater than 20 m in height that increased dead tree height by an average of `r example_height_corrections %>% dplyr::group_by(live) %>% dplyr::summarize(mn_hgt_diff = mean(height_diff)) %>% dplyr::filter(live == 0) %>% dplyr::pull(mn_hgt_diff) %>% round(1)` m and reduced the heights of live trees by an average of `r example_height_corrections %>% dplyr::group_by(live) %>% dplyr::summarize(mn_hgt_diff = abs(mean(height_diff))) %>% dplyr::filter(live == 1) %>% dplyr::pull(mn_hgt_diff) %>% round(1)` m (See Supplementary Figures 18-20 and Supplementary Note 2).
+Finally, we estimated the basal area of each tree from their corrected drone-measured height using species-specific simple linear regressions of the relationship between height and DBH as measured in the coincident field plots from Fettig et al. [@fettig2019].
+
+We note that our study relies on the generation of Level 3a products in order to combine them and create Level 3b products like the classified tree maps, but this need not be the case.
+For instance, deep learning/neural net methods may be able to use both the spectral and geometric information from lower level data products simultaneously to locate and classify trees in a scene and directly generate Level 3b products without a need to first generate the Level 3a products [@weinstein2019; @dossantos2019].
 
 ### Level 4: Aggregations to regular grids
 
 We rasterized the forest structure and composition data at a spatial resolution similar to that of the field plots to better match the grain size at which we validated the automatic tree detection algorithms.
 In each raster cell, we calculated: number of dead trees, number of ponderosa pine trees, total number of trees, and mean height of ponderosa pine trees.
 The values of these variables in each grid cell and derivatives from them were used for visualization and modeling.
-Here, we show the fraction of dead trees per cell (`r fig_nums("fig-drone-data-levels", display = "cite")`; Level 4, first image), the fraction of host trees per cell (`r fig_nums("fig-drone-data-levels", display = "cite")`; Level 4, second image), the mean height of ponderosa pine trees in each cell (`r fig_nums("fig-drone-data-levels", display = "cite")`; Level 4, third image), and the total count of trees per cell (`r fig_nums("fig-drone-data-levels", display = "cite")`; Level 4, fourth image).
+Here, we show the fraction of dead trees per cell (`r fig_nums("fig-drone-data-levels", display = "cite")`; Level 4, first image; Supplementary Figure 21), the fraction of host trees per cell (`r fig_nums("fig-drone-data-levels", display = "cite")`; Level 4, second image), the mean height of ponderosa pine trees in each cell (`r fig_nums("fig-drone-data-levels", display = "cite")`; Level 4, third image), and the total count of trees per cell (`r fig_nums("fig-drone-data-levels", display = "cite")`; Level 4, fourth image).
 
 ### Note on assumptions about dead trees
 
 For the purposes of this study, we assumed that all dead trees were ponderosa pine and thus hosts colonized by WPB.
-This is a reasonably good assumption for our study area; for example, @fettig2019 found that `r pipo_pct_of_all_dead`% of dead trees in their coincident field plots were ponderosa pine.
-Mortality was concentrated in the larger-diameter classes and attributed primarily to WPB [see Figure 5 of @fettig2019].
+This is a reasonably good assumption for our study area; for example, Fettig et al. [@fettig2019] found that `r pipo_pct_of_all_dead`% of dead trees in their coincident field plots were ponderosa pine.
+Mortality was concentrated in the larger-diameter classes and attributed primarily to WPB (see Figure 5 of Fettig et al. [@fettig2019]).
 The species contributing to the next highest proportion of dead trees was incense cedar which represented `r cade_pct_of_all_dead`% of the dead trees in the field plots.
 While the detected mortality is most likely to be ponderosa pine killed by WPB, it is critical to interpret our results with these limitations in mind.
 
@@ -610,7 +620,7 @@ We used CWD [@stephenson1998] from the 1981-2010 mean value of the basin charact
 Higher values of CWD correspond to historically hotter, drier conditions and lower values correspond to historically cooler, wetter conditions.
 CWD has been shown to correlate well with broad patterns of tree mortality in the Sierra Nevada [@young2017] as well as bark beetle-induced tree mortality [@millar2012].
 The forests along the entire CWD gradient used in this study experienced exceptional hot drought between 2012 to 2016 with a severity of at least a 1,200-year event, and perhaps more severe than a 10,000-year event [@griffin2014; @robeson2015].
-We converted the CWD value for each site into a z-score representing that site's deviation from the mean CWD across the climatic range of Sierra Nevada ponderosa pine as determined from 179 herbarium records described in @baldwin2017a.
+We converted the CWD value for each site into a z-score representing that site's deviation from the mean CWD across the climatic range of Sierra Nevada ponderosa pine as determined from 179 herbarium records described in Baldwin et al. [@baldwin2017a].
 Thus, a CWD z-score of 1 would indicate that the CWD at that site is one standard deviation hotter/drier than the mean CWD across all geolocated herbarium records for ponderosa pine in the Sierra Nevada.
 
 ### Statistical model
@@ -646,7 +656,7 @@ Where $y_i$ is the number of dead trees in cell $i$, $n_i$ is the sum of the dea
 We fit this model using the `brms` package [@burkner2017] which implements the No U-Turn Sampler extension to the Hamiltonian Monte Carlo algorithm [@hoffman2014] in the Stan programming language [@carpenter2017].
 We used 4 chains with 5000 iterations each (2000 warmup, 3000 samples), and confirmed chain convergence by ensuring all `Rhat` values were less than 1.1 [@brooks1998] and that the bulk and tail effective sample sizes (ESS) for each estimated parameter were greater than 100 times the number of chains (i.e., greater than 400 in our case).
 We used posterior predictive checks to visually confirm model performance by overlaying the density curves of the predicted number of dead trees per cell over the observed number [@gabry2019].
-For the posterior predictive checks, we used 50 random samples from the model fit to generate 50 density curves and ensured curves were centered on the observed distribution, paying special attention to model performance at capturing counts of zero.
+For the posterior predictive checks, we used 50 random samples from the model fit to generate 50 density curves and ensured curves were centered on the observed distribution, paying special attention to model performance at capturing counts of zero (see Supplementary Figure 22).
 
 ## Data availability
 
@@ -665,12 +675,16 @@ All code used to generate the results from this study are available via GitHub a
 
 ## Acknowledgements
 
-We gratefully acknowledge funding from the USDA Forest Service Western Wildlands Environmental Threat Assessment Center (WWETAC) and the Pacific Southwest Research Station Climate Change Competitive Grant Program. We thank Connie Millar for comments and guidance during the development of this project, Victoria Scholl for helpful discussions regarding remotely-sensed data product levels, and Derek Young for helpful discussions while revising this manuscript.  We also thank Meagan Oldfather for her role as visual observer during drone flights. We gratefully acknowledge Pix4D, which provided free cloud infrastructure for much of the Structure from Motion photogrammetry processing. Finally, we thank the Open Science Framework for facilitating the public access to our complete dataset.
+We gratefully acknowledge funding from the USDA Forest Service Western Wildlands Environmental Threat Assessment Center (WWETAC) and the Pacific Southwest Research Station Climate Change Competitive Grant Program. 
+We thank Connie Millar for comments and guidance during the development of this project, and Meagan Oldfather for her role as visual observer during drone flights.
+We also thank Victoria Scholl for helpful discussions regarding remotely-sensed data product levels, and Derek Young for helpful discussions while revising this manuscript. 
+We gratefully acknowledge Pix4D, which provided free cloud infrastructure for much of the Structure from Motion photogrammetry processing, and the Open Science Framework, who facilitated the public access to our complete dataset.
+Thanks to Alex Mandel, Dan Krofcheck, Taylor Nelson, Nate Metzler, Brandon Stark, Andy Wong, Grace Liu, Sean Hogan, the Micasense team, Lawrence Dennis from Aerial Technology International, and Casey Neistat for valuable input regarding drones, sensors, safe flying, and SfM photogrammetry.
 
 ## Author contributions
 
 Author contributions are defined using the Contributor Roles Taxonomy (CRediT; https://casrai.org/credit/).
-Conceptualization: MJK, AML, CJF, MPN, LAM; Data curation: MJK; Formal analysis: MJK; Funding acquisition: MJK, MPN, CJF, AML; Investigation: MJK, LAM, CJF; Methodology: MJK, AML; Project administration: MJK; Resources: MJK, MPN, AML; Software: MJK; Supervision: MJK, MPN, AML; Validation: MJK; Visualization: MJK; Writing -- original draft: MJK; Writing -- review and editing: MJK, AML, CJF, MPN, LAM  
+Conceptualization: MJK, AML, CJF, MPN, LAM; Data curation: MJK; Formal analysis: MJK; Funding acquisition: MJK, MPN, CJF, AML; Investigation: MJK, LAM, CJF; Methodology: MJK, AML; Project administration: MJK, MPN, AML; Resources: MJK, MPN, AML; Software: MJK; Supervision: MJK, MPN, AML; Validation: MJK; Visualization: MJK; Writing -- original draft: MJK; Writing -- review and editing: MJK, AML, CJF, MPN, LAM  
 
 ## Competing interests
 
