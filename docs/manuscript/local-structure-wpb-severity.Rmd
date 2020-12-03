@@ -677,9 +677,11 @@ All code used to generate the results from this study are available via GitHub a
 
 We gratefully acknowledge funding from the USDA Forest Service Western Wildlands Environmental Threat Assessment Center (WWETAC) and the Pacific Southwest Research Station Climate Change Competitive Grant Program. 
 We thank Connie Millar for comments and guidance during the development of this project, and Meagan Oldfather for her role as visual observer during drone flights.
+We thank Beverly Bulaon for her significant contribution to field plot network establishment.
 We also thank Victoria Scholl for helpful discussions regarding remotely-sensed data product levels, and Derek Young for helpful discussions while revising this manuscript. 
-We gratefully acknowledge Pix4D, which provided free cloud infrastructure for much of the Structure from Motion photogrammetry processing, and the Open Science Framework, who facilitated the public access to our complete dataset.
+We gratefully acknowledge the Map Pilot for iOS team (who implemented several feature requests that helped us conduct our drone flights), Pix4D (which provided free cloud infrastructure for much of the Structure from Motion photogrammetry processing), and the Open Science Framework (who facilitated the public access to our complete dataset).
 Thanks to Alex Mandel, Dan Krofcheck, Taylor Nelson, Nate Metzler, Brandon Stark, Andy Wong, Grace Liu, Sean Hogan, the Micasense team, Lawrence Dennis from Aerial Technology International, and Casey Neistat for valuable input regarding drones, sensors, safe flying, and SfM photogrammetry.
+Publication of this article was partially funded by the University of Colorado Boulder Libraries Open Access Fund and the University of California, Davis Library Open Access Fund.  
 
 ## Author contributions
 
