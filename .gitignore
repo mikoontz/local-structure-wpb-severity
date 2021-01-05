@@ -7,9 +7,7 @@
 .Rhistory
 
 incubator/*
-data/data_raw/*
 
-data/_extra-project-files
 *report.pdf
 
 data/*
