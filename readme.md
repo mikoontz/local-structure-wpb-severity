@@ -1,6 +1,8 @@
 Drone-enabled forest ecology: A fine-grain, broad-extent analysis of how forest structure and regional climate interact to influence the western pine beetle-induced mortality rate of ponderosa pine in the Sierra Nevada Mountain range of California during the exceptional hot drought of 2012-2015.
 
-The manuscript describing this work can be found as a preprint here: [Koontz et al., 2020. Cross-scale interaction of host tree size and climate governs bark beetle-induced tree mortality.](https://doi.org/10.32942/osf.io/jz964)
+The manuscript describing this work was published in Nature Communications in 2021:
+
+Koontz, M.J., Latimer, A.M., Mortenson, L.A. et al. Cross-scale interaction of host tree size and climatic water deficit governs bark beetle-induced tree mortality. Nat Commun 12, 129 (2021). [https://doi.org/10.1038/s41467-020-20455-y](https://doi.org/10.1038/s41467-020-20455-y)
 
 This repository represents the workflow used to process the drone data from aerial photographs taken over ~40 ha of forested area surrounding each of 32 field plots along a 350 km latitudinal gradient and 1,000 m elevational gradient on the western slope Sierra Nevada in yellow pine/mixed-conifer forests. 
 In total, over 9 km^2^ of forest was surveyed between early April, 2018 and early July, 2018 at a spatial resolution of approximately 8 cm per pixel.
